@@ -19,8 +19,10 @@ public:
 	//Konstruktor
 	Liniendaten();
 	//Methoden
-	void Einlesen(string Dateiname, double Wellenlaenge);    // aus Datei einlesen
-	void Emissivitaet_ermitteln();                                        // aus Rohdaten Gamma berechnen  !!!! ACHTUNG HIER GIBTS NOCH DISKUSSIONSBEDARF!!!!! siehe Code
+	void Einlesen(string Dateiname, double Wellenlaenge);  // aus Datei einlesen
+	void Emissivitaet_ermitteln(); // aus Rohdaten Gamma berechnen
+								   // !! ACHTUNG HIER GIBTS DISKUSSIONSBEDARF!!
+								   // siehe Code
 	void Auf_Bildschirm_Ausgeben();
 
 
