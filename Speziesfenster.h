@@ -8,8 +8,8 @@
 /*******************************************************************
 Objekte dieser Klasse enthalten die Wellenlängenfenster, sowie Liniendaten
 für jede Linie
-Achtung die Liniendaten sind abhängig vom Streuwinkel, sodass die Pasenfunktion, sowie
-die Emissivitäten für jede Messung neu bestimmt werden müssen.
+Achtung die Liniendaten sind abhängig vom Streuwinkel, sodass die Pasenfunktion,
+sowie die Emissivitäten für jede Messung neu bestimmt werden müssen.
  *******************************************************************/
 
 #ifndef SPEZIESFENSTER_HH_
@@ -27,8 +27,8 @@ public:
 	// Funktionen
 	void clear();
 
-	//Membervariablen **************************************************************************/
-	string m_Spezies_Name;                          // z.B. Eisen I oder Eisen II
+	//Membervariablen *********************************************************/
+	string m_Spezies_Name;                        // z.B. Eisen I oder Eisen II
 	// Teile für Zeilendichte Berechnung
 	vector<double> m_Wellenlaengen;  // Vektor mit allen zugehörigen Linien
 	vector<Liniendaten> m_Liniendaten;
@@ -38,9 +38,10 @@ public:
 	vector<double> m_Basisfenster_rechts_WLmax;
 	vector<double> m_Peakfenster_WLmin;
 	vector<double> m_Peakfenster_WLmax;
-	double m_FWHM;                               // FWHM der Peaks, oder zumindest Startwert
-	vector<string>    m_Liste_der_Plot_Dateinamen; //Für alle Linien erstmal ein Vektor
-	//Membervariablen ende **************************************************************************/
+	double m_FWHM;  // FWHM der Peaks, oder zumindest Startwert
+	//Für alle Linien erstmal ein Vektor
+	vector<string>  m_Liste_der_Plot_Dateinamen;
+	//Membervariablen ende ****************************************************/
 };
 
 inline void Speziesfenster::clear()
