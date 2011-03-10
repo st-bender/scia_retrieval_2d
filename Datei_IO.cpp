@@ -22,21 +22,25 @@ using namespace std;
 
 extern int Prioritylevel;
 
-///////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //
 // Funktionsstart ReadL1C_Limb_mpl_binary
 //
-///////////////////////////////////////////////////////////////////////////////////////////
-vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname, Messung_Limb &Troposphaerische_Saeule, Messung_Limb &mean_10_20)
+////////////////////////////////////////////////////////////////////////////////
+vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
+		Messung_Limb &Troposphaerische_Saeule, Messung_Limb &mean_10_20)
 {
-	//binärdateien sind nicht gepackt(das wär einfach nicht effizient)...ansonsten hier packen und später entpacken
+	//binärdateien sind nicht gepackt(das wär einfach nicht effizient)...
+	//ansonsten hier packen und später entpacken
 	//..siehe alte versionen
 	// erst wird alles geladen, dann analyse und nachberarbeitung durchgeführt
 
 	// 1. Zur Verfügung Stellung der Speicherstrukturen zur Aufnahme der Datei
 	// 2. Laden der Datei
-	// 3. Nachbearbeitung/Ausschlusskriterien   -> auf seperate Funktion nach laden verschoben worden
-	// 4. Erstellung des Übergabevektors  //ACHTUNG für Troposphaerische_Saeule nur Intensitäten
+	// 3. Nachbearbeitung/Ausschlusskriterien
+	//    -> auf seperate Funktion nach laden verschoben worden
+	// 4. Erstellung des Übergabevektors
+	// //ACHTUNG für Troposphaerische_Saeule nur Intensitäten
 	// 5. Speicherfreigabe
 	// 6. Rückgabe
 
@@ -54,8 +58,8 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname, Messung_Limb &Tro
 	// 2. Laden der Datei
 	//cerr<<" 2. Laden der Datei\n";
 	Load_Limb_l_mpl_binary(Dateiname,
-						   textheader, no_of_alt, no_of_pix, Orbitstate, Datum, Center_Lat_Lon,
-						   orbit_phase, Wellenlaengen,
+						   textheader, no_of_alt, no_of_pix, Orbitstate, Datum,
+						   Center_Lat_Lon, orbit_phase, Wellenlaengen,
 						   Limbdaten);
 	// 3. Nachbearbeitung/Ausschlusskriterien
 	// Wird jetzt nach dem Laden durchgeführt
@@ -89,10 +93,12 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname, Messung_Limb &Tro
 			Ergebnisvektor[i].m_Intensitaeten[j] = 0;
 			Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler[j] = 0;
 		}
-		for (int j = no_of_pix; j < 826; j++) { //Überzählige Pixel(weil leider noch nicht dynamisch)
+		for (int j = no_of_pix; j < 826; j++) {
+			//Überzählige Pixel(weil leider noch nicht dynamisch)
 			Ergebnisvektor[i].m_Intensitaeten[j] = 0;
 		}
-		// Der Pixel 552 (282,03nm zeigt bei nadir( und nur dort, einen Peak)....interpretation dead pixel
+		// Der Pixel 552 (282,03nm zeigt bei nadir( und nur dort, einen Peak)
+		// ....interpretation dead pixel
 		//Datei beginnt bei Pixel 16
 		Ergebnisvektor[i].m_Intensitaeten[536] = (Ergebnisvektor[i].m_Intensitaeten[535] + Ergebnisvektor[i].m_Intensitaeten[537]) / 2;
 	}// ende for i
@@ -101,7 +107,8 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname, Messung_Limb &Tro
 	for (int j = 0; j < no_of_pix; j++) {
 		Troposphaerische_Saeule.m_Intensitaeten[j] = Limbdaten[2].m_radiance[j];
 	}
-	for (int j = no_of_pix; j < 826; j++) { //Überzählige Pixel(weil leider noch nicht dynamisch)
+	for (int j = no_of_pix; j < 826; j++) {
+		//Überzählige Pixel(weil leider noch nicht dynamisch)
 		Troposphaerische_Saeule.m_Intensitaeten[j] = 0;
 	}
 	// und für den Mittelwert, der Höhen 10 bis 20
@@ -113,7 +120,8 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname, Messung_Limb &Tro
 		mean_10_20.m_Intensitaeten[j] /= 11.0;
 	}
 
-	for (int j = no_of_pix; j < 826; j++) { //Überzählige Pixel(weil leider noch nicht dynamisch)
+	for (int j = no_of_pix; j < 826; j++) {
+		//Überzählige Pixel(weil leider noch nicht dynamisch)
 		mean_10_20.m_Intensitaeten[j] = 0;
 	}
 
@@ -134,33 +142,37 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname, Messung_Limb &Tro
 	// 6. Rückgabe
 	return Ergebnisvektor;
 }
-///////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //
 // ENDE ReadL1C_Limb_mpl_binary
 //
-///////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //
 // Funktionsstart ReadL1C_Limb_meso_thermo_mpl_binary
 //
-///////////////////////////////////////////////////////////////////////////////////////////
-vector<Messung_Limb> ReadL1C_Limb_meso_thermo_mpl_binary(string Dateiname, Messung_Limb &niedrigste_Hoehe)
+////////////////////////////////////////////////////////////////////////////////
+vector<Messung_Limb> ReadL1C_Limb_meso_thermo_mpl_binary(string Dateiname,
+		Messung_Limb &niedrigste_Hoehe)
 {
 	///////////////////////////////////////////////////////////
-	// ähnlich zur üblichen Limbroutine...nur andere TH Reihenfolge und alle Messungen über 70 km werden geladen
-	// und die niedrigste bei 53.5 km
+	// ähnlich zur üblichen Limbroutine...nur andere TH Reihenfolge und alle
+	// Messungen über 70 km werden geladen und die niedrigste bei 53.5 km
 	// 0 bis 24   z.B. bei 0 148,7km und bei 25 69.9 km
 	///////////////////////////////////////////////////////////
 
-	//binärdateien sind nicht gepackt(das wär einfach nicht effizient)...ansonsten hier packen und später entpacken
+	//binärdateien sind nicht gepackt(das wär einfach nicht effizient)...
+	//ansonsten hier packen und später entpacken
 	//..siehe alte versionen
 	// erst wird alles geladen, dann analyse und nachberarbeitung durchgeführt
 
 	// 1. Zur Verfügung Stellung der Speicherstrukturen zur Aufnahme der Datei
 	// 2. Laden der Datei
-	// 3. Nachbearbeitung/Ausschlusskriterien   -> auf seperate Funktion nach laden verschoben worden
-	// 4. Erstellung des Übergabevektors  //ACHTUNG für Troposphaerische_Saeule nur Intensitäten
+	// 3. Nachbearbeitung/Ausschlusskriterien
+	//    -> auf seperate Funktion nach laden verschoben worden
+	// 4. Erstellung des Übergabevektors
+	// //ACHTUNG für Troposphaerische_Saeule nur Intensitäten
 	// 5. Speicherfreigabe
 	// 6. Rückgabe
 
@@ -178,15 +190,16 @@ vector<Messung_Limb> ReadL1C_Limb_meso_thermo_mpl_binary(string Dateiname, Messu
 	// 2. Laden der Datei
 	//cerr<<" 2. Laden der Datei\n";
 	Load_Limb_l_mpl_binary(Dateiname,
-						   textheader, no_of_alt, no_of_pix, Orbitstate, Datum, Center_Lat_Lon,
-						   orbit_phase, Wellenlaengen,
+						   textheader, no_of_alt, no_of_pix, Orbitstate, Datum,
+						   Center_Lat_Lon, orbit_phase, Wellenlaengen,
 						   Limbdaten);
 	// 3. Nachbearbeitung/Ausschlusskriterien
 	// Wird jetzt nach dem Laden durchgeführt
 	// 4. Erstellung des Übergabevektors
 	vector<Messung_Limb> Ergebnisvektor;
 	// Interessant sind Höhen über 70 km...also 0 bis 26
-	// Die Reihenfolge in Ergebnisvektor ist gleich der Reihenfolge wie im Limbfall, nur das statt 7 25 Messungen enthalten sind
+	// Die Reihenfolge in Ergebnisvektor ist gleich der Reihenfolge wie im
+	// Limbfall, nur das statt 7 25 Messungen enthalten sind
 	Ergebnisvektor.resize(25);
 	for (int i = 0; i < 25; i++) {
 		Ergebnisvektor[i].m_Dateiname_L1C = Dateiname;
@@ -214,10 +227,12 @@ vector<Messung_Limb> ReadL1C_Limb_meso_thermo_mpl_binary(string Dateiname, Messu
 			Ergebnisvektor[i].m_Intensitaeten[j] = 0;
 			Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler[j] = 0;
 		}
-		for (int j = no_of_pix; j < 826; j++) { //Überzählige Pixel(weil leider noch nicht dynamisch)
+		for (int j = no_of_pix; j < 826; j++) {
+			//Überzählige Pixel(weil leider noch nicht dynamisch)
 			Ergebnisvektor[i].m_Intensitaeten[j] = 0;
 		}
-		// Der Pixel 552 282,03nm ist die Kanalgrenze zwischen 1a und 1b und es gibt manchmal überlapp(->Peak)
+		// Der Pixel 552 282,03nm ist die Kanalgrenze zwischen 1a und 1b und es
+		// gibt manchmal überlapp(->Peak)
 		//...also über grenze glätten
 		//Datei beginnt bei Pixel 16
 		Ergebnisvektor[i].m_Intensitaeten[536] = (Ergebnisvektor[i].m_Intensitaeten[535] + Ergebnisvektor[i].m_Intensitaeten[537]) / 2;
@@ -246,34 +261,40 @@ vector<Messung_Limb> ReadL1C_Limb_meso_thermo_mpl_binary(string Dateiname, Messu
 	// 6. Rückgabe
 	return Ergebnisvektor;
 }
-///////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //
 // ENDE ReadL1C_Limb_meso_thermo_mpl_binary
 //
-///////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //
 // Funktionsstart ReadL1C_Limb_meso_thermo_mpl_binary_reduziert
 //
-///////////////////////////////////////////////////////////////////////////////////////////
-vector<Messung_Limb> ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(string Dateiname, Messung_Limb &niedrigste_Hoehe, int Anzahl_Hoehen)
+////////////////////////////////////////////////////////////////////////////////
+vector<Messung_Limb>
+ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(string Dateiname,
+		Messung_Limb &niedrigste_Hoehe, int Anzahl_Hoehen)
 {
-	// Hier wieder nur Höhen von 70 bis 90 km....(einziger unterschied liegt in der for schleife die nur bis 7 geht)
+	// Hier wieder nur Höhen von 70 bis 90 km....(einziger unterschied liegt in
+	// der for schleife die nur bis 7 geht)
 	///////////////////////////////////////////////////////////
-	// ähnlich zur üblichen Limbroutine...nur andere TH Reihenfolge und alle Messungen über 70 km werden geladen
-	// und die niedrigste bei 53.5 km
+	// ähnlich zur üblichen Limbroutine...nur andere TH Reihenfolge und alle
+	// Messungen über 70 km werden geladen und die niedrigste bei 53.5 km
 	// 0 bis 24   z.B. bei 0 148,7km und bei 25 69.9 km
 	///////////////////////////////////////////////////////////
 
-	//binärdateien sind nicht gepackt(das wär einfach nicht effizient)...ansonsten hier packen und später entpacken
+	//binärdateien sind nicht gepackt(das wär einfach nicht effizient)...
+	//ansonsten hier packen und später entpacken
 	//..siehe alte versionen
 	// erst wird alles geladen, dann analyse und nachberarbeitung durchgeführt
 
 	// 1. Zur Verfügung Stellung der Speicherstrukturen zur Aufnahme der Datei
 	// 2. Laden der Datei
-	// 3. Nachbearbeitung/Ausschlusskriterien   -> auf seperate Funktion nach laden verschoben worden
-	// 4. Erstellung des Übergabevektors  //ACHTUNG für Troposphaerische_Saeule nur Intensitäten
+	// 3. Nachbearbeitung/Ausschlusskriterien
+	//    -> auf seperate Funktion nach laden verschoben worden
+	// 4. Erstellung des Übergabevektors
+	// //ACHTUNG für Troposphaerische_Saeule nur Intensitäten
 	// 5. Speicherfreigabe
 	// 6. Rückgabe
 
@@ -291,15 +312,16 @@ vector<Messung_Limb> ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(string Datein
 	// 2. Laden der Datei
 	//cerr<<" 2. Laden der Datei\n";
 	Load_Limb_l_mpl_binary(Dateiname,
-						   textheader, no_of_alt, no_of_pix, Orbitstate, Datum, Center_Lat_Lon,
-						   orbit_phase, Wellenlaengen,
+						   textheader, no_of_alt, no_of_pix, Orbitstate, Datum,
+						   Center_Lat_Lon, orbit_phase, Wellenlaengen,
 						   Limbdaten);
 	// 3. Nachbearbeitung/Ausschlusskriterien
 	// Wird jetzt nach dem Laden durchgeführt
 	// 4. Erstellung des Übergabevektors
 	vector<Messung_Limb> Ergebnisvektor;
 	// Interessant sind Höhen über 70 km...also 0 bis 26
-	// Die Reihenfolge in Ergebnisvektor ist gleich der Reihenfolge wie im Limbfall, nur das statt 7 25 Messungen enthalten sind
+	// Die Reihenfolge in Ergebnisvektor ist gleich der Reihenfolge wie im
+	// Limbfall, nur das statt 7 25 Messungen enthalten sind
 	Ergebnisvektor.resize(Anzahl_Hoehen);
 	for (int i = 0; i < Anzahl_Hoehen; i++) {
 		Ergebnisvektor[i].m_Dateiname_L1C = Dateiname;
@@ -327,10 +349,12 @@ vector<Messung_Limb> ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(string Datein
 			Ergebnisvektor[i].m_Intensitaeten[j] = 0;
 			Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler[j] = 0;
 		}
-		for (int j = no_of_pix; j < 826; j++) { //Überzählige Pixel(weil leider noch nicht dynamisch)
+		for (int j = no_of_pix; j < 826; j++) {
+			//Überzählige Pixel(weil leider noch nicht dynamisch)
 			Ergebnisvektor[i].m_Intensitaeten[j] = 0;
 		}
-		// Der Pixel 552 282,03nm ist die Kanalgrenze zwischen 1a und 1b und es gibt manchmal überlapp(->Peak)
+		// Der Pixel 552 282,03nm ist die Kanalgrenze zwischen 1a und 1b und es
+		// gibt manchmal überlapp(->Peak)
 		//...also über grenze glätten
 		//Datei beginnt bei Pixel 16
 		Ergebnisvektor[i].m_Intensitaeten[536] = (Ergebnisvektor[i].m_Intensitaeten[535] + Ergebnisvektor[i].m_Intensitaeten[537]) / 2;
@@ -359,24 +383,25 @@ vector<Messung_Limb> ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(string Datein
 	// 6. Rückgabe
 	return Ergebnisvektor;
 }
-///////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //
 // ENDE ReadL1C_Limb_meso_thermo_mpl_binary_reduziert
 //
-///////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //
 // Funktionsstart ReadL1C_Nadir_mpl_binary
 //
-///////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 Messung_Nadir *ReadL1C_Nadir_mpl_binary(string Dateiname, int &Anzahl_Messungen)
 {
 	// 1. Zur Verfügung Stellung der Speicherstrukturen zur Aufnahme der Datei
 	// 2. Laden der Datei
-	// 3. Nachbearbeitung/Ausschlusskriterien   -> wird nach dieser Routine als eigenen Funktion implementiert
+	// 3. Nachbearbeitung/Ausschlusskriterien
+	//    -> wird nach dieser Routine als eigenen Funktion implementiert
 	// 4. Erstellung des Übergabevektors
 	// 5. Speicherfreigabe
 	// 6. Rückgabe
@@ -472,18 +497,19 @@ Messung_Nadir *ReadL1C_Nadir_mpl_binary(string Dateiname, int &Anzahl_Messungen)
 	// 6. Rückgabe
 	return aus;
 }
-///////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //
 // ENDE ReadL1C_Nadir_mpl_binary
 //
-///////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //********************************************************************//
 //START int Ausgabe_Zeilendichten_Limb(string Dateiname);
 //********************************************************************//
-//////////////////////////////////////////////////////////////////////////////////////////
-int Ausgabe_Saeulendichten(string Dateiname, vector<Ausgewertete_Messung_Limb> A_Messung_L)
+////////////////////////////////////////////////////////////////////////////////
+int Ausgabe_Saeulendichten(string Dateiname,
+		vector<Ausgewertete_Messung_Limb> A_Messung_L)
 {
 	//Formatierte Ausgabe
 	FILE *outfile;
@@ -496,8 +522,8 @@ int Ausgabe_Saeulendichten(string Dateiname, vector<Ausgewertete_Messung_Limb> A
 	fprintf(outfile, "%4s %5s %3s %12s %12s %12s %12s %12s %12s %12s %12s %12s %12s\n",
 			"Jahr", "Monat", "Tag",
 			"Lat_Sat[°]", "Lon_Sat[°]", "Lat_TP[°]", "Lon_TP[°]",
-			"Hoehe_TP[km]", "Erdradius[km]", "Deklinationswinkel[°]", "Sonne_Lon[°]",
-			"Zeilendichte[cm^-2]", "Fehler_Zeilendichte[cm^-2]");
+			"Hoehe_TP[km]", "Erdradius[km]", "Deklinationswinkel[°]",
+			"Sonne_Lon[°]", "Zeilendichte[cm^-2]", "Fehler_Zeilendichte[cm^-2]");
 	int lang = A_Messung_L.size();
 	//cerr<<"Matrix schreiben\n";
 	for (int i = 0; i < lang; i++) {
@@ -507,11 +533,14 @@ int Ausgabe_Saeulendichten(string Dateiname, vector<Ausgewertete_Messung_Limb> A
 				"  %1.5E  %1.5E            %1.5E %1.5E"
 				"        %1.5E      %1.5E\n",
 				A_Messung_L[i].m_Jahr, A_Messung_L[i].m_Monat, A_Messung_L[i].m_Tag,
-				A_Messung_L[i].m_Lattidude_Sat, A_Messung_L[i].m_Longitude_Sat, A_Messung_L[i].m_Lattidude_TP,
+				A_Messung_L[i].m_Lattidude_Sat, A_Messung_L[i].m_Longitude_Sat,
+				A_Messung_L[i].m_Lattidude_TP,
 				A_Messung_L[i].m_Longitude_TP,
-				A_Messung_L[i].m_Hoehe_TP, A_Messung_L[i].m_Erdradius, A_Messung_L[i].m_Deklination,
+				A_Messung_L[i].m_Hoehe_TP, A_Messung_L[i].m_Erdradius,
+				A_Messung_L[i].m_Deklination,
 				A_Messung_L[i].m_Sonnen_Longitude,
-				A_Messung_L[i].m_Zeilendichte, A_Messung_L[i].m_Fehler_Zeilendichten);
+				A_Messung_L[i].m_Zeilendichte,
+				A_Messung_L[i].m_Fehler_Zeilendichten);
 	}
 	///////////////////////////////////////////////////////////
 	//cerr<<"Datei schließen\n";
@@ -519,17 +548,18 @@ int Ausgabe_Saeulendichten(string Dateiname, vector<Ausgewertete_Messung_Limb> A
 	fclose(outfile);
 	return 0;
 }
-//////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //********************************************************************//
 //Ende int Ausgabe_Zeilendichten_Limb(string Dateiname);
 //********************************************************************//
-//////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //********************************************************************//
 //START int Ausgabe_Zeilendichten_Nadir
 //********************************************************************//
-//////////////////////////////////////////////////////////////////////////////////////////
-int Ausgabe_Saeulendichten(string Dateiname, vector<Ausgewertete_Messung_Nadir> A_Messung_N)
+////////////////////////////////////////////////////////////////////////////////
+int Ausgabe_Saeulendichten(string Dateiname,
+		vector<Ausgewertete_Messung_Nadir> A_Messung_N)
 {
 	//Formatierte Ausgabe
 	FILE *outfile;
@@ -557,20 +587,23 @@ int Ausgabe_Saeulendichten(string Dateiname, vector<Ausgewertete_Messung_Nadir> 
 				"    %1.5E       %1.5E\n",
 				A_Messung_N[i].m_Jahr, A_Messung_N[i].m_Monat, A_Messung_N[i].m_Tag,
 				A_Messung_N[i].m_Lattitude_Sat, A_Messung_N[i].m_Longitude_Sat,
-				A_Messung_N[i].m_Lattitude_Ground, A_Messung_N[i].m_Longitude_Ground,
-				A_Messung_N[i].m_Erdradius, A_Messung_N[i].m_Deklination, A_Messung_N[i].m_Sonnen_Longitude,
-				A_Messung_N[i].m_Zeilendichte, A_Messung_N[i].m_Fehler_Zeilendichten);
+				A_Messung_N[i].m_Lattitude_Ground,
+				A_Messung_N[i].m_Longitude_Ground,
+				A_Messung_N[i].m_Erdradius, A_Messung_N[i].m_Deklination,
+				A_Messung_N[i].m_Sonnen_Longitude,
+				A_Messung_N[i].m_Zeilendichte,
+				A_Messung_N[i].m_Fehler_Zeilendichten);
 	}
 	///////////////////////////////////////////////////////////
 	// Datei schließen
 	fclose(outfile);
 	return 0;
 }
-//////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //********************************************************************//
 //Ende int Ausgabe_Zeilendichten_Nadir
 //********************************************************************//
-//////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 MPL_Matrix Read_Atmodatei(string Dateiname)
 {
@@ -593,22 +626,26 @@ MPL_Matrix Read_Atmodatei(string Dateiname)
 	}//ende for i
 	return Out;
 }
-//////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //********************************************************************//
 //Ende Read_Atmodatei
 //********************************************************************//
-//////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Funktionsstart Ausgabe_Dichten
-//////////////////////////////////////////////////////////////////////////////////////////
-int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter Grid, MPL_Matrix Dichten, MPL_Matrix S_x, MPL_Matrix AKM)
+////////////////////////////////////////////////////////////////////////////////
+int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter Grid,
+		MPL_Matrix Dichten, MPL_Matrix S_x, MPL_Matrix AKM)
 {
-	// Die Ausgabe erfolgt in 3 Dateien mit zusätzlichem Namen _Dichten.txt, _Sx.txt und  _AKM.txt
-	// Die erste Datei ist die interessanteste davon mit den Dichten Sie hat folgende Spalten
+	// Die Ausgabe erfolgt in 3 Dateien mit zusätzlichem Namen
+	// _Dichten.txt, _Sx.txt und  _AKM.txt
+	// Die erste Datei ist die interessanteste davon mit den Dichten.
+	// Sie hat folgende Spalten:
 	// GP_Nummer Max_H H Min_H Max_Lat Lat Min_Lat Dichte Standardabweichung
-	// In den anderen beiden Matrizzen stehen jeweils pro Zeile ein Element der Matrizzen....
-	// die zuordnung erfolgt aus den Gitterpunktnummern der ersten Datei
+	// In den anderen beiden Matrizzen stehen jeweils pro Zeile ein Element der
+	// Matrizzen....  die zuordnung erfolgt aus den Gitterpunktnummern der
+	// ersten Datei
 
 
 	//Formatierte Ausgabe
@@ -623,7 +660,7 @@ int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter Grid, MPL_Matrix Dicht
 	double stabw = 0;
 	//Datei öffnen
 	outfile1 = fopen(Dateiname1.c_str(), "w");
-	///////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	//Überschrift
 	fprintf(outfile1, "%5s "
 			"%13s %12s %13s "
@@ -658,7 +695,7 @@ int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter Grid, MPL_Matrix Dicht
 			Grid.m_Gitter[i].m_Max_Hoehe, Grid.m_Gitter[i].m_Hoehe, Grid.m_Gitter[i].m_Min_Hoehe,
 			Grid.m_Gitter[i].m_Max_Breite, Grid.m_Gitter[i].m_Breite, Grid.m_Gitter[i].m_Min_Breite,
 			Dichten(i), stabw);
-	///////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	// Datei schließen
 	fclose(outfile1);
 	// Die anderen beiden kurz und schmerzlos
@@ -692,6 +729,6 @@ int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter Grid, MPL_Matrix Dicht
 	outfile3.clear();
 	return 0;
 }
-/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Funktionsende Ausgabe_Dichten
-/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
