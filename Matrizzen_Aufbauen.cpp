@@ -569,10 +569,10 @@ MPL_Matrix Differenz_von_benachbarten_Zeilenelementen_Matrix_aufbauen(int Zeilen
             //cout<<"Punkt_Hoehe: "<<Punkt_Hoehe<<"\n";
             //cout<<"Punkt_Laenge: "<<Punkt_Laenge<<"\n";
             //cout<<"Punkt_Breite: "<<Punkt_Breite<<"\n";
-            int ERR;
+            int myerr;
             //cout<<"Tau_LOS: "<<Tau_LOS<<"\n";
 
-            ERR=Pixel_finden_und_AMF_erhoehen_LOS(AMF,Grid ,MessungNR,
+            myerr=Pixel_finden_und_AMF_erhoehen_LOS(AMF,Grid ,MessungNR,
                                                                                      Pixelnummer,
                                                                                      Schrittlaenge,Tau_LOS,
                                                                                      Punkt_Hoehe,AM_L[MessungNR].m_Erdradius,
@@ -599,7 +599,7 @@ MPL_Matrix Differenz_von_benachbarten_Zeilenelementen_Matrix_aufbauen(int Zeilen
                 }
             }
 
-            if(ERR==4)
+            if(myerr==4)
             {
                 IERR=1;
                 cout<<"mysteriöser fall beendet Programm\n";
@@ -986,9 +986,9 @@ MPL_Matrix Differenz_von_benachbarten_Zeilenelementen_Matrix_aufbauen(int Zeilen
             //Phasenfunktion aus Streuwinkel bestimmen und mit AMF multiplizieren...in Funktion
             double Phasenfunktion=0.75*E1*(Cos_Streuwinkel*Cos_Streuwinkel+1)+E2;
             // Gitterpunkt finden und AMF erhöhen; Durchstoßpunkte der Gitterelemente finden (siehe LFS)
-            int ERR;
+            int myerr;
 
-            ERR=Pixel_finden_und_AMF_erhoehen_LOS(AMF,Grid ,MessungNR,
+            myerr=Pixel_finden_und_AMF_erhoehen_LOS(AMF,Grid ,MessungNR,
                                                                                                  Pixelnummer,
                                                                                                  Schrittweite,Tau_Nadir_LOS,
                                                                                                  AP_Hoehe,AM_N[Nadir_MessungNR].m_Erdradius,
@@ -1013,7 +1013,7 @@ MPL_Matrix Differenz_von_benachbarten_Zeilenelementen_Matrix_aufbauen(int Zeilen
                     }
                 }
             }
-            if(ERR==4)
+            if(myerr==4)
             {
                 IERR=1;
                 cout<<"mysteriöser fall beendet Programm\n";

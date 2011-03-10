@@ -16,7 +16,7 @@ if(array!=0)                                 \
 
 
 #include "Messung_Limb.h"
-#include "math.h"
+#include <cmath>
 #include "stdlib.h"
 
 #include <fstream>  //für Ausgabe

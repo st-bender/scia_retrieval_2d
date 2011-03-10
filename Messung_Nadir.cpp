@@ -15,7 +15,7 @@ if(array!=0)                                 \
 
 #include <stdio.h>
 #include "Messung_Nadir.h"
-#include "math.h"
+#include <cmath>
 #include "stdlib.h"
 #include "Ausgewertete_Messung_Nadir.h"
 #include <stdio.h>
