@@ -15,7 +15,8 @@
  *  Created on: 15.06.2010
  *      Author: martin
  */
-// Es ist doch Sinnvoll neben der Matrixklasse eine mathematische Vektorklasse einzuführen, da Vektoren einer viel einfacheren
+// Es ist doch Sinnvoll neben der Matrixklasse eine mathematische Vektorklasse
+// einzuführen, da Vektoren einer viel einfacheren
 // Arithmetik unterliegen
 
 #ifndef MPL_VEKTOR_HH_
@@ -40,15 +41,18 @@ public:
 	MPL_Vektor &operator +=(const MPL_Vektor &rhs);   // Vektoraddition
 	MPL_Vektor &operator -=(const MPL_Vektor &rhs);    // Vektorsubtraktion
 
-	MPL_Vektor &operator *=(const double &rhs);          // skalare Multiplikation
+	MPL_Vektor &operator *=(const double &rhs);  // skalare Multiplikation
 	MPL_Vektor &operator /=(const double &rhs);          // skalare Division
 
 	//unäre Operatoren
-	// + und - Matrix A   was ist dann +A, was ist -A, +A ist trivial +A=A, -A ist elementweises -
+	// + und - Matrix A   was ist dann +A, was ist -A,
+	// +A ist trivial +A=A, -A ist elementweises -
 	MPL_Vektor operator + () const;
 	MPL_Vektor operator - () const;
 
-	double &operator()(int Element);            // Zugriff auf Elemente//Die braucht man aus obskuren Gründen 2mal
+	// Zugriff auf Elemente
+	// Die braucht man aus obskuren Gründen 2mal
+	double &operator()(int Element);
 	double operator()(int Element) const;
 
 	//binäre Operationen
@@ -68,7 +72,8 @@ public:
 	void Null_Initialisierung();
 	double Betrag_ausgeben();
 	void Normieren();
-	//MPL_Vektor Kreuzprodukt(const MPL_Vektor& rhs); nur für 3er Vektoren sinnvoll
+	//MPL_Vektor Kreuzprodukt(const MPL_Vektor& rhs);
+	// nur für 3er Vektoren sinnvoll
 	//Membervariablen
 	int m_Elementanzahl;
 	double *m_Elemente;
@@ -106,7 +111,8 @@ inline MPL_Vektor::~MPL_Vektor()
 }// Ende Destruktor
 
 // Überladene Operatoren //////
-inline MPL_Vektor &MPL_Vektor::operator =(const MPL_Vektor &rhs)    //= Zuweisung
+//= Zuweisung
+inline MPL_Vektor &MPL_Vektor::operator =(const MPL_Vektor &rhs)
 {
 	m_Elementanzahl = rhs.m_Elementanzahl;
 	if (m_Elemente != 0) {
@@ -119,7 +125,8 @@ inline MPL_Vektor &MPL_Vektor::operator =(const MPL_Vektor &rhs)    //= Zuweisun
 	return *this;
 }// Ende =
 
-inline MPL_Vektor &MPL_Vektor::operator +=(const MPL_Vektor &rhs)   // Vektoraddition
+// Vektoraddition
+inline MPL_Vektor &MPL_Vektor::operator +=(const MPL_Vektor &rhs)
 {
 	if (this->m_Elementanzahl != rhs.m_Elementanzahl) {
 		cout << "Vektoraddition verschieden langer Vektoren ist unsinnig!!!!\n";
@@ -131,7 +138,8 @@ inline MPL_Vektor &MPL_Vektor::operator +=(const MPL_Vektor &rhs)   // Vektoradd
 	return *this;
 }// Ende +=
 
-inline MPL_Vektor &MPL_Vektor::operator -=(const MPL_Vektor &rhs)    // Vektorsubtraktion
+// Vektorsubtraktion
+inline MPL_Vektor &MPL_Vektor::operator -=(const MPL_Vektor &rhs)
 {
 	if (this->m_Elementanzahl != rhs.m_Elementanzahl) {
 		cout << "Vektorsubtraktion verschieden langer Vektoren ist unsinnig!!!!\n";
@@ -143,14 +151,17 @@ inline MPL_Vektor &MPL_Vektor::operator -=(const MPL_Vektor &rhs)    // Vektorsu
 	return *this;
 }// Ende -=
 
-inline MPL_Vektor &MPL_Vektor::operator *=(const double &rhs)          // skalare Multiplikation
+// skalare Multiplikation
+inline MPL_Vektor &MPL_Vektor::operator *=(const double &rhs)
 {
 	for (int i = 0; i < this->m_Elementanzahl; i++) {
 		m_Elemente[i] *= rhs;
 	}
 	return *this;
 }//Ende *=
-inline MPL_Vektor &MPL_Vektor::operator /=(const double &rhs)          // skalare Division
+
+// skalare Division
+inline MPL_Vektor &MPL_Vektor::operator /=(const double &rhs)
 {
 	if (rhs == 0) { // Achtung ...eigentlich in epsilonumgebung betrachten
 		cout << "Achtung Division durch 0 bei skalarer Vektordivision\n";
@@ -164,7 +175,8 @@ inline MPL_Vektor &MPL_Vektor::operator /=(const double &rhs)          // skalar
 }//Ende /=
 
 //unäre Operatoren
-// + und - Matrix A   was ist dann +A, was ist -A, +A ist trivial +A=A, -A ist elementweises -
+// + und - Matrix A   was ist dann +A, was ist -A,
+// +A ist trivial +A=A, -A ist elementweises -
 inline MPL_Vektor MPL_Vektor::operator + () const
 {
 	MPL_Vektor aus(this->m_Elementanzahl);
@@ -180,7 +192,10 @@ inline MPL_Vektor MPL_Vektor::operator - () const
 	}
 	return aus;
 } // Ende - ()
-inline double &MPL_Vektor::operator()(int Element)            // Zugriff auf Elemente//Die braucht man aus obskuren Gründen 2mal
+
+// Zugriff auf Elemente
+// Die braucht man aus obskuren Gründen 2mal
+inline double &MPL_Vektor::operator()(int Element)
 {
 	if ((Element >= 0) && (Element < m_Elementanzahl))
 		return this->m_Elemente[Element];
@@ -200,7 +215,8 @@ inline double MPL_Vektor::operator()(int Element) const
 }
 
 //binäre Operationen
-inline MPL_Vektor MPL_Vektor::operator +(const MPL_Vektor &rhs)  //Vektoraddition
+//Vektoraddition
+inline MPL_Vektor MPL_Vektor::operator +(const MPL_Vektor &rhs)
 {
 	if (this->m_Elementanzahl != rhs.m_Elementanzahl) {
 		cout << "Vektoraddition verschieden langer Vektoren ist unsinnig!!!!\n";
@@ -212,7 +228,8 @@ inline MPL_Vektor MPL_Vektor::operator +(const MPL_Vektor &rhs)  //Vektoradditio
 	}
 	return aus;
 }// Ende +
-inline MPL_Vektor MPL_Vektor::operator -(const MPL_Vektor &rhs)   //Vektorsubtraktion
+//Vektorsubtraktion
+inline MPL_Vektor MPL_Vektor::operator -(const MPL_Vektor &rhs)
 {
 	if (this->m_Elementanzahl != rhs.m_Elementanzahl) {
 		cout << "Vektorsubtraktion verschieden langer Vektoren ist unsinnig!!!!\n";
@@ -225,7 +242,8 @@ inline MPL_Vektor MPL_Vektor::operator -(const MPL_Vektor &rhs)   //Vektorsubtra
 	return aus;
 }//Ende -
 
-inline double MPL_Vektor::operator *(const MPL_Vektor &rhs)         //Skalarprodukt
+//Skalarprodukt
+inline double MPL_Vektor::operator *(const MPL_Vektor &rhs)
 {
 	if (this->m_Elementanzahl != rhs.m_Elementanzahl) {
 		cout << "Skalarprodukt verschieden langer Vektoren ist unsinnig!!!!\n";
@@ -237,7 +255,8 @@ inline double MPL_Vektor::operator *(const MPL_Vektor &rhs)         //Skalarprod
 	}
 	return aus;
 }// Ende Skalarprodukt
-inline MPL_Vektor MPL_Vektor::operator /(const double &rhs)         // skalare Division
+// skalare Division
+inline MPL_Vektor MPL_Vektor::operator /(const double &rhs)
 {
 	if (rhs == 0) {
 		cout << "Achtung Division durch 0!!!!!\n";
@@ -250,7 +269,8 @@ inline MPL_Vektor MPL_Vektor::operator /(const double &rhs)         // skalare D
 	return aus;
 
 }
-inline MPL_Vektor MPL_Vektor::operator *(const double &rhs)         // skalare Multiplikation von skalar rechts
+// skalare Multiplikation von skalar rechts
+inline MPL_Vektor MPL_Vektor::operator *(const double &rhs)
 {
 	MPL_Vektor aus(m_Elementanzahl);
 	for (int i = 0; i < this->m_Elementanzahl; i++) {
@@ -259,7 +279,8 @@ inline MPL_Vektor MPL_Vektor::operator *(const double &rhs)         // skalare M
 	return aus;
 }
 
-inline MPL_Vektor operator * (const double &lhs, const MPL_Vektor &rhs)  // skalare Multiplikation von skalar links
+// skalare Multiplikation von skalar links
+inline MPL_Vektor operator * (const double &lhs, const MPL_Vektor &rhs)
 {
 	MPL_Vektor aus(rhs.m_Elementanzahl);
 	for (int i = 0; i < rhs.m_Elementanzahl; i++) {
@@ -307,7 +328,8 @@ inline void MPL_Vektor::Elementzahl_festlegen(int E)
 	//neuen Speicher allokieren
 	m_Elementanzahl = E;
 	m_Elemente = new double[m_Elementanzahl];
-	//neues Feld mit altem so weit es geht von vorne auffüllen...falls Rest, mit 0 auffüllen
+	//neues Feld mit altem so weit es geht von vorne auffüllen...
+	//falls Rest, mit 0 auffüllen
 	int Grenze;
 	if (m_Elementanzahl < altes_Feld_Elementzahl) {
 		Grenze = m_Elementanzahl;
@@ -347,7 +369,8 @@ inline void MPL_Vektor::Normieren()
 {
 	double d_Betrag = Betrag_ausgeben();
 	if (d_Betrag < 0.000001) {
-		cout << "Es wird versucht einen Vektor zu normieren, dessen Betrag <0.000001 ist. Dies wird nicht gemacht\n";
+		cout << "Es wird versucht einen Vektor zu normieren, "
+			 << "dessen Betrag <0.000001 ist. Dies wird nicht gemacht\n";
 		return; // Nullvektor abbbruch
 	}
 	for (int i = 0; i < this->m_Elementanzahl; i++) {

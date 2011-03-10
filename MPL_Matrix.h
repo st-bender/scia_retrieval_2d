@@ -13,26 +13,34 @@
  * in datei speichern  schreiben in outfile nicht in cout
  *
  *  Last update: 23.09.2010
- *  *= und += waren falsch implementiert (wieso das erst jetzt auffällt...hatte odch alles getestet)
+ *  *= und += waren falsch implementiert
+ *  (wieso das erst jetzt auffällt...hatte odch alles getestet)
  *
  *  16.09.2010
- *  gausselimination mit Pivotisierung: das Zeilentauschen der RHS am Ende hinzugefügt
+ *  gausselimination mit Pivotisierung:
+ *    das Zeilentauschen der RHS am Ende hinzugefügt
  *  gausselimination mit Pivotisierung
- *  ohne Pivotisierung ist glaub ich falsch und mit pivotisierung also erstmal auskommentieren
+ *  ohne Pivotisierung ist glaub ich falsch und
+ *    mit pivotisierung also erstmal auskommentieren
  *
  *  Created on: 28.05.2010
  *      Author: martin
- *      Matrizzendefinitionen gibt es viele, MPL steht dann für meinen Namen, das führt dann hoffentlich
- *      nicht zu doppelt definierten Matrizzentypen, was Mit Matrix alleine ziemlich sicher passieren würde.
+ *      Matrizzendefinitionen gibt es viele, MPL steht dann für meinen Namen,
+ *      das führt dann hoffentlich nicht zu doppelt definierten Matrizzentypen,
+ *      was Mit Matrix alleine ziemlich sicher passieren würde.
  *
- *     Es ist durchaus sinnvoll Vektoren als Zeilen und Spaltenvektoren also als einzeilige oder einspaltige Matrix zu nutzen,
- *     weil dadurch für beide die selbe Algebra verwendet werden kann
+ *     Es ist durchaus sinnvoll Vektoren als Zeilen und Spaltenvektoren also
+ *     als einzeilige oder einspaltige Matrix zu nutzen, weil dadurch für beide
+ *     die selbe Algebra verwendet werden kann
  */
 /*
- *  Zu den Rückgabewerten MPLMatrix, also Rückgabe als Variable ist immer möglich, aber etwas langsamer
- *  Rückgabe als Referenz MPLMatrix&, oder als MPLMatrix* brauchen die Rückgabevariable vorher
+ *  Zu den Rückgabewerten MPLMatrix,
+ *    also Rückgabe als Variable ist immer möglich, aber etwas langsamer
+ *  Rückgabe als Referenz MPLMatrix&,
+ *    oder als MPLMatrix* brauchen die Rückgabevariable vorher
  *
- *  //Die Elemente dieser Matrix sind Zeilenweise angeordnet d.h. Elementzahl(i,j)=i+j*Spaltenzahl
+ *  //Die Elemente dieser Matrix sind Zeilenweise angeordnet
+ *    d.h. Elementzahl(i,j)=i+j*Spaltenzahl
  */
 #ifndef MPLMATRIX_HH_
 #define MPLMATRIX_HH_
@@ -49,7 +57,8 @@ using namespace std;
 
 extern "C" {
 	void dgemm_(char *TRANSA, char *TRANSB, int *M, int *N, int *K,
-				double *ALPHA, double *A, int *LDA, double *B, int *LDB, double *BETA, double *C, int *LDC);
+				double *ALPHA, double *A, int *LDA, double *B, int *LDB,
+				double *BETA, double *C, int *LDC);
 }
 //////////////////////////////////////////////////////
 // START KLASSENDEKLARATION
@@ -67,32 +76,39 @@ public:
 	~MPL_Matrix();
 
 	////////////////////
-	//Überladene Operatoren/////////////////////  Diese werden inline definiert. damit das quasi in dieser Datei geschieht wird am ende
-	//                                                        Eine .inl Funktion included
+	//Überladene Operatoren/////////////////////
+	// Diese werden inline definiert. damit das quasi in dieser Datei geschieht
+	// wird am ende Eine .inl Funktion included
 	// Zuweisungen
-	MPL_Matrix &operator = (const MPL_Matrix &rhs);     // Zuweisung
-	MPL_Matrix &operator *= (const MPL_Matrix &rhs);        // Matrixmultiplikation  //TODO mit DGEMM
-	MPL_Matrix &operator += (const MPL_Matrix &rhs);       // Matrixaddition
-	MPL_Matrix &operator -= (const MPL_Matrix &rhs);        // Matrixsubtraktion
-	MPL_Matrix &operator *= (double rhs);                        // Skalare Multiplikation
-	MPL_Matrix &operator /= (double rhs);                        // Skalare Division
+	MPL_Matrix &operator = (const MPL_Matrix &rhs);   // Zuweisung
+	// TODO mit DGEMM
+	MPL_Matrix &operator *= (const MPL_Matrix &rhs);  // Matrixmultiplikation
+	MPL_Matrix &operator += (const MPL_Matrix &rhs);  // Matrixaddition
+	MPL_Matrix &operator -= (const MPL_Matrix &rhs);  // Matrixsubtraktion
+	MPL_Matrix &operator *= (double rhs);  // Skalare Multiplikation
+	MPL_Matrix &operator /= (double rhs);  // Skalare Division
 	// Beachte...es gibt keine Division, da nicht jede Matrix eine Inverse hat
 	//unäre Operatoren
-	// + und - Matrix A   was ist dann +A, was ist -A, +A ist trivial +A=A, -A ist elementweises -
-	MPL_Matrix operator + () const;  // auch + sollte überladen werden, für tiefe Kopie der Matrix
-	MPL_Matrix operator - () const;   //    für was auch immer const steht->  siehe auch Inspektoren und Mutatoren
-	//Interpretation:  const verändert das lhs Objekt nicht, sondern erzeugt ein echtes neues
+	// + und - Matrix A   was ist dann +A, was ist -A,
+	// +A ist trivial +A=A, -A ist elementweises -
+	// auch + sollte überladen werden, für tiefe Kopie der Matrix
+	MPL_Matrix operator + () const;
+	// für was auch immer const steht->  siehe auch Inspektoren und Mutatoren
+	MPL_Matrix operator - () const;
+	//Interpretation:
+	//  const verändert das lhs Objekt nicht, sondern erzeugt ein echtes neues
 
 	//() Überladung -> Direkter Zugriff auf Das Elemente Array
-	double &operator()(int Zeile, int Spalte);            //Die braucht man aus obskuren Gründen 2mal
+	//Die braucht man aus obskuren Gründen 2mal
+	double &operator()(int Zeile, int Spalte);
 	double operator()(int Zeile, int Spalte) const;
 	double &operator()(int Elementindex);
 	double operator()(int Elementindex) const;
 
 
 	// binary operators
-
-	MPL_Matrix operator * (const MPL_Matrix &rhs) const;   //matmul    //TODO mit DGEMM
+	//TODO mit DGEMM
+	MPL_Matrix operator * (const MPL_Matrix &rhs) const;   //matmul
 	MPL_Matrix operator +(const MPL_Matrix &rhs) const;   //matadd
 	MPL_Matrix operator - (const MPL_Matrix &rhs) const;   //matsub
 	MPL_Matrix operator * (const double &rhs) const;       //skalare Mult
@@ -106,10 +122,12 @@ public:
 
 	// Methoden
 	void Null_Initialisierung();
-	MPL_Matrix Zeile(int Zeilennummer);      // gibt eine Zeile   als Spaltenvektor aus
+	MPL_Matrix Zeile(int Zeilennummer); // gibt eine Zeile als Spaltenvektor aus
 	MPL_Matrix Spalte(int Spaltennummer); // gibt eine Spalte als Spaltenvektor aus
 	MPL_Matrix transponiert(); //transponierte Matrix
-//    MPLMatrix  invertiert();      //inverse Matrix, falls existent... existiert nur bei quadratischen, nicht singulären Matrizzen
+//    MPLMatrix  invertiert();
+//    //inverse Matrix, falls existent...
+//      existiert nur bei quadratischen, nicht singulären Matrizzen
 	// transponieren, Inverse Matrix / Gauss, LU, Cholesky usw SVD
 	void Zeile_Tauschen(int Zeile_a, int Zeile_b);
 	void Zeile_Multiplizieren(int Zeile, double Faktor);
@@ -170,13 +188,16 @@ inline MPL_Matrix::~MPL_Matrix()
 		m_Elemente = 0;
 	}
 }
-//Überladene Operatoren/////////////////////  Diese werden inline definiert. damit das quasi in dieser Datei geschieht wird am ende
-//                                                        Eine .inl Funktion included
+//Überladene Operatoren/////////////////////
+//Diese werden inline definiert.
+// damit das quasi in dieser Datei geschieht wird am ende
+// Eine .inl Funktion included
 // Zuweisungen
 /////////////////////////////////////////////////////////
 // Methodenstart
 /////////////////////////////////////////////////////////
-inline MPL_Matrix &MPL_Matrix::operator = (const MPL_Matrix &rhs)     // Zuweisung
+// Zuweisung
+inline MPL_Matrix &MPL_Matrix::operator = (const MPL_Matrix &rhs)
 {
 	if (this == &rhs)
 		return *this;
@@ -197,13 +218,15 @@ inline MPL_Matrix &MPL_Matrix::operator = (const MPL_Matrix &rhs)     // Zuweisu
 /////////////////////////////////////////////////////////
 // Methodenstart
 /////////////////////////////////////////////////////////
-inline MPL_Matrix &MPL_Matrix::operator *= (const MPL_Matrix &rhs)   // Matrixmultiplikation
+// Matrixmultiplikation
+inline MPL_Matrix &MPL_Matrix::operator *= (const MPL_Matrix &rhs)
 {
 	//Zunächst prüfen, ob Multiplikation möglich ist
 	if (this->m_Spaltenzahl != rhs.m_Zeilenzahl) {
 		MPL_Matrix dummy(1, 1);
 		dummy.m_Elemente[0] = 0;
-		cout << "*= Wrong Matrix Multiplication A*B, coloums number of A != rows number of B\n";
+		cout << "*= Wrong Matrix Multiplication A*B, "
+			 << "coloums number of A != rows number of B\n";
 		cout << "returning nonsense!!!!\n";
 		//return;
 		*this = dummy;
@@ -240,14 +263,17 @@ inline MPL_Matrix &MPL_Matrix::operator *= (const MPL_Matrix &rhs)   // Matrixmu
 /////////////////////////////////////////////////////////
 // Methodenstart
 /////////////////////////////////////////////////////////
-inline MPL_Matrix &MPL_Matrix::operator +=(const MPL_Matrix &rhs)   // Matrixaddition
+// Matrixaddition
+inline MPL_Matrix &MPL_Matrix::operator +=(const MPL_Matrix &rhs)
 {
 	//Zeilen und Spaltenzahl muss gleich sein
-	if ((m_Spaltenzahl != rhs.m_Spaltenzahl) && (m_Zeilenzahl != rhs.m_Zeilenzahl)) {
+	if ((m_Spaltenzahl != rhs.m_Spaltenzahl)
+			&& (m_Zeilenzahl != rhs.m_Zeilenzahl)) {
 		cout << "Addition nicht möglich, ungleiche Matrixdimensionen\n";
 		return *this; //einfach garnix gemacht
 	}
-	// Wenn spaltenzahl und Zeilenzahl gleich, dann ist auch die reihenfolge der elemente gleich
+	// Wenn spaltenzahl und Zeilenzahl gleich,
+	// dann ist auch die reihenfolge der elemente gleich
 	for (int i = 0; i < m_Elementanzahl; i++) {
 		this->m_Elemente[i] += rhs.m_Elemente[i];
 	}
@@ -256,14 +282,17 @@ inline MPL_Matrix &MPL_Matrix::operator +=(const MPL_Matrix &rhs)   // Matrixadd
 /////////////////////////////////////////////////////////
 // Methodenstart
 /////////////////////////////////////////////////////////
-inline MPL_Matrix &MPL_Matrix::operator -= (const MPL_Matrix &rhs)   // Matrixsubtraktion
+// Matrixsubtraktion
+inline MPL_Matrix &MPL_Matrix::operator -= (const MPL_Matrix &rhs)
 {
 	//Zeilen und Spaltenzahl muss gleich sein
-	if ((m_Spaltenzahl != rhs.m_Spaltenzahl) && (m_Zeilenzahl != rhs.m_Zeilenzahl)) {
+	if ((m_Spaltenzahl != rhs.m_Spaltenzahl)
+			&& (m_Zeilenzahl != rhs.m_Zeilenzahl)) {
 		cout << "Addition nicht möglich, ungleiche Matrixdimensionen\n";
 		return *this; //einfach garnix gemacht
 	}
-	// Wenn spaltenzahl und Zeilenzahl gleich, dann ist auch die reihenfolge der elemente gleich
+	// Wenn spaltenzahl und Zeilenzahl gleich,
+	// dann ist auch die reihenfolge der elemente gleich
 	for (int i = 0; i < m_Elementanzahl; i++) {
 		this->m_Elemente[i] -= rhs.m_Elemente[i];
 	}
@@ -272,7 +301,8 @@ inline MPL_Matrix &MPL_Matrix::operator -= (const MPL_Matrix &rhs)   // Matrixsu
 /////////////////////////////////////////////////////////
 // Methodenstart
 /////////////////////////////////////////////////////////
-inline MPL_Matrix &MPL_Matrix::operator *= (double rhs)                   // Skalare Multiplikation
+// Skalare Multiplikation
+inline MPL_Matrix &MPL_Matrix::operator *= (double rhs)
 {
 	for (int i = 0; i < m_Elementanzahl; i++) {
 		this->m_Elemente[i] *= rhs;
@@ -282,7 +312,8 @@ inline MPL_Matrix &MPL_Matrix::operator *= (double rhs)                   // Ska
 /////////////////////////////////////////////////////////
 // Methodenstart
 /////////////////////////////////////////////////////////
-inline MPL_Matrix &MPL_Matrix::operator /= (double rhs)                   // Skalare Division
+// Skalare Division
+inline MPL_Matrix &MPL_Matrix::operator /= (double rhs)
 {
 	if (rhs == 0) {
 		cout << "Division durch 0 wird nicht durchgeführt!\n";
@@ -295,7 +326,8 @@ inline MPL_Matrix &MPL_Matrix::operator /= (double rhs)                   // Ska
 }// ende /=
 
 //unäre Operatoren
-// + und - Matrix A   was ist dann +A, was ist -A, +A ist trivial +A=A, -A ist elementweises -
+// + und - Matrix A   was ist dann +A, was ist -A,
+// +A ist trivial +A=A, -A ist elementweises -
 /////////////////////////////////////////////////////////
 // Methodenstart
 /////////////////////////////////////////////////////////
@@ -324,7 +356,8 @@ inline MPL_Matrix MPL_Matrix::operator - () const
 inline double &MPL_Matrix::operator()(int Zeile, int Spalte)
 {
 	//A(1,2)=b;
-	if ((Spalte >= 0) && (Spalte < m_Spaltenzahl) && (Zeile >= 0) && (Zeile < m_Zeilenzahl))
+	if ((Spalte >= 0) && (Spalte < m_Spaltenzahl)
+			&& (Zeile >= 0) && (Zeile < m_Zeilenzahl))
 		return this->m_Elemente[Spalte + Zeile * this->m_Spaltenzahl];
 	else {
 		cout << "Achtung!!! Zugriff auf Elemente ausserhalb der Matrix\n";
@@ -337,7 +370,8 @@ inline double &MPL_Matrix::operator()(int Zeile, int Spalte)
 inline double MPL_Matrix::operator()(int Zeile, int Spalte) const
 {
 	//b=A(1,2)
-	if ((Spalte >= 0) && (Spalte < m_Spaltenzahl) && (Zeile >= 0) && (Zeile < m_Zeilenzahl))
+	if ((Spalte >= 0) && (Spalte < m_Spaltenzahl)
+			&& (Zeile >= 0) && (Zeile < m_Zeilenzahl))
 		return this->m_Elemente[Spalte + Zeile * this->m_Spaltenzahl];
 	else {
 		cout << "Achtung!!! Zugriff auf Elemente ausserhalb der Matrix\n";
@@ -378,7 +412,8 @@ inline MPL_Matrix MPL_Matrix::operator * (const MPL_Matrix &rhs) const
 {
 	//Zunächst prüfen, ob Multiplikation möglich ist
 	if (this->m_Spaltenzahl != rhs.m_Zeilenzahl) {
-		cout << "*= Wrong Matrix Multiplication A*B, coloums number of A != rows number of B\n";
+		cout << "*= Wrong Matrix Multiplication A*B, "
+			 << "coloums number of A != rows number of B\n";
 		cout << "returning nonsense!!!!\n";
 		return *this;
 	}
@@ -415,12 +450,14 @@ inline MPL_Matrix MPL_Matrix::operator +(const MPL_Matrix &rhs) const
 {
 
 	//Zeilen und Spaltenzahl muss gleich sein
-	if ((m_Spaltenzahl != rhs.m_Spaltenzahl) && (m_Zeilenzahl != rhs.m_Zeilenzahl)) {
+	if ((m_Spaltenzahl != rhs.m_Spaltenzahl)
+			&& (m_Zeilenzahl != rhs.m_Zeilenzahl)) {
 		cout << "Addition nicht möglich, ungleiche Matrixdimensionen\n";
 		return *this; //einfach garnix gemacht
 	}
 	MPL_Matrix Summe(rhs.m_Zeilenzahl, rhs.m_Spaltenzahl);
-	// Wenn spaltenzahl und Zeilenzahl gleich, dann ist auch die reihenfolge der elemente gleich
+	// Wenn spaltenzahl und Zeilenzahl gleich,
+	// dann ist auch die reihenfolge der elemente gleich
 	for (int i = 0; i < m_Elementanzahl; i++) {
 		Summe.m_Elemente[i] = this->m_Elemente[i] + rhs.m_Elemente[i];
 	}
@@ -432,12 +469,14 @@ inline MPL_Matrix MPL_Matrix::operator +(const MPL_Matrix &rhs) const
 inline MPL_Matrix MPL_Matrix::operator - (const MPL_Matrix &rhs) const
 {
 	//Zeilen und Spaltenzahl muss gleich sein
-	if ((m_Spaltenzahl != rhs.m_Spaltenzahl) && (m_Zeilenzahl != rhs.m_Zeilenzahl)) {
+	if ((m_Spaltenzahl != rhs.m_Spaltenzahl)
+			&& (m_Zeilenzahl != rhs.m_Zeilenzahl)) {
 		cout << "Subtraktion nicht möglich, ungleiche Matrixdimensionen\n";
 		return *this; //einfach garnix gemacht
 	}
 	MPL_Matrix Differenz(rhs.m_Zeilenzahl, rhs.m_Spaltenzahl);
-	// Wenn spaltenzahl und Zeilenzahl gleich, dann ist auch die reihenfolge der elemente gleich
+	// Wenn spaltenzahl und Zeilenzahl gleich,
+	// dann ist auch die reihenfolge der elemente gleich
 	for (int i = 0; i < m_Elementanzahl; i++) {
 		Differenz.m_Elemente[i] = this->m_Elemente[i] - rhs.m_Elemente[i];
 	}
@@ -461,7 +500,8 @@ inline MPL_Matrix MPL_Matrix::operator * (const double &rhs) const
 inline MPL_Matrix MPL_Matrix::operator / (const double &rhs) const
 {
 	if (rhs == 0) {
-		// ==0 ist bei double ziemlich undefiniert...evtl nochmal grenzen einbaun
+		// ==0 ist bei double ziemlich undefiniert...
+		// evtl nochmal grenzen einbaun
 		cout << "Division durch 0 wird nivht durchgeführt\n";
 		return *this;
 	}
@@ -487,9 +527,11 @@ inline MPL_Matrix operator * (const double &lhs, const MPL_Matrix &rhs)
 /////////////////////////////////////////////////////////
 inline bool MPL_Matrix::operator == (const MPL_Matrix &rhs) const
 {
-	//2 Matrizzen sind gleich, wenn sie die gleichen Dimensionen haben, und alle ihre Elemente gleich sind
+	//2 Matrizzen sind gleich, wenn sie die gleichen Dimensionen haben,
+	//und alle ihre Elemente gleich sind
 	// erstmal Dimensionen prüfen
-	if ((this->m_Spaltenzahl != rhs.m_Spaltenzahl) || (this->m_Zeilenzahl != rhs.m_Zeilenzahl)) {
+	if ((this->m_Spaltenzahl != rhs.m_Spaltenzahl)
+			|| (this->m_Zeilenzahl != rhs.m_Zeilenzahl)) {
 		return false;
 	}
 	//Gleichheit der Elemente...sowie ein ungleiches gefunden ->falsch
@@ -529,7 +571,8 @@ inline void MPL_Matrix::Null_Initialisierung()
 /////////////////////////////////////////////////////////
 // Methodenstart
 /////////////////////////////////////////////////////////
-inline MPL_Matrix MPL_Matrix::Zeile(int Zeilennummer)      // gibt eine Zeile   als Spaltenvektor aus
+// gibt eine Zeile   als Spaltenvektor aus
+inline MPL_Matrix MPL_Matrix::Zeile(int Zeilennummer)
 {
 	MPL_Matrix aus(this->m_Spaltenzahl, 1);
 	for (int i = 0; i < m_Spaltenzahl; i++) {
@@ -540,7 +583,8 @@ inline MPL_Matrix MPL_Matrix::Zeile(int Zeilennummer)      // gibt eine Zeile   
 /////////////////////////////////////////////////////////
 // Methodenstart
 /////////////////////////////////////////////////////////
-inline MPL_Matrix MPL_Matrix::Spalte(int Spaltennummer) // gibt eine Spalte als Spaltenvektor aus
+// gibt eine Spalte als Spaltenvektor aus
+inline MPL_Matrix MPL_Matrix::Spalte(int Spaltennummer)
 {
 	MPL_Matrix aus(this->m_Zeilenzahl, 1);
 	for (int i = 0; i < m_Zeilenzahl; i++) {
@@ -557,7 +601,8 @@ inline MPL_Matrix MPL_Matrix::transponiert() //transponierte Matrix
 	MPL_Matrix Transponierte(m_Spaltenzahl, m_Zeilenzahl);
 	for (int i = 0; i < m_Spaltenzahl; i++)
 		for (int j = 0; j < m_Zeilenzahl; j++)
-			Transponierte.m_Elemente[j + i * m_Zeilenzahl] = m_Elemente[i + j * m_Spaltenzahl];
+			Transponierte.m_Elemente[j + i * m_Zeilenzahl]
+				= m_Elemente[i + j * m_Spaltenzahl];
 	return Transponierte;
 }
 /////////////////////////////////////////////////////////
@@ -566,13 +611,15 @@ inline MPL_Matrix MPL_Matrix::transponiert() //transponierte Matrix
 inline void MPL_Matrix::Zeile_Tauschen(int Zeile_a, int Zeile_b)
 {
 	if ((Zeile_a >= this->m_Zeilenzahl) || (Zeile_b >= this->m_Zeilenzahl)) {
-		cout << "Zeilen können nicht getauscht werden, weil eine Zeile nicht existiert!\n";
+		cout << "Zeilen können nicht getauscht werden, "
+			 << "weil eine Zeile nicht existiert!\n";
 		return;
 	}
 	double dreieck;
 	for (int i = 0; i < m_Spaltenzahl; i++) {
 		dreieck = m_Elemente[i + Zeile_a * m_Spaltenzahl];
-		m_Elemente[i + Zeile_a * m_Spaltenzahl] = m_Elemente[i + Zeile_b * m_Spaltenzahl];
+		m_Elemente[i + Zeile_a * m_Spaltenzahl]
+			= m_Elemente[i + Zeile_b * m_Spaltenzahl];
 		m_Elemente[i + Zeile_b * m_Spaltenzahl] = dreieck;
 	}
 }// Ende Zeile_Tauschen
@@ -592,41 +639,51 @@ inline void MPL_Matrix::Zeile_Multiplizieren(int Zeile, double Faktor)
 /////////////////////////////////////////////////////////
 // Methodenstart
 /////////////////////////////////////////////////////////
-inline void MPL_Matrix::Vielfaches_einer_Zeile_addieren(int Summenzeile, int Additionszeile, double Faktor)
+inline void MPL_Matrix::Vielfaches_einer_Zeile_addieren(int Summenzeile,
+		int Additionszeile, double Faktor)
 {
-	if ((Summenzeile >= this->m_Zeilenzahl) || (Additionszeile >= this->m_Zeilenzahl)) {
-		cout << "Fehler in MPL_Matrix::Vielfaches_einer_Zeile_addieren...Zeile existiert nicht\n";
+	if ((Summenzeile >= this->m_Zeilenzahl)
+			|| (Additionszeile >= this->m_Zeilenzahl)) {
+		cout << "Fehler in MPL_Matrix::Vielfaches_einer_Zeile_addieren..."
+			 << " Zeile existiert nicht\n";
 		return;
 	}
 	for (int i = 0; i < this->m_Spaltenzahl; i++) {
-		this->m_Elemente[i + Summenzeile * m_Spaltenzahl] += Faktor * this->m_Elemente[i + Additionszeile * m_Spaltenzahl];
+		this->m_Elemente[i + Summenzeile * m_Spaltenzahl] +=
+			Faktor * this->m_Elemente[i + Additionszeile * m_Spaltenzahl];
 	}
 }// Ende Vielfaches_einer_Zeile_addieren
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Methodenstart Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Die Funktion ist langsamer als Matlab...für 200*200 Matrizzen ok, für 4000*4000 nicht (5min gegen 8 sekunden)
+////////////////////////////////////////////////////////////////////////////////
+// Die Funktion ist langsamer als Matlab...für 200*200 Matrizzen ok,
+// für 4000*4000 nicht (5min gegen 8 sekunden)
 // TODO Funktion durch Lapackfunktion ersetzen oder Matlabcode einbinden
-// oder selbst assembler schreiben...(sind ja nur 60 Zeilen code (so * 10 könnt man vll noch hinkriegen)
+// oder selbst assembler schreiben...
+// (sind ja nur 60 Zeilen code (so * 10 könnt man vll noch hinkriegen)
 // TODO nachiteration...(das geht besser mit LU-Zerlegung)
 inline int MPL_Matrix::Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor()
 {
-	/////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	// Die Matrix ist nicht quadratisch das Gleichungssystem
 	// sieht so aus: LHS x= RHS
 	// LHS ist eine gegebene Matrix, RHS ist ein gegebener Vektor
 	// mehrere Zeilen der RHS werden als nebeneinander stehende Vektoren gewertet
 	// Die Matrix hat die Form LHSy1y2 etc
-	// Die Blockmatrix LHS wird durch Gausselimination in eine Einheitsmatrix überführt und aus den Spalten y1,y2 usw
+	// Die Blockmatrix LHS wird durch Gausselimination in eine Einheitsmatrix
+	// überführt und aus den Spalten y1,y2 usw
 	// werden die Lösungen x1,x2, usw...d.h. LHS muss eine nxn Matrix sein und x
 	// sowie RHS müssen nx1 Vektoren sein(Spaltenvektoren)
-	// ACHTUNG DER LÖSUNGSVEKTOR WIRD SCHON RICHTIG DIAGONALISIERT...nicht nochmal machen
-	/////////////////////////////////////////////////////////////////////////////////////////
+	// ACHTUNG DER LÖSUNGSVEKTOR WIRD SCHON RICHTIG DIAGONALISIERT...
+	// nicht nochmal machen
+	////////////////////////////////////////////////////////////////////////////
 	int n = this->m_Zeilenzahl;
-	int *Matrixzeilen; //Feld in der die Reihenfolge der abgearbeiteten Zeilen stehn, so spart man sich Zeilentauschs
+	//Feld in der die Reihenfolge der abgearbeiteten Zeilen stehn,
+	//so spart man sich Zeilentauschs
+	int *Matrixzeilen;
 	Matrixzeilen = new int[n];
 	for (int i = 0; i < n; i++) {
 		Matrixzeilen[i] = -1;   //-1 initialisierung ...0 ist schlecht
@@ -636,7 +693,8 @@ inline int MPL_Matrix::Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor(
 	for (int i = 0; i < n; i++) {
 		// Suche größtes Element der Spalte
 		for (int k = 0; k < n; k++) {
-			// zunächst checken, ob aus dieser Zeile schon einmal das größte Element stammte
+			// zunächst checken, ob aus dieser Zeile schon einmal
+			// das größte Element stammte
 			bool ignorieren = false;
 			for (int j = 0; j < n; j++) {
 				if (Matrixzeilen[j] == k) {
@@ -651,15 +709,18 @@ inline int MPL_Matrix::Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor(
 			if (Matrixzeilen[i] == -1) {
 				Matrixzeilen[i] = k;
 			}
-			//Spaltenelemente miteinander vergleichen ( Betragsmäßiger Vergleich)
-			if (m_Elemente[i + Matrixzeilen[i]*m_Spaltenzahl]*m_Elemente[i + Matrixzeilen[i]*m_Spaltenzahl]
-					< m_Elemente[i + k * m_Spaltenzahl]*m_Elemente[i + k * m_Spaltenzahl]) {
+			//Spaltenelemente miteinander vergleichen (Betragsmäßiger Vergleich)
+			if (m_Elemente[i + Matrixzeilen[i] * m_Spaltenzahl]
+					  * m_Elemente[i + Matrixzeilen[i]*m_Spaltenzahl]
+					< m_Elemente[i + k * m_Spaltenzahl]
+					  * m_Elemente[i + k * m_Spaltenzahl]) {
 				Matrixzeilen[i] = k;
 			}
 		}//for k
 		// Testen ob gefundenes Element 0 ist, dann Matrix singulär
 		double epsilon = 1E-15;
-		if ((m_Elemente[i + Matrixzeilen[i]*m_Spaltenzahl] + epsilon > 0) && (m_Elemente[i + Matrixzeilen[i]*m_Spaltenzahl] - epsilon < 0)) {
+		if ((m_Elemente[i + Matrixzeilen[i] * m_Spaltenzahl] + epsilon > 0)
+				&& (m_Elemente[i + Matrixzeilen[i] * m_Spaltenzahl] - epsilon < 0)) {
 			cout << "Matrix ist singulär, Gausselimination scheitert\n";
 			//Speicher Freigeben
 			delete[] Matrixzeilen;
@@ -671,7 +732,7 @@ inline int MPL_Matrix::Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor(
 		double Faktor_1 = 1.0 / m_Elemente[i + Matrixzeilen[i] * m_Spaltenzahl];
 //        cout<<"Faktor_1: "<<Faktor_1<<"\n";
 		this->Zeile_Multiplizieren(Matrixzeilen[i], Faktor_1);
-//        ///////////////////////////////////////////////////////////////////////////////////////////
+//        //////////////////////////////////////////////////////////////////////
 //        // zum Test Matrixzeilen und Matrix ausgeben
 //        cout<<"Matrixzeilen: ";
 //        for(int b=0;b<n;b++)
@@ -690,19 +751,23 @@ inline int MPL_Matrix::Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor(
 //            }//ende for j
 //            cout<<"\n";
 //        }//Ende Matrix_Ausgeben(MPLMatrix M)
-//        ///////////////////////////////////////////////////////////////////////////////////////////
-		// Die auserwählte Zeile von den restlichen Zeilen so abziehen, dass diese in der gerade betrachteten Spalte 0 sind
+//        //////////////////////////////////////////////////////////////////////
+		// Die auserwählte Zeile von den restlichen Zeilen so abziehen,
+		// dass diese in der gerade betrachteten Spalte 0 sind
 		for (int k = 0; k < n; k++) {
 			if (Matrixzeilen[i] == k) {
-				continue;       // Die Zeile soll ja die 1  haben und die anderen die 0
+				continue; // Die Zeile soll ja die 1 haben und die anderen die 0
 			}
-			double Faktor_2 = -1.0 * (m_Elemente[i + k * m_Spaltenzahl] / m_Elemente[i + Matrixzeilen[i] * m_Spaltenzahl]);
+			double Faktor_2 = -1.0 * (m_Elemente[i + k * m_Spaltenzahl]
+					/ m_Elemente[i + Matrixzeilen[i] * m_Spaltenzahl]);
 			this->Vielfaches_einer_Zeile_addieren(k, Matrixzeilen[i], Faktor_2);
 		}// for k
 	}// for i
 
-	// Letzter Schritt...die Matrix auf echte Diagonalform bringen...(sonst Lösungen in falscher Reihenfolge)
-	//...nicht komplett nötig :  Es reicht die RHS in die richtige Reihenfolge zu bringen
+	// Letzter Schritt...die Matrix auf echte Diagonalform bringen...
+	// (sonst Lösungen in falscher Reihenfolge)
+	//...nicht komplett nötig:
+	//   Es reicht die RHS in die richtige Reihenfolge zu bringen
 	for (int i = 0; i < n; i++) {
 		for (int j = i; j < n; j++) {
 			if (Matrixzeilen[j] == i) {
@@ -711,7 +776,8 @@ inline int MPL_Matrix::Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor(
 					double d_dreieck;
 
 					d_dreieck = m_Elemente[Spalte + Matrixzeilen[i] * m_Spaltenzahl];
-					m_Elemente[Spalte + Matrixzeilen[i]*m_Spaltenzahl] = m_Elemente[Spalte + Matrixzeilen[j] * m_Spaltenzahl];
+					m_Elemente[Spalte + Matrixzeilen[i]*m_Spaltenzahl]
+						= m_Elemente[Spalte + Matrixzeilen[j] * m_Spaltenzahl];
 					m_Elemente[Spalte + Matrixzeilen[j]*m_Spaltenzahl] = d_dreieck;
 				}
 				//Buchhaltung updaten
@@ -726,13 +792,13 @@ inline int MPL_Matrix::Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor(
 	delete[] Matrixzeilen;
 	return 0;
 }
-//////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Ende Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor
-//////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Methodenstart in_Datei_speichern
-//////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 inline void MPL_Matrix::in_Datei_speichern(string Dateiname)
 {
 	ofstream outfile;
@@ -751,8 +817,8 @@ inline void MPL_Matrix::in_Datei_speichern(string Dateiname)
 	outfile.close();
 	outfile.clear();
 }
-//////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // ENDE in_Datei_speichern
-//////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 #endif /* MPLMATRIX_HH_ */
