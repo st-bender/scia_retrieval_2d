@@ -1,4 +1,4 @@
-/***********************************************************************************************
+/*******************************************************************************
 main.cpp
 
 Dieses Programm ist eine C++ Version des Retrievalprogramms SCIA2D.f90,
@@ -6,82 +6,100 @@ welches von Marco Scharringhausen entwickelt wurde.
 Zur Vergleichbarkeit sind die durchgeführten Rechnungen gleich, lediglich
 das Layout des Programms soll etwas anders sein.
 ( Das stimmt schon garnicht mehr....
-  Streuwinkel werden anders berechnet, SZA auch, Das Raytracing ist 3D, d.h. die längenänderung wird für die Schritte berücksichtigt
-  usw.....am Ende kommt aber dasselbe raus, d.h. die kleinen Bugs, die vorher drin waren waren nicht sehr gravierend
+  Streuwinkel werden anders berechnet, SZA auch, Das Raytracing ist 3D, d.h. die
+  längenänderung wird für die Schritte berücksichtigt
+  usw.....am Ende kommt aber dasselbe raus, d.h. die kleinen Bugs, die vorher
+  drin waren waren nicht sehr gravierend
   Bei stärkerer Absorbtion wäre das aber schon der Fall)
 
 
-Ich benutzte hier als integrierte Entwicklungsumgebung eclipse (kostenlos erhältlich, für windows und linux)
-Auf Windows gibt es auch kostenlose Versionen des Visual Studios (Express Versionen....da ham einen verständlicheren Debugger)
-Natürlich kann man auch andere Editoren wie Kate, oder vi verwenden, je nach Geschmack
+Ich benutzte hier als integrierte Entwicklungsumgebung eclipse (kostenlos
+erhältlich, für windows und linux) Auf Windows gibt es auch kostenlose
+Versionen des Visual Studios (Express Versionen....da ham einen
+verständlicheren Debugger) Natürlich kann man auch andere Editoren wie Kate,
+oder vi verwenden, je nach Geschmack
+
+Ein Ziel dieses Programms ist es, schnell zu sein. Ein anderes ist
+Flexibilität, was in diesem Fall die möglichst schnelle und einfache
+Anpassungfähigkeit des Programms an neue Spezies bedeutet.  Letzteres soll
+dadurch erreicht werden, dass diese wichtigen Veränderung nur im Hauptprogramm
+durchgeführt werden müssen.  ( Das hat auch geklappt, nur bei den Spezies in
+Limbauswertung und Nadirauswertung, müssen einige Teile ergänzt werden, die
+aber gleich zu den anderen aussehen) Weitere Teile, die ich oft ändere sind das
+Retrievalgitter In Retrievaliteration, kann man die maximal Iterationszahl, bzw
+den treshold heruntersetzen, wenns zu lange dauert
+
+ Um die kritischen Stellen leicht zu finden, soll der Code im Hauptprogramm
+ entsprechend kurz sein, das heißt, dass längere Passagen in möglichst klar
+ benannten Funktionen untergebracht sind, sodass im Hauptprogramm auch die
+ grobe Struktur der Lösung des Problems schnell nachvollzogen werden kann.
+
+Schnelligkeit ist z.B. dadurch zu erreichen, dass Dateien, die mehrere
+Datensätze enthalten, auch wenn dies nicht der  intuitiven Abarbeitungslogik
+entspricht, trotzdem nur einmal geladen, da dies sehr lange dauert.  Das dauert
+vor allem lange, wenn die Dateien nicht auf der richtigen Platte liegen, also
+lokal speichern
+
+Es sollte auch unbedingt vermieden werden, zu viel mit den Großen Feldern, die
+aus den Dateien geladen werden "herumzujonglieren"(d.h. möglichst die großen
+Felder nicht kopieren).....Das ist doch nicht so schlimm, das Laden so wie es
+jetzt ist, dauert höchstens eine Sekunde, da kann man flexibler sein
+
+Das Programm sollte zudem möglichst parallelisierbar sein, d.h. Gesamtprobleme
+sollten so in Teilprobleme aufgeteilt werden, dass zur Lösung der Teilprobleme
+die anderen gleichartigen Teilprobleme nicht bekannt sein müssen.  Das Programm
+wertet nur für einen Orbit aus.......  Die einfachste Art der Parallelisierung,
+ist mehrere Orbits parallel laufen zu lassen.  Dadurch muss am Programm selbst
+nicht so viel(eigentlich garnix) geändert werden. Ein umhüllendes Programm kann
+dann geschrieben werden, welches die Orbits in gleich große Listen teilt, und
+jeweils für teillisten seriell das Programm startet (siehe shell befehle fork,
+exec, waitpid, system  , für kompliziertere parallelisierungen mpi u.ä.
+verwenden (ist aber glaube ich gar nicht nötig)
+
+( Die veränderlichen Parameter in der Konf Datei müssen dem Programm Übergebbar
+sein) Die Konf Datei ist ein Relikt aus der Umsetzung von Marcos Programm und
+muss immer im Ordner sein, wo auch main.cpp liegt) Einträge dort werden aber
+zum Teil überschrieben
+
+Die Geschwindigkeitsoptimierung sollte nur die Flaschenhälse betreffen
+Die Dateien auf der eigenen Platte zu haben ist für die Geschwindigkeit
+bis jetzt (september 2010) der wichtigste Geschwindigkeitsfaktor damit wurde
+auf ein BINÄRDATEIENSYSTEM UMGESTIEGEN (einfache Umwandlungsfunktionen hab ich
+auch-> mail)
+ - unglücklicherweise habe ich Schrägen Säulendichten anfangs Zeilendichten
+   genannt...ist also hier dasselbe
+ - Das Raytracing in Teil 3 dauert recht lange. Da die Absorbtion Quasi keine
+   Rolle spielt, könnte man auch nur die Lichtwege nehmen.  Die kann man
+   ausrechnen und braucht kein Raytracing
+ - Die Matrix selbst sollte auch nicht Luftmassenfaktoren Matrix oder Air
+   mass faktor Matrix heißen, weil das eigentlich ein andere Sachverhalt ist
+   (Quotient aus Schräger SÄule und Vertikaler Säule, oder so)
+
+Dort, wo sich die Flexibilität mit der Geschwindigkeit beißt, muss abgewogen
+werden, was wichtiger ist
+ //TODO Matrixmultiplikationen überprüfen, ob die Matrizzen auch in einer
+ //günstigen Reihenfolge Multipliziert werden
+ //TODO Matrixoperationen sind z.t. für große Matrizzen langsam, für 200*200
+ //Matrizzen ist das Retrieval aber noch schnell Abhilfe schaffen hier
+ //Matrizzen der LAPACK Bibliothek....da hab ich auch schon ein Programm was
+ //LAPACK und ATLAS(BLAS)
+ // benutzt und für eine 4000*4000 Matrix die LU-Zerlegung in 5 sekunden
+ // schafft (Matlab braucht da 8 für A\x)
+
+ //Sonnenzenitwinkel und Streuwinkel werden für jeden Gitterpunkt berechnet,
+ //und nicht für jeden Messschritt Da die Winkel innerhalb eines Gitterpunktes
+ //nahezu konstant sind und unterschiede bei der späteren verwendung in sin und
+ //cos eher noch kontrahiert werden...also vernachlässigbar sind....das
+ //betrifft Teil 3...wo die Absorbtion wie gesagt, eh fast zu vernachlässigen
+ //sit
 
 
-// Ein Ziel dieses Programms ist es, schnell zu sein. Ein anderes ist Flexibilität, was in diesem
-// Fall die möglichst schnelle und einfache Anpassungfähigkeit des Programms an neue Spezies
-// bedeutet.
-// Letzteres soll dadurch erreicht werden, dass diese wichtigen Veränderung nur im Hauptprogramm
-// durchgeführt werden müssen.
-// ( Das hat auch geklappt, nur bei den Spezies in Limbauswertung und Nadirauswertung, müssen einige Teile
-     ergänzt werden, die aber gleich zu den anderen aussehen)
-   Weitere Teile, die ich oft ändere sind das Retrievalgitter
-   In Retrievaliteration, kann man die maximal Iterationszahl, bzw den treshold heruntersetzen, wenns zu lange dauert
+Für überzeugende Plots, ob das Raytracing auch funktioniert ist es besser TAU
+zu plotten als AMF Tau steigt nämlich mit zunehmendem Weg Monoton an...(bereits
+implementiert)
 
-
-
- // Um die kritischen Stellen leicht zu finden, soll der Code im Hauptprogramm entsprechend kurz sein, das heißt,
-// dass längere Passagen in möglichst klar benannten Funktionen untergebracht sind, sodass im Hauptprogramm
-// auch die grobe Struktur der Lösung des Problems schnell nachvollzogen werden kann.
-
-// Schnelligkeit ist z.B. dadurch zu erreichen, dass Dateien, die mehrere Datensätze enthalten, auch wenn dies nicht
-// der  intuitiven Abarbeitungslogik entspricht, trotzdem nur einmal geladen, da dies sehr lange dauert.
-// Das dauert vor allem lange, wenn die Dateien nicht auf der richtigen Platte liegen, also lokal speichern
-
-
-// Es sollte auch unbedingt vermieden werden, zu viel mit den Großen Feldern, die aus den Dateien geladen werden
-// "herumzujonglieren"(d.h. möglichst die großen Felder nicht kopieren).....Das ist doch nicht so schlimm, das Laden so wie es jetzt
-// ist, dauert höchstens eine Sekunde, da kann man flexibler sein
-//
-//
-// Das Programm sollte zudem möglichst parallelisierbar sein, d.h. Gesamtprobleme sollten so in Teilprobleme aufgeteilt
-// werden, dass zur Lösung der Teilprobleme die anderen gleichartigen Teilprobleme nicht bekannt sein müssen.
-// Das Programm wertet nur für einen Orbit aus.......
-// Die einfachste Art der Parallelisierung, ist mehrere Orbits parallel laufen zu lassen.
-// Dadurch muss am Programm selbst nicht so viel(eigentlich garnix) geändert werden. Ein umhüllendes Programm kann dann
- *  geschrieben werden, welches die Orbits in gleich große Listen teilt, und jeweils für teillisten seriell das Programm startet
- *  (siehe shell befehle fork, exec, waitpid, system  , für kompliziertere parallelisierungen mpi u.ä. verwenden
- *  (ist aber glaube ich gar nicht nötig)
- *
-// ( Die veränderlichen Parameter in der Konf Datei müssen dem Programm Übergebbar sein)
-// Die Konf Datei ist ein Relikt aus der Umsetzung von Marcos Programm und muss immer im Ordner sein, wo auch main.cpp liegt)
-// Einträge dort werden aber zum Teil überschrieben
-
-
-// Die Geschwindigkeitsoptimierung sollte nur die Flaschenhälse betreffen
-// Die Dateien auf der eigenen Platte zu haben ist für die Geschwindigkeit bis jetzt (september 2010) der wichtigste Geschwindigkeits
-   -faktor
-   damit wurde auf ein BINÄRDATEIENSYSTEM UMGESTIEGEN (einfache Umwandlungsfunktionen hab ich auch-> mail)
-   - unglücklicherweise habe ich Schrägen Säulendichten anfangs Zeilendichten genannt...ist also hier dasselbe
-   - Das Raytracing in Teil 3 dauert recht lange. Da die Absorbtion Quasi keine Rolle spielt, könnte man auch nur die Lichtwege nehmen.
-   Die kann man ausrechnen und braucht kein Raytracing
-   Die Matrix selbst sollte auch nicht Luftmassenfaktoren Matrix oder Air mass faktor Matrix heißen, weil das eigentlich ein andere
-    Sachverhalt ist (Quotient aus Schräger SÄule und Vertikaler Säule, oder so)
-
-// Dort, wo sich die Flexibilität mit der Geschwindigkeit beißt, muss abgewogen werden, was wichtiger ist
- *  //TODO Matrixmultiplikationen überprüfen, ob die Matrizzen auch in einer günstigen Reihenfolge Multipliziert werden
- *  //TODO Matrixoperationen sind z.t. für große Matrizzen langsam, für 200*200 Matrizzen ist das Retrieval aber noch schnell
- *  // Abhilfe schaffen hier Matrizzen der LAPACK Bibliothek....da hab ich auch schon ein Programm was LAPACK und ATLAS(BLAS)
- *  // benutzt und für eine 4000*4000 Matrix die LU-Zerlegung in 5 sekunden schafft (Matlab braucht da 8 für A\x)
- *
- *  //Sonnenzenitwinkel und Streuwinkel werden für jeden Gitterpunkt berechnet, und nicht für jeden Messschritt
- *  //Da die Winkel innerhalb eines Gitterpunktes nahezu konstant sind und unterschiede bei der späteren verwendung in sin und cos
- *  //eher noch kontrahiert werden...also vernachlässigbar sind....das betrifft Teil 3...wo die Absorbtion wie gesagt, eh fast zu vernachlässigen sit
- *
- *
- *  //////////////////////////////////////////////////////////////////////
- *  Für überzeugende Plots, ob das Raytracing auch funktioniert ist es besser TAU zu plotten als AMF
- *  Tau steigt nämlich mit zunehmendem Weg Monoton an...(bereits implementiert)
- *  ///////////////////////////////////////////////////////////////////////////////
-Damit das Programm läuft, müssen einige Bibliotheken mit eingebunden werden(am Besten in der Reihenfolge, also gfortran zuerst):
+Damit das Programm läuft, müssen einige Bibliotheken mit eingebunden werden
+(am Besten in der Reihenfolge, also gfortran zuerst):
 LimbNadir_IO
 lapack
 cblas
@@ -89,16 +107,18 @@ f77blas
 atlas
 gfortran
 
-Der Haken ist, dass man ATLAS auf seinem eigenen Rechner installieren muss (was bei Linux Programmen
-eine ziemliche Qual ist. Es gibt aber ein Manual auf deren Seite dem man folgen kann und wenn man Glück hat, dann
-funktioniert das sogar), da das auf die eigene Hardware optimiert, das funktioniert
-auch nur unter Linux, noch schneller wäre intel mkl, kostet aber geld
+Der Haken ist, dass man ATLAS auf seinem eigenen Rechner installieren muss (was
+bei Linux Programmen eine ziemliche Qual ist. Es gibt aber ein Manual
+auf deren Seite dem man folgen kann und wenn man Glück hat, dann
+funktioniert das sogar), da das auf die eigene Hardware optimiert, das
+funktioniert auch nur unter Linux, noch schneller wäre intel mkl, kostet aber
+geld
 
-Ein letzter Hinweis,: nicht alle Kommentare in dem Quelltext müssen noch aktuell sein, da so ein Programm ständigen Änderungen
-unterworfen ist
-Falls irgendetwas nicht funktioniert, mich kontaktieren
+Ein letzter Hinweis,: nicht alle Kommentare in dem Quelltext müssen noch
+aktuell sein, da so ein Programm ständigen Änderungen unterworfen ist Falls
+irgendetwas nicht funktioniert, mich kontaktieren
 
-*****************************************************************************************************************/
+*******************************************************************************/
 //eingebundene Headerfiles
 //standard
 #include <string>           // string
@@ -128,10 +148,13 @@ Falls irgendetwas nicht funktioniert, mich kontaktieren
 
 #include"Dateinamensteile_Bestimmen.h"
 //===========================================================
-// eigene externe Bibliotheken-> Müssen mitgeliefert werden, falls nicht dabei, mail an martin
-// LimbNadir_IO                     // Bibliothek zum laden und speichern von Scia L1C Daten in Ascii oder martins binärformat
-//                                          // wird beim einlesen der Rohdaten in Limbauswertung und Nadirauswertung verwendet
-//                                          // und macht so die Funktionenen in Datei_IO.h zum Teil überflüssig
+// eigene externe Bibliotheken-> Müssen mitgeliefert werden,
+// falls nicht dabei, mail an martin
+// LimbNadir_IO // Bibliothek zum laden und speichern von Scia L1C Daten in
+//              // Ascii oder martins binärformat
+//              // wird beim einlesen der Rohdaten in Limbauswertung und
+//              // Nadirauswertung verwendet
+//              // und macht so die Funktionenen in Datei_IO.h z.T. überflüssig
 //===========================================================
 // den std namespace verwenden damit nicht immer std::
 // geschrieben werden muss
@@ -221,8 +244,9 @@ int main(int argc, char *argv[])
 	//sssss_orbit_xxxxx_yyyy_mm_dd_hh_mm_0limb_Saeulen.txt
 
 	// sssss -Spezies mit führenden 0en z.b. 00MgI
-	// xxxxx -Orbit_ID  kriegt man aus Orbitlistenpfad ......../xxxxx.temp.list ...also von hinten zählen und dann substr
-	// yyyyymmdd_hhmm -kriegt man aus dem Namen der ersten Datei in der Orbitliste
+	// xxxxx -Orbit_ID  kriegt man aus Orbitlistenpfad ......../xxxxx.temp.list
+	// ...also von hinten zählen und dann substr
+	//yyyyymmdd_hhmm kriegt man aus dem Namen der ersten Datei in der Orbitliste
 	////////////////////////////////////////////////////////////////////////////
 
 	time_t start_zeit, timer1, deltaT;
@@ -235,13 +259,13 @@ int main(int argc, char *argv[])
 
 	time(&start_zeit);
 	Nachricht_Schreiben("Starte Hauptprogramm...", 3, Prioritylevel);
-	/*************************************************************************************************************************************************
+	/***************************************************************************
 	 TEIL 1 VORBEREITUNG
 
 	 IN DIESEM PROGRAMMTEIL WERDEN DIE DATEN DER ZU UNTERSUCHENEN SPEZIES ANGEGEBEN.
 	 DIE ORBITLISTE WIRD EINGELESEN UND DAS SONNENSPEKTRUM DES MESSTAGES WIRD EINGELESEN.
 
-	 *************************************************************************************************************************************************/
+	 **************************************************************************/
 	cerr << "Teil1\n";
 	time(&Teil1_Start);
 	unsigned int i, j, k, l; // Meine Zählvariablen
@@ -260,13 +284,15 @@ int main(int argc, char *argv[])
 	Speziesfenster Spez;
 	Liniendaten Lindat;
 	vector<Speziesfenster> Spezies_Fenster;
-	// Linienparameter für alle Spezies einlesen ******************************************************
-	// Dies könnte man später aus einer Datei auslesen ///////////////////////////////////////////////
-	// Die Wahl der Fensterdaten sollte Anhand von ausgewählten Plots von I/F um die Linie herum
-	// getroffen werden. Das in diesem Fall sehr viel einfacher, als eine Automatisierung
+	// Linienparameter für alle Spezies einlesen *******************************
+	// Dies könnte man später aus einer Datei auslesen /////////////////////////
+	// Die Wahl der Fensterdaten sollte Anhand von ausgewählten Plots von I/F
+	// um die Linie herum getroffen werden. Das in diesem Fall sehr viel
+	// einfacher, als eine Automatisierung
 	//
-	// TODO Falls das nochmehr spezies werden, dann Vektor von Vektor von Speziesfenster
-	// Hier werden die Wellenlängen in nm angegeben.(das nm hebt sich nacher mit der Multiplikation mit der Intervallbreite weg)
+	// TODO Falls das nochmehr spezies werden, dann Vektor von Vektor von
+	// Speziesfenster Hier werden die Wellenlängen in nm angegeben.(das nm hebt
+	// sich nacher mit der Multiplikation mit der Intervallbreite weg)
 	//
 	Nachricht_Schreiben("Bestimme Speziesdaten...", 3, Prioritylevel);
 	//Füllen z.B. für Magnesium+ *******************************************
@@ -294,7 +320,8 @@ int main(int argc, char *argv[])
 	Spez.m_Liniendaten.push_back(Lindat);
 	// weitere Wellenlängen
 	Spezies_Fenster.push_back(Spez);
-	// SpezVektoren wieder leeren   //hier könnte man in Spez auch eine Methode für schreiben
+	// SpezVektoren wieder leeren
+	// hier könnte man in Spez auch eine Methode für schreiben
 	Spez.m_Wellenlaengen.resize(0);
 	Spez.m_Basisfenster_links_WLmin.resize(0);
 	Spez.m_Basisfenster_links_WLmax.resize(0);
@@ -320,11 +347,11 @@ int main(int argc, char *argv[])
 	Lindat.Einlesen("DATA/LinePars.dat", Spez.m_Wellenlaengen[0]);
 	Spez.m_Liniendaten.push_back(Lindat);
 	// weitere Wellenlängen
-	//***************************************************************************
+	//**************************************************************************
 	Spezies_Fenster.push_back(Spez);
 	//weitere Spezies
 	Spez.clear();  // Instanz leeren
-	// Unbekannte Spezies ************************************************************
+	// Unbekannte Spezies ******************************************************
 	Spez.m_Spezies_Name = "unknown"; //bitte zusammenhängend
 	Spez.m_FWHM = 0.22;
 	//Wellenlaenge 1
@@ -343,10 +370,11 @@ int main(int argc, char *argv[])
 	Lindat.m_f_Wert = 0.162; //0.162;  // für Si
 	Lindat.m_E1 = 0; //0.01;         //für Si
 	Lindat.m_E2 = 1; //0.99;         //für Si
-	// Dies sind beliebige Werte, die auch nicht unbedingt auf I/F führen(prop faktoren wie pi r_elektron)...sondern auf beliebige werte
+	// Dies sind beliebige Werte, die auch nicht unbedingt auf I/F führen(prop
+	// faktoren wie pi r_elektron)...sondern auf beliebige werte
 	Spez.m_Liniendaten.push_back(Lindat);
 	// weitere Wellenlängen
-	//***************************************************************************
+	//**************************************************************************
 	Spezies_Fenster.push_back(Spez);
 	//cout<<Spezies_Fenster.size();
 	// cout<<Spezies_Fenster[1].m_Liniendaten[0].m_E1<<"\t";
@@ -369,17 +397,18 @@ int main(int argc, char *argv[])
 	Lindat.m_f_Wert = 0.543;
 	Lindat.m_E1 = 0.1733; //  ^5D_4 nach ^5F*_5 übergang j=4, dj=1 (Funktion für Matlab geschrieben)
 	Lindat.m_E2 = 0.8267;
-	// Dies sind beliebige Werte, die auch nicht unbedingt auf I/F führen(prop faktoren wie pi r_elektron)...sondern auf beliebige werte
+	// Dies sind beliebige Werte, die auch nicht unbedingt auf I/F führen(prop
+	// faktoren wie pi r_elektron)...sondern auf beliebige werte
 	Spez.m_Liniendaten.push_back(Lindat);
 	// weitere Wellenlängen
-	//***************************************************************************
+	//**************************************************************************
 	Spezies_Fenster.push_back(Spez);
 	//weitere Spezies
 	Spez.clear();  // Instanz leeren
-	//***************************************************************************
+	//**************************************************************************
 
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Linienparameter für alle Spezies einlesen  ende **********************************************
+	////////////////////////////////////////////////////////////////////////////
+	// Linienparameter für alle Spezies einlesen  ende *************************
 	Nachricht_Schreiben("Speziesdaten bestimmt...", 3, Prioritylevel);
 	// Für jede Spezies einen Vector mit Messergebnissen erstellen
 	// Mg und Mg+
@@ -392,17 +421,21 @@ int main(int argc, char *argv[])
 	vector<Ausgewertete_Messung_Nadir> Ausgewertete_Nadirmessung_unknown;
 	vector<Ausgewertete_Messung_Limb> Ausgewertete_Limbmessung_FeI;
 	vector<Ausgewertete_Messung_Nadir> Ausgewertete_Nadirmessung_FeI;
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	// Orbitliste Laden
 	//
-	// Die Orbitliste ist so zu erstellen, dass die erste Datei eine Limb Datei ist
-	// Da dieses Verfahren eh nur sinnvoll ist, wenn Limbmessungen vorhanden sind, sollte dies kein Problem sein
-	// TODO Die Orbitliste sollte nach Limb und Nadir sortiert werden. Danach muss sie nach Zeit sortiert sein(
-	// Wichtig für Einteilung der Boxen etc.... falls Ordner nach Dateinamen sortiert, so sollte das immer stimmen)
-	// Die Frage ist, ob man die Orbitliste so übernimmt, oder ob man hier nochmal sortiert. Bis jetzt ist die Orbitliste
-	// schon automatisch so. Allerdings wär eine Sortierung der Orbitliste ein geringer Zeitaufwand
+	// Die Orbitliste ist so zu erstellen, dass die erste Datei eine Limb Datei
+	// ist Da dieses Verfahren eh nur sinnvoll ist, wenn Limbmessungen
+	// vorhanden sind, sollte dies kein Problem sein
+	// TODO Die Orbitliste sollte nach Limb und Nadir sortiert werden. Danach
+	// muss sie nach Zeit sortiert sein( Wichtig für Einteilung der Boxen
+	// etc.... falls Ordner nach Dateinamen sortiert, so sollte das immer
+	// stimmen) Die Frage ist, ob man die Orbitliste so übernimmt, oder ob man
+	// hier nochmal sortiert. Bis jetzt ist die Orbitliste schon automatisch
+	// so. Allerdings wär eine Sortierung der Orbitliste ein geringer
+	// Zeitaufwand
 	//
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	Nachricht_Schreiben("Lade Orbitliste...", 3, Prioritylevel);
 	Orbitliste Orbitlist;
 	if (Orbitlist.Liste_Laden(Konf.m_Pfad_Datei_mit_Dateinamen_fuer_Messungen_eines_Orbits) != 0) {
@@ -410,21 +443,24 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 	// Zur Überprüfung Orbitliste in Datei schreiben
-	//Orbitlist.In_Datei_Speichern("CHECKDATA/Orbitliste_Ueberpruefung.txt"); // der ordner CHECKDATA muss vorher existieren
-	//cout<<Orbitlist.m_Dateinamen[Orbitlist.m_Dateinamen.size()-1];// //TODO Das ist leer...Es muss beim erstellen der Orbitliste
-	//                                                                                             // sichergestellt werden, dass die letzte Zeile kein\n enthält!!!!
-	// -> Funktion funktioniert... aber Orbitliste Datei muss  ordentlich erzeugt sein
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//Orbitlist.In_Datei_Speichern("CHECKDATA/Orbitliste_Ueberpruefung.txt");
+	// der ordner CHECKDATA muss vorher existieren
+	//cout<<Orbitlist.m_Dateinamen[Orbitlist.m_Dateinamen.size()-1];//
+	//TODO Das ist leer...Es muss beim erstellen der Orbitliste
+	// sichergestellt werden, dass die letzte Zeile kein\n enthält!!!!
+	// -> Funktion funktioniert... aber Orbitliste Datei muss  ordentlich
+	// erzeugt sein
+	////////////////////////////////////////////////////////////////////////////
 	//
 	// Orbitliste Ist geladen
 	//
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	//
 	// Sonnenspektrum bestimmen
 	//
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	Nachricht_Schreiben("Lade Sonnenspektrum...", 3, Prioritylevel);
 	Sonnenspektrum Solspec;
 	if (Solspec.Laden_SCIA(Konf.m_Pfad_Solar_Spektrum, Konf.m_Pfad_Solar_Fallback_Spektrum) != 0) {
@@ -432,37 +468,41 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 	//Überprüfen, ob einlesen erfolgreich war
-	//Solspec.Speichern_was_geladen_wurde("CHECKDATA/Sonne_so_wie_geladen.txt"); //ok -> funktioniert
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//Solspec.Speichern_was_geladen_wurde("CHECKDATA/Sonne_so_wie_geladen.txt");
+	//ok -> funktioniert
+	////////////////////////////////////////////////////////////////////////////
 	//
 	// Sonnenspektrum ist bestimmt
 	//
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	time(&Teil1_End);
 	T1_Dauer = Teil1_End - Teil1_Start;
-	/*************************************************************************************************************************************************
+	/***************************************************************************
 	 ENDE TEIL 1
-	 ************************************************************************************************************************************************/
-	/*************************************************************************************************************************************************
+	 **************************************************************************/
+	/***************************************************************************
 	TEIL 2 BESTIMMUNG DER SÄULENDICHTEN
-	FÜR ALLE LIMB- UND NADIRMESSUNGEN EINES ORBITS WERDEN DIE SÄULENDICHTEN FÜR JEDE LINIE BESTIMMT
-	UND IN EINE EINFACHERE STRUKTUR(Ausgewertete_Messungen) GESTECKT.
-	*************************************************************************************************************************************************/
+	FÜR ALLE LIMB- UND NADIRMESSUNGEN EINES ORBITS WERDEN DIE SÄULENDICHTEN FÜR
+	JEDE LINIE BESTIMMT UND IN EINE EINFACHERE STRUKTUR(Ausgewertete_Messungen)
+	GESTECKT.
+	***************************************************************************/
 	cerr << "Teil2\n";
 	time(&Teil2_Start);
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	//
 	// Säulendichtenbestimmung
 	//
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	Nachricht_Schreiben("Bestimme Säulendichten...", 3, Prioritylevel);
-	// Aus jeder Messung egal ob Limb oder Nadir die Säulendichte für jede Linie jeder Spezies bestimmen
+	// Aus jeder Messung egal ob Limb oder Nadir die Säulendichte für jede
+	// Linie jeder Spezies bestimmen
 	int counter_Nachtmessungen = 0;              //counter für Qualitätscheck der Messung initialisieren
 	int counter_NLC_detektiert = 0;                  //TODO ausgabe der counter später implementieren
 	int counter_Richtungsvektor_nicht_ok = 0;
 	int counter_Nachtmessungen_Nadir = 0;
 	int counter_Nadir_Nacht_Dateien = 0;
-	// Aus jeder Messung egal ob Limb oder Nadir die Säulendichte für jede Linie jeder Spezies bestimmen
+	// Aus jeder Messung egal ob Limb oder Nadir die Säulendichte für jede
+	// Linie jeder Spezies bestimmen
 	for (l = 0; l < Orbitlist.m_Dateinamen.size(); l++) {
 		string L1CDatei = Orbitlist.m_Dateinamen[l];
 		//cout<<L1CDatei<<"\n";
@@ -472,16 +512,20 @@ int main(int argc, char *argv[])
 			/////////////////////////////////////
 			//Limbauswertung
 			////////////////////////////////////
-			// Die erste Limbdatei ist wichtig für die Interpolation des Sonnenspektrums... es ist also wichtig, dass für l=0 eine Limbmessung vorliegt
+			// Die erste Limbdatei ist wichtig für die Interpolation des
+			// Sonnenspektrums... es ist also wichtig, dass für l=0 eine
+			// Limbmessung vorliegt
 			//cerr<<"limbauswertung start\n";
-			//NotTODO Die Säulendichtebestimmung kann deutlich schneller geschehen, Verbesserungen hier sind aber irrelevant
+			//NotTODO Die Säulendichtebestimmung kann deutlich schneller
+			//geschehen, Verbesserungen hier sind aber irrelevant
 			Limb_Auswertung(Orbitlist, l, Solspec, Spezies_Fenster,
 							&counter_Nachtmessungen, &counter_NLC_detektiert, &counter_Richtungsvektor_nicht_ok,
 							Arbeitsverzeichnis, mache_Fit_Plots_limb, untersuche_limb_mesothermo_states,
 							Ausgewertete_Limbmessung_MgI, Ausgewertete_Limbmessung_MgII, Ausgewertete_Limbmessung_unknown,
 							Ausgewertete_Limbmessung_FeI);
 			//cerr<<"limbauswertung Ende\n";
-			// Die Zwischenergebnisse stehen nun in Ausgewertete_Limbmessung_MgI und  Ausgewertete_Limbmessung_MgII
+			// Die Zwischenergebnisse stehen nun in
+			// Ausgewertete_Limbmessung_MgI und  Ausgewertete_Limbmessung_MgII
 			/////////////////////////////////////
 			//Limbauswertung Ende
 			////////////////////////////////////
@@ -492,8 +536,9 @@ int main(int argc, char *argv[])
 			/////////////////////////////////////
 			//Nadirauswertung
 			/////////////////////////////////////
-			// TODO Die Zeilendichtebestimmung kann deutlich schneller geschehen...da werden viel zu viele unnötig große
-			// Schleifen verwendet
+			// TODO Die Zeilendichtebestimmung kann deutlich schneller
+			// geschehen...da werden viel zu viele unnötig große Schleifen
+			// verwendet
 			//cerr<<"Nadirauswertung start\n";
 			Nadir_Auswertung(Orbitlist, l, Solspec, Spezies_Fenster,
 							 &counter_Nachtmessungen_Nadir, &counter_Nadir_Nacht_Dateien,
@@ -516,14 +561,15 @@ int main(int argc, char *argv[])
 	}
 
 	//////// TEIL 2B/////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	//
 	// Zeilendichtenbestimmung ist abgeschlossen
-	// Bis hierhin braucht das Programm keine Sekunde, wenn die ROHDATEN auf der LOKALEN Platte liegen.
+	// Bis hierhin braucht das Programm keine Sekunde, wenn die ROHDATEN auf
+	// der LOKALEN Platte liegen.
 	//
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	Nachricht_Schreiben("Zeilendichten sind bestimmt....", 3, Prioritylevel);
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	//Ausgabe der Vektoren mit den Zwischenergebnissen in Dateien
 	// TODO sieht Ok aus...evtl später mal ein par fits angucken
 	string xxxxx = xxxxx_Bestimmen(Orbitlistenpfad);
@@ -562,41 +608,44 @@ int main(int argc, char *argv[])
 			Plots_Zusammenfassen(Pfad_multips2pdf, Pfad_multips2ps, pdf_Datei, Spezies_Fenster[i].m_Liste_der_Plot_Dateinamen);
 		}
 	}
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	time(&Teil2_End);
 	T2_Dauer = Teil2_End - Teil2_Start;
 	if (mache_volles_Retrieval != "ja") { // Falls nicht, nach Teil 2 abbrechen
-		// Hier könnt man echtmal ne sprunganweisung machen...ich verlass mich erstmal auf den garbage collector von c++
+		// Hier könnt man echtmal ne sprunganweisung machen...ich verlass mich
+		// erstmal auf den garbage collector von c++
 		cerr << "Programm wird vorzeitig nach Säulendichtenbestimmung beendet\n";
 		return 0;
 	}
 
-	/***************************************************************************************************************************************************
+	/***************************************************************************
 	ENDE TEIL 2
 
-	****************************************************************************************************************************************************/
+	***************************************************************************/
 
-	/***************************************************************************************************************************************************
+	/***************************************************************************
 	TEIL 3 AUFBAU DER FÜR DAS RETRIEVAL BENÖTIGTEN MATRIZZEN
 	MEHRERE EINFACHE MATRIZZEN WERDEN BENÖTIGT.
-	DIE WICHTIGSTE UND KOMPLIZIERTESTE MATRIX IST DIE MATRIX FÜR DIE LUFTMASSENFAKTOREN AMF.
-	****************************************************************************************************************************************************/
+	DIE WICHTIGSTE UND KOMPLIZIERTESTE MATRIX IST DIE MATRIX FÜR DIE
+	LUFTMASSENFAKTOREN AMF.
+	***************************************************************************/
 	cerr << "Teil3\n";
 	time(&Teil3_Start);
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	// Matrizzen und Vektoren aufbauen
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	/****************************************************************************************************************************************
+	////////////////////////////////////////////////////////////////////////////
+	/***************************************************************************
 	// Wir benötigen das Gitter, auf dem wir die Dichte ausrechnen
 	// Ab nun Vektoren und Matrizzen für jede Spezies bestimmen
 	// einen Vektor der Dichte_n
 	// einen Vektor x_a für die a-priori-Lösung der Dichte (oder Startwert usw)
 	// einen Vektor der Zeilendichten
 	// Die Gesamtwichtungsfaktoren Lambda_H und Lambda_PHI
-	// zwei Matrizzen S_H und S_LAT mit den Unrterschieden der Nachbarpunkte(zur Glättung)
-	// die Matrix K, in der das Absorbtionsgesetz für die Lichtwege drinsteckt
+	// zwei Matrizzen S_H und S_LAT mit den Unrterschieden der
+	// Nachbarpunkte(zur Glättung) die Matrix K, in der das Absorbtionsgesetz
+	// für die Lichtwege drinsteckt
 	// Kovarianzmatrizzen S_y und S_a...die man aber als Diagonalvektor benutzt
-	******************************************************************************************************************************************/
+	***************************************************************************/
 	Ausgewertete_Nadirmessung_MgI.resize(0);  //das hier weg( das erlaubt nur Limbmessungen)
 	Ausgewertete_Nadirmessung_MgII.resize(0);  //das hier weg( das erlaubt nur Limbmessungen)
 	Ausgewertete_Nadirmessung_unknown.resize(0);
@@ -604,12 +653,13 @@ int main(int argc, char *argv[])
 	Retrievalgitter Grid;
 	double Mindestabstand_Lat_in_Grad = 5.0; //5.0;  //5.0 ist vernünftig; 2.0 ist gut für TAU_LOS_plot
 	Grid.Retrievalgitter_erzeugen(Ausgewertete_Limbmessung_MgI, Mindestabstand_Lat_in_Grad);
-	//Folgende Ausgabe sieht ok aus 28.9.2010 (Durchstoßpunkte werden erst später ermittelt)
+	//Folgende Ausgabe sieht ok aus 28.9.2010 (Durchstoßpunkte werden erst
+	//später ermittelt)
 	string Pfad_Grid = Arbeitsverzeichnis + "/" + "Gitter.txt";
 	Grid.In_Datei_Ausgeben(Pfad_Grid);
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	// Spezies Mg I //
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	// einen Vektor der Dichte_n
 	MPL_Matrix Dichte_n_MgI(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
 	Dichte_n_MgI.Null_Initialisierung();
@@ -637,14 +687,16 @@ int main(int argc, char *argv[])
 	}
 	//Ende Säulendichten und Fehler auffüllen
 	// verwendete Konfiguration bis 20.1.2011
-	//double MgI_Lambda_Hoehe= 5E-7;//5E-6;//5E-6;//5E-6;     gute Werte 5 E-6    // TODO das laden der Parameter eindeutiger machen Konf.m_Retrieval_Kovarianzen[0+1*m_Anzahl_der_Emitter];
+	//double MgI_Lambda_Hoehe= 5E-7;//5E-6;//5E-6;//5E-6;     gute Werte 5 E-6 
+	// TODO das laden der Parameter eindeutiger machen
+	// Konf.m_Retrieval_Kovarianzen[0+1*m_Anzahl_der_Emitter];
 	//double MgI_Lambda_Breite= 5E-6;//1E-6;//1E-7;//1E-7;      gute Werte 1 E-6
 	//double MgI_Lambda_apriori= 5E-5;//5E-6 oder -5;
-	//double MgI_Lambda_Hoehe= 5E-7;           // Gut für 3 km Schirtte mit 30 Höhen
-	//double MgI_Lambda_Breite= 5E-6;            // Gut für 3 km Schirtte mit 30 Höhen
+	//double MgI_Lambda_Hoehe= 5E-7;      // Gut für 3 km Schirtte mit 30 Höhen
+	//double MgI_Lambda_Breite= 5E-6;     // Gut für 3 km Schirtte mit 30 Höhen
 	//double MgI_Lambda_apriori=5E-5; //5E-5;  // Gut für 3 km Schirtte mit 30 Höhen
 
-	//double MgI_Lambda_Hoehe= 1E-5;           // Gut für 1 km Schirtte mit 82 Höhen
+	//double MgI_Lambda_Hoehe= 1E-5;      // Gut für 1 km Schirtte mit 82 Höhen
 	//double MgI_Lambda_Breite= 1E-5;
 	//double MgI_Lambda_apriori=5E-5;
 	//double MgI_Lambda_letzte_Hoehe=100;
@@ -677,7 +729,8 @@ int main(int argc, char *argv[])
 						   S_apriori_MgI, S_y_MgI,
 						   AMF_MgI, MgI_Lambda_apriori,
 						   Saeulendichten_Fehler_MgI,
-						   Spezies_Fenster[1],                        // TODO TODO TODO  1 ist MgI, 0 ist MgII  hier wieder korrigieren
+						   Spezies_Fenster[1],
+						   // TODO 1 ist MgI, 0 ist MgII hier wieder korrigieren
 						   Grid,
 						   Ausgewertete_Limbmessung_MgI,
 						   Ausgewertete_Nadirmessung_MgI,
@@ -687,13 +740,13 @@ int main(int argc, char *argv[])
 			return -1; //Hauptprogramm beenden
 		}
 	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	// ENDE Spezies Mg I //
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	// Spezies Mg II //
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	// einen Vektor der Dichte_n
 	MPL_Matrix Dichte_n_MgII(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
 	Dichte_n_MgII.Null_Initialisierung();
@@ -743,7 +796,8 @@ int main(int argc, char *argv[])
 						   S_apriori_MgII, S_y_MgII,
 						   AMF_MgII, MgII_Lambda_apriori,
 						   Saeulendichten_Fehler_MgII,
-						   Spezies_Fenster[0],                        // TODO TODO TODO  1 ist MgI, 0 ist MgII  hier wieder korrigieren
+						   Spezies_Fenster[0],
+						   // TODO 1 ist MgI, 0 ist MgII hier wieder korrigieren
 						   Grid,
 						   Ausgewertete_Limbmessung_MgII,
 						   Ausgewertete_Nadirmessung_MgII,
@@ -753,13 +807,13 @@ int main(int argc, char *argv[])
 			return -1; //Hauptprogramm beenden
 		}
 	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	// ENDE Spezies Mg II //
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	// Spezies unbekannte //
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	// einen Vektor der Dichte_n
 	MPL_Matrix Dichte_n_unknown(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
 	Dichte_n_unknown.Null_Initialisierung();
@@ -803,7 +857,8 @@ int main(int argc, char *argv[])
 						   S_apriori_unknown, S_y_unknown,
 						   AMF_unknown, unknown_Lambda_apriori,
 						   Saeulendichten_Fehler_unknown,
-						   Spezies_Fenster[2],                        // TODO TODO TODO  1 ist MgI, 0 ist MgII  hier wieder korrigieren
+						   Spezies_Fenster[2],
+						   // TODO 1 ist MgI, 0 ist MgII hier wieder korrigieren
 						   Grid,
 						   Ausgewertete_Limbmessung_unknown,
 						   Ausgewertete_Nadirmessung_unknown,
@@ -813,13 +868,13 @@ int main(int argc, char *argv[])
 			return -1; //Hauptprogramm beenden
 		}
 	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	// ENDE Spezies unknown
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	// Spezies FeI //
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	// einen Vektor der Dichte_n
 	MPL_Matrix Dichte_n_FeI(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
 	Dichte_n_FeI.Null_Initialisierung();
@@ -859,7 +914,7 @@ int main(int argc, char *argv[])
 						   S_apriori_FeI, S_y_FeI,
 						   AMF_FeI, FeI_Lambda_apriori,
 						   Saeulendichten_Fehler_FeI,
-						   Spezies_Fenster[3],                        // TODO TODO TODO  Index setzten
+						   Spezies_Fenster[3], // TODO Index setzten
 						   Grid,
 						   Ausgewertete_Limbmessung_FeI,
 						   Ausgewertete_Nadirmessung_FeI,
@@ -869,34 +924,36 @@ int main(int argc, char *argv[])
 			return -1; //Hauptprogramm beenden
 		}
 	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	// ENDE Spezies FeI
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Matrizzen sind aufgebaut  // Schön wärs 7.7.2010...erstmal weiter, weil es beim Raytracing noch probleme gibt
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Matrizzen sind aufgebaut  // wer hat an der Uhr gedreht 14.9.2010; getestet 4.10.2010
-	//                                       // jetzt auch für Mg II.... oha...schon 7.12.2010
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
+	// Matrizzen sind aufgebaut  // Schön wärs 7.7.2010...erstmal weiter, weil
+	// es beim Raytracing noch probleme gibt
+	////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
+	// Matrizzen sind aufgebaut
+	// // wer hat an der Uhr gedreht 14.9.2010; getestet 4.10.2010
+	// // jetzt auch für Mg II.... oha...schon 7.12.2010
+	////////////////////////////////////////////////////////////////////////////
 
 	time(&Teil3_End);
 	T3_Dauer = Teil3_End - Teil3_Start;
-	/*****************************************************************************************************************************************
+	/***************************************************************************
 	 ENDE TEIL 3
-	******************************************************************************************************************************************/
+	***************************************************************************/
 
-	/*****************************************************************************************************************************************
+	/***************************************************************************
 	 TEIL 4 AUSFÜHREN DES RETRIEVALS
 	 AUFSTELLEN UND LÖSEN DER NORMALGLEICHUNG
-	 ******************************************************************************************************************************************/
+	 **************************************************************************/
 	cerr << "Teil4\n";
 	time(&Teil4_Start);
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	// Iteration des Retrievals
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	/////////////////////////
 	// Spezies Mg I //
 	/////////////////////////
@@ -937,17 +994,18 @@ int main(int argc, char *argv[])
 
 	time(&Teil4_End);
 	T4_Dauer = Teil4_End - Teil4_Start;
-	/*****************************************************************************************************************************************
+	/***************************************************************************
 	TEIL 5 FEHLERABSCHÄTZUNG
 	BERECHNUNG DER AVERAGING-KERNEL MATRIX UND DER FEHLERMATRIX
-	******************************************************************************************************************************************/
+	***************************************************************************/
 	cerr << "Teil5\n";
 	time(&Teil5_Start);
 
 	// todolist
 	// die LHS Seite der Normalgleichung berechnen
 	// zum Invertieren 1 Matrix anhängen und Diagonalisieren -> Fehlermatrix
-	// die Averaging Kernels erhält man mit Multiplikation der Fehlermatrix mit AMF^T S_y AMF
+	// die Averaging Kernels erhält man mit Multiplikation der Fehlermatrix mit
+	// AMF^T S_y AMF
 	//Retrievalfehler_Abschaetzung();
 
 	/////////////////////////
@@ -992,17 +1050,18 @@ int main(int argc, char *argv[])
 	}
 	time(&Teil5_End);
 	T5_Dauer = Teil5_End - Teil5_Start;
-	/*****************************************************************************************************************************************
+	/***************************************************************************
 	ENDE TEIL 5
-	 ******************************************************************************************************************************************/
+	 **************************************************************************/
 
-	/*****************************************************************************************************************************************
+	/***************************************************************************
 	TEIL 6 ERGEBNISAUSGABE
 	DIE ERGEBNISAUSGABE SCHLIEßT DAS PROGRAMM AB
-	******************************************************************************************************************************************/
+	***************************************************************************/
 	cerr << "Teil6\n";
 	time(&Teil6_Start);
-	//int Ausgabe_Dichten(string Dateiname_out,Retrievalgitter Grid, MPL_Matrix Dichten, MPL_Matrix S_x, MPL_Matrix AKM)
+	//int Ausgabe_Dichten(string Dateiname_out,Retrievalgitter Grid,
+	//  MPL_Matrix Dichten, MPL_Matrix S_x, MPL_Matrix AKM)
 	string Dateiname_out;
 	// MgI /////////////////////
 	Dateiname_out = Arbeitsverzeichnis + "/" + sssss_MgI + Dateiout_Mittelteil;
@@ -1034,9 +1093,9 @@ int main(int argc, char *argv[])
 
 	time(&Teil6_End);
 	T6_Dauer = Teil6_End - Teil6_Start;
-	/*****************************************************************************************************************************************
+	/***************************************************************************
 	ENDE TEIL 6
-	******************************************************************************************************************************************/
+	***************************************************************************/
 	int Messungen_pro_Limbdatei = 7;
 	if (untersuche_limb_mesothermo_states == "ja") {
 		Messungen_pro_Limbdatei = 25;
@@ -1047,7 +1106,7 @@ int main(int argc, char *argv[])
 	cout << "Limb Messungen mit ungenauen Koordinaten: " << counter_Richtungsvektor_nicht_ok << "\n";
 	cout << "Nadir Nachtmessungen: " << counter_Nachtmessungen_Nadir << "\n";
 	cout << "Nadir Nachtdateien: " << counter_Nadir_Nacht_Dateien << "\n";
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	// Zeitmessung
 	time(&timer1);
 	char buf[256];
@@ -1075,7 +1134,7 @@ int main(int argc, char *argv[])
 	sprintf(buf, "Dauer Teilprozess 6 Ausgabe:\t\t\t %ld", T6_Dauer);
 	dum = buf;
 	Nachricht_Schreiben(dum, 10, Prioritylevel);
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	Nachricht_Schreiben("Beende Programm regulär...", 3, Prioritylevel);
 	return 0;
 } // Ende Hauptprogramm
