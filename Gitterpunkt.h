@@ -35,19 +35,21 @@ public:
 	int m_Index_unterer_Nachbar; // bzw. Niedriger
 	int m_Index_Nord_Nachbar;
 	int m_Index_Sued_Nachbar;
-	// Die Nachbarn auf den 4 Diagonalen Punkten  //(später Praktisch für das Raytracing)
+	// Die Nachbarn auf den 4 Diagonalen Punkten
+	// (später Praktisch für das Raytracing)
 	int m_Index_oberer_Nord_Nachbar ;
 	int m_Index_unterer_Nord_Nachbar;
 	int m_Index_oberer_Sued_Nachbar ;
 	int m_Index_unterer_Sued_Nachbar;
 
-	// Die beiden Durchstoßpunkte des LOS Raytracings sollte man sich merken....im LFS Retrieval für Longitude des Startpunkts
-	// wichtig
+	// Die beiden Durchstoßpunkte des LOS Raytracings sollte man sich merken....
+	// im LFS Retrieval für Longitude des Startpunkts wichtig
 	MPL_Vektor m_vorderer_Durchstosspunkt;  // vorne beim satelliten
 	MPL_Vektor m_hinterer_Durchstosspunkt;  //hinten weiter weg vom satelliten
 
-	// Diese Winkel werden bei der Erzeugung der AMF Matrix als Zwischenlösungen benötigt..... Todo Winkel in Raytracing
-	//double m_SZA;                          // Sonnenzenitwinkel des Gitterpunktes
+	// Diese Winkel werden bei der Erzeugung der AMF Matrix
+	// als Zwischenlösungen benötigt..... Todo Winkel in Raytracing
+	//double m_SZA;                       // Sonnenzenitwinkel des Gitterpunktes
 	//double m_Streuwinkel;               // Streuwinkel des Gitterpunkts
 };
 #endif /* GITTERPUNKT_HH_ */

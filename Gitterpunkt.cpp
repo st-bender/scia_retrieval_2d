@@ -50,7 +50,8 @@ Gitterpunkt &Gitterpunkt::operator =(const Gitterpunkt &rhs)
 //Methoden
 bool Gitterpunkt::Punkt_in_Gitterpunkt(double Lat, double Hoehe)
 {
-	if ((Lat <= m_Max_Breite) && (Lat > m_Min_Breite) && (Hoehe <= m_Max_Hoehe) && (Hoehe > m_Min_Hoehe)) {
+	if ((Lat <= m_Max_Breite) && (Lat > m_Min_Breite) && (Hoehe <= m_Max_Hoehe)
+			&& (Hoehe > m_Min_Hoehe)) {
 		//Punkt im Gitter
 		return true;
 	}
