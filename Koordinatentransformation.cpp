@@ -11,13 +11,15 @@
 
 using namespace std;
 
-////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Kugelkoordinaten
-////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////
-// Funktionsstart int  Umwandlung_Kugel_in_Karthesisch(double r,double phi,double theta,double& x,double& y,double& z);
+// Funktionsstart int  Umwandlung_Kugel_in_Karthesisch(double r,double phi,
+// double theta,double& x,double& y,double& z);
 ////////////////////////////////////////////////
-void Umwandlung_Kugel_in_Karthesisch(double r, double phi, double theta, double &x, double &y, double &z)
+void Umwandlung_Kugel_in_Karthesisch(double r, double phi, double theta,
+		double &x, double &y, double &z)
 {
 	// Winkel in Grad
 	const double pi = 3.1415926535897;
@@ -27,13 +29,15 @@ void Umwandlung_Kugel_in_Karthesisch(double r, double phi, double theta, double 
 	z = r * sin(theta * pi / 180.0);
 }
 ////////////////////////////////////////////////
-// ENDE int  Umwandlung_Kugel_in_Karthesisch(double r,double phi,double theta,double& x,double& y,double& z);
+// ENDE int  Umwandlung_Kugel_in_Karthesisch
 ////////////////////////////////////////////////
 
 ////////////////////////////////////////////////
-// Funktionsstart int Umwandlung_Karthesisch_in_Kugel(double x,double y,double z,double& r,double& phi,double& theta);
+// Funktionsstart int Umwandlung_Karthesisch_in_Kugel(double x,double y,
+// double z,double& r,double& phi,double& theta);
 ////////////////////////////////////////////////
-void Umwandlung_Karthesisch_in_Kugel(double x, double y, double z, double &r, double &phi, double &theta)
+void Umwandlung_Karthesisch_in_Kugel(double x, double y, double z, double &r,
+		double &phi, double &theta)
 {
 	// Winkel in Grad
 	// Der Punkt 0,0,0 ist ausgeschlossen
@@ -64,9 +68,9 @@ void Umwandlung_Karthesisch_in_Kugel(double x, double y, double z, double &r, do
 	phi = 180.0 / pi * atan2(y, x);
 }
 ////////////////////////////////////////////////
-// ENDE int Umwandlung_Karthesisch_in_Kugel(double x,double y,double z,double& r,double& phi,double& theta);
+// ENDE int Umwandlung_Karthesisch_in_Kugel
 ////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // ENDE  Kugelkoordinaten
-////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
