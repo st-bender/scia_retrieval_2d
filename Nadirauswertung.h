@@ -8,8 +8,9 @@
 #ifndef NADIRAUSWERTUNG_HH_
 #define NADIRAUSWERTUNG_HH_
 
-// Diese Funktion dient lediglich dazu den Programmcode im Hauptprogramm kurz zu halten
-// wichtig ist dabei, dass die nötigen Argumente übergeben werden und auch die Rückgabe komplett ist
+// Diese Funktion dient lediglich dazu den Programmcode im Hauptprogramm kurz
+// zu halten wichtig ist dabei, dass die nötigen Argumente übergeben werden und
+// auch die Rückgabe komplett ist
 
 #include<vector>
 #include "Orbitliste.h"

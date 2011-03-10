@@ -37,7 +37,8 @@ int Orbitliste::Ist_Messung_Limbmessung(uint Index)    //0 ja alles andere nein
 {
 	//zuerstmal prüfen ob m_Dateinamen[Index] überhaupt existiert
 	if (Index >= m_Dateinamen.size()) {
-		cout << "Achtung Zugriff auf nicht vorhandenes Listenelement in Funktion Orbitliste::Ist_Messung_Limbmessung\n";
+		cout << "Achtung Zugriff auf nicht vorhandenes Listenelement in "
+			 << "Funktion Orbitliste::Ist_Messung_Limbmessung\n";
 		return 1;
 	}
 	// charakteristische Zeichenkette suchen
@@ -54,7 +55,8 @@ int Orbitliste::Ist_Messung_Nadirmessung(uint Index)   //0 ja alles andere nein
 {
 	//zuerstmal prüfen ob m_Dateinamen[Index] überhaupt existiert
 	if (Index >= m_Dateinamen.size()) {
-		cout << "Achtung Zugriff auf nicht vorhandenes Listenelement in Funktion Orbitliste::Ist_Messung_Nadirmessung\n";
+		cout << "Achtung Zugriff auf nicht vorhandenes Listenelement in "
+			 << "Funktion Orbitliste::Ist_Messung_Nadirmessung\n";
 		return 1;
 	}
 	// charakteristische Zeichenkette suchen
@@ -78,4 +80,4 @@ void Orbitliste::In_Datei_Speichern(string Dateiname)
 	}
 	outfile.close();
 }//Ende in_Datei_Speichern
-///////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////

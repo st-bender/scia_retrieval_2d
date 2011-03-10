@@ -10,7 +10,8 @@
 #include "Sonnenspektrum.h"
 #include "Speziesfenster.h"
 #include "Ausgewertete_Messung_Nadir.h"
-//#include "Messung_Limb.h" // TODO Das kann weg, komisch, dass das ohne Messung_Nadir funktioniert hat
+// TODO Das kann weg, komisch, dass das ohne Messung_Nadir funktioniert hat
+//#include "Messung_Limb.h"
 #include "Messung_Nadir.h"
 #include "Datei_IO.h"  //ReadL1C_Nadir_mpl_binary
 #include"Messungs_ausschliessende_Tests.h"
@@ -35,7 +36,8 @@ int Nadir_Auswertung(Orbitliste Orbitlist,
 	int Anzahl_Messungen = 0;
 	Rohdaten = ReadL1C_Nadir_mpl_binary(Orbitlist.m_Dateinamen[l], Anzahl_Messungen);
 	//cerr<<Orbitlist.m_Dateinamen[l]<<" wird bearbeitet\n";
-	//cout<<Rohdaten[0].m_Wellenlaengen[0]<<"\t"<<Rohdaten[0].m_Intensitaeten[0]<<"\n";
+	//cout<<Rohdaten[0].m_Wellenlaengen[0]<<"\t"
+	//  <<Rohdaten[0].m_Intensitaeten[0]<<"\n";
 
 	// Hier erste Messungen aussortieren
 	bool ist_Nachtmessung;
@@ -45,8 +47,10 @@ int Nadir_Auswertung(Orbitliste Orbitlist,
 		(*counter_Nadir_Nacht_Dateien)++;
 		// Speicher freimachen /////////////
 		for (int i = 0; i < Anzahl_Messungen; i++) {
-			Rohdaten[i].save_delete_all_memory(); // das muss sein..unschön..evtl ein Objekt entwerfen, was nur aus so einem Array besteht
-			// dann kann man das über den Destruktor erledigen
+			// das muss sein..unschön..evtl ein Objekt entwerfen, was nur aus
+			// so einem Array besteht dann kann man das über den Destruktor
+			// erledigen
+			Rohdaten[i].save_delete_all_memory();
 		}
 		if (Rohdaten != 0) {
 			delete[] Rohdaten;
@@ -63,19 +67,23 @@ int Nadir_Auswertung(Orbitliste Orbitlist,
 		Messung.Sonnen_Longitude_bestimmen();
 		Messung.Intensitaeten_normieren(Solspec.m_Int_interpoliert);
 
-		for (j = 0; j < Spezies_Fenster.size(); j++) { //Schleife über alle Spezies wie z.b. Mg oder Mg+
+		for (j = 0; j < Spezies_Fenster.size(); j++) {
+			//Schleife über alle Spezies wie z.b. Mg oder Mg+
 
 			//Speziesfenster  Spezfenst=Spezies_Fenster[j];
-			for (k = 0; k < Spezies_Fenster[j].m_Wellenlaengen.size(); k++) { //Schleife über alle Linien dieser Spezies
+			for (k = 0; k < Spezies_Fenster[j].m_Wellenlaengen.size(); k++) {
+				//Schleife über alle Linien dieser Spezies
 				//Streuwinkel schon beim einlesen bestimmt
-				//Spezfenst.m_Liniendaten[k].m_theta=Messung.m_Streuwinkel; Streuwinkel muss woanders ermittelt werden
+				//Spezfenst.m_Liniendaten[k].m_theta=Messung.m_Streuwinkel;
+				//Streuwinkel muss woanders ermittelt werden
 				Spezies_Fenster[j].m_Liniendaten[k].Emissivitaet_ermitteln();
 				//Spezfenst.m_Liniendaten[k].Auf_Bildschirm_Ausgeben();
 
 				Messung.Intensitaeten_durch_piF_Gamma_berechnen(Spezies_Fenster[j], k);
 
 				// Jetzt Zeilendichte und Fehler bestimmen
-				Messung.Zeilendichte_Bestimmen(Spezies_Fenster[j], k, Arbeitsverzeichnis, mache_Fit_Plots, i);
+				Messung.Zeilendichte_Bestimmen(Spezies_Fenster[j], k,
+						Arbeitsverzeichnis, mache_Fit_Plots, i);
 
 				// Zu Testzwecken fertige Messung in Datei Speichern
 				if ((k == 0) && (j == 0) && (i == 0)) {
@@ -83,9 +91,11 @@ int Nadir_Auswertung(Orbitliste Orbitlist,
 				}
 				// Ergebnis zusammenfassen
 				Ausgewertete_Messung_Nadir Ergebnis = Messung.Ergebnis_Zusammenfassen();
-				Ergebnis.m_Wellenlaenge = Spezies_Fenster[j].m_Wellenlaengen[k];    // Die braucht man später für die Luftmassenmatrix
+				// Die braucht man später für die Luftmassenmatrix
+				Ergebnis.m_Wellenlaenge = Spezies_Fenster[j].m_Wellenlaengen[k];
 				//Ergebnis.Ausgabe_auf_Bildschirm();
-				// Zusammenfassung der Zwischenresultate dem Vektor für die jeweilige Spezies zuordnen
+				// Zusammenfassung der Zwischenresultate dem Vektor
+				// für die jeweilige Spezies zuordnen
 				//cout<<Spezies_Fenster[j].m_Spezies_Name<<"\n";
 				if (Spezies_Fenster[j].m_Spezies_Name == "MgI") {
 					//cout<<"Ausgewertete_Nadirmessung_MgI.push_back(Ergebnis)\n";
@@ -103,12 +113,16 @@ int Nadir_Auswertung(Orbitliste Orbitlist,
 			}//ende k Linie
 		}//ende j Spezies_Fenster
 		//Speicher der Messung löschen
-		Messung.save_delete_all_memory(); // das muss eigentlich nicht hier stehn, da Messung gleich seinen Destruktor aufruft
+		// das muss eigentlich nicht hier stehn,
+		// da Messung gleich seinen Destruktor aufruft
+		Messung.save_delete_all_memory();
 	}//Ende i Rohdaten
 
 	for (int i = 0; i < Anzahl_Messungen; i++) {
-		Rohdaten[i].save_delete_all_memory(); // das muss sein..unschön..evtl ein Objekt entwerfen, was nur aus so einem Array besteht
+		// das muss sein..unschön..
+		// evtl ein Objekt entwerfen, was nur aus so einem Array besteht
 		// dann kann man das über den Destruktor erledigen
+		Rohdaten[i].save_delete_all_memory();
 	}
 	if (Rohdaten != 0) {
 		delete[] Rohdaten;

@@ -12,9 +12,11 @@
 using namespace std;
 
 extern "C" {
-	void dgesv_(int *N, int *NRHS, double *A, int *LDA, int *IPIV, double *B, int *LDB, int *INFO);
+	void dgesv_(int *N, int *NRHS, double *A, int *LDA, int *IPIV, double *B,
+				int *LDB, int *INFO);
 	void dgemm_(char *TRANSA, char *TRANSB, int *M, int *N, int *K,
-				double *ALPHA, double *A, int *LDA, double *B, int *LDB, double *BETA, double *C, int *LDC);
+				double *ALPHA, double *A, int *LDA, double *B, int *LDB,
+				double *BETA, double *C, int *LDC);
 }
 
 int Retrievalfehler_Abschaetzung(MPL_Matrix &S_x,
@@ -29,9 +31,8 @@ int Retrievalfehler_Abschaetzung(MPL_Matrix &S_x,
 								 MPL_Matrix AMF,
 								 const Konfiguration &Konf)
 {
-	//TODO Auch hier kann man das Gleichungssystem mit ATLAS/LAPACK FUNKTIONEN LÖSEN
-
-
+	//TODO Auch hier kann man das Gleichungssystem
+	//mit ATLAS/LAPACK FUNKTIONEN LÖSEN
 
 	// Die Formeln für die Matrizzen findet man in Marcos Arbeit
 	MPL_Matrix S_x_invers;
@@ -95,7 +96,7 @@ void Matrix_Invertieren(MPL_Matrix &M)
 	// Die Funktion wandelt die Matrix M in ihre eigene Inverse um
 	// Dafür muss das gehen (M quadratisch und nicht singulär)
 	int N = M.m_Zeilenzahl; // M ist quadratisch !!!!
-	MPL_Matrix Inverse(N, N);                                   // Inverse als Einheitsmatrix der RHS initialisieren
+	MPL_Matrix Inverse(N, N); // Inverse als Einheitsmatrix der RHS initialisieren
 	int NN = N * N; // spare die Multiplikation
 	for (int i = 0; i < NN; i++) {
 		Inverse.m_Elemente[i] = 0;
@@ -104,7 +105,7 @@ void Matrix_Invertieren(MPL_Matrix &M)
 		Inverse.m_Elemente[i + N * i] = 1;
 	}
 	int *IPIV;
-	IPIV = new int[N];              // Lösung des Gleichungssystems M*Inverse=RHS vorbereiten
+	IPIV = new int[N]; // Lösung des Gleichungssystems M*Inverse=RHS vorbereiten
 	for (int i = 0; i < N; i++)  {
 		IPIV[i] = 0;
 	}
@@ -114,9 +115,10 @@ void Matrix_Invertieren(MPL_Matrix &M)
 	int INFO;
 	// M in Fortran Matrix umwandeln->M_transponieren
 	M = M.transponiert();
-	dgesv_(&N, &NRHS, M.m_Elemente, &LDA, IPIV, Inverse.m_Elemente, &LDB, &INFO);  //Solveraufruf
+	//Solveraufruf
+	dgesv_(&N, &NRHS, M.m_Elemente, &LDA, IPIV, Inverse.m_Elemente, &LDB, &INFO);
 	// Die Inverse von Fortran in C++ -> Inverse transponieren
-	M = Inverse.transponiert();                                  // Ergebnis in M deponieren
+	M = Inverse.transponiert();  // Ergebnis in M deponieren
 	delete[] IPIV;
 }
 ///////////////////////////////////////////////////////
