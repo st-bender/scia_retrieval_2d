@@ -101,7 +101,7 @@ int SCD_Glaettung(vector<Ausgewertete_Messung_Limb>& AML, int Anzahl_Linien, str
 			Messung_Nr = u * Anzahl_Linien + k;
 			AML[Messung_Nr].m_Zeilendichte = (2.0 * AML_OLD[Messung_Nr].m_Zeilendichte +
 											  AML_OLD[Messung_Nr + Anzahl_Linien].m_Zeilendichte +
-											  AML_OLD[Messung_Nr  - Anzahl_Linien].m_Zeilendichte +
+											  AML_OLD[Messung_Nr - Anzahl_Linien].m_Zeilendichte +
 											  AML_OLD[Messung_Nr + Anzahl_Linien * Anzahl_Hoehen].m_Zeilendichte
 											 ) / 5.0;
 			//cerr<<"Kante 1\n";
@@ -109,29 +109,29 @@ int SCD_Glaettung(vector<Ausgewertete_Messung_Limb>& AML, int Anzahl_Linien, str
 			//                            <<Messung_Nr+Anzahl_Linien*Anzahl_Hoehen<<"\n";
 			AML[Messung_Nr].m_Fehler_Zeilendichten = (2.0 * AML_OLD[Messung_Nr].m_Fehler_Zeilendichten +
 					AML_OLD[Messung_Nr + Anzahl_Linien].m_Fehler_Zeilendichten +
-					AML_OLD[Messung_Nr  - Anzahl_Linien].m_Fehler_Zeilendichten +
+					AML_OLD[Messung_Nr - Anzahl_Linien].m_Fehler_Zeilendichten +
 					AML_OLD[Messung_Nr + Anzahl_Linien * Anzahl_Hoehen].m_Fehler_Zeilendichten
 													 ) / 5.0;
 			Messung_Nr = Anzahl_Messungen - Anzahl_Hoehen * Anzahl_Linien + u * Anzahl_Linien + k;
 			AML[Messung_Nr].m_Zeilendichte = (2.0 * AML_OLD[Messung_Nr].m_Zeilendichte +
 											  AML_OLD[Messung_Nr + Anzahl_Linien].m_Zeilendichte +
-											  AML_OLD[Messung_Nr  - Anzahl_Linien].m_Zeilendichte +
-											  AML_OLD[Messung_Nr  - Anzahl_Linien * Anzahl_Hoehen].m_Zeilendichte
+											  AML_OLD[Messung_Nr - Anzahl_Linien].m_Zeilendichte +
+											  AML_OLD[Messung_Nr - Anzahl_Linien * Anzahl_Hoehen].m_Zeilendichte
 											 ) / 5.0;
 			//cerr<<"Kante 2\n";
 			//cerr<<" Beitrag aus: "<<Messung_Nr<<" "<<Messung_Nr +Anzahl_Linien<<" "<<Messung_Nr-Anzahl_Linien<<" "
 			//                            <<Messung_Nr-Anzahl_Linien*Anzahl_Hoehen<<"\n";
 			AML[Messung_Nr].m_Fehler_Zeilendichten = (2.0 * AML_OLD[Messung_Nr].m_Fehler_Zeilendichten +
 					AML_OLD[Messung_Nr + Anzahl_Linien].m_Fehler_Zeilendichten +
-					AML_OLD[Messung_Nr  - Anzahl_Linien].m_Fehler_Zeilendichten +
-					AML_OLD[Messung_Nr  - Anzahl_Linien * Anzahl_Hoehen].m_Fehler_Zeilendichten
+					AML_OLD[Messung_Nr - Anzahl_Linien].m_Fehler_Zeilendichten +
+					AML_OLD[Messung_Nr - Anzahl_Linien * Anzahl_Hoehen].m_Fehler_Zeilendichten
 													 ) / 5.0;
 		} //ende for u
 		for (int u = Anzahl_Hoehen * Anzahl_Linien; u < (Anzahl_Messungen - Anzahl_Hoehen * Anzahl_Linien); u += Anzahl_Hoehen * Anzahl_Linien) {
 			Messung_Nr = u + k;
 			AML[Messung_Nr].m_Zeilendichte = (2.0 * AML_OLD[Messung_Nr].m_Zeilendichte +
 											  AML_OLD[Messung_Nr + Anzahl_Linien].m_Zeilendichte +
-											  AML_OLD[Messung_Nr  - Anzahl_Linien * Anzahl_Hoehen].m_Zeilendichte +
+											  AML_OLD[Messung_Nr - Anzahl_Linien * Anzahl_Hoehen].m_Zeilendichte +
 											  AML_OLD[Messung_Nr + Anzahl_Linien * Anzahl_Hoehen].m_Zeilendichte
 											 ) / 5.0;
 			//cerr<<"Kante 3\n";
@@ -139,23 +139,23 @@ int SCD_Glaettung(vector<Ausgewertete_Messung_Limb>& AML, int Anzahl_Linien, str
 			//                            <<Messung_Nr+Anzahl_Linien*Anzahl_Hoehen<<"\n";
 			AML[Messung_Nr].m_Fehler_Zeilendichten = (2.0 * AML_OLD[Messung_Nr].m_Fehler_Zeilendichten +
 					AML_OLD[Messung_Nr + Anzahl_Linien].m_Fehler_Zeilendichten +
-					AML_OLD[Messung_Nr  - Anzahl_Linien * Anzahl_Hoehen].m_Fehler_Zeilendichten +
+					AML_OLD[Messung_Nr - Anzahl_Linien * Anzahl_Hoehen].m_Fehler_Zeilendichten +
 					AML_OLD[Messung_Nr + Anzahl_Linien * Anzahl_Hoehen].m_Fehler_Zeilendichten
 													 ) / 5.0;
 
 			Messung_Nr = u + (Anzahl_Hoehen - 1) * Anzahl_Linien + k;
 			AML[Messung_Nr].m_Zeilendichte = (2.0 * AML_OLD[Messung_Nr].m_Zeilendichte +
 											  AML_OLD[Messung_Nr - Anzahl_Linien].m_Zeilendichte +
-											  AML_OLD[Messung_Nr  - Anzahl_Linien * Anzahl_Hoehen].m_Zeilendichte +
-											  AML_OLD[Messung_Nr  + Anzahl_Linien * Anzahl_Hoehen].m_Zeilendichte
+											  AML_OLD[Messung_Nr - Anzahl_Linien * Anzahl_Hoehen].m_Zeilendichte +
+											  AML_OLD[Messung_Nr + Anzahl_Linien * Anzahl_Hoehen].m_Zeilendichte
 											 ) / 5.0;
 			//cerr<<"Kante 4\n";
 			//cerr<<" Beitrag aus: "<<Messung_Nr<<" "<<Messung_Nr -Anzahl_Linien<<" "<<Messung_Nr-Anzahl_Linien*Anzahl_Hoehen<<" "
 			//                            <<Messung_Nr+Anzahl_Linien*Anzahl_Hoehen<<"\n";
 			AML[Messung_Nr].m_Fehler_Zeilendichten = (2.0 * AML_OLD[Messung_Nr].m_Fehler_Zeilendichten +
 					AML_OLD[Messung_Nr - Anzahl_Linien].m_Fehler_Zeilendichten +
-					AML_OLD[Messung_Nr  - Anzahl_Linien * Anzahl_Hoehen].m_Fehler_Zeilendichten +
-					AML_OLD[Messung_Nr  + Anzahl_Linien * Anzahl_Hoehen].m_Fehler_Zeilendichten
+					AML_OLD[Messung_Nr - Anzahl_Linien * Anzahl_Hoehen].m_Fehler_Zeilendichten +
+					AML_OLD[Messung_Nr + Anzahl_Linien * Anzahl_Hoehen].m_Fehler_Zeilendichten
 													 ) / 5.0;
 		} //ende for u
 
@@ -164,20 +164,20 @@ int SCD_Glaettung(vector<Ausgewertete_Messung_Limb>& AML, int Anzahl_Linien, str
 			for (int w = Anzahl_Hoehen * Anzahl_Linien;   w < (Anzahl_Messungen - Anzahl_Hoehen * Anzahl_Linien);   w += Anzahl_Hoehen * Anzahl_Linien) {
 				Messung_Nr = w + u * Anzahl_Linien + k;
 				AML[Messung_Nr].m_Zeilendichte = (AML_OLD[Messung_Nr].m_Zeilendichte +
-												  AML_OLD[Messung_Nr   + Anzahl_Linien].m_Zeilendichte +
-												  AML_OLD[Messung_Nr    - Anzahl_Linien].m_Zeilendichte +
-												  AML_OLD[Messung_Nr   + Anzahl_Linien * Anzahl_Hoehen].m_Zeilendichte +
-												  AML_OLD[Messung_Nr   - Anzahl_Linien * Anzahl_Hoehen ].m_Zeilendichte)
+												  AML_OLD[Messung_Nr + Anzahl_Linien].m_Zeilendichte +
+												  AML_OLD[Messung_Nr - Anzahl_Linien].m_Zeilendichte +
+												  AML_OLD[Messung_Nr + Anzahl_Linien * Anzahl_Hoehen].m_Zeilendichte +
+												  AML_OLD[Messung_Nr - Anzahl_Linien * Anzahl_Hoehen ].m_Zeilendichte)
 												 / 5.0;
 				//cerr<<"u= "<< u<<" w= "<<w<<"\n";
 				//cerr<<" Beitrag aus: "<<Messung_Nr<<" "<<Messung_Nr +Anzahl_Linien<<" "<<Messung_Nr -Anzahl_Linien<<" "<<Messung_Nr-Anzahl_Linien*Anzahl_Hoehen<<" "
 				//                        <<Messung_Nr+Anzahl_Linien*Anzahl_Hoehen<<"\n";
 				AML[Messung_Nr].m_Fehler_Zeilendichten =
 					(AML_OLD[Messung_Nr].m_Fehler_Zeilendichten +
-					 AML_OLD[Messung_Nr   + Anzahl_Linien].m_Fehler_Zeilendichten +
-					 AML_OLD[Messung_Nr    - Anzahl_Linien].m_Fehler_Zeilendichten +
-					 AML_OLD[Messung_Nr   + Anzahl_Linien * Anzahl_Hoehen].m_Fehler_Zeilendichten +
-					 AML_OLD[Messung_Nr   - Anzahl_Linien * Anzahl_Hoehen ].m_Fehler_Zeilendichten)
+					 AML_OLD[Messung_Nr + Anzahl_Linien].m_Fehler_Zeilendichten +
+					 AML_OLD[Messung_Nr - Anzahl_Linien].m_Fehler_Zeilendichten +
+					 AML_OLD[Messung_Nr + Anzahl_Linien * Anzahl_Hoehen].m_Fehler_Zeilendichten +
+					 AML_OLD[Messung_Nr - Anzahl_Linien * Anzahl_Hoehen ].m_Fehler_Zeilendichten)
 					/ 5.0;
 			}//ende for w
 		}//Ende for u

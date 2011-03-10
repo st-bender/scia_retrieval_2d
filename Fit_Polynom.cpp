@@ -12,7 +12,7 @@ using namespace std;
 
 extern "C" {
 	void dgesv_(int *N, int *NRHS, double *A, int *LDA, int *IPIV, double *B, int *LDB, int *INFO);
-	void dgetrs_(char * , int *N, int *NRHS, double *A, int *LDA, int *IPIV, double *B, int *LDB, int *INFO);
+	void dgetrs_(char *, int *N, int *NRHS, double *A, int *LDA, int *IPIV, double *B, int *LDB, int *INFO);
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -33,10 +33,10 @@ void Fit_Polynom(double *x, double *y, int Startindex, int Endindex, double x0, 
 	double *LHS_Parameter_letzte_Spalte_Inkrement;
 	double *RHS_Inkrement;
 	//Speicher reservieren
-	LHS_Parameter_Zeile_eins           = new double[Polynomgrad + 1];
+	LHS_Parameter_Zeile_eins = new double[Polynomgrad + 1];
 	LHS_Parameter_letzte_Spalte = new double[Polynomgrad + 1];
-	RHS                                      = new double[Polynomgrad + 1];
-	LHS                                       = new double[(Polynomgrad + 1) * (Polynomgrad + 1)];
+	RHS = new double[Polynomgrad + 1];
+	LHS = new double[(Polynomgrad + 1) * (Polynomgrad + 1)];
 	LHS_Parameter_Zeile_eins_Inkrement = new double[Polynomgrad + 1];
 	LHS_Parameter_letzte_Spalte_Inkrement = new double[Polynomgrad + 1];
 	RHS_Inkrement = new double[Polynomgrad + 1];
@@ -100,7 +100,7 @@ void Fit_Polynom(double *x, double *y, int Startindex, int Endindex, double x0, 
 	//RHS und LHS sind fertig
 	//LAPACK Solver Routine vorbereiten
 	int N = Polynomgrad + 1;         //<---------- Feldgröße Speed propto N^3 , LHS ist quadratisch, N ist Anzahl der Gitterpunkte
-	int    *IPIV;  //array mit der Pivotisierungsmatrix sollte so groß wie N sein, alle Elemente 0
+	int *IPIV;  //array mit der Pivotisierungsmatrix sollte so groß wie N sein, alle Elemente 0
 	IPIV = new int[N];
 	int NRHS = 1; //Spalten von RHS 1 nehmen, um keine c/Fortran Verwirrungen zu provozieren
 	int LDA = N;

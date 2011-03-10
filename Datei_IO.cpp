@@ -502,9 +502,9 @@ int Ausgabe_Saeulendichten(string Dateiname, vector<Ausgewertete_Messung_Limb> A
 	//cerr<<"Matrix schreiben\n";
 	for (int i = 0; i < lang; i++) {
 		//die letzte Zeile der Datei ist leer, da \n in der Vorletzten steht
-		fprintf(outfile, "%4i %5i %3i"\
-				" %1.5E %1.5E %1.5E %1.5E"\
-				"  %1.5E  %1.5E            %1.5E %1.5E"\
+		fprintf(outfile, "%4i %5i %3i"
+				" %1.5E %1.5E %1.5E %1.5E"
+				"  %1.5E  %1.5E            %1.5E %1.5E"
 				"        %1.5E      %1.5E\n",
 				A_Messung_L[i].m_Jahr, A_Messung_L[i].m_Monat, A_Messung_L[i].m_Tag,
 				A_Messung_L[i].m_Lattidude_Sat, A_Messung_L[i].m_Longitude_Sat, A_Messung_L[i].m_Lattidude_TP,
@@ -536,10 +536,10 @@ int Ausgabe_Saeulendichten(string Dateiname, vector<Ausgewertete_Messung_Nadir> 
 	//Datei öffnen
 	outfile = fopen(Dateiname.c_str(), "w");
 	//Überschrift
-	fprintf(outfile, "%4s %3s %5s "    \
-			"%11s %11s "          \
-			"%11s %11s "          \
-			"%11s %11s %11s"          \
+	fprintf(outfile, "%4s %3s %5s "
+			"%11s %11s "
+			"%11s %11s "
+			"%11s %11s %11s"
 			"%11s %11s \n",
 			"Jahr", "Tag", "Monat",
 			"Lat_Sat", "Lon_Sat",
@@ -550,15 +550,15 @@ int Ausgabe_Saeulendichten(string Dateiname, vector<Ausgewertete_Messung_Nadir> 
 
 	for (int i = 0; i < lang; i++) {
 		//die letzte Zeile der Datei ist leer, da \n in der Vorletzten steht
-		fprintf(outfile, "%4i %3i %5i "     \
-				"%1.5E %1.5E "            \
-				"%1.5E %1.5E "            \
-				"%1.5E  %1.5E   %1.5E "            \
+		fprintf(outfile, "%4i %3i %5i "
+				"%1.5E %1.5E "
+				"%1.5E %1.5E "
+				"%1.5E  %1.5E   %1.5E "
 				"    %1.5E       %1.5E\n",
 				A_Messung_N[i].m_Jahr, A_Messung_N[i].m_Monat, A_Messung_N[i].m_Tag,
 				A_Messung_N[i].m_Lattitude_Sat, A_Messung_N[i].m_Longitude_Sat,
 				A_Messung_N[i].m_Lattitude_Ground, A_Messung_N[i].m_Longitude_Ground,
-				A_Messung_N[i].m_Erdradius,  A_Messung_N[i].m_Deklination, A_Messung_N[i].m_Sonnen_Longitude,
+				A_Messung_N[i].m_Erdradius, A_Messung_N[i].m_Deklination, A_Messung_N[i].m_Sonnen_Longitude,
 				A_Messung_N[i].m_Zeilendichte, A_Messung_N[i].m_Fehler_Zeilendichten);
 	}
 	///////////////////////////////////////////////////////////
@@ -625,24 +625,24 @@ int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter Grid, MPL_Matrix Dicht
 	outfile1 = fopen(Dateiname1.c_str(), "w");
 	///////////////////////////////////////////////////////////////////////////////////////////
 	//Überschrift
-	fprintf(outfile1, "%5s " \
-			"%13s %12s %13s "\
-			"%14s  %12s %14s "\
-			"%12s %12s\n", \
-			"GP_ID", \
-			"Max_Hoehe[km]", "Hoehe[km]", "Min_Hoehe[km]", \
-			"Max_Breite[°]"    ,    "Breite[°]", "Min_Breite[°]", \
+	fprintf(outfile1, "%5s "
+			"%13s %12s %13s "
+			"%14s  %12s %14s "
+			"%12s %12s\n",
+			"GP_ID",
+			"Max_Hoehe[km]", "Hoehe[km]", "Min_Hoehe[km]",
+			"Max_Breite[°]", "Breite[°]", "Min_Breite[°]",
 			"Dichte[cm^-3]", " Standardabweichung[cm^-3]");
 	// Alle Zeilen bis auf die letzte
 	for (i = 0; i < Grid.m_Anzahl_Punkte - 1; i++) {
 		stabw = sqrt(S_x(i, i));
-		fprintf(outfile1, "%5i  " \
-				"%+1.5E %+1.5E  %+1.5E "\
-				" %+1.5E %+1.5E  %+1.5E "\
-				" %+1.5E               %+1.5E\n", \
-				i, \
-				Grid.m_Gitter[i].m_Max_Hoehe, Grid.m_Gitter[i].m_Hoehe, Grid.m_Gitter[i].m_Min_Hoehe, \
-				Grid.m_Gitter[i].m_Max_Breite , Grid.m_Gitter[i].m_Breite , Grid.m_Gitter[i].m_Min_Breite, \
+		fprintf(outfile1, "%5i  "
+				"%+1.5E %+1.5E  %+1.5E "
+				" %+1.5E %+1.5E  %+1.5E "
+				" %+1.5E               %+1.5E\n",
+				i,
+				Grid.m_Gitter[i].m_Max_Hoehe, Grid.m_Gitter[i].m_Hoehe, Grid.m_Gitter[i].m_Min_Hoehe,
+				Grid.m_Gitter[i].m_Max_Breite, Grid.m_Gitter[i].m_Breite, Grid.m_Gitter[i].m_Min_Breite,
 				Dichten(i), stabw);
 
 
@@ -650,13 +650,13 @@ int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter Grid, MPL_Matrix Dicht
 	//letzte Zeile (ohne \n am Ende)
 	i = Anzahl - 1;
 	stabw = sqrt(S_x(i, i));
-	fprintf(outfile1, "%5i  " \
-			"%+1.5E %+1.5E  %+1.5E "\
-			" %+1.5E %+1.5E  %+1.5E "\
-			" %+1.5E               %+1.5E\n", \
-			i, \
-			Grid.m_Gitter[i].m_Max_Hoehe, Grid.m_Gitter[i].m_Hoehe, Grid.m_Gitter[i].m_Min_Hoehe, \
-			Grid.m_Gitter[i].m_Max_Breite , Grid.m_Gitter[i].m_Breite , Grid.m_Gitter[i].m_Min_Breite, \
+	fprintf(outfile1, "%5i  "
+			"%+1.5E %+1.5E  %+1.5E "
+			" %+1.5E %+1.5E  %+1.5E "
+			" %+1.5E               %+1.5E\n",
+			i,
+			Grid.m_Gitter[i].m_Max_Hoehe, Grid.m_Gitter[i].m_Hoehe, Grid.m_Gitter[i].m_Min_Hoehe,
+			Grid.m_Gitter[i].m_Max_Breite, Grid.m_Gitter[i].m_Breite, Grid.m_Gitter[i].m_Min_Breite,
 			Dichten(i), stabw);
 	///////////////////////////////////////////////////////////////////////////////////////////
 	// Datei schließen

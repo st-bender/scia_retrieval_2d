@@ -17,16 +17,16 @@ extern "C" {
 				double *ALPHA, double *A, int *LDA, double *B, int *LDB, double *BETA, double *C, int *LDC);
 }
 
-int Retrievalfehler_Abschaetzung(MPL_Matrix             &S_x,
-								 MPL_Matrix            &Averaging_Kernel_Matrix,
-								 const MPL_Matrix   &S_apriori,
-								 const MPL_Matrix   &S_y,
-								 MPL_Matrix               S_Breite,
-								 MPL_Matrix               S_Hoehe,
-								 MPL_Matrix               S_letzte_Hoehe,
-								 const double          &Lambda_Breite,
-								 const double          &Lambda_Hoehe,
-								 MPL_Matrix               AMF,
+int Retrievalfehler_Abschaetzung(MPL_Matrix &S_x,
+								 MPL_Matrix &Averaging_Kernel_Matrix,
+								 const MPL_Matrix &S_apriori,
+								 const MPL_Matrix &S_y,
+								 MPL_Matrix S_Breite,
+								 MPL_Matrix S_Hoehe,
+								 MPL_Matrix S_letzte_Hoehe,
+								 const double &Lambda_Breite,
+								 const double &Lambda_Hoehe,
+								 MPL_Matrix AMF,
 								 const Konfiguration &Konf)
 {
 	//TODO Auch hier kann man das Gleichungssystem mit ATLAS/LAPACK FUNKTIONEN LÖSEN
@@ -45,11 +45,11 @@ int Retrievalfehler_Abschaetzung(MPL_Matrix             &S_x,
 	S_letzte_Hoehe_trans = S_Breite.transponiert();
 
 
-	S_x = AMF_trans * (S_y * AMF)                                        + // hier noch invers, also noch invertieren
-		  S_apriori                                                   +
-		  Lambda_Hoehe * (S_Hoehe_trans * S_Hoehe) +
-		  Lambda_Breite * (S_Breite_trans * S_Breite) +
-		  S_letzte_Hoehe_trans * S_letzte_Hoehe;
+	S_x = AMF_trans * (S_y * AMF) // hier noch invers, also noch invertieren
+		  + S_apriori
+		  + Lambda_Hoehe * (S_Hoehe_trans * S_Hoehe)
+		  + Lambda_Breite * (S_Breite_trans * S_Breite)
+		  + S_letzte_Hoehe_trans * S_letzte_Hoehe;
 	Matrix_Invertieren(S_x);
 	//  cout<<S_x_invers.m_Zeilenzahl<<"\t"<<S_x_invers.m_Spaltenzahl<<"\n";
 	//  Die Matrix sollte quadratisch sein

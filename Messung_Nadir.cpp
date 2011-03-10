@@ -76,28 +76,28 @@ Messung_Nadir &Messung_Nadir::operator =(const Messung_Nadir &rhs)
 		return *this;
 	//cout<<"skalare kopieren\n";
 	//Ergebnisse
-	m_Zeilendichte                 = rhs.m_Zeilendichte;
-	m_Fehler_Zeilendichten     = rhs.m_Fehler_Zeilendichten;
+	m_Zeilendichte = rhs.m_Zeilendichte;
+	m_Fehler_Zeilendichten = rhs.m_Fehler_Zeilendichten;
 	//Zwischenergebnisse
-	m_Deklinationswinkel        = rhs.m_Deklinationswinkel;
-	m_Sonnen_Longitude        = rhs.m_Sonnen_Longitude;
+	m_Deklinationswinkel = rhs.m_Deklinationswinkel;
+	m_Sonnen_Longitude = rhs.m_Sonnen_Longitude;
 	// Herkunftsmerkmale
-	m_Dateiname_L1C            = rhs.m_Dateiname_L1C;
-	m_Messung_ID                 = rhs.m_Messung_ID;
+	m_Dateiname_L1C = rhs.m_Dateiname_L1C;
+	m_Messung_ID = rhs.m_Messung_ID;
 	// Dartum
-	m_Jahr                            = rhs.m_Jahr;
-	m_Monat                         = rhs.m_Monat;
-	m_Tag                             = rhs.m_Tag;
-	m_Stunde                        = rhs.m_Stunde;
-	m_Minute                         = rhs.m_Minute;
+	m_Jahr = rhs.m_Jahr;
+	m_Monat = rhs.m_Monat;
+	m_Tag = rhs.m_Tag;
+	m_Stunde = rhs.m_Stunde;
+	m_Minute = rhs.m_Minute;
 	//Geolocations
-	m_Lattitude_Sat               = rhs.m_Lattitude_Sat;
-	m_Longitude_Sat             = rhs.m_Longitude_Sat;
-	m_Hoehe_Sat                  = rhs.m_Hoehe_Sat;
-	m_Lattitude_Ground         = rhs.m_Lattitude_Ground;
-	m_Longitude_Ground        = rhs.m_Longitude_Ground;
-	m_Erdradius                    = rhs.m_Erdradius;
-	m_orbit_phase                 = rhs.m_orbit_phase;
+	m_Lattitude_Sat = rhs.m_Lattitude_Sat;
+	m_Longitude_Sat = rhs.m_Longitude_Sat;
+	m_Hoehe_Sat = rhs.m_Hoehe_Sat;
+	m_Lattitude_Ground = rhs.m_Lattitude_Ground;
+	m_Longitude_Ground = rhs.m_Longitude_Ground;
+	m_Erdradius = rhs.m_Erdradius;
+	m_orbit_phase = rhs.m_orbit_phase;
 	//für Füllbare Felder Wichtig
 	m_Number_of_Wavelength = rhs.m_Number_of_Wavelength;
 	////////////////////////////////////////////////////////////////////////
@@ -108,18 +108,18 @@ Messung_Nadir &Messung_Nadir::operator =(const Messung_Nadir &rhs)
 	save_delete_all_memory();
 	// Felder neu anlegen
 	//cout<<"speicher neu anmelden\n";
-	m_Wellenlaengen                          = new double[this->m_Number_of_Wavelength];
-	m_Intensitaeten                             = new double[this->m_Number_of_Wavelength];
-	m_Intensitaeten_relativer_Fehler      = new double[this->m_Number_of_Wavelength];
-	m_Intensitaeten_durch_piF             = new double[this->m_Number_of_Wavelength];
+	m_Wellenlaengen = new double[this->m_Number_of_Wavelength];
+	m_Intensitaeten = new double[this->m_Number_of_Wavelength];
+	m_Intensitaeten_relativer_Fehler = new double[this->m_Number_of_Wavelength];
+	m_Intensitaeten_durch_piF = new double[this->m_Number_of_Wavelength];
 	m_Intensitaeten_durch_piF_Gamma = new double[this->m_Number_of_Wavelength];
 	// Nun Füllbare Felder auffüllen -> Zeitintensiv
 	//cout<<"Felder Fuellen\n";
 	for (int i = 0; i < m_Number_of_Wavelength; i++) {
-		m_Wellenlaengen[i]                           = rhs.m_Wellenlaengen[i];
-		m_Intensitaeten[i]                              = rhs.m_Intensitaeten[i];
-		m_Intensitaeten_relativer_Fehler[i]       = rhs.m_Intensitaeten_relativer_Fehler[i];
-		m_Intensitaeten_durch_piF[i]              = rhs.m_Intensitaeten_durch_piF[i];
+		m_Wellenlaengen[i] = rhs.m_Wellenlaengen[i];
+		m_Intensitaeten[i] = rhs.m_Intensitaeten[i];
+		m_Intensitaeten_relativer_Fehler[i] = rhs.m_Intensitaeten_relativer_Fehler[i];
+		m_Intensitaeten_durch_piF[i] = rhs.m_Intensitaeten_durch_piF[i];
 		m_Intensitaeten_durch_piF_Gamma[i] = rhs.m_Intensitaeten_durch_piF_Gamma[i];
 	}
 	////////////////////////////////////////////////////////////////////////
@@ -183,40 +183,40 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index, 
 	double *Peakfenster_WL;
 	double *Peakfenster_Intensitaet;
 	//Zunächst Indizes der Wellenlaengen der Basisfensterbestimmen
-	int Index_Basisfenster_links_min   = Get_Index(Spezfenst.m_Basisfenster_links_WLmin[Index]);
-	int Index_Basisfenster_links_max  = Get_Index(Spezfenst.m_Basisfenster_links_WLmax[Index]);
+	int Index_Basisfenster_links_min = Get_Index(Spezfenst.m_Basisfenster_links_WLmin[Index]);
+	int Index_Basisfenster_links_max = Get_Index(Spezfenst.m_Basisfenster_links_WLmax[Index]);
 	int Index_Basisfenster_rechts_min = Get_Index(Spezfenst.m_Basisfenster_rechts_WLmin[Index]);
 	int Index_Basisfenster_rechts_max = Get_Index(Spezfenst.m_Basisfenster_rechts_WLmax[Index]);
-	int Index_Peakfenster_min             = Get_Index(Spezfenst.m_Peakfenster_WLmin[Index]);
-	int Index_Peakfenster_max            = Get_Index(Spezfenst.m_Peakfenster_WLmax[Index]);
+	int Index_Peakfenster_min = Get_Index(Spezfenst.m_Peakfenster_WLmin[Index]);
+	int Index_Peakfenster_max = Get_Index(Spezfenst.m_Peakfenster_WLmax[Index]);
 	// Speicherplatzbedarf für die Fenster ermitteln
 	int Bas_l = (Index_Basisfenster_links_max - Index_Basisfenster_links_min + 1);
 	int Bas_r = (Index_Basisfenster_rechts_max - Index_Basisfenster_rechts_min + 1);
 	int Speicherbedarf_Basis = Bas_l + Bas_r;
 	int Speicherbedarf_Peak = Index_Peakfenster_max - Index_Peakfenster_min + 1;
 	// Speicher anfordern
-	Basisfenster_WL          = new double[Speicherbedarf_Basis];
+	Basisfenster_WL = new double[Speicherbedarf_Basis];
 	Basisfenster_Intensitaet = new double[Speicherbedarf_Basis];
-	Peakfenster_WL           = new double[Speicherbedarf_Peak];
+	Peakfenster_WL = new double[Speicherbedarf_Peak];
 	Peakfenster_Intensitaet = new double[Speicherbedarf_Peak];
 	// Basisfenster WL und I auffüllen
 	for (int i = 0; i < Bas_l; i++) {
-		Basisfenster_WL[i]          = this->m_Wellenlaengen[Index_Basisfenster_links_min + i];
+		Basisfenster_WL[i] = this->m_Wellenlaengen[Index_Basisfenster_links_min + i];
 		Basisfenster_Intensitaet[i] = this->m_Intensitaeten_durch_piF_Gamma[Index_Basisfenster_links_min + i];
 	}
 	for (int i = 0; i < Bas_r; i++) {
-		Basisfenster_WL[Bas_l + i]          = this->m_Wellenlaengen[Index_Basisfenster_rechts_min + i];
+		Basisfenster_WL[Bas_l + i] = this->m_Wellenlaengen[Index_Basisfenster_rechts_min + i];
 		Basisfenster_Intensitaet[Bas_l + i] = this->m_Intensitaeten_durch_piF_Gamma[Index_Basisfenster_rechts_min + i];
 	}
 	//Peakfenster WL und I auffüllen
 	for (int i = 0; i < Speicherbedarf_Peak; i++) {
-		Peakfenster_WL[i]          = m_Wellenlaengen[Index_Peakfenster_min + i];
+		Peakfenster_WL[i] = m_Wellenlaengen[Index_Peakfenster_min + i];
 		Peakfenster_Intensitaet[i] = m_Intensitaeten_durch_piF_Gamma[Index_Peakfenster_min + i];
 	}
 	// linearen Fit des Basisfensters durchführen
 	// Proto: Fit_Linear(double* x,double* y, double& a0, double& a1,int Anfangsindex, int Endindex)
 	double a0, a1;
-	Fit_Linear(Basisfenster_WL, Basisfenster_Intensitaet, a0,  a1, 0, Speicherbedarf_Basis - 1);
+	Fit_Linear(Basisfenster_WL, Basisfenster_Intensitaet, a0, a1, 0, Speicherbedarf_Basis - 1);
 	// lineare Funktion von Intensitäten des Peakfenster abziehen
 	for (int i = 0; i < Speicherbedarf_Peak; i++) {
 		Peakfenster_Intensitaet[i] -= a0 + a1 * Peakfenster_WL[i];
@@ -239,10 +239,10 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index, 
 	if (mache_Fit_Plots == "ja") {
 		//TODO das als Funktion implementieren
 		double *Funktion;
-		Funktion           = new double[Speicherbedarf_Peak];
+		Funktion = new double[Speicherbedarf_Peak];
 		const double pi = 3.14159265;
-		double FWHM  = Spezfenst.m_FWHM;
-		double cnorm   =  4.0 * pi * sqrt(2.0) / (FWHM * FWHM * FWHM);
+		double FWHM = Spezfenst.m_FWHM;
+		double cnorm = 4.0 * pi * sqrt(2.0) / (FWHM * FWHM * FWHM);
 
 		for (int i = 0; i < Speicherbedarf_Peak; i++) {
 			double Basis = a0 + a1 * Peakfenster_WL[i];
@@ -502,7 +502,7 @@ void Messung_Nadir::Fit_Peak_hyperbolic(double *x, double *y, double x0, double 
 	double sum_gy = 0;
 	double sum_gg = 0;
 	double g;
-	double cnorm =  4.0 * pi * sqrt(2.0) / (FWHM * FWHM * FWHM); //lambda m
+	double cnorm = 4.0 * pi * sqrt(2.0) / (FWHM * FWHM * FWHM); //lambda m
 
 	for (int i = 0; i < N; i++) {
 		//g berechnen
@@ -528,7 +528,7 @@ double Messung_Nadir::Evaluate_Error_primitive(double *x, double *y, double a0, 
 	******************************************************************************************/
 	double Error = 0;
 	const double pi = 3.14159265;
-	double cnorm =  4.0 * pi * sqrt(2.0) / (FWHM * FWHM * FWHM);
+	double cnorm = 4.0 * pi * sqrt(2.0) / (FWHM * FWHM * FWHM);
 	for (int i = Anfangsindex; i < Endindex + 1; i++) {
 		//Funktionswert Bestimmen
 		double Basis = a0 + a1 * x[i];

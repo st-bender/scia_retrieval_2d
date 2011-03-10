@@ -48,41 +48,41 @@ public:
 	//Membervariablen
 
 	// Ergebnisse
-	double  m_Zeilendichte;
-	double  m_Fehler_Zeilendichten;
+	double m_Zeilendichte;
+	double m_Fehler_Zeilendichten;
 	// Zwischenergebnisse
-	double  m_Deklinationswinkel;  // aus Datum berechenbar
+	double m_Deklinationswinkel;  // aus Datum berechenbar
 	double m_Sonnen_Longitude;
 	//double  m_Streuwinkel;           // ist mehrere Streuwinkel auf einer Messachse...muss später berechnet werden
 	//double  m_SZA;                     //abhängig von Deklination Uhrzeit und Lat und Lon.....dasselbe wie beim streuwinkel
 	//Dateiname
-	string     m_Dateiname_L1C;
+	string m_Dateiname_L1C;
 	//Datum
-	int         m_Jahr;
-	int         m_Monat;
-	int         m_Tag;
-	int         m_Stunde;
-	int         m_Minute;
+	int m_Jahr;
+	int m_Monat;
+	int m_Tag;
+	int m_Stunde;
+	int m_Minute;
 	// Geolocation
-	double  m_Lattidude_Sat;   // hierfür muss das Programm noch geändert werden
-	double  m_Longitude_Sat;
-	double  m_Hoehe_Sat;
-	double  m_Lattidude_TP;
-	double  m_Longitude_TP;
-	double  m_Hoehe_TP;
-	double  m_Erdradius;
+	double m_Lattidude_Sat;   // hierfür muss das Programm noch geändert werden
+	double m_Longitude_Sat;
+	double m_Hoehe_Sat;
+	double m_Lattidude_TP;
+	double m_Longitude_TP;
+	double m_Hoehe_TP;
+	double m_Erdradius;
 
 	double m_orbit_phase;
 	//double  m_SZA_TP;      // alt
 	//double  m_SAA_TP;     // alt
 	// Datenfelder
-	int         m_Number_of_Wavelength;
-	double  m_Wellenlaengen[826];
-	double  m_Sonne[826];
-	double  m_Intensitaeten[826];  // genauer genommen photonen/(s cm^2nm)
-	double  m_Intensitaeten_relativer_Fehler[826]; // 1=100% vom Messwert
-	double  m_Intensitaeten_durch_piF[826];
-	double  m_Intensitaeten_durch_piF_Gamma[826]; // ein bisschen mehr Speicher...optimierbar
-	double  m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand[826];
+	int m_Number_of_Wavelength;
+	double m_Wellenlaengen[826];
+	double m_Sonne[826];
+	double m_Intensitaeten[826];  // genauer genommen photonen/(s cm^2nm)
+	double m_Intensitaeten_relativer_Fehler[826]; // 1=100% vom Messwert
+	double m_Intensitaeten_durch_piF[826];
+	double m_Intensitaeten_durch_piF_Gamma[826]; // ein bisschen mehr Speicher...optimierbar
+	double m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand[826];
 };
 #endif /* MESSUNG_LIMB_HH_ */

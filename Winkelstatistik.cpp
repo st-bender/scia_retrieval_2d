@@ -21,15 +21,15 @@ Winkelstatistik::Winkelstatistik()
 	m_counter_0_001 = 0; //winkel zwischen 0 und 0,001Grad
 	m_counter_0_002 = 0;
 	m_counter_0_005 = 0;
-	m_counter_0_01  = 0;
-	m_counter_0_02  = 0;   //Alles bis hier ist OK
-	m_counter_0_05  = 0;   //Das geht noch
-	m_counter_0_1   = 0;    // Ab hier wird so ziemlich alles falsch
-	m_counter_0_2   = 0;
-	m_counter_0_5   = 0;
-	m_counter_1       = 0;
-	m_counter_2       = 0;
-	m_counter_5       = 0;
+	m_counter_0_01 = 0;
+	m_counter_0_02 = 0;   //Alles bis hier ist OK
+	m_counter_0_05 = 0;   //Das geht noch
+	m_counter_0_1 = 0;    // Ab hier wird so ziemlich alles falsch
+	m_counter_0_2 = 0;
+	m_counter_0_5 = 0;
+	m_counter_1 = 0;
+	m_counter_2 = 0;
+	m_counter_5 = 0;
 	m_counter_mehr = 0;
 
 }

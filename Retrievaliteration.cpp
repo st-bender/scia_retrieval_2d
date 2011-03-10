@@ -15,19 +15,19 @@ using namespace std;
 
 extern "C" {
 	void dgesv_(int *N, int *NRHS, double *A, int *LDA, int *IPIV, double *B, int *LDB, int *INFO);
-	void dgetrs_(char * , int *N, int *NRHS, double *A, int *LDA, int *IPIV, double *B, int *LDB, int *INFO);
+	void dgetrs_(char *, int *N, int *NRHS, double *A, int *LDA, int *IPIV, double *B, int *LDB, int *INFO);
 }
 
-int Retrievaliteration(MPL_Matrix             &Dichten,
-					   MPL_Matrix            &Dichten_apriori,
-					   MPL_Matrix   &Saeulendichten,
-					   MPL_Matrix   &S_apriori,
-					   MPL_Matrix   &S_y,
-					   MPL_Matrix               S_Breite,
-					   MPL_Matrix               S_Hoehe,
-					   const double          &Lambda_Breite,
-					   const double          &Lambda_Hoehe,
-					   MPL_Matrix   &AMF,
+int Retrievaliteration(MPL_Matrix &Dichten,
+					   MPL_Matrix &Dichten_apriori,
+					   MPL_Matrix &Saeulendichten,
+					   MPL_Matrix &S_apriori,
+					   MPL_Matrix &S_y,
+					   MPL_Matrix S_Breite,
+					   MPL_Matrix S_Hoehe,
+					   const double &Lambda_Breite,
+					   const double &Lambda_Hoehe,
+					   MPL_Matrix &AMF,
 					   Konfiguration &Konf)
 {
 	// Die Sache mit dem Apriori ist noch glaub ich noch nicht ganz sauber...bei 0 apriori kein problem beim nachiterieren
@@ -45,9 +45,9 @@ int Retrievaliteration(MPL_Matrix             &Dichten,
 	MPL_Matrix S_Hoehe_trans = S_Hoehe.transponiert();
 
 	// Solange man die lambdas für die constraints nicht ändern will, sieht die LHS immer gleich aus
-	LHS = (AMF_trans * (S_y * AMF))                               +
-		  (S_apriori)                                                   +
-		  (Lambda_Breite * (S_Breite_trans * S_Breite))   +
+	LHS = (AMF_trans * (S_y * AMF)) +
+		  (S_apriori) +
+		  (Lambda_Breite * (S_Breite_trans * S_Breite)) +
 		  (Lambda_Hoehe * (S_Hoehe_trans * S_Hoehe));
 //    cout<<"LHS: "<<LHS.m_Zeilenzahl<<"\t"<<LHS.m_Spaltenzahl<<"\n";
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,7 +97,7 @@ int Retrievaliteration(MPL_Matrix             &Dichten,
 	// Man kann auch die MPL_Matrix nach Fortran Nomenklatur anpassen, aber transponieren ist
 	// nicht zeitaufwändig
 	int N = LHS.m_Zeilenzahl;           //<---------- Feldgröße Speed propto N^3 , LHS ist quadratisch, N ist Anzahl der Gitterpunkte
-	int    *IPIV;  //array mit der Pivotisierungsmatrix sollte so groß wie N sein, alle Elemente 0
+	int *IPIV;  //array mit der Pivotisierungsmatrix sollte so groß wie N sein, alle Elemente 0
 	IPIV = new int[N];
 	// ------ RHS oben definiert
 	int NRHS = 1; //Spalten von RHS 1 nehmen, um keine c/Fortran Verwirrungen zu provozieren
@@ -120,7 +120,7 @@ int Retrievaliteration(MPL_Matrix             &Dichten,
 	Residual = 0;
 	Residual_1 = 0;
 	int Itmax = Konf.m_Max_Zahl_Iterationen;
-	double  Threshold = Konf.m_Convergence_Treshold;
+	double Threshold = Konf.m_Convergence_Treshold;
 	//Threshold=1E-5;  // für 12 Hoehen gut
 	//Threshold=1E-2;
 	Threshold = 1E-5;
@@ -153,10 +153,10 @@ int Retrievaliteration(MPL_Matrix             &Dichten,
 		if ((Iterationsschritt == 0) || (Iterationsschritt == Itmax - 1)) {
 			cerr << "Iterationsschritt:" << Iterationsschritt << "\t" << "Residual: " << Residual << "\n";
 		}
-		if (Iterationsschritt == 0)                    {
+		if (Iterationsschritt == 0) {
 			Residual_1 = Residual;    // erstes Residuum als ungefähre Fehlerabschätzung
 		}
-		if (Residual < Threshold * Residual_1)  {
+		if (Residual < Threshold * Residual_1) {
 			break;
 		}
 		RHS = AMF_trans * (S_y * Saeulendichten_rest) + S_apriori * Dichten_apriori_rest; //RHS sollte ein Spaltenvektor sein
@@ -183,17 +183,17 @@ int Retrievaliteration(MPL_Matrix             &Dichten,
 
 
 
-int Retrievaliteration_old(MPL_Matrix             &Dichten,
-						   MPL_Matrix            &Dichten_apriori,
-						   MPL_Matrix   &Saeulendichten,
-						   MPL_Matrix   &S_apriori,
-						   MPL_Matrix   &S_y,
-						   MPL_Matrix               S_Breite,
-						   MPL_Matrix               S_Hoehe,
-						   MPL_Matrix               S_letzte_Hoehe,
-						   const double          &Lambda_Breite,
-						   const double          &Lambda_Hoehe,
-						   MPL_Matrix   &AMF,
+int Retrievaliteration_old(MPL_Matrix &Dichten,
+						   MPL_Matrix &Dichten_apriori,
+						   MPL_Matrix &Saeulendichten,
+						   MPL_Matrix &S_apriori,
+						   MPL_Matrix &S_y,
+						   MPL_Matrix S_Breite,
+						   MPL_Matrix S_Hoehe,
+						   MPL_Matrix S_letzte_Hoehe,
+						   const double &Lambda_Breite,
+						   const double &Lambda_Hoehe,
+						   MPL_Matrix &AMF,
 						   Konfiguration &Konf)
 {
 	//FIXME ACHTUNG TRESHOLD UND ITMAX WERDEN HIER PER HAND GESETZT UND NICHT AUS KONF ÜBERNOMMEN
@@ -209,10 +209,10 @@ int Retrievaliteration_old(MPL_Matrix             &Dichten,
 //    cout<<"Dim S_y: "<<S_y.m_Zeilenzahl<<"\t"<<S_y.m_Spaltenzahl<<"\n";
 //    cout<<"AMF: "<<AMF.m_Zeilenzahl<<"\t"<<AMF.m_Spaltenzahl<<"\n";
 //    cout<<"AMF_trans: "<<AMF_trans.m_Zeilenzahl<<"\t"<<AMF_trans.m_Spaltenzahl<<"\n";
-	LHS = (AMF_trans * (S_y * AMF))                               +
-		  (S_apriori)                                                    +
-		  (Lambda_Breite * (S_Breite_trans * S_Breite))    +  // Breitenglattung
-		  (Lambda_Hoehe * (S_Hoehe_trans * S_Hoehe))   + // Hoehenglattung
+	LHS = (AMF_trans * (S_y * AMF)) +
+		  (S_apriori) +
+		  (Lambda_Breite * (S_Breite_trans * S_Breite)) +  // Breitenglattung
+		  (Lambda_Hoehe * (S_Hoehe_trans * S_Hoehe)) + // Hoehenglattung
 		  S_letzte_Hoehe_trans * S_letzte_Hoehe;               // letzte Hoehe auf 0 zwingen
 //    cout<<"LHS: "<<LHS.m_Zeilenzahl<<"\t"<<LHS.m_Spaltenzahl<<"\n";
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -242,7 +242,7 @@ int Retrievaliteration_old(MPL_Matrix             &Dichten,
 	//für positiv definite Matrizzen ist Choleskyzerlegung genauer, das schließt aber negative Säulendichten aus, also wird LU-benutzt
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	int Itmax = Konf.m_Max_Zahl_Iterationen;
-	double  Threshold = Konf.m_Convergence_Treshold;
+	double Threshold = Konf.m_Convergence_Treshold;
 	//Threshold=1E-5;  // für 12 Hoehen gut
 	Threshold = 1E-2;
 	MPL_Matrix Dichten_alt = Dichten;
@@ -259,7 +259,7 @@ int Retrievaliteration_old(MPL_Matrix             &Dichten,
 	// Man kann auch die MPL_Matrix nach Fortran Nomenklatur anpassen, aber transponieren ist
 	// nicht zeitaufwändig
 	int N = LHS.m_Zeilenzahl;           //<---------- Feldgröße Speed propto N^3 , LHS ist quadratisch, N ist Anzahl der Gitterpunkte
-	int    *IPIV;  //array mit der Pivotisierungsmatrix sollte so groß wie N sein, alle Elemente 0
+	int *IPIV;  //array mit der Pivotisierungsmatrix sollte so groß wie N sein, alle Elemente 0
 	IPIV = new int[N];
 	// ------ RHS oben definiert
 	int NRHS = 1; //Spalten von RHS 1 nehmen, um keine c/Fortran Verwirrungen zu provozieren

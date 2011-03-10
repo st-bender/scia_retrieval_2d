@@ -38,7 +38,7 @@ public:
 	int Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfenst, int Index);
 	int Deklinationswinkel_bestimmen();
 	int Sonnen_Longitude_bestimmen();
-	Ausgewertete_Messung_Nadir  Ergebnis_Zusammenfassen();
+	Ausgewertete_Messung_Nadir Ergebnis_Zusammenfassen();
 
 	//Hilfsfunktionen  //nur intern aufrufen!!!   // Die Hilfsfunktionen sind FAST dieselben wie bei den LIMB Messungen
 	int Get_Index(double WL);
@@ -52,20 +52,20 @@ public:
 	//Membervariablen
 
 	// Ergebnisse
-	double  m_Zeilendichte;
-	double  m_Fehler_Zeilendichten;
+	double m_Zeilendichte;
+	double m_Fehler_Zeilendichten;
 	//Zwischenergebnisse
-	double  m_Deklinationswinkel;
+	double m_Deklinationswinkel;
 	double m_Sonnen_Longitude;
 	// Herkunftsmerkmale
-	string     m_Dateiname_L1C;
-	int         m_Messung_ID;
+	string m_Dateiname_L1C;
+	int m_Messung_ID;
 	//Datum
-	int         m_Jahr;
-	int         m_Monat;
-	int         m_Tag;
-	int         m_Stunde;
-	int         m_Minute;
+	int m_Jahr;
+	int m_Monat;
+	int m_Tag;
+	int m_Stunde;
+	int m_Minute;
 	// Geolokationen für Raytrace
 	double m_Lattitude_Sat;
 	double m_Longitude_Sat;
@@ -75,7 +75,7 @@ public:
 	double m_Erdradius;
 	double m_orbit_phase;
 	//Füllbare Felder
-	int         m_Number_of_Wavelength;
+	int m_Number_of_Wavelength;
 	double *m_Wellenlaengen;
 	double *m_Intensitaeten;
 	double *m_Intensitaeten_relativer_Fehler;

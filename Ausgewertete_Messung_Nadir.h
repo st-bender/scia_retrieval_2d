@@ -5,7 +5,7 @@
  *      Author: martin
  */
 
-#ifndef  AUSGEWERTETE_MESSUNG_NADIR_HH_
+#ifndef AUSGEWERTETE_MESSUNG_NADIR_HH_
 #define AUSGEWERTETE_MESSUNG_NADIR_HH_
 
 #include <string>
@@ -29,11 +29,11 @@ public:
 	// Zusatzinformationen
 	double m_Wellenlaenge; //Übergangswellenlänge
 	// Datum
-	int         m_Jahr;
-	int         m_Monat;
-	int         m_Tag;
-	int         m_Stunde;
-	int         m_Minute;
+	int m_Jahr;
+	int m_Monat;
+	int m_Tag;
+	int m_Stunde;
+	int m_Minute;
 	// Geolokationen
 	double m_Lattitude_Sat;
 	double m_Longitude_Sat;

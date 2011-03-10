@@ -38,7 +38,7 @@ public:
 	vector<double> m_Basisfenster_rechts_WLmax;
 	vector<double> m_Peakfenster_WLmin;
 	vector<double> m_Peakfenster_WLmax;
-	double              m_FWHM;                               // FWHM der Peaks, oder zumindest Startwert
+	double m_FWHM;                               // FWHM der Peaks, oder zumindest Startwert
 	vector<string>    m_Liste_der_Plot_Dateinamen; //Für alle Linien erstmal ein Vektor
 	//Membervariablen ende **************************************************************************/
 };

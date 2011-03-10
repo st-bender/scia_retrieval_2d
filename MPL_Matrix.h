@@ -34,7 +34,7 @@
  *
  *  //Die Elemente dieser Matrix sind Zeilenweise angeordnet d.h. Elementzahl(i,j)=i+j*Spaltenzahl
  */
-#ifndef  MPLMATRIX_HH_
+#ifndef MPLMATRIX_HH_
 #define MPLMATRIX_HH_
 
 #include<iostream>
@@ -85,9 +85,9 @@ public:
 
 	//() Überladung -> Direkter Zugriff auf Das Elemente Array
 	double &operator()(int Zeile, int Spalte);            //Die braucht man aus obskuren Gründen 2mal
-	double   operator()(int Zeile, int Spalte) const;
+	double operator()(int Zeile, int Spalte) const;
 	double &operator()(int Elementindex);
-	double   operator()(int Elementindex) const;
+	double operator()(int Elementindex) const;
 
 
 	// binary operators
@@ -108,10 +108,10 @@ public:
 	void Null_Initialisierung();
 	MPL_Matrix Zeile(int Zeilennummer);      // gibt eine Zeile   als Spaltenvektor aus
 	MPL_Matrix Spalte(int Spaltennummer); // gibt eine Spalte als Spaltenvektor aus
-	MPL_Matrix  transponiert(); //transponierte Matrix
+	MPL_Matrix transponiert(); //transponierte Matrix
 //    MPLMatrix  invertiert();      //inverse Matrix, falls existent... existiert nur bei quadratischen, nicht singulären Matrizzen
 	// transponieren, Inverse Matrix / Gauss, LU, Cholesky usw SVD
-	void Zeile_Tauschen(int Zeile_a, int  Zeile_b);
+	void Zeile_Tauschen(int Zeile_a, int Zeile_b);
 	void Zeile_Multiplizieren(int Zeile, double Faktor);
 	void Vielfaches_einer_Zeile_addieren(int Summenzeile, int Additionszeile, double Faktor);
 	//int simple_Gaussdiagonalisierung(); siehe ganz oben
@@ -197,7 +197,7 @@ inline MPL_Matrix &MPL_Matrix::operator = (const MPL_Matrix &rhs)     // Zuweisu
 /////////////////////////////////////////////////////////
 // Methodenstart
 /////////////////////////////////////////////////////////
-inline MPL_Matrix  &MPL_Matrix::operator *= (const MPL_Matrix &rhs)   // Matrixmultiplikation
+inline MPL_Matrix &MPL_Matrix::operator *= (const MPL_Matrix &rhs)   // Matrixmultiplikation
 {
 	//Zunächst prüfen, ob Multiplikation möglich ist
 	if (this->m_Spaltenzahl != rhs.m_Zeilenzahl) {
@@ -321,26 +321,26 @@ inline MPL_Matrix MPL_Matrix::operator - () const
 /////////////////////////////////////////////////////////
 // Methodenstart
 /////////////////////////////////////////////////////////
-inline double  &MPL_Matrix::operator()(int Zeile, int Spalte)
+inline double &MPL_Matrix::operator()(int Zeile, int Spalte)
 {
 	//A(1,2)=b;
 	if ((Spalte >= 0) && (Spalte < m_Spaltenzahl) && (Zeile >= 0) && (Zeile < m_Zeilenzahl))
 		return this->m_Elemente[Spalte + Zeile * this->m_Spaltenzahl];
 	else {
-		cout << "Achtung!!! Zugriff auf Elemente ausserhalb  der Matrix\n";
+		cout << "Achtung!!! Zugriff auf Elemente ausserhalb der Matrix\n";
 		return m_Elemente[0];//auch schlecht, aber wenigstens nicht ausserhalb
 	}
 }
 /////////////////////////////////////////////////////////
 // Methodenstart
 /////////////////////////////////////////////////////////
-inline double   MPL_Matrix::operator()(int Zeile, int Spalte) const
+inline double MPL_Matrix::operator()(int Zeile, int Spalte) const
 {
 	//b=A(1,2)
 	if ((Spalte >= 0) && (Spalte < m_Spaltenzahl) && (Zeile >= 0) && (Zeile < m_Zeilenzahl))
 		return this->m_Elemente[Spalte + Zeile * this->m_Spaltenzahl];
 	else {
-		cout << "Achtung!!! Zugriff auf Elemente ausserhalb  der Matrix\n";
+		cout << "Achtung!!! Zugriff auf Elemente ausserhalb der Matrix\n";
 		return -1;
 	}
 }
@@ -352,19 +352,19 @@ inline double &MPL_Matrix::operator()(int Elementindex)
 	if ((Elementindex >= 0) && (Elementindex < m_Elementanzahl))
 		return this->m_Elemente[Elementindex];
 	else {
-		cout << "Achtung!!! Zugriff auf Elemente ausserhalb  der Matrix\n";
+		cout << "Achtung!!! Zugriff auf Elemente ausserhalb der Matrix\n";
 		return m_Elemente[0];//auch schlecht, aber wenigstens nicht ausserhalb
 	}
 }
 /////////////////////////////////////////////////////////
 // Methodenstart
 /////////////////////////////////////////////////////////
-inline double   MPL_Matrix::operator()(int Elementindex) const
+inline double MPL_Matrix::operator()(int Elementindex) const
 {
 	if ((Elementindex >= 0) && (Elementindex < m_Elementanzahl))
 		return this->m_Elemente[Elementindex];
 	else {
-		cout << "Achtung!!! Zugriff auf Elemente ausserhalb  der Matrix\n";
+		cout << "Achtung!!! Zugriff auf Elemente ausserhalb der Matrix\n";
 		return m_Elemente[0];//auch schlecht, aber wenigstens nicht ausserhalb
 	}
 
@@ -551,7 +551,7 @@ inline MPL_Matrix MPL_Matrix::Spalte(int Spaltennummer) // gibt eine Spalte als 
 /////////////////////////////////////////////////////////
 // Methodenstart
 /////////////////////////////////////////////////////////
-inline MPL_Matrix  MPL_Matrix::transponiert() //transponierte Matrix
+inline MPL_Matrix MPL_Matrix::transponiert() //transponierte Matrix
 {
 	//Zeilen und Spalten tauschen
 	MPL_Matrix Transponierte(m_Spaltenzahl, m_Zeilenzahl);

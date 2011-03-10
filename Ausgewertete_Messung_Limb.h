@@ -41,19 +41,19 @@ public:
 	// Wellenlänge des Übergangs
 	double m_Wellenlaenge;
 	//Datum
-	int         m_Jahr;
-	int         m_Monat;
-	int         m_Tag;        //Uhrzeit ist wichtig für Längengrad der Sonne
-	int         m_Stunde;
-	int         m_Minute;
+	int m_Jahr;
+	int m_Monat;
+	int m_Tag;        //Uhrzeit ist wichtig für Längengrad der Sonne
+	int m_Stunde;
+	int m_Minute;
 	// Geolocation
-	double  m_Lattidude_Sat;
-	double  m_Longitude_Sat;
-	double  m_Hoehe_Sat;
-	double  m_Lattidude_TP;
-	double  m_Longitude_TP;
-	double  m_Hoehe_TP;
-	double  m_Erdradius;
+	double m_Lattidude_Sat;
+	double m_Longitude_Sat;
+	double m_Hoehe_Sat;
+	double m_Lattidude_TP;
+	double m_Longitude_TP;
+	double m_Hoehe_TP;
+	double m_Erdradius;
 };
 
 // inline Implementierungen

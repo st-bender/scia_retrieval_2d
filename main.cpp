@@ -258,7 +258,7 @@ int main(int argc, char *argv[])
 
 	// Fitparameter für alle Spezies vorbeiten
 	Speziesfenster Spez;
-	Liniendaten      Lindat;
+	Liniendaten Lindat;
 	vector<Speziesfenster> Spezies_Fenster;
 	// Linienparameter für alle Spezies einlesen ******************************************************
 	// Dies könnte man später aus einer Datei auslesen ///////////////////////////////////////////////
@@ -478,7 +478,7 @@ int main(int argc, char *argv[])
 			Limb_Auswertung(Orbitlist, l, Solspec, Spezies_Fenster,
 							&counter_Nachtmessungen, &counter_NLC_detektiert, &counter_Richtungsvektor_nicht_ok,
 							Arbeitsverzeichnis, mache_Fit_Plots_limb, untersuche_limb_mesothermo_states,
-							Ausgewertete_Limbmessung_MgI,  Ausgewertete_Limbmessung_MgII, Ausgewertete_Limbmessung_unknown,
+							Ausgewertete_Limbmessung_MgI, Ausgewertete_Limbmessung_MgII, Ausgewertete_Limbmessung_unknown,
 							Ausgewertete_Limbmessung_FeI);
 			//cerr<<"limbauswertung Ende\n";
 			// Die Zwischenergebnisse stehen nun in Ausgewertete_Limbmessung_MgI und  Ausgewertete_Limbmessung_MgII
@@ -629,7 +629,8 @@ int main(int argc, char *argv[])
 	}
 	// Nadir MgI
 	//cerr<<"MgI Nadir\n";
-	for (unsigned int i = Ausgewertete_Limbmessung_MgI.size(); i < Ausgewertete_Limbmessung_MgI.size() + Ausgewertete_Nadirmessung_MgI.size(); i++) {
+	for (unsigned int i = Ausgewertete_Limbmessung_MgI.size();
+			i < Ausgewertete_Limbmessung_MgI.size() + Ausgewertete_Nadirmessung_MgI.size(); i++) {
 		int Nadir_i = i - Ausgewertete_Limbmessung_MgI.size();
 		Saeulendichten_MgI(i) = Ausgewertete_Nadirmessung_MgI[Nadir_i].m_Zeilendichte;
 		Saeulendichten_Fehler_MgI(i) = Ausgewertete_Nadirmessung_MgI[Nadir_i].m_Fehler_Zeilendichten;
@@ -975,9 +976,9 @@ int main(int argc, char *argv[])
 	MPL_Matrix S_x_unknown(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
 	MPL_Matrix AKM_unknown(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte); //Averaging Kernel Matrix
 	if (mache_volles_Retrieval_unknown == "ja") {
-		Retrievalfehler_Abschaetzung(S_x_unknown , AKM_unknown ,
-									 S_apriori_unknown , S_y_unknown , S_Breite, S_Hoehe, S_letzte_Hoehe_unknown, unknown_Lambda_Breite, unknown_Lambda_Hoehe,
-									 AMF_unknown , Konf);
+		Retrievalfehler_Abschaetzung(S_x_unknown, AKM_unknown,
+									 S_apriori_unknown, S_y_unknown, S_Breite, S_Hoehe, S_letzte_Hoehe_unknown, unknown_Lambda_Breite, unknown_Lambda_Hoehe,
+									 AMF_unknown, Konf);
 	}
 	/////////////////////////
 	// Spezies FeI  //
@@ -985,9 +986,9 @@ int main(int argc, char *argv[])
 	MPL_Matrix S_x_FeI(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
 	MPL_Matrix AKM_FeI(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte); //Averaging Kernel Matrix
 	if (mache_volles_Retrieval_FeI == "ja") {
-		Retrievalfehler_Abschaetzung(S_x_FeI , AKM_FeI ,
-									 S_apriori_FeI , S_y_FeI , S_Breite, S_Hoehe, S_letzte_Hoehe_FeI, FeI_Lambda_Breite, FeI_Lambda_Hoehe,
-									 AMF_FeI , Konf);
+		Retrievalfehler_Abschaetzung(S_x_FeI, AKM_FeI,
+									 S_apriori_FeI, S_y_FeI, S_Breite, S_Hoehe, S_letzte_Hoehe_FeI, FeI_Lambda_Breite, FeI_Lambda_Hoehe,
+									 AMF_FeI, Konf);
 	}
 	time(&Teil5_End);
 	T5_Dauer = Teil5_End - Teil5_Start;
@@ -1008,27 +1009,27 @@ int main(int argc, char *argv[])
 	//cout<<"Dateiname_out: "<<Dateiname_out<<"\n";
 	//cout<<"Dateiout_Mittelteil: "<<Dateiout_Mittelteil<<"\n";
 	if (mache_volles_Retrieval_MgI == "ja") {
-		Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_MgI,  S_x_MgI,  AKM_MgI);
+		Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_MgI, S_x_MgI, AKM_MgI);
 	}
 	//////////////////////////////
 	// MgII ////////////////////
 	Dateiname_out = Arbeitsverzeichnis + "/" + sssss_MgII + Dateiout_Mittelteil;
 	//cout<<"Dateiname_out: "<<Dateiname_out<<"\n";
 	if (mache_volles_Retrieval_MgII == "ja") {
-		Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_MgII,  S_x_MgII,  AKM_MgII);
+		Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_MgII, S_x_MgII, AKM_MgII);
 	}
 	//////////////////////////////
 	// unknown//////////////
 	Dateiname_out = Arbeitsverzeichnis + "/" + sssss_unknown + Dateiout_Mittelteil;
 	//cout<<"Dateiname_out: "<<Dateiname_out<<"\n";
 	if (mache_volles_Retrieval_unknown == "ja") {
-		Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_unknown,  S_x_unknown,  AKM_unknown);
+		Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_unknown, S_x_unknown, AKM_unknown);
 	}
 	// FeI//////////////
 	Dateiname_out = Arbeitsverzeichnis + "/" + sssss_FeI + Dateiout_Mittelteil;
 	//cout<<"Dateiname_out: "<<Dateiname_out<<"\n";
 	if (mache_volles_Retrieval_FeI == "ja") {
-		Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_FeI,  S_x_FeI,  AKM_FeI);
+		Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_FeI, S_x_FeI, AKM_FeI);
 	}
 
 	time(&Teil6_End);

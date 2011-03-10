@@ -277,7 +277,7 @@ int Plot_Slantcoloumns_polyfit_MgI(string Arbeitsverzeichnis, string Dateiname, 
 // Funktionsstart Plot_Spektren_und_Quotient
 ////////////////////////////////////////////////////////////////////////////////
 int Plot_Spektren_und_Quotient(string Arbeitsverzeichnis, string Dateiname, string title, double *WL, int Startind, int Endind,
-							   double *Limb, double *Limb_error , double *Sonne, double *Quotient, double *Quotient_error)
+							   double *Limb, double *Limb_error, double *Sonne, double *Quotient, double *Quotient_error)
 {
 	string Rohdaten_Name = Arbeitsverzeichnis + "/Rohdaten_extrem_unwahrscheinliche_Endung_g"; //geht das parallel....???
 	string Temp_Skript_Name = Arbeitsverzeichnis + "/Skript_extrem_unwahrscheinliche_Endung_g";

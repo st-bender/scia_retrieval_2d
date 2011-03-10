@@ -17,7 +17,7 @@ using namespace std;
 ////////////////////////////////////////////////
 // Funktionsstart int  Umwandlung_Kugel_in_Karthesisch(double r,double phi,double theta,double& x,double& y,double& z);
 ////////////////////////////////////////////////
-void  Umwandlung_Kugel_in_Karthesisch(double r, double phi, double theta, double &x, double &y, double &z)
+void Umwandlung_Kugel_in_Karthesisch(double r, double phi, double theta, double &x, double &y, double &z)
 {
 	// Winkel in Grad
 	const double pi = 3.1415926535897;

@@ -31,12 +31,12 @@ using namespace std;
 void Matrizzen_Aufbauen(MPL_Matrix &S_Breite, MPL_Matrix &S_Hoehe, MPL_Matrix &S_letzte_Hoehe, double Lambda_letzte_Hoehe,
 						MPL_Matrix &S_apriori, MPL_Matrix &S_y, MPL_Matrix &AMF, double Lambda_apriori, MPL_Matrix Saeulendichten_Fehler,
 						Speziesfenster &Spezies_Fenster,
-						Retrievalgitter &Grid,  vector<Ausgewertete_Messung_Limb> AM_L, vector<Ausgewertete_Messung_Nadir> AM_N,
+						Retrievalgitter &Grid, vector<Ausgewertete_Messung_Limb> AM_L, vector<Ausgewertete_Messung_Nadir> AM_N,
 						Konfiguration &Konf, int &IERR)
 {
 	//Fehlermatrizzen
 	//cerr<<"S_Breite\n";
-	S_Breite  = Differenz_von_benachbarten_Zeilenelementen_Matrix_aufbauen(Grid.m_Anzahl_Hoehen, Grid.m_Anzahl_Breiten);
+	S_Breite = Differenz_von_benachbarten_Zeilenelementen_Matrix_aufbauen(Grid.m_Anzahl_Hoehen, Grid.m_Anzahl_Breiten);
 	//cerr<<"S_Hoehe\n";
 	S_Hoehe = Differenz_von_benachbarten_Spaltenelementen_Matrix_aufbauen(Grid.m_Anzahl_Hoehen, Grid.m_Anzahl_Breiten);
 	//cerr<<"S_letzte_Hoehe\n";
@@ -221,8 +221,8 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 	//cerr<<"Limb Raytracing\n";
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Zunächst die Limbmessungen in Eintragen  /////////////////////////////////////////////////////////////////////////////////////////////////////
-	time_t t_Limb_LOS_start, t_Limb_LOS_ende , t_Limb_LOS_delta;
-	time_t t_interpolieren_start, t_interpolieren_ende , t_interpolieren_delta_gesamt;
+	time_t t_Limb_LOS_start, t_Limb_LOS_ende, t_Limb_LOS_delta;
+	time_t t_interpolieren_start, t_interpolieren_ende, t_interpolieren_delta_gesamt;
 	t_interpolieren_delta_gesamt = 0;
 	time(&t_Limb_LOS_start);
 	t_Limb_LOS_delta = t_Limb_LOS_start - t_Limb_LOS_start;
@@ -555,7 +555,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			int myerr;
 			//cout<<"Tau_LOS: "<<Tau_LOS<<"\n";
 
-			myerr = Pixel_finden_und_AMF_erhoehen_LOS(AMF, Grid , MessungNR,
+			myerr = Pixel_finden_und_AMF_erhoehen_LOS(AMF, Grid, MessungNR,
 					Pixelnummer,
 					Schrittlaenge, Tau_LOS,
 					Punkt_Hoehe, AM_L[MessungNR].m_Erdradius,
@@ -951,7 +951,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			// Gitterpunkt finden und AMF erhöhen; Durchstoßpunkte der Gitterelemente finden (siehe LFS)
 			int myerr;
 
-			myerr = Pixel_finden_und_AMF_erhoehen_LOS(AMF, Grid , MessungNR,
+			myerr = Pixel_finden_und_AMF_erhoehen_LOS(AMF, Grid, MessungNR,
 					Pixelnummer,
 					Schrittweite, Tau_Nadir_LOS,
 					AP_Hoehe, AM_N[Nadir_MessungNR].m_Erdradius,
@@ -1191,8 +1191,8 @@ int interpolieren(MPL_Matrix M, int x_Spalte, int y_Spalte, double x_Wert_des_ge
 
 	//Anfangs und Endindex sind nun bekannt und um 1 unterschiedlich,
 	//sodass die eigentliche Interpolation druchgeführt werden kann
-	double I2 = ((double)(x_Wert_des_gesuchten_Wertes   - M(Index_Anfang, x_Spalte)))
-				/ ((double)(M(Index_Ende, x_Spalte)                         - M(Index_Anfang, x_Spalte)));
+	double I2 = ((double)(x_Wert_des_gesuchten_Wertes - M(Index_Anfang, x_Spalte)))
+				/ ((double)(M(Index_Ende, x_Spalte) - M(Index_Anfang, x_Spalte)));
 	double I1 = 1.0 - I2;
 	//cout<<"Index_Anfang:"<<Index_Anfang<<"   Index_Ende:"<<Index_Ende<<"\n";
 	//cout<<"I2: "<<I2<<"   I1: "<<I1<<"\n";
@@ -1206,11 +1206,11 @@ int interpolieren(MPL_Matrix M, int x_Spalte, int y_Spalte, double x_Wert_des_ge
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Funktionsstart  Pixel_finden_und_AMF_erhoehen_LOS();
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-int Pixel_finden_und_AMF_erhoehen_LOS(MPL_Matrix &AMF,   Retrievalgitter &Grid , const int &MessungNr,
+int Pixel_finden_und_AMF_erhoehen_LOS(MPL_Matrix &AMF, Retrievalgitter &Grid, const int &MessungNr,
 									  int &Pixelnummer,
-									  const double &Schrittlaenge                   , const double &Tau_LOS,
-									  const double &Punkt_Hoehe                   , const double &Erdradius,
-									  const double &Punkt_Laenge                  , const double &Punkt_Breite,
+									  const double &Schrittlaenge, const double &Tau_LOS,
+									  const double &Punkt_Hoehe, const double &Erdradius,
+									  const double &Punkt_Laenge, const double &Punkt_Breite,
 									  const double &Phasenfunktion, MPL_Matrix &Tau_LOS_Limb_Matrix)
 {
 	/****************************************************************************************
@@ -1517,8 +1517,8 @@ int Pixel_finden_und_AMF_erhoehen_LOS(MPL_Matrix &AMF,   Retrievalgitter &Grid ,
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Funktionsstart  Punkt_Pruefen_und_ggf_AMF_erhoehen()
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool Punkt_Pruefen_und_ggf_AMF_erhoehen(MPL_Matrix &AMF, Retrievalgitter &Grid,  const int &MessungNR,
-										const int &PN_Test            ,  int &Pixelnummer,
+bool Punkt_Pruefen_und_ggf_AMF_erhoehen(MPL_Matrix &AMF, Retrievalgitter &Grid, const int &MessungNR,
+										const int &PN_Test, int &Pixelnummer,
 										const double &Schrittlaenge, const double &Tau_LOS,
 										const double &Punkt_Hoehe, const double &Punkt_Breite,
 										const double &Phasenfunktion, MPL_Matrix &Tau_LOS_Limb_Matrix)

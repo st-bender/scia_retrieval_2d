@@ -18,7 +18,7 @@ public:
 	int Konfiguration_anzeigen();  // gucken obs geklappt hat
 	// Member_Variablen
 	// Directory Structures //////////////////////////////////////////
-	int    m_Anzahl_der_Emitter;
+	int m_Anzahl_der_Emitter;
 	string m_Pfad_Solar_Spektrum;
 	string m_Pfad_Solar_Fallback_Spektrum;
 	string m_Pfad_Linienparameter_Metalle;
@@ -31,16 +31,16 @@ public:
 	// Altitude Grid /////////////////////////////////////////////////
 	double m_MinAlt;  // höhen für retrieval 71
 	double m_MaxAlt;  // 93
-	int    m_Anzahl_zusaetzliche_Hoehengitterpunkte;
+	int m_Anzahl_zusaetzliche_Hoehengitterpunkte;
 	vector<double> m_Grid_ext_low;
 	vector<double> m_Grid_ext_high;
 	double m_TOA; //top of Atmosphere, ab hier keine Absorption mehr
 	// Switches für Selection Rules //////////////////////////////////
-	int     m_Nadir_only;  // switch 0 ja 1 nein
-	int     m_Nachtmessung;// switch 0 ja 1 nein
-	int     m_Geolocation; // switch 0 ja 1 nein
-	int     m_Large_SZA;   // switch 0 ja 1 nein //SZA Sonnenwinkel zum Zenit
-	int     m_NLC;         // switch 0 ja 1 nein
+	int m_Nadir_only;  // switch 0 ja 1 nein
+	int m_Nachtmessung;// switch 0 ja 1 nein
+	int m_Geolocation; // switch 0 ja 1 nein
+	int m_Large_SZA;   // switch 0 ja 1 nein //SZA Sonnenwinkel zum Zenit
+	int m_NLC;         // switch 0 ja 1 nein
 	double m_Maximaler_SZA;         // falls Auswahlkriterium Large_SZA aktiv ist dies die Grenze
 	vector<double> m_Geolocation_Grenzen;//LonMin,LonMax,LatMin,LatMax
 	// Baseline Fitparameters ////////////////////////////////////////
@@ -57,11 +57,11 @@ public:
 	// Sonstiges /////////////////////////////////////////////////////
 	vector<double> m_Fehlergrenzen;   //sollte man auch dynamisch machen nach anzahl der spezies
 	double m_FWHM;
-	string  m_Betriebssystem;
-	int    m_Do_Corrections_of_Radiances; // switch 0 ja 1 nein
-	int    m_Max_Zahl_Levenberg_Schritte;
+	string m_Betriebssystem;
+	int m_Do_Corrections_of_Radiances; // switch 0 ja 1 nein
+	int m_Max_Zahl_Levenberg_Schritte;
 	double m_Levenberg_Schrittweite;
-	int    m_Max_Zahl_Iterationen;
+	int m_Max_Zahl_Iterationen;
 	double m_Convergence_Treshold;
 };
 

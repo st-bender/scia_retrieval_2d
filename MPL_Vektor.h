@@ -49,7 +49,7 @@ public:
 	MPL_Vektor operator - () const;
 
 	double &operator()(int Element);            // Zugriff auf Elemente//Die braucht man aus obskuren Gründen 2mal
-	double   operator()(int Element) const;
+	double operator()(int Element) const;
 
 	//binäre Operationen
 	MPL_Vektor operator +(const MPL_Vektor &rhs);  //Vektoraddition
@@ -185,16 +185,16 @@ inline double &MPL_Vektor::operator()(int Element)            // Zugriff auf Ele
 	if ((Element >= 0) && (Element < m_Elementanzahl))
 		return this->m_Elemente[Element];
 	else {
-		cout << "Achtung!!! Zugriff auf Elemente ausserhalb  des Vektors\n";
+		cout << "Achtung!!! Zugriff auf Elemente ausserhalb des Vektors\n";
 		return m_Elemente[0];//auch schlecht, aber wenigstens nicht ausserhalb
 	}
 }
-inline double   MPL_Vektor::operator()(int Element) const
+inline double MPL_Vektor::operator()(int Element) const
 {
 	if ((Element >= 0) && (Element < m_Elementanzahl))
 		return this->m_Elemente[Element];
 	else {
-		cout << "Achtung!!! Zugriff auf Elemente ausserhalb  des Vektors\n";
+		cout << "Achtung!!! Zugriff auf Elemente ausserhalb des Vektors\n";
 		return m_Elemente[0];//auch schlecht, aber wenigstens nicht ausserhalb
 	}
 }

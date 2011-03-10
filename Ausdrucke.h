@@ -31,7 +31,7 @@ int Plot_Slantcoloumns_polyfit_MgI(string Arbeitsverzeichnis, string Dateiname, 
 								   double *WL_fein, int Startind_fein, int Endind_fein,
 								   double *Limb, double *Fitlimb, double *Sonne, double *Fitsonne, double *Quotient, double *Fitquotient);
 int Plot_Spektren_und_Quotient(string Arbeitsverzeichnis, string Dateiname, string title, double *WL, int Startind, int Endind,
-							   double *Limb, double *Limb_error , double *Sonne, double *Quotient, double *Quotient_error);
+							   double *Limb, double *Limb_error, double *Sonne, double *Quotient, double *Quotient_error);
 int Plot_Quotient_mit_Fehler(string Arbeitsverzeichnis, string Dateiname, string title, double *WL, int Startind, int Endind,
 							 double *Quotient, double *Quotient_error, double *Quotient_stabw);
 

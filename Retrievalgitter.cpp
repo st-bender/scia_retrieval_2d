@@ -101,7 +101,7 @@ void Retrievalgitter::Retrievalgitter_erzeugen(vector<Ausgewertete_Messung_Limb>
 	// Im Winter gibt es dementsprechend zusätzliche Süd-Nord Messungen am Ende der Messreihe
 	// Wir suchen nun zunächst den index der Maximalen und der Minimalen Lat um das Gitter zu bauen
 	int Max_Index = Get_Index_of_Maximum(Lats_Messung);
-	int Min_Index  = Get_Index_of_Minimum(Lats_Messung, Max_Index);
+	int Min_Index = Get_Index_of_Minimum(Lats_Messung, Max_Index);
 	// Wir bauen nun ein äquidistantes Gitter zwischen diesen beiden Punkten auf, dafür bestimmen wir zunächst die Gitterkonstante
 	double MaxLat = Lats_Messung[Max_Index];
 	double MinLat = Lats_Messung[Min_Index];
