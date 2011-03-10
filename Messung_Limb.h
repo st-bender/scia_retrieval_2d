@@ -24,13 +24,22 @@ public:
 	// Assignmentoperator Overload
 	Messung_Limb &operator =(const Messung_Limb &rhs);
 	//Methoden
-	int Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index, string Arbeitsverzeichnis, string mache_Fit_Plots);
-	int Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst, int Index, string Arbeitsverzeichnis, string mache_Fit_Plots, double *mean_10_20);
-	int Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst, int Index, string Arbeitsverzeichnis, string mache_Fit_Plots, double *mean_10_20);
+	int Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
+			string Arbeitsverzeichnis, string mache_Fit_Plots);
+	int Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst, int Index,
+			string Arbeitsverzeichnis, string mache_Fit_Plots,
+			double *mean_10_20);
+	int Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst, int Index,
+			string Arbeitsverzeichnis, string mache_Fit_Plots,
+			double *mean_10_20);
 	int Intensitaeten_normieren(double Teiler[826]);
-	//int        Intensitaeten_normieren(Sonnenspektrum Solspec, Fenster); // hier müsste überlegt werden, wie man mehrfachkorrekturen umgeht
-	int Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfenst, int Index);
-	int Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Speziesfenster Spezfenst, int Index); // In der Formel ist piF in W/(m^2*Wellenlänge) verlangt..also muss noch mit der Kanalbreite multipliziert werden
+	//int        Intensitaeten_normieren(Sonnenspektrum Solspec, Fenster);
+	// hier müsste überlegt werden, wie man mehrfachkorrekturen umgeht
+	int Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfenst,
+			int Index);
+	// In der Formel ist piF in W/(m^2*Wellenlänge) verlangt..
+	// also muss noch mit der Kanalbreite multipliziert werden
+	int Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Speziesfenster Spezfenst, int Index);
 	int Deklinationswinkel_bestimmen();
 	int Sonnen_Longitude_bestimmen();
 
@@ -38,12 +47,20 @@ public:
 
 	//Hilfsfunktionen  //nur intern aufrufen!!!
 	int Get_Index(double WL);
-	void Fit_Linear(double *x, double *y, double &a0, double &a1, int Anfangsindex, int Endindex);
-	void Fit_Polynom_4ten_Grades(double *x, double *y, double x0, double *Par_a0, double *Par_a1, double *Par_a2, double *Par_a3, double *Par_a4, int Anfangsindex, int Endindex);
-	void Fit_Peak_hyperbolic(double *x, double *y, double x0, double FWHM, double &A, int Anfangsindex, int Endindex);
-	double Evaluate_Error_primitive(double *x, double *y, double a0, double a1, double A, double FWHM, double x0, int Anfangsindex, int Endindex);
-	//Wartungsfunktionen  //können und sollten sogar später auskommentiert werden, und dienen im wesentlichen zum debuggen
-	int Ausgabe_in_Datei(string Dateiname);  //zum Testen und debuggen und überprüfen, ob der fit halbwegs passt
+	void Fit_Linear(double *x, double *y, double &a0, double &a1,
+			int Anfangsindex, int Endindex);
+	void Fit_Polynom_4ten_Grades(double *x, double *y, double x0,
+			double *Par_a0, double *Par_a1, double *Par_a2, double *Par_a3,
+			double *Par_a4, int Anfangsindex, int Endindex);
+	void Fit_Peak_hyperbolic(double *x, double *y, double x0, double FWHM,
+			double &A, int Anfangsindex, int Endindex);
+	double Evaluate_Error_primitive(double *x, double *y, double a0, double a1,
+			double A, double FWHM, double x0, int Anfangsindex, int Endindex);
+	//Wartungsfunktionen
+	//können und sollten sogar später auskommentiert werden,
+	//und dienen im wesentlichen zum debuggen
+	//zum Testen und debuggen und überprüfen, ob der fit halbwegs passt
+	int Ausgabe_in_Datei(string Dateiname);
 
 	//Membervariablen
 
@@ -53,8 +70,10 @@ public:
 	// Zwischenergebnisse
 	double m_Deklinationswinkel;  // aus Datum berechenbar
 	double m_Sonnen_Longitude;
-	//double  m_Streuwinkel;           // ist mehrere Streuwinkel auf einer Messachse...muss später berechnet werden
-	//double  m_SZA;                     //abhängig von Deklination Uhrzeit und Lat und Lon.....dasselbe wie beim streuwinkel
+	//double  m_Streuwinkel;  // ist mehrere Streuwinkel auf einer Messachse...
+							  //muss später berechnet werden
+	//double  m_SZA;          //abhängig von Deklination Uhrzeit und Lat und Lon
+							  //.....dasselbe wie beim streuwinkel
 	//Dateiname
 	string m_Dateiname_L1C;
 	//Datum
