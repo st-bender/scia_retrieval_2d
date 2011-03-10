@@ -19,13 +19,16 @@ using namespace std;
 /////////////////////////////////////////////////////////////////////////
 int Test_auf_Nachtmessung_Limb(Messung_Limb &Tropo, bool &ist_Nachtmessung)
 {
-	// Der Test überprüft im Intervall 290nm bis 295 nm, ob die mittleren Signale bei der Tangentenhöhe -1km (wie bei Marco)
-	// einen kritischen Mittelwert unterschreiten (1E10)  bei Tagmessungen wird dieser Wert zumeist
-	// mindestenz um einen Faktor 10 überschritten, während bei Nachtmessungen die Unterschreitung noch deutlicher ist
+	// Der Test überprüft im Intervall 290nm bis 295 nm, ob die mittleren
+	// Signale bei der Tangentenhöhe -1km (wie bei Marco) einen kritischen
+	// Mittelwert unterschreiten (1E10)  bei Tagmessungen wird dieser Wert
+	// zumeist mindestenz um einen Faktor 10 überschritten, während bei
+	// Nachtmessungen die Unterschreitung noch deutlicher ist
 	// 1E7 bis 1E8
 	ist_Nachtmessung = false;
 	int Index1 = 608;
-	int Index2 = 653; //Die Indizes könnte man auch ermitteln, aber die sind ja immer gleich
+	//Die Indizes könnte man auch ermitteln, aber die sind ja immer gleich
+	int Index2 = 653;
 	double Troposignal = 0;
 	for (int i = Index1; i <= Index2; i++) {
 		Troposignal += Tropo.m_Intensitaeten[i];
@@ -42,13 +45,15 @@ int Test_auf_Nachtmessung_Limb(Messung_Limb &Tropo, bool &ist_Nachtmessung)
 // ENDE Test_auf_Nachtmessung_Limb
 /////////////////////////////////////////////////////////////////////////
 
-int Test_auf_Nachtmessung_Limb_meso_thermo(Messung_Limb &niedrigste_hoehe, bool &ist_Nachtmessung)
+int Test_auf_Nachtmessung_Limb_meso_thermo(Messung_Limb &niedrigste_hoehe,
+		bool &ist_Nachtmessung)
 {
 	//Wie im Limbfall nur leider nicht bei -1km TH, weil Messung nicht vorhanden
 	// TODO Schwellenenergie heraufinden
 	ist_Nachtmessung = false;
 	int Index1 = 608;
-	int Index2 = 653; //Die Indizes könnte man auch ermitteln, aber die sind ja immer gleich
+	//Die Indizes könnte man auch ermitteln, aber die sind ja immer gleich
+	int Index2 = 653;
 	double Signal = 0;
 	for (int i = Index1; i <= Index2; i++) {
 		Signal += niedrigste_hoehe.m_Intensitaeten[i];
@@ -70,17 +75,21 @@ int Test_auf_Nachtmessung_Limb_meso_thermo(Messung_Limb &niedrigste_hoehe, bool 
 /////////////////////////////////////////////////////////////////////////
 int Test_auf_NLC_Limb(vector<Messung_Limb> &Rohdaten, bool &ist_NLC_Messung)
 {
-	//Die Intensitäten in einem Breiten Bereich zwischen etwa 1/4 des Spektrums und 3/4 des Spektrums werden
-	//für die 7 Tangentenhöhen gemittelt. Das Signal fällt, falls keine Wolken in der Mesosphäre sind,
+	//Die Intensitäten in einem Breiten Bereich zwischen etwa 1/4 des Spektrums
+	//und 3/4 des Spektrums werden für die 7 Tangentenhöhen gemittelt. Das
+	//Signal fällt, falls keine Wolken in der Mesosphäre sind,
 	//mit zunehmender Höhe ziemlich Stark ab.
-	//Wolken Reflektieren das Sonnenlicht. Daher gibt es bei Wolken in der Mesosphäre (Polar Mesospheric Clouds
-	//PMCs, oder auch Nachtleuchtende Wolken NLCs genannt) einen Peak, der ungefähr auf der Höhe der Mesopause
-	//(im Sommer bei 84 km) liegt. Fällt das Signal also nicht monoton mit der Hoehe, so wurde eine PMC detektiert.
-	// Das erste Viertel abzuschneiden ist eine gute Idee, da dort das Signal extrem verrauscht und stark ist.
+	//Wolken Reflektieren das Sonnenlicht. Daher gibt es bei Wolken in der
+	//Mesosphäre (Polar Mesospheric Clouds PMCs, oder auch Nachtleuchtende
+	//Wolken NLCs genannt) einen Peak, der ungefähr auf der Höhe der Mesopause
+	//(im Sommer bei 84 km) liegt. Fällt das Signal also nicht monoton mit der
+	//Hoehe, so wurde eine PMC detektiert.  Das erste Viertel abzuschneiden ist
+	//eine gute Idee, da dort das Signal extrem verrauscht und stark ist.
 	// 71 ist in 0;  91 ist in 6
 
 	int Index1 = 242;
-	int Index2 = 727; //Die Indizes könnte man auch ermitteln, aber die sind ja immer gleich
+	//Die Indizes könnte man auch ermitteln, aber die sind ja immer gleich
+	int Index2 = 727;
 	ist_NLC_Messung = false;
 	double mittleres_Signal[7];
 	for (int Hoehenlevel = 0; Hoehenlevel < 7; Hoehenlevel++) {
@@ -103,17 +112,24 @@ int Test_auf_NLC_Limb(vector<Messung_Limb> &Rohdaten, bool &ist_NLC_Messung)
 //////////////////////////////////////////////////////////////////////////
 // Funktionsstart Test_auf_korrekte_geolocations_Limb
 /////////////////////////////////////////////////////////////////////////
-int Test_auf_korrekte_geolocations_Limb(vector<Messung_Limb> &Rohdaten, int *counter_Winkel_nicht_ok)
+int Test_auf_korrekte_geolocations_Limb(vector<Messung_Limb> &Rohdaten,
+		int *counter_Winkel_nicht_ok)
 {
-	//Die Positionen des Tangentenpunktes und des Satelliten werden in Karthesischen Koordinaten bestimmt.
-	//Der Verbindungsvektor beider Punkte und der Ortsvektor des Tangentenpunkts bilden, wenn man sie vorher normiert
-	//im Skalarprodukt den cosinus des Winkels a; dieser entspricht dem sinus von b=(a-90°).
-	//Für kleine Winkel gilt sin x= tan x, sodass man aus der Abweichung von 90° eine Steigung erhält und mit der
-	//Sehnenlänge in der Atmosphäre eine Höhenverschiebung des Tangentenpunkts
-	//Derartige Abschätzungen ergeben eine Verschiebung der Tangentenhoehe um 1,13 km bei einer Abweichung von 0.02°
-	//                                                                                                      und um 2,84 km bei einer Abweichung von 0.05°
-	//Besser gesagt, liegt dann der Tangentenpunkt nicht am angegebenen Tangentenpunkt...das ist nicht linear und kompliziert
-	//aber auch kleiner als der oben abgeschätzte Worst-Case (erst bei Messungen mit 5° Unterschied, kam eine verdächtige
+	//Die Positionen des Tangentenpunktes und des Satelliten werden in
+	//Karthesischen Koordinaten bestimmt.  Der Verbindungsvektor beider Punkte
+	//und der Ortsvektor des Tangentenpunkts bilden, wenn man sie vorher
+	//normiert im Skalarprodukt den cosinus des Winkels a; dieser entspricht
+	//dem sinus von b=(a-90°).
+	//Für kleine Winkel gilt sin x= tan x, sodass man aus der Abweichung von
+	//90° eine Steigung erhält und mit der Sehnenlänge in der Atmosphäre eine
+	//Höhenverschiebung des Tangentenpunkts
+	//Derartige Abschätzungen ergeben eine Verschiebung der Tangentenhoehe um
+	//1,13 km bei einer Abweichung von 0.02° und um 2,84 km bei einer
+	//Abweichung von 0.05°
+	//Besser gesagt, liegt dann der Tangentenpunkt nicht am angegebenen
+	//Tangentenpunkt...das ist nicht linear und kompliziert aber auch kleiner
+	//als der oben abgeschätzte Worst-Case (erst bei Messungen mit 5°
+	//Unterschied, kam eine verdächtige
 	//Fehlermeldung)
 	//Die meisten Messwerte liegen zwischen 0.01 und 0.02
 	const double pi = 3.1415926535897;
@@ -157,12 +173,15 @@ int Test_auf_korrekte_geolocations_Limb(vector<Messung_Limb> &Rohdaten, int *cou
 //////////////////////////////////////////////////////////////////////////
 // Funktionsstart Test_auf_Nachtmessung_Nadir
 /////////////////////////////////////////////////////////////////////////
-int Test_auf_Nachtmessung_Nadir(Messung_Nadir *Rohdaten, int Anzahl_Datensaetze, bool &ist_Nachtmessung)
+int Test_auf_Nachtmessung_Nadir(Messung_Nadir *Rohdaten,
+		int Anzahl_Datensaetze, bool &ist_Nachtmessung)
 {
-	// Der Test überprüft im Intervall 290nm bis 295 nm, ob die mittleren Signale einen kritischen Mittelwert unterschreiten (5E8)
-	// bei Tagmessungen wird dieser Wert zumeist mindestenz um einen Faktor 10 überschritten
-	// Bei Nadir ist der Grenzwert kleiner, der Rest ist fast gleich....die erste Datei wird zuerst gemessen, ist also am Nordpol
-	// die Dunkelste
+	// Der Test überprüft im Intervall 290nm bis 295 nm, ob die mittleren
+	// Signale einen kritischen Mittelwert unterschreiten (5E8) bei
+	// Tagmessungen wird dieser Wert zumeist mindestenz um einen Faktor 10
+	// überschritten
+	// Bei Nadir ist der Grenzwert kleiner, der Rest ist fast gleich....die
+	// erste Datei wird zuerst gemessen, ist also am Nordpol die Dunkelste
 	// Die letzte Datei ist am Südpol die dunkelste
 	// Es wird also erst auf Nord oder Südhalbkugel geprüft
 	int n;// n wie Messungnummer
@@ -171,10 +190,11 @@ int Test_auf_Nachtmessung_Nadir(Messung_Nadir *Rohdaten, int Anzahl_Datensaetze,
 	} else {
 		n = Anzahl_Datensaetze - 1;
 	}
-	///////////////////////////////////////////////// Der Rest ist ziemlich analog zu Limb
+	////////////////////////////// Der Rest ist ziemlich analog zu Limb
 	ist_Nachtmessung = false;
 	int Index1 = 608;
-	int Index2 = 653; //Die Indizes könnte man auch ermitteln, aber die sind ja immer gleich
+	//Die Indizes könnte man auch ermitteln, aber die sind ja immer gleich
+	int Index2 = 653;
 	double Signal = 0;
 	for (int i = Index1; i <= Index2; i++) {
 		Signal += Rohdaten[n].m_Intensitaeten[i];
