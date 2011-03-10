@@ -110,7 +110,8 @@ Messung_Limb &Messung_Limb::operator =(const Messung_Limb &rhs)
 		m_Intensitaeten[i] = rhs.m_Intensitaeten[i];
 		m_Intensitaeten_relativer_Fehler[i] = rhs.m_Intensitaeten_relativer_Fehler[i];
 		m_Sonne[i] = rhs.m_Sonne[i];
-		// Die drei Zeilen zur Geschwindigkeitsoptimierung auch auskommentierbar...aber dann keine ECHTE Kopie mehr !!!!
+		// Die drei Zeilen zur Geschwindigkeitsoptimierung auch auskommentierbar
+		// ...aber dann keine ECHTE Kopie mehr !!!!
 		m_Intensitaeten_durch_piF[i] = rhs.m_Intensitaeten_durch_piF[i];
 		m_Intensitaeten_durch_piF_Gamma[i] = rhs.m_Intensitaeten_durch_piF_Gamma[i];
 		m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand[i] = rhs.m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand[i];
@@ -126,29 +127,39 @@ Messung_Limb &Messung_Limb::operator =(const Messung_Limb &rhs)
 int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index, string Arbeitsverzeichnis, string mache_Fit_Plots)
 {
 	//kurz:
-	//Diese Fitroutine ermittelt die Fläche von I/(piF*Gamma) bei der Übergangswellenlänge
-	//Da nur wenige Punkte zu einer Linie beitragen, entspricht der Linie der Auflösungsfunktion
+	//Diese Fitroutine ermittelt die Fläche von I/(piF*Gamma) bei der
+	//Übergangswellenlänge Da nur wenige Punkte zu einer Linie beitragen,
+	//entspricht der Linie der Auflösungsfunktion
 	//Diese ist ein Hyperboloide 4ter Ordnung
 
 	//lang:
-	// Die Umgebung jeder Linie wird in 3 Bereiche unterteilt. 2 sogenannte Basisfenster links und rechts von der Linie
-	// und das Peakfenster selbst, welches in der Umsetzung auch Bereiche aus den beiden Basisfenstern beinhalten darf.
-	// Bis Hierhin haben wir I/(piFGamma) berechnet. Nun wollen wir die "normierte" Intensität für einen Peak berechnen
-	// Da der Peak gerade im Kanal zumeist auf einem relativ großen Untergrundsignal sitzt, wird dieses zunächst abgezogen.
-	// Dafür wird im Bereich um die Linie herum, wo keine signifikanten anderen Linien liegen(Basisfenster) ein linearer Fit
-	// der Grundlinie durchgeführt, welcher vom der "normierten" Intensität abgezogen wird.
-	// Danach wird im Bereich des Peakfensters die Fläche des Peaks bestimmt.
-	// Da die Linie zumeist nur aus 3 Punkten besteht,  hat das Profil im wesentlichen die Form der Auflösungsfunktion, welche
-	// eine hyperboloide 4ten Grades ist. Diese hat im wesentlichen 3 Parameter: Wellenlänge des Peaks, Breite und Fläche.
-	// Die robusteste Variante ist es, die Wellenlänge und die Halbwertsbreite der Linie vorzugeben und nur die Fläche anzufitten.
-	// Diese Variante kann durch einen linearen Parameterfit erreicht werden und ist zum einen schnell und was hier viel wichtiger ist
-	// robust. Andere nichtlineare Verfahren sind entweder nicht robust(Gauss Newton, insbesondere bei dem
-	// schlechten Signal/Noise Verhältnis) oder deutlich langsamer (simulated annealing bzw. ist das aufwändiger dies noch schnel
-	//l zu implementieren... das wäre Schritt 2)
+	// Die Umgebung jeder Linie wird in 3 Bereiche unterteilt. 2 sogenannte
+	// Basisfenster links und rechts von der Linie und das Peakfenster selbst,
+	// welches in der Umsetzung auch Bereiche aus den beiden Basisfenstern
+	// beinhalten darf.  Bis Hierhin haben wir I/(piFGamma) berechnet. Nun
+	// wollen wir die "normierte" Intensität für einen Peak berechnen Da der
+	// Peak gerade im Kanal zumeist auf einem relativ großen Untergrundsignal
+	// sitzt, wird dieses zunächst abgezogen.  Dafür wird im Bereich um die
+	// Linie herum, wo keine signifikanten anderen Linien liegen(Basisfenster)
+	// ein linearer Fit der Grundlinie durchgeführt, welcher vom der
+	// "normierten" Intensität abgezogen wird.  Danach wird im Bereich des
+	// Peakfensters die Fläche des Peaks bestimmt.  Da die Linie zumeist nur
+	// aus 3 Punkten besteht,  hat das Profil im wesentlichen die Form der
+	// Auflösungsfunktion, welche eine hyperboloide 4ten Grades ist. Diese hat
+	// im wesentlichen 3 Parameter: Wellenlänge des Peaks, Breite und Fläche.
+	// Die robusteste Variante ist es, die Wellenlänge und die Halbwertsbreite
+	// der Linie vorzugeben und nur die Fläche anzufitten.  Diese Variante kann
+	// durch einen linearen Parameterfit erreicht werden und ist zum einen
+	// schnell und was hier viel wichtiger ist robust. Andere nichtlineare
+	// Verfahren sind entweder nicht robust(Gauss Newton, insbesondere bei dem
+	// schlechten Signal/Noise Verhältnis) oder deutlich langsamer (simulated
+	// annealing bzw. ist das aufwändiger dies noch schnell zu implementieren...
+	// das wäre Schritt 2)
 	// Die ermittelte Fläche ist dann unsere gesuchte Säulenzeilendichte.
 
-	// I/(piFGamma)=integral(AMF n ds) mit AMF = s exp(-tau) ...aber zu der Formel später nochmal zurück
-	// Das spätere Retrieval ermittelt dann die Dichte n aus der rechten Seite
+	// I/(piFGamma)=integral(AMF n ds) mit AMF = s exp(-tau) ...aber zu der
+	// Formel später nochmal zurück Das spätere Retrieval ermittelt dann die
+	// Dichte n aus der rechten Seite
 
 	double *Basisfenster_WL;
 	double *Basisfenster_Intensitaet;
@@ -186,7 +197,8 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index, s
 		Peakfenster_Intensitaet[i] = m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand[Index_Peakfenster_min + i];
 	}
 	// linearen Fit des Basisfensters durchführen
-	// Proto: Fit_Linear(double* x,double* y, double& a0, double& a1,int Anfangsindex, int Endindex)
+	// Proto: Fit_Linear(double* x,double* y, double& a0, double& a1,int
+	// Anfangsindex, int Endindex)
 	double a0, a1;
 	Fit_Linear(Basisfenster_WL, Basisfenster_Intensitaet, a0, a1, 0, Speicherbedarf_Basis - 1);
 	// lineare Funktion von Intensitäten des Peakfenster abziehen
@@ -194,23 +206,27 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index, s
 		Peakfenster_Intensitaet[i] -= a0 + a1 * Peakfenster_WL[i];
 	}
 	// Hyperboloiden an Peakfenster anfitten
-	// Proto: Fit_Peak_hyperbolic(double* x,double* y,double x0, double FWHM, double& A, int Anfangsindex, int Endindex)
+	// Proto: Fit_Peak_hyperbolic(double* x,double* y,double x0, double FWHM,
+	// double& A, int Anfangsindex, int Endindex)
 	double Flaeche;
 	Fit_Peak_hyperbolic(Peakfenster_WL, Peakfenster_Intensitaet, Spezfenst.m_Wellenlaengen[Index],
-						Spezfenst.m_FWHM, Flaeche, 0, Speicherbedarf_Peak - 1); // Hier Wellenlängen in nm verwendet..das hebt sich mit dem Gitterabstand raus
-	//Fehler des Fits bestimmen... da Peakfenster_Intensitaet nicht mehr gebraucht wird die Basislinie für die Fehlerberechnung wieder
-	//aufaddiert
+						Spezfenst.m_FWHM, Flaeche, 0, Speicherbedarf_Peak - 1);
+	// Hier Wellenlängen in nm verwendet..das hebt sich mit dem Gitterabstand
+	// raus
+	//Fehler des Fits bestimmen... da Peakfenster_Intensitaet nicht mehr
+	//gebraucht wird die Basislinie für die Fehlerberechnung wieder aufaddiert
 	m_Zeilendichte = Flaeche;
 	//cout<<m_Zeilendichte<<"\n";
 	//cout<<Spezfenst.m_Liniendaten[Index].m_Gamma<<"\n";
 	for (int i = 0; i < Speicherbedarf_Peak; i++) {
 		Peakfenster_Intensitaet[i] += a0 + a1 * Peakfenster_WL[i];
 	}
-	// Funktion double Messung_Limb::Evaluate_Error_primitive(double* x,double* y, double a0,double a1, double A, double FWHM, double x0, int Anfangsindex, int Endindex)
+	// Funktion double Messung_Limb::Evaluate_Error_primitive(double* x,
+	// double* y, double a0,double a1, double A, double FWHM, double x0, int Anfangsindex, int Endindex)
 	m_Fehler_Zeilendichten = Evaluate_Error_primitive(Peakfenster_WL, Peakfenster_Intensitaet, a0, a1, m_Zeilendichte, Spezfenst.m_FWHM, Spezfenst.m_Wellenlaengen[Index], 0, Speicherbedarf_Peak - 1);
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Hier kann man zur Testzwecken noch einen Plot machen  /////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
+	// Hier kann man zur Testzwecken noch einen Plot machen  ///////////////////
 	if (mache_Fit_Plots == "ja") {
 		//TODO das als Funktion implementieren
 		double *Funktion;
@@ -230,7 +246,8 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index, s
 		string s1, s_OrbNum, s2;
 		int h = this->m_Hoehe_TP;
 		char buf[256];
-		//TODO immer prüfen, ob Dateienamenlänge noch stimmt...falls / im Namen ist das schlecht
+		//TODO immer prüfen, ob Dateienamenlänge noch stimmt...
+		// falls / im Namen ist das schlecht
 		string Datnam = m_Dateiname_L1C.substr(m_Dateiname_L1C.size() - 39, 39);
 
 		//TODO Pfad anpassen
@@ -241,10 +258,12 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index, s
 		sprintf(buf, "%s_%s_%i_%ikm.ps", Datnam.c_str(), Spezfenst.m_Spezies_Name.c_str(), Index, h);
 		string new_datnam = buf;
 		sprintf(buf, "%s/Plots/%s", Arbeitsverzeichnis.c_str(), new_datnam.c_str());
-		s1 = buf; //s1 ist der Volle Pfad der Datei...diesen kann man wegspeichern, um später die .ps files in ein großes pdf zu packen
+		s1 = buf;
+		//s1 ist der Volle Pfad der Datei...diesen kann man wegspeichern, um
+		//später die .ps files in ein großes pdf zu packen
 		Spezfenst.m_Liste_der_Plot_Dateinamen.push_back(s1);
 		//Orbitnummer ermitteln/////
-		// egal, wie die Datei heißt... die Orbitnummer sind die 5 Zeichen vor .dat
+		// egal wie die Datei heißt, die Orbitnummer sind die 5 Zeichen vor .dat
 		size_t pos_suffix = 0;
 		pos_suffix = Datnam.find(".dat");
 		if (pos_suffix == string::npos) {
@@ -258,16 +277,21 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index, s
 				s_OrbNum.c_str(), m_Lattidude_TP, m_Longitude_TP, m_Hoehe_TP);
 		s2 = buf;
 		//cout<<s1<<"\n";
-		//int Plot_2xy(string Dateiname,string title, string xlabel, string ylabel,double* x1,double*y1, double* x2,double* y2,int Startindex,int Endindex);
-		//Plot_2xy(s1.c_str(),s1.substr(s1.size()-50,50).c_str(),"$\\lambda$ in nm","$\\frac{I}{\\piF\\gamma}$",Peakfenster_WL,Peakfenster_Intensitaet,Peakfenster_WL,Funktion,0,Speicherbedarf_Peak-1); //-> Fit geht
+		//int Plot_2xy(string Dateiname,string title, string xlabel,
+		//string ylabel,double* x1,double*y1, double* x2,double* y2,
+		//int Startindex,int Endindex);
+		//Plot_2xy(s1.c_str(),s1.substr(s1.size()-50,50).c_str(),
+		//"$\\lambda$ in nm","$\\frac{I}{\\piF\\gamma}$",Peakfenster_WL,
+		//Peakfenster_Intensitaet,Peakfenster_WL,Funktion,0,Speicherbedarf_Peak-1);
+		//-> Fit geht
 		Plot_2xy(Arbeitsverzeichnis.c_str(), s1.c_str(), s2.c_str(), "Wellenlaenge in nm",
 				 "Schraege Saeule bei Peakposition in cm^{-2}/nm",
 				 Peakfenster_WL, Peakfenster_Intensitaet, Peakfenster_WL, Funktion, 0, Speicherbedarf_Peak - 1,
 				 m_Zeilendichte, m_Fehler_Zeilendichten);
 		SAVEDELETE(Funktion);
 	}
-	// Ende Plot //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Ende Plot ///////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	//dynamische Felder der Funktion löschen
 	SAVEDELETE(Basisfenster_WL);
 	SAVEDELETE(Basisfenster_Intensitaet);
@@ -278,30 +302,36 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index, s
 //========================================
 //========================================
 
-/////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Funktionsstart Saeulendichte_Bestimmen_MgI285nm
-/////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst, int Index, string Arbeitsverzeichnis, string mache_Fit_Plots, double *mean_10_20)
 {
 	//kurz:
 	//alternative Fitroutine für die Bestimmung  der MgI 285.21275 nm Linie
 	//lang:
-	// Das Signal zu Rausch Verhältnis für die Limbmessungen scheint ziemlich mies zu sein, sodass die Befürchtung besteht,
-	// dass man da Rauschen als Messwerte interpretiert
-	// Ein Erster Rettungsversuch ist es, statt den Qoutienten I/piF direkt aus den Messwerten zu bilden, die breiten Peaks im Limb
-	// und Sonnenspektrum auszunutzen
+	// Das Signal zu Rausch Verhältnis für die Limbmessungen scheint ziemlich
+	// mies zu sein, sodass die Befürchtung besteht, dass man da Rauschen als
+	// Messwerte interpretiert
+	// Ein Erster Rettungsversuch ist es, statt den Qoutienten I/piF direkt aus
+	// den Messwerten zu bilden, die breiten Peaks im Limb und Sonnenspektrum
+	// auszunutzen
 	//
 	// I/(Fgamma * oder / Integrations wegstück in nm) ist schon vorhanden
-	// in dem entsprechendem Fenster wird die Basislinie diese Quotienten der Messwerte gebildet
-	// Limb und Sonnenspektrum werden einzeln als Polynome angefittet
-	// Da das Minimum eines nicht geraden Polynoms nicht bei der vorgegebenen Wellenlänge liegt
-	// wird das Limbspektrum so geshifted, dass die Minima übereinander liegen
+	// in dem entsprechendem Fenster wird die Basislinie diese Quotienten der
+	// Messwerte gebildet Limb und Sonnenspektrum werden einzeln als Polynome
+	// angefittet
+	// Da das Minimum eines nicht geraden Polynoms nicht bei der vorgegebenen
+	// Wellenlänge liegt wird das Limbspektrum so geshifted, dass die Minima
+	// übereinander liegen
 	// Der Quotient beider Polynome wird gebildet
-	// Der konstante Faktor aus gamma und infinitesimalen Wegstück(ca. 0.11 also WL(2)-WL(1)) wird anmultipliziert, sodass
-	// Quotient aus Messwerten und Quotient aus Polynomen die gleiche Größenordnung haben
+	// Der konstante Faktor aus gamma und infinitesimalen Wegstück(ca. 0.11
+	// also WL(2)-WL(1)) wird anmultipliziert, sodass Quotient aus Messwerten
+	// und Quotient aus Polynomen die gleiche Größenordnung haben
 	// Die Basislinie wird nun von beiden abgezogen
-	// Wenn überhaupt, sollte man erst jetzt den Quotienten so shiften, dass das Minimum bei der Wellenlänge des Übergangs liegt.
-	// Abschließend werden für jede Messung mehrere Plots erstellt
+	// Wenn überhaupt, sollte man erst jetzt den Quotienten so shiften, dass
+	// das Minimum bei der Wellenlänge des Übergangs liegt.  Abschließend
+	// werden für jede Messung mehrere Plots erstellt
 
 	double *Basisfenster_WL;
 	double *Basisfenster_Intensitaet;
@@ -352,7 +382,8 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst, in
 		Vollfenster_Limb_mittlere_atmo[i] = mean_10_20[Index_Basisfenster_links_min + i];
 	}
 	//Minima vergleichen um Linie herum (5 nachbarpunkte)
-	// und shift durchführen  //Suche mit Glattem Fenster, Verschiebung im unglatten
+	// und shift durchführen
+	// Suche mit Glattem Fenster, Verschiebung im unglatten
 	int Suchbereich = 5;
 	int min_Index_Limb = Index_Uebergangs_Wellenlaenge - Suchbereich;
 	int min_Index_Sun = Index_Uebergangs_Wellenlaenge - Suchbereich;
@@ -392,12 +423,14 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst, in
 	smooth_data(Speicherbedarf_Vollfenster, Vollfenster_Sonne, smooth_Nachbarn, smooth_Iterationen);
 
 	// linearen Fit des Basisfensters durchführen
-	// Proto: Fit_Linear(double* x,double* y, double& a0, double& a1,int Anfangsindex, int Endindex)
+	// Proto:
+	// Fit_Linear(double* x,double* y, double& a0, double& a1,
+	//   int Anfangsindex, int Endindex)
 	double a0, a1;
 	Fit_Linear(Basisfenster_WL, Basisfenster_Intensitaet, a0, a1, 0, Speicherbedarf_Basis - 1);
 
 	int Polynomgrad = 4;
-	//Get_Index(Spezfenst.m_Wellenlaengen[Index]); darf hier nicht benutzt werden
+	//Get_Index(Spezfenst.m_Wellenlaengen[Index]) darf hier nicht benutzt werden
 	int Fitpunktezahl_links = 4;
 	int Polyfit_Startindex = Index_Uebergangs_Wellenlaenge - Fitpunktezahl_links;
 	int Polyfit_Endindex = Index_Uebergangs_Wellenlaenge + Fitpunktezahl_links;
@@ -405,13 +438,18 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst, in
 	double *Sonnefit_Parameter;
 	Limbfit_Parameter = new double[Polynomgrad + 1];
 	Sonnefit_Parameter = new double[Polynomgrad + 1];
-	// Limb-Spektrum mit einem Polynom anfitten  // später evlt mehrmals mit shifts in beide Richtungen //evtl runs-test machen
+	// Limb-Spektrum mit einem Polynom anfitten
+	// später evlt mehrmals mit shifts in beide Richtungen
+	// evtl runs-test machen
 	Fit_Polynom(Vollfenster_WL, Vollfenster_Limb, Polyfit_Startindex, Polyfit_Endindex,
-				Spezfenst.m_Wellenlaengen[Index], Polynomgrad, Limbfit_Parameter); // Fit sieht ok aus
-	// Sonnen-Spektrum mit gleichem Polynom anfitten         // später evlt mehrmals mit shifts in beide Richtungen
+				Spezfenst.m_Wellenlaengen[Index], Polynomgrad, Limbfit_Parameter);
+	// Fit sieht ok aus
+	// Sonnen-Spektrum mit gleichem Polynom anfitten
+	// später evlt mehrmals mit shifts in beide Richtungen
 	Fit_Polynom(Vollfenster_WL, Vollfenster_Sonne, Polyfit_Startindex, Polyfit_Endindex,
 				Spezfenst.m_Wellenlaengen[Index], Polynomgrad, Sonnefit_Parameter);
-	// Beide Polynome im gesamten Fenster diskretisieren...dabei 5 mal so viele Punkte nutzen, wie die ursprünglichen Messwerte
+	// Beide Polynome im gesamten Fenster diskretisieren...
+	// dabei 5 mal so viele Punkte nutzen, wie die ursprünglichen Messwerte
 	double *Vollfenster_fein_WL;
 	double *Vollfenster_fein_Limb;
 	double *Vollfenster_fein_Sonne;
@@ -444,8 +482,8 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst, in
 			Faktor *= h;
 		} //ende for j
 	}// ende for i
-	//Minimimum beider Polynome bestimmen und Limbspektrum so shiften, dass das Minimum auch auf dem Minimum des
-	//Sonnenspektrums liegt
+	//Minimimum beider Polynome bestimmen und Limbspektrum so shiften, dass das
+	//Minimum auch auf dem Minimum des Sonnenspektrums liegt
 	double Limb_WL_min, Limb_y_min;
 	int Limb_Indexmin;
 	double Sonne_WL_min, Sonne_y_min;
@@ -455,7 +493,8 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst, in
 	x_zu_Minimum_von_y_in_Intervall(Vollfenster_fein_WL, Vollfenster_fein_Sonne, Polyfit_Startindex * 5, Polyfit_Endindex * 5,
 									Sonne_WL_min, Sonne_y_min, Sonne_Indexmin);
 	int shift = Sonne_Indexmin - Limb_Indexmin; //z.b. Sonne 43 Limb 50 shift=-7
-	// shiften des Limbspektrums   // Die Randpunkte sind jetzt falsch, aber die Linie sollte nicht am Rand liegen
+	// shiften des Limbspektrums
+	// Die Randpunkte sind jetzt falsch, aber die Linie sollte nicht am Rand liegen
 	double *vor_shift;
 //    cout<<"Sonne_WL_min: "<<Sonne_WL_min<<"\n";
 //    cout<<"Limb_WL_min: "<<Limb_WL_min<<"\n";
@@ -500,7 +539,8 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst, in
 	for (int i = 0; i < Speicherbedarf_Vollfenster_fein; i++) {
 		Fit_Quotient[i]             -= a0 + a1 * Vollfenster_fein_WL[i];
 	}
-	// Falls an der Stelle des Peaks der Wert jetzt negativ ist, alle positiven Werte abschneiden, sonst negative
+	// Falls an der Stelle des Peaks der Wert jetzt negativ ist, alle positiven
+	// Werte abschneiden, sonst negative
 	if (Fit_Quotient[Sonne_Indexmin] < 0) {
 		for (int i = 0; i < Speicherbedarf_Vollfenster_fein; i++) {
 			if (Fit_Quotient[i] > 0) {
@@ -541,10 +581,12 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst, in
 		sprintf(buf, "%s_%s_%i_%ikm.ps", Datnam.c_str(), Spezfenst.m_Spezies_Name.c_str(), Index, h);
 		string new_datnam = buf;
 		sprintf(buf, "%s/Plots/%s", Arbeitsverzeichnis.c_str(), new_datnam.c_str());
-		s1 = buf; //s1 ist der Volle Pfad der Datei...diesen kann man wegspeichern, um später die .ps files in ein großes pdf zu packen
+		s1 = buf;
+		//s1 ist der Volle Pfad der Datei...diesen kann man wegspeichern, um
+		//später die .ps files in ein großes pdf zu packen
 		Spezfenst.m_Liste_der_Plot_Dateinamen.push_back(s1);
 		//Orbitnummer ermitteln/////
-		// egal, wie die Datei heißt... die Orbitnummer sind die 5 Zeichen vor .dat
+		// egal, wie die Datei heißt die Orbitnummer sind die 5 Zeichen vor .dat
 		size_t pos_suffix = 0;
 		pos_suffix = Datnam.find(".dat");
 		if (pos_suffix == string::npos) {
@@ -579,12 +621,12 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst, in
 
 	return 0;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // ENDE Saeulendichte_Bestimmen_MgI285nm
-/////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Funktionsstart Plots_der_Spektren_erzeugen
-/////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst, int Index, string Arbeitsverzeichnis, string mache_Fit_Plots, double *mean_10_20)
 {
 	// Plot der Spektren Sonne und Limb und Quotient mit und ohne Rauschen
@@ -635,22 +677,27 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst, int Ind
 		Vollfenster_Limb_abs_error[i] = Vollfenster_Limb[i] * m_Intensitaeten_relativer_Fehler[Index_Basisfenster_links_min + i];
 	}
 
-	// TODO braucht man das hier überhaupt noch für irgendwas...wenn nicht weg damit..das verwirrt nur
+	// TODO braucht man das hier überhaupt noch für irgendwas...wenn nicht weg
+	// damit..das verwirrt nur
 	//double* Vollfenster_Limb_mittlere_atmo; //zwischen 40 und 60km
 	//Vollfenster_Limb_mittlere_atmo=new double[Speicherbedarf_Vollfenster];
 	//for(int i=0;i<Speicherbedarf_Vollfenster;i++)
 	//{
-	//      Vollfenster_Limb_mittlere_atmo[i]=mean_10_20[Index_Basisfenster_links_min+i];
+	//  Vollfenster_Limb_mittlere_atmo[i]=mean_10_20[Index_Basisfenster_links_min+i];
 	//}
 
-	// Spektrum glätten bei 0 wird nichts geglättet...könnte man auch auskommentieren
+	// Spektrum glätten bei 0 wird nichts geglättet
+	// ...könnte man auch auskommentieren
 	int smooth_Nachbarn = 0; //1;//2;
 	int smooth_Iterationen = 0; //6;//4;
 	smooth_data(Speicherbedarf_Vollfenster, Vollfenster_Limb, smooth_Nachbarn, smooth_Iterationen);
 	smooth_data(Speicherbedarf_Vollfenster, Vollfenster_Sonne, smooth_Nachbarn, smooth_Iterationen);
 
 	// linearen Fit des Basisfensters durchführen
-	// TODO Basisfenster neu berechnen Proto: Fit_Linear(double* x,double* y, double& a0, double& a1,int Anfangsindex, int Endindex)
+	// TODO Basisfenster neu berechnen
+	// Proto:
+	// Fit_Linear(double* x,double* y, double& a0, double& a1,int Anfangsindex,
+	// int Endindex)
 	double a0, a1;
 	Fit_Linear(Basisfenster_WL, Basisfenster_Intensitaet, a0, a1, 0, Speicherbedarf_Basis - 1);
 	//Die beiden gefitteten Spektren dividieren Limb/Sonne
@@ -660,7 +707,8 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst, int Ind
 	Messwerte_Quotient_error = new double[Speicherbedarf_Vollfenster];
 	for (int i = 0; i < Speicherbedarf_Vollfenster; i++) {
 		Messwerte_Quotient[i] = Vollfenster_Limb[i] / Vollfenster_Sonne[i];
-		// Die relativen Fehler von MW_Q und Vf_L sind gleich...Limb ist linear, also auch Fehler linear skalieren
+		// Die relativen Fehler von MW_Q und Vf_L sind gleich...Limb ist linear,
+		// also auch Fehler linear skalieren
 		Messwerte_Quotient_error[i] = Vollfenster_Limb_abs_error[i] / Vollfenster_Sonne[i];
 
 	}
@@ -675,10 +723,11 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst, int Ind
 	//Basislinie abziehen
 	for (int i = 0; i < Speicherbedarf_Vollfenster; i++) {
 		Messwerte_Quotient[i] -= a0 + a1 * Vollfenster_WL[i];
-		// Im besten Fall verändert sich der absolute Fehler nicht...aber der relative, wenn die Baseline im Vergleich zum peak hoch
-		// liegt
+		// Im besten Fall verändert sich der absolute Fehler nicht...aber der
+		// relative, wenn die Baseline im Vergleich zum peak hoch liegt
 	}
-	// Fehler aus Residuuen abschätzen  /////////////////////(und nicht den gegebenen Fehler nehmen
+	// Fehler aus Residuuen abschätzen
+	/////////////////////(und nicht den gegebenen Fehler nehmen
 	// Zunächst nochmal den Mittelwert bilden
 	double *Messwerte_Quotient_stabw;
 	Messwerte_Quotient_stabw = new double[Speicherbedarf_Vollfenster];
@@ -704,7 +753,8 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst, int Ind
 		string s1, s_OrbNum, s2;
 		int h = this->m_Hoehe_TP;
 		char buf[256];
-		//TODO immer prüfen, ob Dateienamenlänge noch stimmt...falls / im Namen ist das schlecht
+		//TODO immer prüfen, ob Dateienamenlänge noch stimmt
+		// ...falls / im Namen ist das schlecht
 		string Datnam = m_Dateiname_L1C.substr(m_Dateiname_L1C.size() - 39, 39);
 		//TODO Pfad anpassen
 		sprintf(buf, "mkdir %s/Plots 2>/dev/null", Arbeitsverzeichnis.c_str());
@@ -713,10 +763,12 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst, int Ind
 		sprintf(buf, "%s_%s_%i_%ikm.ps", Datnam.c_str(), Spezfenst.m_Spezies_Name.c_str(), Index, h);
 		string new_datnam = buf;
 		sprintf(buf, "%s/Plots/%s", Arbeitsverzeichnis.c_str(), new_datnam.c_str());
-		s1 = buf; //s1 ist der Volle Pfad der Datei...diesen kann man wegspeichern, um später die .ps files in ein großes pdf zu packen
+		s1 = buf;
+		//s1 ist der Volle Pfad der Datei...diesen kann man wegspeichern,
+		//um später die .ps files in ein großes pdf zu packen
 		Spezfenst.m_Liste_der_Plot_Dateinamen.push_back(s1);
 		//Orbitnummer ermitteln/////
-		// egal, wie die Datei heißt... die Orbitnummer sind die 5 Zeichen vor .dat
+		// egal, wie die Datei heißt die Orbitnummer sind die 5 Zeichen vor .dat
 		size_t pos_suffix = 0;
 		pos_suffix = Datnam.find(".dat");
 		if (pos_suffix == string::npos) {
@@ -734,18 +786,21 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst, int Ind
 								   Vollfenster_WL, 0, Speicherbedarf_Vollfenster - 1,
 								   Vollfenster_Limb, Vollfenster_Limb_abs_error, Vollfenster_Sonne, Messwerte_Quotient, Messwerte_Quotient_error);
 		/*Plot_Quotient_mit_Fehler(Arbeitsverzeichnis.c_str(),s1.c_str(), s2.c_str(),
-		                                        Vollfenster_WL,0 ,Speicherbedarf_Vollfenster-1,
-		                                        Messwerte_Quotient,Messwerte_Quotient_error, Messwerte_Quotient_stabw);*/
+		                   Vollfenster_WL,0 ,Speicherbedarf_Vollfenster-1,
+		                   Messwerte_Quotient,Messwerte_Quotient_error,
+		                   Messwerte_Quotient_stabw);*/
 	}
 	///////////////////////////////////////////////
 	// Fit der Säulendichte  /////////////
 	double Flaeche;
 	Fit_Peak_hyperbolic(Vollfenster_WL, Messwerte_Quotient, Spezfenst.m_Wellenlaengen[Index],
 						Spezfenst.m_FWHM, Flaeche, 0, Speicherbedarf_Vollfenster - 1); // Hier Wellenlängen in nm verwendet..das hebt sich mit dem Gitterabstand raus
-	//Fehler des Fits bestimmen... da Peakfenster_Intensitaet nicht mehr gebraucht wird die Basislinie für die Fehlerberechnung wieder
-	//aufaddiert
+	//Fehler des Fits bestimmen... da Peakfenster_Intensitaet nicht mehr
+	//gebraucht wird die Basislinie für die Fehlerberechnung wieder aufaddiert
 	m_Zeilendichte = Flaeche;
-	// Funktion double Messung_Limb::Evaluate_Error_primitive(double* x,double* y, double a0,double a1, double A, double FWHM, double x0, int Anfangsindex, int Endindex)
+	// Funktion double Messung_Limb::Evaluate_Error_primitive(double* x,
+	// double* y, double a0,double a1, double A, double FWHM, double x0,
+	// int Anfangsindex, int Endindex)
 	m_Fehler_Zeilendichten = Evaluate_Error_primitive(Vollfenster_WL, Messwerte_Quotient, a0, a1, m_Zeilendichte, Spezfenst.m_FWHM, Spezfenst.m_Wellenlaengen[Index], 0, Speicherbedarf_Vollfenster - 1);
 	//////////////////////////////////////////////
 	/////////////////////////////////////////////
@@ -762,12 +817,14 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst, int Ind
 	delete[] Messwerte_Quotient_stabw;
 	return 0;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // ENDE Plots_der_Spektren_erzeugen
-/////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 int Messung_Limb::Intensitaeten_normieren(double Teiler[826])
 {
-	//Teiler wurde vorher interpoliert //todo prüfen  // der Teiler ist das interpolierte Sonnenspektrum
+	//Teiler wurde vorher interpoliert
+	//todo prüfen
+	// der Teiler ist das interpolierte Sonnenspektrum
 	//cout<<"m_Wellenlangen[0]: "<<m_Wellenlaengen[0]<<"\n";
 	//cout<<"m_Intensitaeten[0]: "<<m_Intensitaeten[0]<<"\n";
 	//cout<<"Teiler[0]: "<<Teiler[0]<<"\n";
@@ -794,14 +851,21 @@ int Messung_Limb::Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Spez
 	//Auf dem ganzen Fenster...Verschwendung !!!!!
 
 	// Wir berechnen den Gitterabstand nur einmal
-	// Am besten gleich bei der Wellenlänge des Übergangs....eigentlich reicht 0,11nm, falls es mal schneller gehn soll
-	//                                                                                  die Gitterabstände sind aber über große Bereiche doch schon nicht linear
+	// Am besten gleich bei der Wellenlänge des Übergangs....
+	// eigentlich reicht 0,11nm, falls es mal schneller gehn soll
+	// die Gitterabstände sind aber über große Bereiche doch schon nicht linear
 	int Ind = Get_Index(Spezfenst.m_Wellenlaengen[Index]);
 	double Delta_WL = (m_Wellenlaengen[Ind + 1] - m_Wellenlaengen[Ind]);
-	// Nun alles damit multiplizieren....wie gesagt..das ist etwas langsam, da es sich um nen konstanten Faktor handelt
+	// Nun alles damit multiplizieren....wie gesagt..das ist etwas langsam,
+	// da es sich um nen konstanten Faktor handelt
 	for (int i = 0; i < 826; i++) { //langsam, optimierbar
-		//m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand[i]=m_Intensitaeten_durch_piF_Gamma[i]*Delta_WL; // Delta_Wl ist in nm gegeben...dann muss beim Peakfit nicht in nm umgerechnet werden, wenn integriert wird
-		m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand[i] = m_Intensitaeten_durch_piF_Gamma[i] / Delta_WL; // glaub man muss dividieren
+		//m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand[i]=m_Intensitaeten
+		//_durch_piF_Gamma[i]*Delta_WL;
+		// Delta_Wl ist in nm gegeben...
+		// dann muss beim Peakfit nicht in nm umgerechnet werden
+		// wenn integriert wird
+		m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand[i] = m_Intensitaeten_durch_piF_Gamma[i] / Delta_WL;
+		// glaub man muss dividieren
 	}
 	return 0;
 }
@@ -813,7 +877,8 @@ int Messung_Limb::Deklinationswinkel_bestimmen()
 	// Formel nach der englischen Wikipedia
 	//theta=-23,45*cos(360° *(N+10)/365);
 	// dieser Winkel ändert sich nicht sehr stark von Tag zu Tag
-	int Monatstage[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; // reicht auch auf Tagesgenauigkeit
+	int Monatstage[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	// reicht auch auf Tagesgenauigkeit
 	double Tage = 0;
 	for (int i = 0; i < (this->m_Monat - 1); i++) {
 		Tage += Monatstage[i];
@@ -831,7 +896,8 @@ int Messung_Limb::Deklinationswinkel_bestimmen()
 // Funktionsstart  Sonnen_Longitude_bestimmen
 int Messung_Limb::Sonnen_Longitude_bestimmen()
 {
-	// 12 Uhr Mittags (UTC) ist die Sonne bei Phi=0(glaub Greenwich, oder zumindest in etwa) im Zenit
+	// 12 Uhr Mittags (UTC) ist die Sonne bei Phi=0
+	// (glaub Greenwich, oder zumindest in etwa) im Zenit
 	double Stunden = 0.0;
 	Stunden += this->m_Stunde;
 	Stunden += (double) this->m_Minute / ((double) 60.0);
@@ -852,7 +918,9 @@ Ausgewertete_Messung_Limb Messung_Limb::Ergebnis_Zusammenfassen()
 	//Zwischenergebnisse
 	aus.m_Deklination = this->m_Deklinationswinkel;
 	aus.m_Sonnen_Longitude = this->m_Sonnen_Longitude;
-	aus.m_Wellenlaenge = 0; // Nullinitialisierung...die Wellenlänge des Übergangs steckt im Speziesfenster
+	aus.m_Wellenlaenge = 0;
+	// Nullinitialisierung...
+	// die Wellenlänge des Übergangs steckt im Speziesfenster
 	//Datum
 	aus.m_Jahr = this->m_Jahr;
 	aus.m_Monat = this->m_Monat;
@@ -875,11 +943,11 @@ Ausgewertete_Messung_Limb Messung_Limb::Ergebnis_Zusammenfassen()
 //Methoden ende
 //========================================
 
-/////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //
 //Hilfsfunktionen
 //
-/////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 int Messung_Limb::Get_Index(double WL)
 {
 	// Die Wellenlängen sind monoton steigend sortiert
@@ -896,7 +964,9 @@ int Messung_Limb::Get_Index(double WL)
 	if (abs(this->m_Wellenlaengen[oberer_Fensterindex] - WL) < 0.08) {
 		return oberer_Fensterindex;
 	}
-	while (!gefunden) { //eventuell durch forschleife ersetzen, weil Programm sich hier festhängen könnte
+	while (!gefunden) {
+		//eventuell durch forschleife ersetzen,
+		//weil Programm sich hier festhängen könnte
 		// Wellenlänge gefunden
 		if (abs(this->m_Wellenlaengen[aktueller_Index] - WL) < 0.08) {
 			return aktueller_Index;// Schleifenabbruch und sofortige Rückgabe
@@ -906,18 +976,22 @@ int Messung_Limb::Get_Index(double WL)
 		} else {
 			oberer_Fensterindex = aktueller_Index;
 		}//if m_WL<WL
-		aktueller_Index = (oberer_Fensterindex + unterer_Fensterindex) / 2; //achtung hier wird abgerundet
+		aktueller_Index = (oberer_Fensterindex + unterer_Fensterindex) / 2;
+		//achtung hier wird abgerundet
 	}//while
-	return -1; // soweit sollte es eigentlich nicht kommen...aber damit die Warnung verschwindet geben wir mal was zurück
+	return -1;
+	// soweit sollte es eigentlich nicht kommen...
+	// aber damit die Warnung verschwindet geben wir mal was zurück
 }//ende int Messung_Limb::Get_Index(double WL)
 
 void Messung_Limb::Fit_Linear(double *x, double *y, double &a0, double &a1, int Anfangsindex, int Endindex)
 {
-	//fit der Funktion y=a0+a1x; Bestimmung von a und b im Intervall zwischen Anfangs und endindex
+	//fit der Funktion y=a0+a1x;
+	//Bestimmung von a und b im Intervall zwischen Anfangs und endindex
 	a0 = 0;
 	a1 = 0;
 	int i;
-	// benötigt werden die Mittelwerte von x,y,x*y,und x^2 ===============================
+	// benötigt werden die Mittelwerte von x,y,x*y,und x^2 =====================
 	double xsum = 0;
 	double ysum = 0;
 	double xysum = 0;
@@ -933,7 +1007,7 @@ void Messung_Limb::Fit_Linear(double *x, double *y, double &a0, double &a1, int 
 	double y_m = ysum / (Endindex - Anfangsindex + 1);
 	double xy_m = xysum / (Endindex - Anfangsindex + 1);
 	double xx_m = xxsum / (Endindex - Anfangsindex + 1);
-	//====================================================================================
+	//==========================================================================
 	// Parameter b
 	a1 = (xy_m - y_m * x_m) / (xx_m - x_m * x_m);
 	//Parameter a
@@ -943,13 +1017,15 @@ void Messung_Limb::Fit_Linear(double *x, double *y, double &a0, double &a1, int 
 
 void Messung_Limb::Fit_Polynom_4ten_Grades(double *x, double *y, double x0, double *Par_a0, double *Par_a1, double *Par_a2, double *Par_a3, double *Par_a4, int Anfangsindex, int Endindex)
 {
-	// Das geht auch analytisch, aber das ist eine laaaaaaaaaaaaaaaaaange Formel,
-	// deren Ableitung zwar trivial, aber Fehleranfällig ist(so vieeeeel zu schreiben)
-	// Das Diagonalisieren des Linearen Gleichungssystems könnte man auslagern,
-	//sodass nur das Rückeinsetzen benutzt werden muss...
-	// bei einer 5*6 Matrix ist ist das aber vermutlich noch zu verschmerzen...wir werden sehn
+	// Das geht auch analytisch, aber das ist eine laaaaaaaaaaaaaaaaange Formel,
+	// deren Ableitung zwar trivial, aber Fehleranfällig ist(so vieeeeel zu
+	// schreiben) Das Diagonalisieren des Linearen Gleichungssystems könnte man
+	// auslagern,
+	//sodass nur das Rückeinsetzen benutzt werden muss...  bei einer 5*6 Matrix
+	//ist ist das aber vermutlich noch zu verschmerzen...wir werden sehn
 
-	//Für jede Messung müssen 30 konstanten bestimmt werden, von denen aber einige doppelt vorkommen
+	//Für jede Messung müssen 30 konstanten bestimmt werden, von denen aber
+	//einige doppelt vorkommen
 
 	double a0 = 0;
 	double b0 = 0;
@@ -989,10 +1065,10 @@ void Messung_Limb::Fit_Polynom_4ten_Grades(double *x, double *y, double x0, doub
 		f3 += y[i] * h * h * h;
 		f4 += y[i] * h * h * h * h;
 	}
-	// Zur Lösung des Gleichungssystems wird eine Lapack routine benutzt
-	// da diese in Fortran geschrieben sind, muss die Transponierte Matrix übergeben werden
-	// da die RHS nur aus einem Vektor besteht, gibt es keine Verwirrung mit transponierten
-	// Matrix und Vektor aufbauen
+	// Zur Lösung des Gleichungssystems wird eine Lapack routine benutzt da
+	// diese in Fortran geschrieben sind, muss die Transponierte Matrix
+	// übergeben werden da die RHS nur aus einem Vektor besteht, gibt es keine
+	// Verwirrung mit transponierten Matrix und Vektor aufbauen
 	double LHS[25];
 	double RHS[5];
 	// LHS Matrix Spaltenweise eingeben
@@ -1028,7 +1104,7 @@ void Messung_Limb::Fit_Polynom_4ten_Grades(double *x, double *y, double x0, doub
 	RHS[3] = f3;
 	RHS[4] = f4;
 	// Restliche Vorbereitungen für Lapackroutine
-	int N = 5;           //<---------- Feldgröße Speed propto N^3 , LHS ist quadratisch, N ist Anzahl der Gitterpunkte
+	int N = 5;  //<-- Feldgröße Speed propto N^3 , LHS ist quadratisch, N ist Anzahl der Gitterpunkte
 	int *IPIV;  //array mit der Pivotisierungsmatrix sollte so groß wie N sein, alle Elemente 0
 	IPIV = new int[N];
 	// ------ RHS oben definiert
@@ -1036,7 +1112,8 @@ void Messung_Limb::Fit_Polynom_4ten_Grades(double *x, double *y, double x0, doub
 	int LDA = N;
 	int LDB = N;
 	int INFO;
-	//int Anzahl=N*N;  Anzahl sollte die Integer grenzen nicht überschreiten, aber danbn sollte der Aufbau von LHS schon stören
+	//int Anzahl=N*N;  Anzahl sollte die Integer grenzen nicht überschreiten,
+	//aber danbn sollte der Aufbau von LHS schon stören
 	// AUFRUF   A ist LHS.transponiert und B ist RHS
 	dgesv_(&N, &NRHS, LHS, &LDA, IPIV, RHS, &LDB, &INFO);
 	// ENDE LU ZERLEGUNG
@@ -1053,7 +1130,7 @@ void Messung_Limb::Fit_Polynom_4ten_Grades(double *x, double *y, double x0, doub
 
 void Messung_Limb::Fit_Peak_hyperbolic(double *x, double *y, double x0, double FWHM, double &A, int Anfangsindex, int Endindex)
 {
-	//Folgende Funktion ist für das Integral über alles ordentlich auf 1 normiert
+	//Folgende Funktion ist fürs Integral über alles ordentlich auf 1 normiert
 	//Spaltfunktion
 	//cnorm           = 4.*PI*sqrt(2.) / FWHM**3      ! Normierung stimmt MPL
 	//SlitFuncSPEC    = 1./( ( (.5*FWHM)**4 + X**4 ) * cnorm )
@@ -1064,13 +1141,16 @@ void Messung_Limb::Fit_Peak_hyperbolic(double *x, double *y, double x0, double F
 	//dchi^2/dA=-2sum(gy)+2 A sum(g^2) das soll 0 sein
 	//-> A=sum(gy)/sum(g^2)
 	//
-	// FWHM muss gegeben werden und wir werten die Funktion um den Mittelwert x0 aus also statt X-> X-x0
+	// FWHM muss gegeben werden und wir werten die Funktion um den Mittelwert
+	// x0 aus also statt X-> X-x0
 
-	// In dieser Funktion wird die Fläche A der Spaltfunktion bestimmt, da die Funktionwerte y=I/(piFGamma) sind
-	// so ist A dann die Säulendichte
+	// In dieser Funktion wird die Fläche A der Spaltfunktion bestimmt, da die
+	// Funktionwerte y=I/(piFGamma) sind so ist A dann die Säulendichte
 
 	const double pi = 3.14159265;
-	double N = Endindex - Anfangsindex + 1; // Zahl der Messwertpaare //double, damit später keine Probleme beim weiterrechnen
+	double N = Endindex - Anfangsindex + 1;
+	// Zahl der Messwertpaare
+	// double, damit später keine Probleme beim weiterrechnen
 	double sum_gy = 0;
 	double sum_gg = 0;
 	double g;
@@ -1078,7 +1158,8 @@ void Messung_Limb::Fit_Peak_hyperbolic(double *x, double *y, double x0, double F
 
 	for (int i = 0; i < N; i++) {
 		//g berechnen
-		g = 1 / (cnorm * (pow(0.5 * FWHM, 4) + pow(x0 - x[Anfangsindex + i], 4))); //eine Rechnung...nicht  Zeitkritisch
+		g = 1 / (cnorm * (pow(0.5 * FWHM, 4) + pow(x0 - x[Anfangsindex + i], 4)));
+		//eine Rechnung...nicht  Zeitkritisch
 		// sum_gy erhöhen
 		sum_gy += g * y[Anfangsindex + i];
 		// sum_gg erhöhen
@@ -1089,10 +1170,11 @@ void Messung_Limb::Fit_Peak_hyperbolic(double *x, double *y, double x0, double F
 
 double Messung_Limb::Evaluate_Error_primitive(double *x, double *y, double a0, double a1, double A, double FWHM, double x0, int Anfangsindex, int Endindex)
 {
-	/*****************************************************************************************
+	/***************************************************************************
 	Wie der Name schon sagt, ist dies eine eher einfache Berechnung des Fehlers.
-	Summe der Quadratischen Abweichungen-> Chi^2 hmm nicht gut... aber als Wichtungsfaktor noch akzeptabel
-	******************************************************************************************/
+	Summe der Quadratischen Abweichungen-> Chi^2 hmm nicht gut... aber als
+	Wichtungsfaktor noch akzeptabel
+	 **************************************************************************/
 	double Error = 0;
 	const double pi = 3.14159265;
 	double cnorm = 4.0 * pi * sqrt(2.0) / (FWHM * FWHM * FWHM);
@@ -1102,29 +1184,32 @@ double Messung_Limb::Evaluate_Error_primitive(double *x, double *y, double a0, d
 		double Basis = a0 + a1 * x[i];
 		double Peak = A / (cnorm * (pow(0.5 * FWHM, 4) + pow(x0 - x[i], 4)));
 		double Funktionswert = Peak + Basis;
-		// Quadratische Abweichung des Funktionswerts zum Messwert Bestimmen und aufaddieren
+		// Quadratische Abweichung des Funktionswerts zum Messwert Bestimmen
+		// und aufaddieren
 		Error += (Funktionswert - y[i]) * (Funktionswert - y[i]);
 		//y_quadrat+=y[i]*y[i];
 	}
 	Error /= (Endindex - Anfangsindex + 1);
-	Error = sqrt(Error);  //Das ist nach Numerical Recipes der Fehlerbalken der Messpunkte
-	// Es ist vermutlich anschaulicher diesen Fehler noch durch den Mittelwert zu teilen;
+	Error = sqrt(Error);
+	//Das ist nach Numerical Recipes der Fehlerbalken der Messpunkte Es ist
+	//vermutlich anschaulicher diesen Fehler noch durch den Mittelwert zu
+	//teilen;
 	//y_quadrat/=(Endindex-Anfangsindex+1);
 	//double quot=Error/sqrt(y_quadrat);
 	//cout<<quot<<"\n";
 	return Error;
 }
-/////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //
 //Hilfsfunktionen ENDE
 //
-/////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //
 // Wartungsfunktionen
 //
-/////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 int Messung_Limb::Ausgabe_in_Datei(string Dateiname)
 {
 	//TODO hier kann sich später auch noch was verändern
@@ -1133,14 +1218,16 @@ int Messung_Limb::Ausgabe_in_Datei(string Dateiname)
 	Damit kann überprüft werden:
 	a) ob das einlesen aller parameter ordentlich geklappt hat
 	b) ob die Unterfunktionen das richtige errechnet haben
-	c) Die Felder können geplottet werden, zusammen mit den Fitfunktionen-> Überprüfung, ob Fit sinnvoll (z.b. mit Matlab oder Gnuplot)
+	c) Die Felder können geplottet werden, zusammen mit den Fitfunktionen->
+	   Überprüfung, ob Fit sinnvoll (z.b. mit Matlab oder Gnuplot)
 	************************************************************/
 	//Formatierte Ausgabe
 	FILE *outfile;
 	//Datei öffnen
 	outfile = fopen(Dateiname.c_str(), "w");
-	//checken, ob Datei auch offen fehlt...aber ok Funktion wird eh beim debuggen eingesetzt...da kriegt man das schon raus..hoffentlich
-	//Datei schreiben
+	//checken, ob Datei auch offen fehlt...aber ok Funktion wird eh beim
+	//debuggen eingesetzt...da kriegt man das schon raus..hoffentlich Datei
+	//schreiben
 	///////////////////////////////////////////////////////////
 	//zunächst die randdaten in den header
 	//fprintf(outfile,"blblblbllblblb");
@@ -1175,9 +1262,9 @@ int Messung_Limb::Ausgabe_in_Datei(string Dateiname)
 	fclose(outfile);
 	return 0;
 }//Ausgabe_in_Datei ENDE
-/////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //
 // Wartungsfunktionen ENDE
 //
-/////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
