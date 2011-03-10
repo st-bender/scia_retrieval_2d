@@ -24,8 +24,9 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 					   const double &Lambda_Hoehe,
 					   MPL_Matrix &AMF,
 					   Konfiguration &Konf);
-int Retrievaliteration_old(MPL_Matrix &Dichten,             // Zur Sicherheit behalten
-						   MPL_Matrix &Dichten_apriori,         // Iteration über anpassen des apriori
+int Retrievaliteration_old(MPL_Matrix &Dichten,  // Zur Sicherheit behalten
+						   // Iteration über anpassen des apriori
+						   MPL_Matrix &Dichten_apriori,
 						   MPL_Matrix &Saeulendichten,
 						   MPL_Matrix &S_apriori,
 						   MPL_Matrix &S_y,
