@@ -8,7 +8,7 @@
 #ifndef GLAETTEN_HH_
 #define GLAETTEN_HH_
 
-void smooth_data(int Datasize,double* Data, int Anzahl_Nachbarn_eine_Seite, int Zahl_der_Iterationen);
+void smooth_data(int Datasize, double *Data, int Anzahl_Nachbarn_eine_Seite, int Zahl_der_Iterationen);
 
 
 #endif /* GLAETTEN_HH_ */

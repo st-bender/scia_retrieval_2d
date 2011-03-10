@@ -140,119 +140,121 @@ using namespace std;
 ///////////////////////////////////////
 // START globale Variablen
 //Nachrichtenprioritäten
-int Prioritylevel=10;
+int Prioritylevel = 10;
 // ENDE globale Variablen
 ///////////////////////////////////////
 
 // argc ist Die Anzahl der Kommandozeilenparameter
 // argv[i] enthält den i-ten Kommandozeilenparameter argv[0] ist Programmname
-int main(int argc,char *argv[])
+int main(int argc, char *argv[])
 {
-    //////////////////////////////////////////////////////////////////////////
-    // Übernahme der Kommandozeilenargumente
-/*    if(argc<7)
-    {
-        cout<<"Falscher Programmaufruf von SCIA_RETRIEVAL_2D\n";
-        cout<<"Aufruf: SCIA_RETRIEVAL_2D Orbitlistenpfad Pfad_temporäres_Arbeitsverzeichnis"\
-                  " Pfad_Sonnenrefenzspektrum Pfad_multips2pdf  Anzahl_zusaetzlicher_Orbits zusätzliche_Orbitpfade\n";
-        cout<<"Bsp: SCIA_RETRIEVAL_2D /tmp/orbit.list /tmp /home/meso/SCIA-DATA/SOLAR /home/martin/Skripts/multips2pdf"
-               <<" 2 /tmp/orbit2.list /tmp/orbit3.list   \n";
-        cout<<"Programm wird abgebrochen\n";
-        return 1;
-    }
-    int Anzahl_zusaetzlicher_Orbits=atoi(argv[6]);
-    if(argc!=(7+Anzahl_zusaetzlicher_Orbits))
-    {
-        cout<<"Falscher Programmaufruf von SCIA_RETRIEVAL_2D\n";
-        cout<<"Aufruf: SCIA_RETRIEVAL_2D Orbitlistenpfad Pfad_temporäres_Arbeitsverzeichnis"\
-                  " Pfad_Sonnenrefenzspektrum Pfad_multips2pdf  Anzahl_zusaetzlicher_Orbits zusätzliche_Orbitpfade\n";
-        cout<<"Bsp: SCIA_RETRIEVAL_2D /tmp/orbit.list /tmp /home/meso/SCIA-DATA/SOLAR /home/martin/Skripts/multips2pdf"
-               <<" 2 /tmp/orbit2.list /tmp/orbit3.list   \n";
-        cout<<"Programm wird abgebrochen\n";
-        return 1;
-    }*/
+	//////////////////////////////////////////////////////////////////////////
+	// Übernahme der Kommandozeilenargumente
+	/*    if(argc<7)
+	    {
+	        cout<<"Falscher Programmaufruf von SCIA_RETRIEVAL_2D\n";
+	        cout<<"Aufruf: SCIA_RETRIEVAL_2D Orbitlistenpfad Pfad_temporäres_Arbeitsverzeichnis"\
+	                  " Pfad_Sonnenrefenzspektrum Pfad_multips2pdf  Anzahl_zusaetzlicher_Orbits zusätzliche_Orbitpfade\n";
+	        cout<<"Bsp: SCIA_RETRIEVAL_2D /tmp/orbit.list /tmp /home/meso/SCIA-DATA/SOLAR /home/martin/Skripts/multips2pdf"
+	               <<" 2 /tmp/orbit2.list /tmp/orbit3.list   \n";
+	        cout<<"Programm wird abgebrochen\n";
+	        return 1;
+	    }
+	    int Anzahl_zusaetzlicher_Orbits=atoi(argv[6]);
+	    if(argc!=(7+Anzahl_zusaetzlicher_Orbits))
+	    {
+	        cout<<"Falscher Programmaufruf von SCIA_RETRIEVAL_2D\n";
+	        cout<<"Aufruf: SCIA_RETRIEVAL_2D Orbitlistenpfad Pfad_temporäres_Arbeitsverzeichnis"\
+	                  " Pfad_Sonnenrefenzspektrum Pfad_multips2pdf  Anzahl_zusaetzlicher_Orbits zusätzliche_Orbitpfade\n";
+	        cout<<"Bsp: SCIA_RETRIEVAL_2D /tmp/orbit.list /tmp /home/meso/SCIA-DATA/SOLAR /home/martin/Skripts/multips2pdf"
+	               <<" 2 /tmp/orbit2.list /tmp/orbit3.list   \n";
+	        cout<<"Programm wird abgebrochen\n";
+	        return 1;
+	    }*/
 
-    if(argc!=6)
-    {
-        cout<<"Falscher Programmaufruf von SCIA_RETRIEVAL_2D\n";
-        cout<<"Aufruf: SCIA_RETRIEVAL_2D Orbitlistenpfad Pfad_temporäres_Arbeitsverzeichnis"\
-                  " Pfad_Sonnenrefenzspektrum Pfad_multips2pdf\n";
-        cout<<"Bsp: SCIA_RETRIEVAL_2D /tmp/orbit.list /tmp /home/meso/SCIA-DATA/SOLAR /home/martin/Skripts/multips2pdf\n";
-        cout<<"Programm wird abgebrochen\n";
-        return 1;
-    }
-
-
-    string Orbitlistenpfad=argv[1];       // um Konf zu überschreiben
-    string Arbeitsverzeichnis=argv[2]; // für Ausgaben in Datei(5 mal pro Spezies)
-    string Solarpfad=argv[3];              // um Konf zu überschreiben
-    string Pfad_multips2pdf=argv[4];
-    string Pfad_multips2ps=argv[5];
+	if (argc != 6) {
+		cout << "Falscher Programmaufruf von SCIA_RETRIEVAL_2D\n";
+		cout << "Aufruf: SCIA_RETRIEVAL_2D Orbitlistenpfad Pfad_temporäres_Arbeitsverzeichnis"\
+			 " Pfad_Sonnenrefenzspektrum Pfad_multips2pdf\n";
+		cout << "Bsp: SCIA_RETRIEVAL_2D /tmp/orbit.list /tmp /home/meso/SCIA-DATA/SOLAR /home/martin/Skripts/multips2pdf\n";
+		cout << "Programm wird abgebrochen\n";
+		return 1;
+	}
 
 
-    cerr<<"Orbitlistenpfad: "<<Orbitlistenpfad<<"\n";
-    cerr<<"Arbeitsverzeichnis: "<<Arbeitsverzeichnis<<"\n";
-    cerr<<"Solarpfad: "<<Solarpfad<<"\n";
-    cerr<<"Pfad_multips2pdf: "<<Pfad_multips2pdf<<"\n";
-    cerr<<"Pfad_multips2ps: "<<Pfad_multips2ps<<"\n";
+	string Orbitlistenpfad = argv[1];     // um Konf zu überschreiben
+	string Arbeitsverzeichnis = argv[2]; // für Ausgaben in Datei(5 mal pro Spezies)
+	string Solarpfad = argv[3];            // um Konf zu überschreiben
+	string Pfad_multips2pdf = argv[4];
+	string Pfad_multips2ps = argv[5];
 
-    //vector<string> Zusaetzliche_Orbits;
-    //for (int i=0;i<Anzahl_zusaetzlicher_Orbits;i++)    {   Zusaetzliche_Orbits.push_back(argv[i+7]);    }
 
-    string untersuche_limb_mesothermo_states="nein";  //TODO ACHTUNG ACHUTNG  // Falls ja läuft das Laden der Limbdaten anders ab und
-                                                                                 //
-                                                                                 // die Ausschlusskriterien müssen anders angewendet werden;
-    string mache_Fit_Plots_limb="nein";
-    string mache_Fit_Plots_nadir="nein";
- //   string mache_Fit_Plots_MgI="ja";          // switches für einzelne Spezies
+	cerr << "Orbitlistenpfad: " << Orbitlistenpfad << "\n";
+	cerr << "Arbeitsverzeichnis: " << Arbeitsverzeichnis << "\n";
+	cerr << "Solarpfad: " << Solarpfad << "\n";
+	cerr << "Pfad_multips2pdf: " << Pfad_multips2pdf << "\n";
+	cerr << "Pfad_multips2ps: " << Pfad_multips2ps << "\n";
+
+	//vector<string> Zusaetzliche_Orbits;
+	//for (int i=0;i<Anzahl_zusaetzlicher_Orbits;i++)    {   Zusaetzliche_Orbits.push_back(argv[i+7]);    }
+
+	string untersuche_limb_mesothermo_states = "nein"; //TODO ACHTUNG ACHUTNG  // Falls ja läuft das Laden der Limbdaten anders ab und
+	//
+	// die Ausschlusskriterien müssen anders angewendet werden;
+	string mache_Fit_Plots_limb = "nein";
+	string mache_Fit_Plots_nadir = "nein";
+//   string mache_Fit_Plots_MgI="ja";          // switches für einzelne Spezies
 //    string mache_Fit_Plots_MgII="nein";          Plotterei als Spezieseigenschaft, implementieren volles Retrieval auch
 //    string mache_Fit_Plots_unknown="nein";
-    string mache_volles_Retrieval="ja";   // Falls nicht, nach Teil 2 abbrechen
-    string mache_volles_Retrieval_MgI="nein";     // switches für einzelne Spezies
-    string mache_volles_Retrieval_MgII="ja";
-    string mache_volles_Retrieval_unknown="nein";
-    string mache_volles_Retrieval_FeI="nein";
+	string mache_volles_Retrieval = "ja"; // Falls nicht, nach Teil 2 abbrechen
+	string mache_volles_Retrieval_MgI = "nein";   // switches für einzelne Spezies
+	string mache_volles_Retrieval_MgII = "ja";
+	string mache_volles_Retrieval_unknown = "nein";
+	string mache_volles_Retrieval_FeI = "nein";
 
 
-    // Zu Arbeitsverzeichnis /////// für jede Spezies sollen 5 Dateien entstehen
-    //sssss_orbit_xxxxx_yyyymmdd_hhmm_Dichten.txt
-    //sssss_orbit_xxxxx_yyyymmdd_hhmm_Sx.txt
-    //sssss_orbit_xxxxx_yyyymmdd_hhmm_AKM.txt
-    //sssss_orbit_xxxxx_yyyy_mm_dd_hh_mm_nadir_Saeulen.txt
-    //sssss_orbit_xxxxx_yyyy_mm_dd_hh_mm_0limb_Saeulen.txt
+	// Zu Arbeitsverzeichnis /////// für jede Spezies sollen 5 Dateien entstehen
+	//sssss_orbit_xxxxx_yyyymmdd_hhmm_Dichten.txt
+	//sssss_orbit_xxxxx_yyyymmdd_hhmm_Sx.txt
+	//sssss_orbit_xxxxx_yyyymmdd_hhmm_AKM.txt
+	//sssss_orbit_xxxxx_yyyy_mm_dd_hh_mm_nadir_Saeulen.txt
+	//sssss_orbit_xxxxx_yyyy_mm_dd_hh_mm_0limb_Saeulen.txt
 
-    // sssss -Spezies mit führenden 0en z.b. 00MgI
-    // xxxxx -Orbit_ID  kriegt man aus Orbitlistenpfad ......../xxxxx.temp.list ...also von hinten zählen und dann substr
-    // yyyyymmdd_hhmm -kriegt man aus dem Namen der ersten Datei in der Orbitliste
-    ////////////////////////////////////////////////////////////////////////////
+	// sssss -Spezies mit führenden 0en z.b. 00MgI
+	// xxxxx -Orbit_ID  kriegt man aus Orbitlistenpfad ......../xxxxx.temp.list ...also von hinten zählen und dann substr
+	// yyyyymmdd_hhmm -kriegt man aus dem Namen der ersten Datei in der Orbitliste
+	////////////////////////////////////////////////////////////////////////////
 
-    time_t start_zeit,timer1,deltaT;
-    time_t Teil1_Start, Teil1_End, T1_Dauer;
-    time_t Teil2_Start, Teil2_End, T2_Dauer;
-    time_t Teil3_Start, Teil3_End, T3_Dauer;
-    time_t Teil4_Start, Teil4_End, T4_Dauer;
-    time_t Teil5_Start, Teil5_End, T5_Dauer;
-    time_t Teil6_Start, Teil6_End, T6_Dauer;
+	time_t start_zeit, timer1, deltaT;
+	time_t Teil1_Start, Teil1_End, T1_Dauer;
+	time_t Teil2_Start, Teil2_End, T2_Dauer;
+	time_t Teil3_Start, Teil3_End, T3_Dauer;
+	time_t Teil4_Start, Teil4_End, T4_Dauer;
+	time_t Teil5_Start, Teil5_End, T5_Dauer;
+	time_t Teil6_Start, Teil6_End, T6_Dauer;
 
-    time(&start_zeit);
-    Nachricht_Schreiben("Starte Hauptprogramm...",3,Prioritylevel);
-    /*************************************************************************************************************************************************
-     TEIL 1 VORBEREITUNG
+	time(&start_zeit);
+	Nachricht_Schreiben("Starte Hauptprogramm...", 3, Prioritylevel);
+	/*************************************************************************************************************************************************
+	 TEIL 1 VORBEREITUNG
 
-     IN DIESEM PROGRAMMTEIL WERDEN DIE DATEN DER ZU UNTERSUCHENEN SPEZIES ANGEGEBEN.
-     DIE ORBITLISTE WIRD EINGELESEN UND DAS SONNENSPEKTRUM DES MESSTAGES WIRD EINGELESEN.
+	 IN DIESEM PROGRAMMTEIL WERDEN DIE DATEN DER ZU UNTERSUCHENEN SPEZIES ANGEGEBEN.
+	 DIE ORBITLISTE WIRD EINGELESEN UND DAS SONNENSPEKTRUM DES MESSTAGES WIRD EINGELESEN.
 
-     *************************************************************************************************************************************************/
-    cerr<<"Teil1\n";
-    time(&Teil1_Start);
-    unsigned int i,j,k,l;  // Meine Zählvariablen
-    i=0;  j=0; k=0; l=0;
+	 *************************************************************************************************************************************************/
+	cerr << "Teil1\n";
+	time(&Teil1_Start);
+	unsigned int i, j, k, l; // Meine Zählvariablen
+	i = 0;
+	j = 0;
+	k = 0;
+	l = 0;
 	Konfiguration Konf;
 	Konf.Konfiguration_einlesen();
 	//Konf.Konfiguration_anzeigen();  //-> Test erfolgreich
 	//Konf mit argv Argumenten
-	Konf.m_Pfad_Datei_mit_Dateinamen_fuer_Messungen_eines_Orbits=Orbitlistenpfad;
-	Konf.m_Pfad_Solar_Spektrum=Solarpfad;
+	Konf.m_Pfad_Datei_mit_Dateinamen_fuer_Messungen_eines_Orbits = Orbitlistenpfad;
+	Konf.m_Pfad_Solar_Spektrum = Solarpfad;
 
 	// Fitparameter für alle Spezies vorbeiten
 	Speziesfenster Spez;
@@ -266,829 +268,813 @@ int main(int argc,char *argv[])
 	// TODO Falls das nochmehr spezies werden, dann Vektor von Vektor von Speziesfenster
 	// Hier werden die Wellenlängen in nm angegeben.(das nm hebt sich nacher mit der Multiplikation mit der Intervallbreite weg)
 	//
-	Nachricht_Schreiben("Bestimme Speziesdaten...",3,Prioritylevel);
-    //Füllen z.B. für Magnesium+ *******************************************
-	Spez.m_Spezies_Name="MgII"; //bitte zusammenhängend
-    Spez.m_FWHM=0.22;
-    //Wellenlaenge 1
-    Spez.m_Wellenlaengen.push_back(279.635);
-    Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[0]-3);
-    Spez.m_Basisfenster_links_WLmax.push_back(Spez.m_Wellenlaengen[0]-1);
-    Spez.m_Basisfenster_rechts_WLmin.push_back(Spez.m_Wellenlaengen[0]+1);
-    Spez.m_Basisfenster_rechts_WLmax.push_back(Spez.m_Wellenlaengen[0]+3);
-    Spez.m_Peakfenster_WLmin.push_back(Spez.m_Wellenlaengen[0]-3);
-    Spez.m_Peakfenster_WLmax.push_back(Spez.m_Wellenlaengen[0]+3);
-    Lindat.Einlesen("DATA/LinePars.dat",Spez.m_Wellenlaengen[0]);
-    Spez.m_Liniendaten.push_back(Lindat);
-    //Wellenlänge 2
-    Spez.m_Wellenlaengen.push_back(280.353);
-    Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[1]-3);
-    Spez.m_Basisfenster_links_WLmax.push_back(Spez.m_Wellenlaengen[1]-1);
-    Spez.m_Basisfenster_rechts_WLmin.push_back(Spez.m_Wellenlaengen[1]+1);
-    Spez.m_Basisfenster_rechts_WLmax.push_back(Spez.m_Wellenlaengen[1]+3);
-    Spez.m_Peakfenster_WLmin.push_back(Spez.m_Wellenlaengen[1]-3);
-    Spez.m_Peakfenster_WLmax.push_back(Spez.m_Wellenlaengen[1]+3);
-    Lindat.Einlesen("DATA/LinePars.dat",Spez.m_Wellenlaengen[1]);
-    Spez.m_Liniendaten.push_back(Lindat);
-    // weitere Wellenlängen
-    Spezies_Fenster.push_back(Spez);
-    // SpezVektoren wieder leeren   //hier könnte man in Spez auch eine Methode für schreiben
-    Spez.m_Wellenlaengen.resize(0);
-    Spez.m_Basisfenster_links_WLmin.resize(0);
-    Spez.m_Basisfenster_links_WLmax.resize(0);
-    Spez.m_Basisfenster_rechts_WLmin.resize(0);
-    Spez.m_Basisfenster_rechts_WLmax.resize(0);
-    Spez.m_Peakfenster_WLmin.resize(0);
-    Spez.m_Peakfenster_WLmax.resize(0);
-    Spez.m_Liniendaten.resize(0);
-    //weitere Spezies
-    // Magnesium ************************************************************
-    Spez.m_Spezies_Name="MgI";  //bitte zusammenhängend
-    Spez.m_FWHM=0.22;
-    //Wellenlaenge 1
-    Spez.m_Wellenlaengen.push_back(285.213);
-    Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[0]-3);
-    //Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[0]-10);
-    Spez.m_Basisfenster_links_WLmax.push_back(Spez.m_Wellenlaengen[0]-1);
-    Spez.m_Basisfenster_rechts_WLmin.push_back(Spez.m_Wellenlaengen[0]+1);
-    Spez.m_Basisfenster_rechts_WLmax.push_back(Spez.m_Wellenlaengen[0]+3);
-    //Spez.m_Basisfenster_rechts_WLmax.push_back(Spez.m_Wellenlaengen[0]+4);
-    Spez.m_Peakfenster_WLmin.push_back(Spez.m_Wellenlaengen[0]-3);
-    Spez.m_Peakfenster_WLmax.push_back(Spez.m_Wellenlaengen[0]+3);
-    Lindat.Einlesen("DATA/LinePars.dat",Spez.m_Wellenlaengen[0]);
-    Spez.m_Liniendaten.push_back(Lindat);
-    // weitere Wellenlängen
-    //***************************************************************************
-    Spezies_Fenster.push_back(Spez);
-    //weitere Spezies
-    Spez.clear();  // Instanz leeren
-    // Unbekannte Spezies ************************************************************
-    Spez.m_Spezies_Name="unknown";  //bitte zusammenhängend
-    Spez.m_FWHM=0.22;
-    //Wellenlaenge 1
-    Spez.m_Wellenlaengen.push_back(288.2);
-    Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[0]-2);
-    //Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[0]-10);
-    Spez.m_Basisfenster_links_WLmax.push_back(Spez.m_Wellenlaengen[0]-1);
-    Spez.m_Basisfenster_rechts_WLmin.push_back(Spez.m_Wellenlaengen[0]+1);
-    Spez.m_Basisfenster_rechts_WLmax.push_back(Spez.m_Wellenlaengen[0]+3);
-    //Spez.m_Basisfenster_rechts_WLmax.push_back(Spez.m_Wellenlaengen[0]+4);
-    Spez.m_Peakfenster_WLmin.push_back(Spez.m_Wellenlaengen[0]-2);
-    Spez.m_Peakfenster_WLmax.push_back(Spez.m_Wellenlaengen[0]+3);
-    // Lindat sind unbekannt
-    Lindat.m_Wellenlaenge=Spez.m_Wellenlaengen[0];
-    Lindat.m_rel_Einstein=1; // stimmt nicht
-    Lindat.m_f_Wert=0.162;//0.162;  // für Si
-    Lindat.m_E1=0;//0.01;         //für Si
-    Lindat.m_E2=1;//0.99;         //für Si
-    // Dies sind beliebige Werte, die auch nicht unbedingt auf I/F führen(prop faktoren wie pi r_elektron)...sondern auf beliebige werte
-    Spez.m_Liniendaten.push_back(Lindat);
-    // weitere Wellenlängen
-    //***************************************************************************
-    Spezies_Fenster.push_back(Spez);
-    //cout<<Spezies_Fenster.size();
-    // cout<<Spezies_Fenster[1].m_Liniendaten[0].m_E1<<"\t";
-     //weitere Spezies
-    Spez.clear();  // Instanz leeren
-    // FeI ************************************************************
-    Spez.m_Spezies_Name="FeI";  //bitte zusammenhängend
-    Spez.m_FWHM=0.22;
-    //Wellenlaenge 1
-    Spez.m_Wellenlaengen.push_back(248.32707);
-    Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[0]-1);
-    Spez.m_Basisfenster_links_WLmax.push_back(Spez.m_Wellenlaengen[0]-0.5);
-    Spez.m_Basisfenster_rechts_WLmin.push_back(Spez.m_Wellenlaengen[0]+1);
-    Spez.m_Basisfenster_rechts_WLmax.push_back(Spez.m_Wellenlaengen[0]+2);
-    Spez.m_Peakfenster_WLmin.push_back(Spez.m_Wellenlaengen[0]-1);
-    Spez.m_Peakfenster_WLmax.push_back(Spez.m_Wellenlaengen[0]+2);
-    // Liniendaten
-    Lindat.m_Wellenlaenge=Spez.m_Wellenlaengen[0];
-    Lindat.m_rel_Einstein=0.19; // stimmt nicht
-    Lindat.m_f_Wert=0.543;
-    Lindat.m_E1=0.1733;  //  ^5D_4 nach ^5F*_5 übergang j=4, dj=1 (Funktion für Matlab geschrieben)
-    Lindat.m_E2=0.8267;
-    // Dies sind beliebige Werte, die auch nicht unbedingt auf I/F führen(prop faktoren wie pi r_elektron)...sondern auf beliebige werte
-    Spez.m_Liniendaten.push_back(Lindat);
-    // weitere Wellenlängen
-    //***************************************************************************
-    Spezies_Fenster.push_back(Spez);
-     //weitere Spezies
-    Spez.clear();  // Instanz leeren
-    //***************************************************************************
+	Nachricht_Schreiben("Bestimme Speziesdaten...", 3, Prioritylevel);
+	//Füllen z.B. für Magnesium+ *******************************************
+	Spez.m_Spezies_Name = "MgII"; //bitte zusammenhängend
+	Spez.m_FWHM = 0.22;
+	//Wellenlaenge 1
+	Spez.m_Wellenlaengen.push_back(279.635);
+	Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[0] - 3);
+	Spez.m_Basisfenster_links_WLmax.push_back(Spez.m_Wellenlaengen[0] - 1);
+	Spez.m_Basisfenster_rechts_WLmin.push_back(Spez.m_Wellenlaengen[0] + 1);
+	Spez.m_Basisfenster_rechts_WLmax.push_back(Spez.m_Wellenlaengen[0] + 3);
+	Spez.m_Peakfenster_WLmin.push_back(Spez.m_Wellenlaengen[0] - 3);
+	Spez.m_Peakfenster_WLmax.push_back(Spez.m_Wellenlaengen[0] + 3);
+	Lindat.Einlesen("DATA/LinePars.dat", Spez.m_Wellenlaengen[0]);
+	Spez.m_Liniendaten.push_back(Lindat);
+	//Wellenlänge 2
+	Spez.m_Wellenlaengen.push_back(280.353);
+	Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[1] - 3);
+	Spez.m_Basisfenster_links_WLmax.push_back(Spez.m_Wellenlaengen[1] - 1);
+	Spez.m_Basisfenster_rechts_WLmin.push_back(Spez.m_Wellenlaengen[1] + 1);
+	Spez.m_Basisfenster_rechts_WLmax.push_back(Spez.m_Wellenlaengen[1] + 3);
+	Spez.m_Peakfenster_WLmin.push_back(Spez.m_Wellenlaengen[1] - 3);
+	Spez.m_Peakfenster_WLmax.push_back(Spez.m_Wellenlaengen[1] + 3);
+	Lindat.Einlesen("DATA/LinePars.dat", Spez.m_Wellenlaengen[1]);
+	Spez.m_Liniendaten.push_back(Lindat);
+	// weitere Wellenlängen
+	Spezies_Fenster.push_back(Spez);
+	// SpezVektoren wieder leeren   //hier könnte man in Spez auch eine Methode für schreiben
+	Spez.m_Wellenlaengen.resize(0);
+	Spez.m_Basisfenster_links_WLmin.resize(0);
+	Spez.m_Basisfenster_links_WLmax.resize(0);
+	Spez.m_Basisfenster_rechts_WLmin.resize(0);
+	Spez.m_Basisfenster_rechts_WLmax.resize(0);
+	Spez.m_Peakfenster_WLmin.resize(0);
+	Spez.m_Peakfenster_WLmax.resize(0);
+	Spez.m_Liniendaten.resize(0);
+	//weitere Spezies
+	// Magnesium ************************************************************
+	Spez.m_Spezies_Name = "MgI"; //bitte zusammenhängend
+	Spez.m_FWHM = 0.22;
+	//Wellenlaenge 1
+	Spez.m_Wellenlaengen.push_back(285.213);
+	Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[0] - 3);
+	//Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[0]-10);
+	Spez.m_Basisfenster_links_WLmax.push_back(Spez.m_Wellenlaengen[0] - 1);
+	Spez.m_Basisfenster_rechts_WLmin.push_back(Spez.m_Wellenlaengen[0] + 1);
+	Spez.m_Basisfenster_rechts_WLmax.push_back(Spez.m_Wellenlaengen[0] + 3);
+	//Spez.m_Basisfenster_rechts_WLmax.push_back(Spez.m_Wellenlaengen[0]+4);
+	Spez.m_Peakfenster_WLmin.push_back(Spez.m_Wellenlaengen[0] - 3);
+	Spez.m_Peakfenster_WLmax.push_back(Spez.m_Wellenlaengen[0] + 3);
+	Lindat.Einlesen("DATA/LinePars.dat", Spez.m_Wellenlaengen[0]);
+	Spez.m_Liniendaten.push_back(Lindat);
+	// weitere Wellenlängen
+	//***************************************************************************
+	Spezies_Fenster.push_back(Spez);
+	//weitere Spezies
+	Spez.clear();  // Instanz leeren
+	// Unbekannte Spezies ************************************************************
+	Spez.m_Spezies_Name = "unknown"; //bitte zusammenhängend
+	Spez.m_FWHM = 0.22;
+	//Wellenlaenge 1
+	Spez.m_Wellenlaengen.push_back(288.2);
+	Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[0] - 2);
+	//Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[0]-10);
+	Spez.m_Basisfenster_links_WLmax.push_back(Spez.m_Wellenlaengen[0] - 1);
+	Spez.m_Basisfenster_rechts_WLmin.push_back(Spez.m_Wellenlaengen[0] + 1);
+	Spez.m_Basisfenster_rechts_WLmax.push_back(Spez.m_Wellenlaengen[0] + 3);
+	//Spez.m_Basisfenster_rechts_WLmax.push_back(Spez.m_Wellenlaengen[0]+4);
+	Spez.m_Peakfenster_WLmin.push_back(Spez.m_Wellenlaengen[0] - 2);
+	Spez.m_Peakfenster_WLmax.push_back(Spez.m_Wellenlaengen[0] + 3);
+	// Lindat sind unbekannt
+	Lindat.m_Wellenlaenge = Spez.m_Wellenlaengen[0];
+	Lindat.m_rel_Einstein = 1; // stimmt nicht
+	Lindat.m_f_Wert = 0.162; //0.162;  // für Si
+	Lindat.m_E1 = 0; //0.01;         //für Si
+	Lindat.m_E2 = 1; //0.99;         //für Si
+	// Dies sind beliebige Werte, die auch nicht unbedingt auf I/F führen(prop faktoren wie pi r_elektron)...sondern auf beliebige werte
+	Spez.m_Liniendaten.push_back(Lindat);
+	// weitere Wellenlängen
+	//***************************************************************************
+	Spezies_Fenster.push_back(Spez);
+	//cout<<Spezies_Fenster.size();
+	// cout<<Spezies_Fenster[1].m_Liniendaten[0].m_E1<<"\t";
+	//weitere Spezies
+	Spez.clear();  // Instanz leeren
+	// FeI ************************************************************
+	Spez.m_Spezies_Name = "FeI"; //bitte zusammenhängend
+	Spez.m_FWHM = 0.22;
+	//Wellenlaenge 1
+	Spez.m_Wellenlaengen.push_back(248.32707);
+	Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[0] - 1);
+	Spez.m_Basisfenster_links_WLmax.push_back(Spez.m_Wellenlaengen[0] - 0.5);
+	Spez.m_Basisfenster_rechts_WLmin.push_back(Spez.m_Wellenlaengen[0] + 1);
+	Spez.m_Basisfenster_rechts_WLmax.push_back(Spez.m_Wellenlaengen[0] + 2);
+	Spez.m_Peakfenster_WLmin.push_back(Spez.m_Wellenlaengen[0] - 1);
+	Spez.m_Peakfenster_WLmax.push_back(Spez.m_Wellenlaengen[0] + 2);
+	// Liniendaten
+	Lindat.m_Wellenlaenge = Spez.m_Wellenlaengen[0];
+	Lindat.m_rel_Einstein = 0.19; // stimmt nicht
+	Lindat.m_f_Wert = 0.543;
+	Lindat.m_E1 = 0.1733; //  ^5D_4 nach ^5F*_5 übergang j=4, dj=1 (Funktion für Matlab geschrieben)
+	Lindat.m_E2 = 0.8267;
+	// Dies sind beliebige Werte, die auch nicht unbedingt auf I/F führen(prop faktoren wie pi r_elektron)...sondern auf beliebige werte
+	Spez.m_Liniendaten.push_back(Lindat);
+	// weitere Wellenlängen
+	//***************************************************************************
+	Spezies_Fenster.push_back(Spez);
+	//weitere Spezies
+	Spez.clear();  // Instanz leeren
+	//***************************************************************************
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Linienparameter für alle Spezies einlesen  ende **********************************************
-    Nachricht_Schreiben("Speziesdaten bestimmt...",3,Prioritylevel);
-    // Für jede Spezies einen Vector mit Messergebnissen erstellen
-    // Mg und Mg+
-    vector<Ausgewertete_Messung_Limb> Ausgewertete_Limbmessung_MgI;
-    vector<Ausgewertete_Messung_Limb> Ausgewertete_Limbmessung_MgII;
-    vector<Ausgewertete_Messung_Nadir> Ausgewertete_Nadirmessung_MgI;
-    vector<Ausgewertete_Messung_Nadir> Ausgewertete_Nadirmessung_MgII;
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Linienparameter für alle Spezies einlesen  ende **********************************************
+	Nachricht_Schreiben("Speziesdaten bestimmt...", 3, Prioritylevel);
+	// Für jede Spezies einen Vector mit Messergebnissen erstellen
+	// Mg und Mg+
+	vector<Ausgewertete_Messung_Limb> Ausgewertete_Limbmessung_MgI;
+	vector<Ausgewertete_Messung_Limb> Ausgewertete_Limbmessung_MgII;
+	vector<Ausgewertete_Messung_Nadir> Ausgewertete_Nadirmessung_MgI;
+	vector<Ausgewertete_Messung_Nadir> Ausgewertete_Nadirmessung_MgII;
 
-    vector<Ausgewertete_Messung_Limb> Ausgewertete_Limbmessung_unknown;
-    vector<Ausgewertete_Messung_Nadir> Ausgewertete_Nadirmessung_unknown;
-    vector<Ausgewertete_Messung_Limb> Ausgewertete_Limbmessung_FeI;
-    vector<Ausgewertete_Messung_Nadir> Ausgewertete_Nadirmessung_FeI;
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Orbitliste Laden
-    //
-    // Die Orbitliste ist so zu erstellen, dass die erste Datei eine Limb Datei ist
-    // Da dieses Verfahren eh nur sinnvoll ist, wenn Limbmessungen vorhanden sind, sollte dies kein Problem sein
-    // TODO Die Orbitliste sollte nach Limb und Nadir sortiert werden. Danach muss sie nach Zeit sortiert sein(
-    // Wichtig für Einteilung der Boxen etc.... falls Ordner nach Dateinamen sortiert, so sollte das immer stimmen)
-    // Die Frage ist, ob man die Orbitliste so übernimmt, oder ob man hier nochmal sortiert. Bis jetzt ist die Orbitliste
-    // schon automatisch so. Allerdings wär eine Sortierung der Orbitliste ein geringer Zeitaufwand
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    Nachricht_Schreiben("Lade Orbitliste...",3,Prioritylevel);
-   Orbitliste Orbitlist;
-    if(Orbitlist.Liste_Laden(Konf.m_Pfad_Datei_mit_Dateinamen_fuer_Messungen_eines_Orbits) != 0)
-    {
-    	cout<<"Programmabbruch\n";
-    	return -1;
-    }
-    // Zur Überprüfung Orbitliste in Datei schreiben
-    //Orbitlist.In_Datei_Speichern("CHECKDATA/Orbitliste_Ueberpruefung.txt"); // der ordner CHECKDATA muss vorher existieren
-    //cout<<Orbitlist.m_Dateinamen[Orbitlist.m_Dateinamen.size()-1];// //TODO Das ist leer...Es muss beim erstellen der Orbitliste
-    //                                                                                             // sichergestellt werden, dass die letzte Zeile kein\n enthält!!!!
-    // -> Funktion funktioniert... aber Orbitliste Datei muss  ordentlich erzeugt sein
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Orbitliste Ist geladen
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	vector<Ausgewertete_Messung_Limb> Ausgewertete_Limbmessung_unknown;
+	vector<Ausgewertete_Messung_Nadir> Ausgewertete_Nadirmessung_unknown;
+	vector<Ausgewertete_Messung_Limb> Ausgewertete_Limbmessung_FeI;
+	vector<Ausgewertete_Messung_Nadir> Ausgewertete_Nadirmessung_FeI;
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Orbitliste Laden
+	//
+	// Die Orbitliste ist so zu erstellen, dass die erste Datei eine Limb Datei ist
+	// Da dieses Verfahren eh nur sinnvoll ist, wenn Limbmessungen vorhanden sind, sollte dies kein Problem sein
+	// TODO Die Orbitliste sollte nach Limb und Nadir sortiert werden. Danach muss sie nach Zeit sortiert sein(
+	// Wichtig für Einteilung der Boxen etc.... falls Ordner nach Dateinamen sortiert, so sollte das immer stimmen)
+	// Die Frage ist, ob man die Orbitliste so übernimmt, oder ob man hier nochmal sortiert. Bis jetzt ist die Orbitliste
+	// schon automatisch so. Allerdings wär eine Sortierung der Orbitliste ein geringer Zeitaufwand
+	//
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	Nachricht_Schreiben("Lade Orbitliste...", 3, Prioritylevel);
+	Orbitliste Orbitlist;
+	if (Orbitlist.Liste_Laden(Konf.m_Pfad_Datei_mit_Dateinamen_fuer_Messungen_eines_Orbits) != 0) {
+		cout << "Programmabbruch\n";
+		return -1;
+	}
+	// Zur Überprüfung Orbitliste in Datei schreiben
+	//Orbitlist.In_Datei_Speichern("CHECKDATA/Orbitliste_Ueberpruefung.txt"); // der ordner CHECKDATA muss vorher existieren
+	//cout<<Orbitlist.m_Dateinamen[Orbitlist.m_Dateinamen.size()-1];// //TODO Das ist leer...Es muss beim erstellen der Orbitliste
+	//                                                                                             // sichergestellt werden, dass die letzte Zeile kein\n enthält!!!!
+	// -> Funktion funktioniert... aber Orbitliste Datei muss  ordentlich erzeugt sein
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Orbitliste Ist geladen
+	//
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Sonnenspektrum bestimmen
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    Nachricht_Schreiben("Lade Sonnenspektrum...",3,Prioritylevel);
-    Sonnenspektrum Solspec;
-    if(Solspec.Laden_SCIA(Konf.m_Pfad_Solar_Spektrum,Konf.m_Pfad_Solar_Fallback_Spektrum)!=0)
-    {
-        cout<<"Programmabbruch\n";
-        return -1;
-    }
-    //Überprüfen, ob einlesen erfolgreich war
-    //Solspec.Speichern_was_geladen_wurde("CHECKDATA/Sonne_so_wie_geladen.txt"); //ok -> funktioniert
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Sonnenspektrum ist bestimmt
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    time(&Teil1_End);
-    T1_Dauer=Teil1_End-Teil1_Start;
-    /*************************************************************************************************************************************************
-     ENDE TEIL 1
-     ************************************************************************************************************************************************/
-    /*************************************************************************************************************************************************
-    TEIL 2 BESTIMMUNG DER SÄULENDICHTEN
-    FÜR ALLE LIMB- UND NADIRMESSUNGEN EINES ORBITS WERDEN DIE SÄULENDICHTEN FÜR JEDE LINIE BESTIMMT
-    UND IN EINE EINFACHERE STRUKTUR(Ausgewertete_Messungen) GESTECKT.
-    *************************************************************************************************************************************************/
-    cerr<<"Teil2\n";
-    time(&Teil2_Start);
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Säulendichtenbestimmung
-    //
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    Nachricht_Schreiben("Bestimme Säulendichten...",3,Prioritylevel);
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Sonnenspektrum bestimmen
+	//
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	Nachricht_Schreiben("Lade Sonnenspektrum...", 3, Prioritylevel);
+	Sonnenspektrum Solspec;
+	if (Solspec.Laden_SCIA(Konf.m_Pfad_Solar_Spektrum, Konf.m_Pfad_Solar_Fallback_Spektrum) != 0) {
+		cout << "Programmabbruch\n";
+		return -1;
+	}
+	//Überprüfen, ob einlesen erfolgreich war
+	//Solspec.Speichern_was_geladen_wurde("CHECKDATA/Sonne_so_wie_geladen.txt"); //ok -> funktioniert
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Sonnenspektrum ist bestimmt
+	//
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	time(&Teil1_End);
+	T1_Dauer = Teil1_End - Teil1_Start;
+	/*************************************************************************************************************************************************
+	 ENDE TEIL 1
+	 ************************************************************************************************************************************************/
+	/*************************************************************************************************************************************************
+	TEIL 2 BESTIMMUNG DER SÄULENDICHTEN
+	FÜR ALLE LIMB- UND NADIRMESSUNGEN EINES ORBITS WERDEN DIE SÄULENDICHTEN FÜR JEDE LINIE BESTIMMT
+	UND IN EINE EINFACHERE STRUKTUR(Ausgewertete_Messungen) GESTECKT.
+	*************************************************************************************************************************************************/
+	cerr << "Teil2\n";
+	time(&Teil2_Start);
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Säulendichtenbestimmung
+	//
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	Nachricht_Schreiben("Bestimme Säulendichten...", 3, Prioritylevel);
 	// Aus jeder Messung egal ob Limb oder Nadir die Säulendichte für jede Linie jeder Spezies bestimmen
-    int counter_Nachtmessungen=0;                //counter für Qualitätscheck der Messung initialisieren
-    int counter_NLC_detektiert=0;                    //TODO ausgabe der counter später implementieren
-    int counter_Richtungsvektor_nicht_ok=0;
-    int counter_Nachtmessungen_Nadir=0;
-    int counter_Nadir_Nacht_Dateien=0;
-    // Aus jeder Messung egal ob Limb oder Nadir die Säulendichte für jede Linie jeder Spezies bestimmen
-    for(l=0;l<Orbitlist.m_Dateinamen.size();l++)
-    {
-    	string L1CDatei=Orbitlist.m_Dateinamen[l];
-    	//cout<<L1CDatei<<"\n";
+	int counter_Nachtmessungen = 0;              //counter für Qualitätscheck der Messung initialisieren
+	int counter_NLC_detektiert = 0;                  //TODO ausgabe der counter später implementieren
+	int counter_Richtungsvektor_nicht_ok = 0;
+	int counter_Nachtmessungen_Nadir = 0;
+	int counter_Nadir_Nacht_Dateien = 0;
+	// Aus jeder Messung egal ob Limb oder Nadir die Säulendichte für jede Linie jeder Spezies bestimmen
+	for (l = 0; l < Orbitlist.m_Dateinamen.size(); l++) {
+		string L1CDatei = Orbitlist.m_Dateinamen[l];
+		//cout<<L1CDatei<<"\n";
 
-    	//Falls Limb-> Limbauslesung
-    	if (Orbitlist.Ist_Messung_Limbmessung(l)==0)
-    	{
-            /////////////////////////////////////
-            //Limbauswertung
-            ////////////////////////////////////
-    	    // Die erste Limbdatei ist wichtig für die Interpolation des Sonnenspektrums... es ist also wichtig, dass für l=0 eine Limbmessung vorliegt
-    	    //cerr<<"limbauswertung start\n";
-    	    //NotTODO Die Säulendichtebestimmung kann deutlich schneller geschehen, Verbesserungen hier sind aber irrelevant
-            Limb_Auswertung(Orbitlist,l, Solspec, Spezies_Fenster,
-                                       &counter_Nachtmessungen,&counter_NLC_detektiert,&counter_Richtungsvektor_nicht_ok,
-                                       Arbeitsverzeichnis, mache_Fit_Plots_limb, untersuche_limb_mesothermo_states,
-                                       Ausgewertete_Limbmessung_MgI,  Ausgewertete_Limbmessung_MgII, Ausgewertete_Limbmessung_unknown,
-                                       Ausgewertete_Limbmessung_FeI );
-            //cerr<<"limbauswertung Ende\n";
-            // Die Zwischenergebnisse stehen nun in Ausgewertete_Limbmessung_MgI und  Ausgewertete_Limbmessung_MgII
-            /////////////////////////////////////
-            //Limbauswertung Ende
-            ////////////////////////////////////
-    	}//ende if (Orbitlist.Ist_Messung_Limbmessung(i)==0)
-    	//Falls Nadir-> Nadirauslesung
-    	//TODO Ladeunterroutine überprüfen
-    	if (Orbitlist.Ist_Messung_Nadirmessung(l)==0)
-    	{
-    		/////////////////////////////////////
-    		//Nadirauswertung
-    		/////////////////////////////////////
-    	    // TODO Die Zeilendichtebestimmung kann deutlich schneller geschehen...da werden viel zu viele unnötig große
-    	    // Schleifen verwendet
-    	    //cerr<<"Nadirauswertung start\n";
-    	    Nadir_Auswertung(Orbitlist, l, Solspec, Spezies_Fenster,
-    	                               &counter_Nachtmessungen_Nadir,&counter_Nadir_Nacht_Dateien,
-    	                               Arbeitsverzeichnis, mache_Fit_Plots_nadir,
-    	                               Ausgewertete_Nadirmessung_MgI, Ausgewertete_Nadirmessung_MgII,
-    	                               Ausgewertete_Nadirmessung_unknown, Ausgewertete_Nadirmessung_FeI);
-    	    /////////////////////////////////////
-    		//Nadirauswertung Ende
-    		////////////////////////////////////
+		//Falls Limb-> Limbauslesung
+		if (Orbitlist.Ist_Messung_Limbmessung(l) == 0) {
+			/////////////////////////////////////
+			//Limbauswertung
+			////////////////////////////////////
+			// Die erste Limbdatei ist wichtig für die Interpolation des Sonnenspektrums... es ist also wichtig, dass für l=0 eine Limbmessung vorliegt
+			//cerr<<"limbauswertung start\n";
+			//NotTODO Die Säulendichtebestimmung kann deutlich schneller geschehen, Verbesserungen hier sind aber irrelevant
+			Limb_Auswertung(Orbitlist, l, Solspec, Spezies_Fenster,
+							&counter_Nachtmessungen, &counter_NLC_detektiert, &counter_Richtungsvektor_nicht_ok,
+							Arbeitsverzeichnis, mache_Fit_Plots_limb, untersuche_limb_mesothermo_states,
+							Ausgewertete_Limbmessung_MgI,  Ausgewertete_Limbmessung_MgII, Ausgewertete_Limbmessung_unknown,
+							Ausgewertete_Limbmessung_FeI);
+			//cerr<<"limbauswertung Ende\n";
+			// Die Zwischenergebnisse stehen nun in Ausgewertete_Limbmessung_MgI und  Ausgewertete_Limbmessung_MgII
+			/////////////////////////////////////
+			//Limbauswertung Ende
+			////////////////////////////////////
+		}//ende if (Orbitlist.Ist_Messung_Limbmessung(i)==0)
+		//Falls Nadir-> Nadirauslesung
+		//TODO Ladeunterroutine überprüfen
+		if (Orbitlist.Ist_Messung_Nadirmessung(l) == 0) {
+			/////////////////////////////////////
+			//Nadirauswertung
+			/////////////////////////////////////
+			// TODO Die Zeilendichtebestimmung kann deutlich schneller geschehen...da werden viel zu viele unnötig große
+			// Schleifen verwendet
+			//cerr<<"Nadirauswertung start\n";
+			Nadir_Auswertung(Orbitlist, l, Solspec, Spezies_Fenster,
+							 &counter_Nachtmessungen_Nadir, &counter_Nadir_Nacht_Dateien,
+							 Arbeitsverzeichnis, mache_Fit_Plots_nadir,
+							 Ausgewertete_Nadirmessung_MgI, Ausgewertete_Nadirmessung_MgII,
+							 Ausgewertete_Nadirmessung_unknown, Ausgewertete_Nadirmessung_FeI);
+			/////////////////////////////////////
+			//Nadirauswertung Ende
+			////////////////////////////////////
 		}//ENDE if(Orbitlist.Ist_Messung_Nadirmessung(l)==0)
-    }//ende Schleife über l
+	}//ende Schleife über l
 
-    //////// TEIL 2B/////////////////////
-    // Glätten der Ausgewerteten Messunge
-    for (int i=0;i<3;i++)
-    {
-        SCD_Glaettung(Ausgewertete_Limbmessung_MgI, 1, untersuche_limb_mesothermo_states);
-        SCD_Glaettung(Ausgewertete_Limbmessung_unknown, 1, untersuche_limb_mesothermo_states);
-        SCD_Glaettung(Ausgewertete_Limbmessung_MgII, 2, untersuche_limb_mesothermo_states);
-        SCD_Glaettung(Ausgewertete_Limbmessung_FeI, 1, untersuche_limb_mesothermo_states);
-    }
+	//////// TEIL 2B/////////////////////
+	// Glätten der Ausgewerteten Messunge
+	for (int i = 0; i < 3; i++) {
+		SCD_Glaettung(Ausgewertete_Limbmessung_MgI, 1, untersuche_limb_mesothermo_states);
+		SCD_Glaettung(Ausgewertete_Limbmessung_unknown, 1, untersuche_limb_mesothermo_states);
+		SCD_Glaettung(Ausgewertete_Limbmessung_MgII, 2, untersuche_limb_mesothermo_states);
+		SCD_Glaettung(Ausgewertete_Limbmessung_FeI, 1, untersuche_limb_mesothermo_states);
+	}
 
-    //////// TEIL 2B/////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Zeilendichtenbestimmung ist abgeschlossen
-    // Bis hierhin braucht das Programm keine Sekunde, wenn die ROHDATEN auf der LOKALEN Platte liegen.
-    //
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    Nachricht_Schreiben("Zeilendichten sind bestimmt....",3,Prioritylevel);
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //Ausgabe der Vektoren mit den Zwischenergebnissen in Dateien
-    // TODO sieht Ok aus...evtl später mal ein par fits angucken
-    string xxxxx=xxxxx_Bestimmen(Orbitlistenpfad);
-    string yyyymmdd_hhmm=yyyymmdd_hhmm_Bestimmen(Orbitlist.m_Dateinamen[0]);
-    string sssss_MgI="00MgI";
-    string sssss_MgII="0MgII";
-    string sssss_unknown="unkno";
-    string sssss_FeI="00FeI";
-    string Endung_Limb="_0limb_Saeulen.txt";
-    string Endung_Nadir="_nadir_Saeulen.txt";
-    string Dateiout_Mittelteil="_orbit_"+xxxxx+"_"+yyyymmdd_hhmm;
-    //sssss_orbit_xxxxx_yyyy_mm_dd_hh_mm_0limb_Saeulen.txt
-    string Pfad_Saeulen_Limb_MgI=Arbeitsverzeichnis+"/"+sssss_MgI+Dateiout_Mittelteil+Endung_Limb;
-    string Pfad_Saeulen_Limb_MgII=Arbeitsverzeichnis+"/"+sssss_MgII+Dateiout_Mittelteil+Endung_Limb;
-    string Pfad_Saeulen_Limb_unknown=Arbeitsverzeichnis+"/"+sssss_unknown+Dateiout_Mittelteil+Endung_Limb;
-    string Pfad_Saeulen_Limb_FeI=Arbeitsverzeichnis+"/"+sssss_FeI+Dateiout_Mittelteil+Endung_Limb;
-    string Pfad_Saeulen_Nadir_MgI=Arbeitsverzeichnis+"/"+sssss_MgI+Dateiout_Mittelteil+Endung_Nadir;
-    string Pfad_Saeulen_Nadir_MgII=Arbeitsverzeichnis+"/"+sssss_MgII+Dateiout_Mittelteil+Endung_Nadir;
-    string Pfad_Saeulen_Nadir_unknown=Arbeitsverzeichnis+"/"+sssss_unknown+Dateiout_Mittelteil+Endung_Nadir;
-    string Pfad_Saeulen_Nadir_FeI=Arbeitsverzeichnis+"/"+sssss_FeI+Dateiout_Mittelteil+Endung_Nadir;
-    //cerr<<"Ausgabe_Saeulendichten\n";
-    Ausgabe_Saeulendichten(Pfad_Saeulen_Limb_MgI.c_str(),Ausgewertete_Limbmessung_MgI);
-    Ausgabe_Saeulendichten(Pfad_Saeulen_Limb_MgII.c_str(),Ausgewertete_Limbmessung_MgII);
-    Ausgabe_Saeulendichten(Pfad_Saeulen_Limb_unknown.c_str(),Ausgewertete_Limbmessung_unknown);
-    Ausgabe_Saeulendichten(Pfad_Saeulen_Limb_FeI.c_str(),Ausgewertete_Limbmessung_FeI);
-    Ausgabe_Saeulendichten(Pfad_Saeulen_Nadir_MgI.c_str(),Ausgewertete_Nadirmessung_MgI);
-    Ausgabe_Saeulendichten(Pfad_Saeulen_Nadir_MgII.c_str(),Ausgewertete_Nadirmessung_MgII);
-    Ausgabe_Saeulendichten(Pfad_Saeulen_Nadir_unknown.c_str(),Ausgewertete_Nadirmessung_unknown);
-    Ausgabe_Saeulendichten(Pfad_Saeulen_Nadir_FeI.c_str(),Ausgewertete_Nadirmessung_FeI);
-    //cerr<<"Plotdateien zusammenfassen\n";
-    //Plotdateien zusammenfassen
-    if((mache_Fit_Plots_limb=="ja") || (mache_Fit_Plots_nadir=="ja"))
-    {   for(unsigned int i=0;i<Spezies_Fenster.size();i++)
-        {   // Namen der Ausgabedatei zusammenschustern
-            string pdf_Datei=Arbeitsverzeichnis+"/Plots/Orbit_"+xxxxx+"_"+Spezies_Fenster[i].m_Spezies_Name+"Fits.pdf";
-            Plots_Zusammenfassen(Pfad_multips2pdf,Pfad_multips2ps, pdf_Datei, Spezies_Fenster[i].m_Liste_der_Plot_Dateinamen);
-        }
-    }
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    time(&Teil2_End);
-    T2_Dauer=Teil2_End-Teil2_Start;
-    if(mache_volles_Retrieval!="ja")   // Falls nicht, nach Teil 2 abbrechen
-    {
-        // Hier könnt man echtmal ne sprunganweisung machen...ich verlass mich erstmal auf den garbage collector von c++
-        cerr<<"Programm wird vorzeitig nach Säulendichtenbestimmung beendet\n";
-        return 0;
-    }
+	//////// TEIL 2B/////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Zeilendichtenbestimmung ist abgeschlossen
+	// Bis hierhin braucht das Programm keine Sekunde, wenn die ROHDATEN auf der LOKALEN Platte liegen.
+	//
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	Nachricht_Schreiben("Zeilendichten sind bestimmt....", 3, Prioritylevel);
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//Ausgabe der Vektoren mit den Zwischenergebnissen in Dateien
+	// TODO sieht Ok aus...evtl später mal ein par fits angucken
+	string xxxxx = xxxxx_Bestimmen(Orbitlistenpfad);
+	string yyyymmdd_hhmm = yyyymmdd_hhmm_Bestimmen(Orbitlist.m_Dateinamen[0]);
+	string sssss_MgI = "00MgI";
+	string sssss_MgII = "0MgII";
+	string sssss_unknown = "unkno";
+	string sssss_FeI = "00FeI";
+	string Endung_Limb = "_0limb_Saeulen.txt";
+	string Endung_Nadir = "_nadir_Saeulen.txt";
+	string Dateiout_Mittelteil = "_orbit_" + xxxxx + "_" + yyyymmdd_hhmm;
+	//sssss_orbit_xxxxx_yyyy_mm_dd_hh_mm_0limb_Saeulen.txt
+	string Pfad_Saeulen_Limb_MgI = Arbeitsverzeichnis + "/" + sssss_MgI + Dateiout_Mittelteil + Endung_Limb;
+	string Pfad_Saeulen_Limb_MgII = Arbeitsverzeichnis + "/" + sssss_MgII + Dateiout_Mittelteil + Endung_Limb;
+	string Pfad_Saeulen_Limb_unknown = Arbeitsverzeichnis + "/" + sssss_unknown + Dateiout_Mittelteil + Endung_Limb;
+	string Pfad_Saeulen_Limb_FeI = Arbeitsverzeichnis + "/" + sssss_FeI + Dateiout_Mittelteil + Endung_Limb;
+	string Pfad_Saeulen_Nadir_MgI = Arbeitsverzeichnis + "/" + sssss_MgI + Dateiout_Mittelteil + Endung_Nadir;
+	string Pfad_Saeulen_Nadir_MgII = Arbeitsverzeichnis + "/" + sssss_MgII + Dateiout_Mittelteil + Endung_Nadir;
+	string Pfad_Saeulen_Nadir_unknown = Arbeitsverzeichnis + "/" + sssss_unknown + Dateiout_Mittelteil + Endung_Nadir;
+	string Pfad_Saeulen_Nadir_FeI = Arbeitsverzeichnis + "/" + sssss_FeI + Dateiout_Mittelteil + Endung_Nadir;
+	//cerr<<"Ausgabe_Saeulendichten\n";
+	Ausgabe_Saeulendichten(Pfad_Saeulen_Limb_MgI.c_str(), Ausgewertete_Limbmessung_MgI);
+	Ausgabe_Saeulendichten(Pfad_Saeulen_Limb_MgII.c_str(), Ausgewertete_Limbmessung_MgII);
+	Ausgabe_Saeulendichten(Pfad_Saeulen_Limb_unknown.c_str(), Ausgewertete_Limbmessung_unknown);
+	Ausgabe_Saeulendichten(Pfad_Saeulen_Limb_FeI.c_str(), Ausgewertete_Limbmessung_FeI);
+	Ausgabe_Saeulendichten(Pfad_Saeulen_Nadir_MgI.c_str(), Ausgewertete_Nadirmessung_MgI);
+	Ausgabe_Saeulendichten(Pfad_Saeulen_Nadir_MgII.c_str(), Ausgewertete_Nadirmessung_MgII);
+	Ausgabe_Saeulendichten(Pfad_Saeulen_Nadir_unknown.c_str(), Ausgewertete_Nadirmessung_unknown);
+	Ausgabe_Saeulendichten(Pfad_Saeulen_Nadir_FeI.c_str(), Ausgewertete_Nadirmessung_FeI);
+	//cerr<<"Plotdateien zusammenfassen\n";
+	//Plotdateien zusammenfassen
+	if ((mache_Fit_Plots_limb == "ja") || (mache_Fit_Plots_nadir == "ja")) {
+		for (unsigned int i = 0; i < Spezies_Fenster.size(); i++) {
+			// Namen der Ausgabedatei zusammenschustern
+			string pdf_Datei = Arbeitsverzeichnis + "/Plots/Orbit_" + xxxxx + "_" + Spezies_Fenster[i].m_Spezies_Name + "Fits.pdf";
+			Plots_Zusammenfassen(Pfad_multips2pdf, Pfad_multips2ps, pdf_Datei, Spezies_Fenster[i].m_Liste_der_Plot_Dateinamen);
+		}
+	}
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	time(&Teil2_End);
+	T2_Dauer = Teil2_End - Teil2_Start;
+	if (mache_volles_Retrieval != "ja") { // Falls nicht, nach Teil 2 abbrechen
+		// Hier könnt man echtmal ne sprunganweisung machen...ich verlass mich erstmal auf den garbage collector von c++
+		cerr << "Programm wird vorzeitig nach Säulendichtenbestimmung beendet\n";
+		return 0;
+	}
 
-    /***************************************************************************************************************************************************
-    ENDE TEIL 2
+	/***************************************************************************************************************************************************
+	ENDE TEIL 2
 
-    ****************************************************************************************************************************************************/
+	****************************************************************************************************************************************************/
 
-    /***************************************************************************************************************************************************
-    TEIL 3 AUFBAU DER FÜR DAS RETRIEVAL BENÖTIGTEN MATRIZZEN
-    MEHRERE EINFACHE MATRIZZEN WERDEN BENÖTIGT.
-    DIE WICHTIGSTE UND KOMPLIZIERTESTE MATRIX IST DIE MATRIX FÜR DIE LUFTMASSENFAKTOREN AMF.
-    ****************************************************************************************************************************************************/
-    cerr<<"Teil3\n";
-    time(&Teil3_Start);
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Matrizzen und Vektoren aufbauen
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /****************************************************************************************************************************************
-    // Wir benötigen das Gitter, auf dem wir die Dichte ausrechnen
-    // Ab nun Vektoren und Matrizzen für jede Spezies bestimmen
-    // einen Vektor der Dichte_n
-    // einen Vektor x_a für die a-priori-Lösung der Dichte (oder Startwert usw)
-    // einen Vektor der Zeilendichten
-    // Die Gesamtwichtungsfaktoren Lambda_H und Lambda_PHI
-    // zwei Matrizzen S_H und S_LAT mit den Unrterschieden der Nachbarpunkte(zur Glättung)
-    // die Matrix K, in der das Absorbtionsgesetz für die Lichtwege drinsteckt
-    // Kovarianzmatrizzen S_y und S_a...die man aber als Diagonalvektor benutzt
-    ******************************************************************************************************************************************/
-    Ausgewertete_Nadirmessung_MgI.resize(0);  //das hier weg( das erlaubt nur Limbmessungen)
-    Ausgewertete_Nadirmessung_MgII.resize(0);  //das hier weg( das erlaubt nur Limbmessungen)
-    Ausgewertete_Nadirmessung_unknown.resize(0);
-    Ausgewertete_Nadirmessung_FeI.resize(0);
-    Retrievalgitter Grid;
-    double Mindestabstand_Lat_in_Grad=5.0;//5.0;  //5.0 ist vernünftig; 2.0 ist gut für TAU_LOS_plot
-    Grid.Retrievalgitter_erzeugen(Ausgewertete_Limbmessung_MgI,Mindestabstand_Lat_in_Grad);
-    //Folgende Ausgabe sieht ok aus 28.9.2010 (Durchstoßpunkte werden erst später ermittelt)
-    string Pfad_Grid=Arbeitsverzeichnis+"/"+"Gitter.txt";
-    Grid.In_Datei_Ausgeben(Pfad_Grid);
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Spezies Mg I //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // einen Vektor der Dichte_n
-    MPL_Matrix Dichte_n_MgI(Grid.m_Anzahl_Punkte,1); //Spaltenvektor
-    Dichte_n_MgI.Null_Initialisierung();
-    //Dichte_n_MgI.in_Datei_speichern("/tmp/mlangowski/0/Dichte_n_MgI");
-    // einen Vektor x_a für die a-priori-Lösung der Dichte (oder Startwert usw)
-    MPL_Matrix Dichte_apriori_MgI(Grid.m_Anzahl_Punkte,1); //Spaltenvektor
-    Dichte_apriori_MgI.Null_Initialisierung();  // Null als Startwert
-     // Vektor mit Zeilendichten  für alle Messungen einer Spezies
-    MPL_Matrix Saeulendichten_MgI( Ausgewertete_Limbmessung_MgI.size()+Ausgewertete_Nadirmessung_MgI.size(),1); //Spaltenvektor
-    MPL_Matrix Saeulendichten_Fehler_MgI( Ausgewertete_Limbmessung_MgI.size()+Ausgewertete_Nadirmessung_MgI.size(),1); //Spaltenvektor
-    // Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
-    // Limb MgI
-    //cerr<<"MgI Limb\n";
-    for (unsigned int i=0;i<Ausgewertete_Limbmessung_MgI.size();i++)
-    {
-        Saeulendichten_MgI(i)=Ausgewertete_Limbmessung_MgI[i].m_Zeilendichte;
-        Saeulendichten_Fehler_MgI(i)=Ausgewertete_Limbmessung_MgI[i].m_Fehler_Zeilendichten;
-    }
-    // Nadir MgI
-    //cerr<<"MgI Nadir\n";
-    for (unsigned int i=Ausgewertete_Limbmessung_MgI.size();i<Ausgewertete_Limbmessung_MgI.size()+Ausgewertete_Nadirmessung_MgI.size();i++)
-    {
-        int Nadir_i=i-Ausgewertete_Limbmessung_MgI.size();
-        Saeulendichten_MgI(i)=Ausgewertete_Nadirmessung_MgI[Nadir_i].m_Zeilendichte;
-        Saeulendichten_Fehler_MgI(i)=Ausgewertete_Nadirmessung_MgI[Nadir_i].m_Fehler_Zeilendichten;
-    }
-    //Ende Säulendichten und Fehler auffüllen
-    // verwendete Konfiguration bis 20.1.2011
-    //double MgI_Lambda_Hoehe= 5E-7;//5E-6;//5E-6;//5E-6;     gute Werte 5 E-6    // TODO das laden der Parameter eindeutiger machen Konf.m_Retrieval_Kovarianzen[0+1*m_Anzahl_der_Emitter];
-    //double MgI_Lambda_Breite= 5E-6;//1E-6;//1E-7;//1E-7;      gute Werte 1 E-6
-    //double MgI_Lambda_apriori= 5E-5;//5E-6 oder -5;
-    //double MgI_Lambda_Hoehe= 5E-7;           // Gut für 3 km Schirtte mit 30 Höhen
-    //double MgI_Lambda_Breite= 5E-6;            // Gut für 3 km Schirtte mit 30 Höhen
-    //double MgI_Lambda_apriori=5E-5; //5E-5;  // Gut für 3 km Schirtte mit 30 Höhen
+	/***************************************************************************************************************************************************
+	TEIL 3 AUFBAU DER FÜR DAS RETRIEVAL BENÖTIGTEN MATRIZZEN
+	MEHRERE EINFACHE MATRIZZEN WERDEN BENÖTIGT.
+	DIE WICHTIGSTE UND KOMPLIZIERTESTE MATRIX IST DIE MATRIX FÜR DIE LUFTMASSENFAKTOREN AMF.
+	****************************************************************************************************************************************************/
+	cerr << "Teil3\n";
+	time(&Teil3_Start);
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Matrizzen und Vektoren aufbauen
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/****************************************************************************************************************************************
+	// Wir benötigen das Gitter, auf dem wir die Dichte ausrechnen
+	// Ab nun Vektoren und Matrizzen für jede Spezies bestimmen
+	// einen Vektor der Dichte_n
+	// einen Vektor x_a für die a-priori-Lösung der Dichte (oder Startwert usw)
+	// einen Vektor der Zeilendichten
+	// Die Gesamtwichtungsfaktoren Lambda_H und Lambda_PHI
+	// zwei Matrizzen S_H und S_LAT mit den Unrterschieden der Nachbarpunkte(zur Glättung)
+	// die Matrix K, in der das Absorbtionsgesetz für die Lichtwege drinsteckt
+	// Kovarianzmatrizzen S_y und S_a...die man aber als Diagonalvektor benutzt
+	******************************************************************************************************************************************/
+	Ausgewertete_Nadirmessung_MgI.resize(0);  //das hier weg( das erlaubt nur Limbmessungen)
+	Ausgewertete_Nadirmessung_MgII.resize(0);  //das hier weg( das erlaubt nur Limbmessungen)
+	Ausgewertete_Nadirmessung_unknown.resize(0);
+	Ausgewertete_Nadirmessung_FeI.resize(0);
+	Retrievalgitter Grid;
+	double Mindestabstand_Lat_in_Grad = 5.0; //5.0;  //5.0 ist vernünftig; 2.0 ist gut für TAU_LOS_plot
+	Grid.Retrievalgitter_erzeugen(Ausgewertete_Limbmessung_MgI, Mindestabstand_Lat_in_Grad);
+	//Folgende Ausgabe sieht ok aus 28.9.2010 (Durchstoßpunkte werden erst später ermittelt)
+	string Pfad_Grid = Arbeitsverzeichnis + "/" + "Gitter.txt";
+	Grid.In_Datei_Ausgeben(Pfad_Grid);
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Spezies Mg I //
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// einen Vektor der Dichte_n
+	MPL_Matrix Dichte_n_MgI(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
+	Dichte_n_MgI.Null_Initialisierung();
+	//Dichte_n_MgI.in_Datei_speichern("/tmp/mlangowski/0/Dichte_n_MgI");
+	// einen Vektor x_a für die a-priori-Lösung der Dichte (oder Startwert usw)
+	MPL_Matrix Dichte_apriori_MgI(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
+	Dichte_apriori_MgI.Null_Initialisierung();  // Null als Startwert
+	// Vektor mit Zeilendichten  für alle Messungen einer Spezies
+	MPL_Matrix Saeulendichten_MgI(Ausgewertete_Limbmessung_MgI.size() + Ausgewertete_Nadirmessung_MgI.size(), 1); //Spaltenvektor
+	MPL_Matrix Saeulendichten_Fehler_MgI(Ausgewertete_Limbmessung_MgI.size() + Ausgewertete_Nadirmessung_MgI.size(), 1); //Spaltenvektor
+	// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
+	// Limb MgI
+	//cerr<<"MgI Limb\n";
+	for (unsigned int i = 0; i < Ausgewertete_Limbmessung_MgI.size(); i++) {
+		Saeulendichten_MgI(i) = Ausgewertete_Limbmessung_MgI[i].m_Zeilendichte;
+		Saeulendichten_Fehler_MgI(i) = Ausgewertete_Limbmessung_MgI[i].m_Fehler_Zeilendichten;
+	}
+	// Nadir MgI
+	//cerr<<"MgI Nadir\n";
+	for (unsigned int i = Ausgewertete_Limbmessung_MgI.size(); i < Ausgewertete_Limbmessung_MgI.size() + Ausgewertete_Nadirmessung_MgI.size(); i++) {
+		int Nadir_i = i - Ausgewertete_Limbmessung_MgI.size();
+		Saeulendichten_MgI(i) = Ausgewertete_Nadirmessung_MgI[Nadir_i].m_Zeilendichte;
+		Saeulendichten_Fehler_MgI(i) = Ausgewertete_Nadirmessung_MgI[Nadir_i].m_Fehler_Zeilendichten;
+	}
+	//Ende Säulendichten und Fehler auffüllen
+	// verwendete Konfiguration bis 20.1.2011
+	//double MgI_Lambda_Hoehe= 5E-7;//5E-6;//5E-6;//5E-6;     gute Werte 5 E-6    // TODO das laden der Parameter eindeutiger machen Konf.m_Retrieval_Kovarianzen[0+1*m_Anzahl_der_Emitter];
+	//double MgI_Lambda_Breite= 5E-6;//1E-6;//1E-7;//1E-7;      gute Werte 1 E-6
+	//double MgI_Lambda_apriori= 5E-5;//5E-6 oder -5;
+	//double MgI_Lambda_Hoehe= 5E-7;           // Gut für 3 km Schirtte mit 30 Höhen
+	//double MgI_Lambda_Breite= 5E-6;            // Gut für 3 km Schirtte mit 30 Höhen
+	//double MgI_Lambda_apriori=5E-5; //5E-5;  // Gut für 3 km Schirtte mit 30 Höhen
 
-    //double MgI_Lambda_Hoehe= 1E-5;           // Gut für 1 km Schirtte mit 82 Höhen
-    //double MgI_Lambda_Breite= 1E-5;
-    //double MgI_Lambda_apriori=5E-5;
-    //double MgI_Lambda_letzte_Hoehe=100;
+	//double MgI_Lambda_Hoehe= 1E-5;           // Gut für 1 km Schirtte mit 82 Höhen
+	//double MgI_Lambda_Breite= 1E-5;
+	//double MgI_Lambda_apriori=5E-5;
+	//double MgI_Lambda_letzte_Hoehe=100;
 
- //   double MgI_Lambda_Hoehe= 1E-5;
- //   double MgI_Lambda_Breite= 1E-5;
- //   double MgI_Lambda_apriori=5E-5;
- //   double MgI_Lambda_letzte_Hoehe=1E-32; //100 für ein
+//   double MgI_Lambda_Hoehe= 1E-5;
+//   double MgI_Lambda_Breite= 1E-5;
+//   double MgI_Lambda_apriori=5E-5;
+//   double MgI_Lambda_letzte_Hoehe=1E-32; //100 für ein
 
-      double MgI_Lambda_Hoehe= 1E-5;
-      double MgI_Lambda_Breite= 1E-5;
-      double MgI_Lambda_apriori=5E-2;
-      double MgI_Lambda_letzte_Hoehe=1E-32; //100 für ein
+	double MgI_Lambda_Hoehe = 1E-5;
+	double MgI_Lambda_Breite = 1E-5;
+	double MgI_Lambda_apriori = 5E-2;
+	double MgI_Lambda_letzte_Hoehe = 1E-32; //100 für ein
 
 
-    // Speziesunabhängige Matrizzen
-    MPL_Matrix S_Breite(Grid.m_Anzahl_Punkte,Grid.m_Anzahl_Punkte); // quadratische matrix
-    MPL_Matrix S_Hoehe(Grid.m_Anzahl_Punkte,Grid.m_Anzahl_Punkte); //quadratische matrix
-    MPL_Matrix S_letzte_Hoehe_MgI(Grid.m_Anzahl_Punkte,Grid.m_Anzahl_Punkte); //quadratische matrix
-    // Messfehlermatrix S_y y*y
-    MPL_Matrix S_y_MgI(Saeulendichten_MgI.m_Elementanzahl,Saeulendichten_MgI.m_Elementanzahl); // quadratische matrix
-    MPL_Matrix S_apriori_MgI(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
-    // AMF_Matrix erstellen // Zeilen wie y spalten wie x
-    MPL_Matrix AMF_MgI(Saeulendichten_MgI.m_Elementanzahl, Grid.m_Anzahl_Punkte);
-    // S_Breite, S_Hoehe, S_Apriori, S_y, AMF aufbauen
-    int IERR=0;
-    //cerr<<"MgI Matrizzen aufbaun\n";
-    if(mache_volles_Retrieval_MgI=="ja")
-    {
-        Matrizzen_Aufbauen(S_Breite, S_Hoehe, S_letzte_Hoehe_MgI,MgI_Lambda_letzte_Hoehe,
-                                      S_apriori_MgI, S_y_MgI,
-                                      AMF_MgI, MgI_Lambda_apriori,
-                                      Saeulendichten_Fehler_MgI,
-                                      Spezies_Fenster[1],                        // TODO TODO TODO  1 ist MgI, 0 ist MgII  hier wieder korrigieren
-                                      Grid,
-                                      Ausgewertete_Limbmessung_MgI,
-                                      Ausgewertete_Nadirmessung_MgI,
-                                      Konf, IERR);
-        if(IERR!=0)
-        {
-            cerr<<"Fehler bei Matrizzen_Aufbauen\n";
-            return -1; //Hauptprogramm beenden
-        }
-    }
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // ENDE Spezies Mg I //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Speziesunabhängige Matrizzen
+	MPL_Matrix S_Breite(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte); // quadratische matrix
+	MPL_Matrix S_Hoehe(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte); //quadratische matrix
+	MPL_Matrix S_letzte_Hoehe_MgI(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte); //quadratische matrix
+	// Messfehlermatrix S_y y*y
+	MPL_Matrix S_y_MgI(Saeulendichten_MgI.m_Elementanzahl, Saeulendichten_MgI.m_Elementanzahl); // quadratische matrix
+	MPL_Matrix S_apriori_MgI(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
+	// AMF_Matrix erstellen // Zeilen wie y spalten wie x
+	MPL_Matrix AMF_MgI(Saeulendichten_MgI.m_Elementanzahl, Grid.m_Anzahl_Punkte);
+	// S_Breite, S_Hoehe, S_Apriori, S_y, AMF aufbauen
+	int IERR = 0;
+	//cerr<<"MgI Matrizzen aufbaun\n";
+	if (mache_volles_Retrieval_MgI == "ja") {
+		Matrizzen_Aufbauen(S_Breite, S_Hoehe, S_letzte_Hoehe_MgI, MgI_Lambda_letzte_Hoehe,
+						   S_apriori_MgI, S_y_MgI,
+						   AMF_MgI, MgI_Lambda_apriori,
+						   Saeulendichten_Fehler_MgI,
+						   Spezies_Fenster[1],                        // TODO TODO TODO  1 ist MgI, 0 ist MgII  hier wieder korrigieren
+						   Grid,
+						   Ausgewertete_Limbmessung_MgI,
+						   Ausgewertete_Nadirmessung_MgI,
+						   Konf, IERR);
+		if (IERR != 0) {
+			cerr << "Fehler bei Matrizzen_Aufbauen\n";
+			return -1; //Hauptprogramm beenden
+		}
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// ENDE Spezies Mg I //
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Spezies Mg II //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // einen Vektor der Dichte_n
-    MPL_Matrix Dichte_n_MgII(Grid.m_Anzahl_Punkte,1); //Spaltenvektor
-    Dichte_n_MgII.Null_Initialisierung();
-    //Dichte_n_MgI.in_Datei_speichern("/tmp/mlangowski/0/Dichte_n_MgI");
-    // einen Vektor x_a für die a-priori-Lösung der Dichte (oder Startwert usw)
-    MPL_Matrix Dichte_apriori_MgII(Grid.m_Anzahl_Punkte,1); //Spaltenvektor
-    Dichte_apriori_MgII.Null_Initialisierung();  // Null als Startwert
-     // Vektor mit Zeilendichten  für alle Messungen einer Spezies
-    MPL_Matrix S_letzte_Hoehe_MgII(Grid.m_Anzahl_Punkte,Grid.m_Anzahl_Punkte); //quadratische matrix
-    MPL_Matrix Saeulendichten_MgII( Ausgewertete_Limbmessung_MgII.size()+Ausgewertete_Nadirmessung_MgII.size(),1); //Spaltenvektor
-    MPL_Matrix Saeulendichten_Fehler_MgII( Ausgewertete_Limbmessung_MgII.size()+Ausgewertete_Nadirmessung_MgII.size(),1); //Spaltenvektor
-    // Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
-    // Limb MgII
-    //cerr<<"MgII Limb\n";
-    for (unsigned int i=0;i<Ausgewertete_Limbmessung_MgII.size();i++)
-    {
-        Saeulendichten_MgII(i)=Ausgewertete_Limbmessung_MgII[i].m_Zeilendichte;
-        Saeulendichten_Fehler_MgII(i)=Ausgewertete_Limbmessung_MgII[i].m_Fehler_Zeilendichten;
-    }
-    // Nadir MgII
-    //cerr<<"MgII Nadir\n";
-    for (unsigned int i=Ausgewertete_Limbmessung_MgII.size();i<Ausgewertete_Limbmessung_MgII.size()+Ausgewertete_Nadirmessung_MgII.size();i++)
-    {
-        int Nadir_i=i-Ausgewertete_Limbmessung_MgII.size();
-        Saeulendichten_MgII(i)=Ausgewertete_Nadirmessung_MgII[Nadir_i].m_Zeilendichte;
-        Saeulendichten_Fehler_MgII(i)=Ausgewertete_Nadirmessung_MgII[Nadir_i].m_Fehler_Zeilendichten;
-    }
-    //Ende Säulendichten und Fehler auffüllen
-    // Konfiguration bis januar 2011
-    //double MgII_Lambda_Hoehe= 5E-6;//5E-6;//5E-6;//5E-6;
-    //double MgII_Lambda_Breite= 1E-6;//1E-6;//1E-7;//1E-7;
-    //double MgII_Lambda_apriori= 1E-3;//5E-6 oder -5;
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Spezies Mg II //
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// einen Vektor der Dichte_n
+	MPL_Matrix Dichte_n_MgII(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
+	Dichte_n_MgII.Null_Initialisierung();
+	//Dichte_n_MgI.in_Datei_speichern("/tmp/mlangowski/0/Dichte_n_MgI");
+	// einen Vektor x_a für die a-priori-Lösung der Dichte (oder Startwert usw)
+	MPL_Matrix Dichte_apriori_MgII(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
+	Dichte_apriori_MgII.Null_Initialisierung();  // Null als Startwert
+	// Vektor mit Zeilendichten  für alle Messungen einer Spezies
+	MPL_Matrix S_letzte_Hoehe_MgII(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte); //quadratische matrix
+	MPL_Matrix Saeulendichten_MgII(Ausgewertete_Limbmessung_MgII.size() + Ausgewertete_Nadirmessung_MgII.size(), 1); //Spaltenvektor
+	MPL_Matrix Saeulendichten_Fehler_MgII(Ausgewertete_Limbmessung_MgII.size() + Ausgewertete_Nadirmessung_MgII.size(), 1); //Spaltenvektor
+	// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
+	// Limb MgII
+	//cerr<<"MgII Limb\n";
+	for (unsigned int i = 0; i < Ausgewertete_Limbmessung_MgII.size(); i++) {
+		Saeulendichten_MgII(i) = Ausgewertete_Limbmessung_MgII[i].m_Zeilendichte;
+		Saeulendichten_Fehler_MgII(i) = Ausgewertete_Limbmessung_MgII[i].m_Fehler_Zeilendichten;
+	}
+	// Nadir MgII
+	//cerr<<"MgII Nadir\n";
+	for (unsigned int i = Ausgewertete_Limbmessung_MgII.size(); i < Ausgewertete_Limbmessung_MgII.size() + Ausgewertete_Nadirmessung_MgII.size(); i++) {
+		int Nadir_i = i - Ausgewertete_Limbmessung_MgII.size();
+		Saeulendichten_MgII(i) = Ausgewertete_Nadirmessung_MgII[Nadir_i].m_Zeilendichte;
+		Saeulendichten_Fehler_MgII(i) = Ausgewertete_Nadirmessung_MgII[Nadir_i].m_Fehler_Zeilendichten;
+	}
+	//Ende Säulendichten und Fehler auffüllen
+	// Konfiguration bis januar 2011
+	//double MgII_Lambda_Hoehe= 5E-6;//5E-6;//5E-6;//5E-6;
+	//double MgII_Lambda_Breite= 1E-6;//1E-6;//1E-7;//1E-7;
+	//double MgII_Lambda_apriori= 1E-3;//5E-6 oder -5;
 
-    //double MgII_Lambda_Hoehe= 5E-7;  // für 3km
-    double MgII_Lambda_Hoehe= 1E-5;  // für 1km
-    double MgII_Lambda_Breite= 1E-5;
-    double MgII_Lambda_apriori= 5E-4;
-    double MgII_Lambda_letzte_Hoehe=1E-32; //100 für ein
-    // Messfehlermatrix S_y y*y
-    MPL_Matrix S_y_MgII(Saeulendichten_MgII.m_Elementanzahl,Saeulendichten_MgII.m_Elementanzahl); // quadratische matrix
-    MPL_Matrix S_apriori_MgII(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
-    // AMF_Matrix erstellen // Zeilen wie y spalten wie x
-    MPL_Matrix AMF_MgII(Saeulendichten_MgII.m_Elementanzahl, Grid.m_Anzahl_Punkte);
-    // S_Breite, S_Hoehe, S_Apriori, S_y, AMF aufbauen
-    IERR=0;
-    //cerr<<"MgI Matrizzen aufbaun\n";
-    if(mache_volles_Retrieval_MgII=="ja")
-    {
-        Matrizzen_Aufbauen(S_Breite, S_Hoehe,S_letzte_Hoehe_MgII,MgII_Lambda_letzte_Hoehe,
-                                      S_apriori_MgII, S_y_MgII,
-                                      AMF_MgII, MgII_Lambda_apriori,
-                                      Saeulendichten_Fehler_MgII,
-                                      Spezies_Fenster[0],                        // TODO TODO TODO  1 ist MgI, 0 ist MgII  hier wieder korrigieren
-                                      Grid,
-                                      Ausgewertete_Limbmessung_MgII,
-                                      Ausgewertete_Nadirmessung_MgII,
-                                      Konf, IERR);
-        if(IERR!=0)
-        {
-            cerr<<"Fehler bei Matrizzen_Aufbauen\n";
-            return -1; //Hauptprogramm beenden
-        }
-    }
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // ENDE Spezies Mg II //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//double MgII_Lambda_Hoehe= 5E-7;  // für 3km
+	double MgII_Lambda_Hoehe = 1E-5; // für 1km
+	double MgII_Lambda_Breite = 1E-5;
+	double MgII_Lambda_apriori = 5E-4;
+	double MgII_Lambda_letzte_Hoehe = 1E-32; //100 für ein
+	// Messfehlermatrix S_y y*y
+	MPL_Matrix S_y_MgII(Saeulendichten_MgII.m_Elementanzahl, Saeulendichten_MgII.m_Elementanzahl); // quadratische matrix
+	MPL_Matrix S_apriori_MgII(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
+	// AMF_Matrix erstellen // Zeilen wie y spalten wie x
+	MPL_Matrix AMF_MgII(Saeulendichten_MgII.m_Elementanzahl, Grid.m_Anzahl_Punkte);
+	// S_Breite, S_Hoehe, S_Apriori, S_y, AMF aufbauen
+	IERR = 0;
+	//cerr<<"MgI Matrizzen aufbaun\n";
+	if (mache_volles_Retrieval_MgII == "ja") {
+		Matrizzen_Aufbauen(S_Breite, S_Hoehe, S_letzte_Hoehe_MgII, MgII_Lambda_letzte_Hoehe,
+						   S_apriori_MgII, S_y_MgII,
+						   AMF_MgII, MgII_Lambda_apriori,
+						   Saeulendichten_Fehler_MgII,
+						   Spezies_Fenster[0],                        // TODO TODO TODO  1 ist MgI, 0 ist MgII  hier wieder korrigieren
+						   Grid,
+						   Ausgewertete_Limbmessung_MgII,
+						   Ausgewertete_Nadirmessung_MgII,
+						   Konf, IERR);
+		if (IERR != 0) {
+			cerr << "Fehler bei Matrizzen_Aufbauen\n";
+			return -1; //Hauptprogramm beenden
+		}
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// ENDE Spezies Mg II //
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Spezies unbekannte //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // einen Vektor der Dichte_n
-    MPL_Matrix Dichte_n_unknown(Grid.m_Anzahl_Punkte,1); //Spaltenvektor
-    Dichte_n_unknown.Null_Initialisierung();
-    //Dichte_n_MgI.in_Datei_speichern("/tmp/mlangowski/0/Dichte_n_MgI");
-    // einen Vektor x_a für die a-priori-Lösung der Dichte (oder Startwert usw)
-    MPL_Matrix Dichte_apriori_unknown(Grid.m_Anzahl_Punkte,1); //Spaltenvektor
-    Dichte_apriori_unknown.Null_Initialisierung();  // Null als Startwert
-    MPL_Matrix S_letzte_Hoehe_unknown(Grid.m_Anzahl_Punkte,Grid.m_Anzahl_Punkte); //quadratische matrix
-     // Vektor mit Zeilendichten  für alle Messungen einer Spezies
-    MPL_Matrix Saeulendichten_unknown( Ausgewertete_Limbmessung_unknown.size()+Ausgewertete_Nadirmessung_unknown.size(),1); //Spaltenvektor
-    MPL_Matrix Saeulendichten_Fehler_unknown( Ausgewertete_Limbmessung_unknown.size()+Ausgewertete_Nadirmessung_unknown.size(),1); //Spaltenvektor
-    // Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
-    // Limb unknown
-    //cerr<<"unknown Limb\n";
-    for (unsigned int i=0;i<Ausgewertete_Limbmessung_unknown.size();i++)
-    {
-        Saeulendichten_unknown(i)=Ausgewertete_Limbmessung_unknown[i].m_Zeilendichte;
-        Saeulendichten_Fehler_unknown(i)=Ausgewertete_Limbmessung_unknown[i].m_Fehler_Zeilendichten;
-    }
-    // Nadir unknown
-    //cerr<<"unknown Nadir\n";
-    for (unsigned int i=Ausgewertete_Limbmessung_unknown.size();i<Ausgewertete_Limbmessung_unknown.size()+Ausgewertete_Nadirmessung_unknown.size();i++)
-    {
-        int Nadir_i=i-Ausgewertete_Limbmessung_unknown.size();
-        Saeulendichten_unknown(i)=Ausgewertete_Nadirmessung_unknown[Nadir_i].m_Zeilendichte;
-        Saeulendichten_Fehler_unknown(i)=Ausgewertete_Nadirmessung_unknown[Nadir_i].m_Fehler_Zeilendichten;
-    }
-    //Ende Säulendichten und Fehler auffüllen
-    double unknown_Lambda_Hoehe= 5E-6;//5E-6;//5E-6;//5E-6;
-    double unknown_Lambda_Breite= 1E-6;//1E-6;//1E-7;//1E-7;
-    double unknown_Lambda_apriori= 1E-14; //1E-3;//5E-6 oder -5;
-    double unknown_Lambda_letzte_Hoehe=1E-32; //100 für ein
-    // Messfehlermatrix S_y y*y
-    MPL_Matrix S_y_unknown(Saeulendichten_unknown.m_Elementanzahl,Saeulendichten_unknown.m_Elementanzahl); // quadratische matrix
-    MPL_Matrix S_apriori_unknown(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
-    // AMF_Matrix erstellen // Zeilen wie y spalten wie x
-    MPL_Matrix AMF_unknown(Saeulendichten_unknown.m_Elementanzahl, Grid.m_Anzahl_Punkte);
-    // S_Breite, S_Hoehe, S_Apriori, S_y, AMF aufbauen
-    IERR=0;
-    //cerr<<"MgI Matrizzen aufbaun\n";
-    if(mache_volles_Retrieval_unknown=="ja")
-    {   Matrizzen_Aufbauen(S_Breite, S_Hoehe, S_letzte_Hoehe_unknown,unknown_Lambda_letzte_Hoehe,
-                                      S_apriori_unknown, S_y_unknown,
-                                      AMF_unknown, unknown_Lambda_apriori,
-                                      Saeulendichten_Fehler_unknown,
-                                      Spezies_Fenster[2],                        // TODO TODO TODO  1 ist MgI, 0 ist MgII  hier wieder korrigieren
-                                      Grid,
-                                      Ausgewertete_Limbmessung_unknown,
-                                      Ausgewertete_Nadirmessung_unknown,
-                                      Konf, IERR);
-        if(IERR!=0)
-        {
-            cerr<<"Fehler bei Matrizzen_Aufbauen\n";
-            return -1; //Hauptprogramm beenden
-        }
-    }
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // ENDE Spezies unknown
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Spezies unbekannte //
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// einen Vektor der Dichte_n
+	MPL_Matrix Dichte_n_unknown(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
+	Dichte_n_unknown.Null_Initialisierung();
+	//Dichte_n_MgI.in_Datei_speichern("/tmp/mlangowski/0/Dichte_n_MgI");
+	// einen Vektor x_a für die a-priori-Lösung der Dichte (oder Startwert usw)
+	MPL_Matrix Dichte_apriori_unknown(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
+	Dichte_apriori_unknown.Null_Initialisierung();  // Null als Startwert
+	MPL_Matrix S_letzte_Hoehe_unknown(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte); //quadratische matrix
+	// Vektor mit Zeilendichten  für alle Messungen einer Spezies
+	MPL_Matrix Saeulendichten_unknown(Ausgewertete_Limbmessung_unknown.size() + Ausgewertete_Nadirmessung_unknown.size(), 1); //Spaltenvektor
+	MPL_Matrix Saeulendichten_Fehler_unknown(Ausgewertete_Limbmessung_unknown.size() + Ausgewertete_Nadirmessung_unknown.size(), 1); //Spaltenvektor
+	// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
+	// Limb unknown
+	//cerr<<"unknown Limb\n";
+	for (unsigned int i = 0; i < Ausgewertete_Limbmessung_unknown.size(); i++) {
+		Saeulendichten_unknown(i) = Ausgewertete_Limbmessung_unknown[i].m_Zeilendichte;
+		Saeulendichten_Fehler_unknown(i) = Ausgewertete_Limbmessung_unknown[i].m_Fehler_Zeilendichten;
+	}
+	// Nadir unknown
+	//cerr<<"unknown Nadir\n";
+	for (unsigned int i = Ausgewertete_Limbmessung_unknown.size(); i < Ausgewertete_Limbmessung_unknown.size() + Ausgewertete_Nadirmessung_unknown.size(); i++) {
+		int Nadir_i = i - Ausgewertete_Limbmessung_unknown.size();
+		Saeulendichten_unknown(i) = Ausgewertete_Nadirmessung_unknown[Nadir_i].m_Zeilendichte;
+		Saeulendichten_Fehler_unknown(i) = Ausgewertete_Nadirmessung_unknown[Nadir_i].m_Fehler_Zeilendichten;
+	}
+	//Ende Säulendichten und Fehler auffüllen
+	double unknown_Lambda_Hoehe = 5E-6; //5E-6;//5E-6;//5E-6;
+	double unknown_Lambda_Breite = 1E-6; //1E-6;//1E-7;//1E-7;
+	double unknown_Lambda_apriori = 1E-14; //1E-3;//5E-6 oder -5;
+	double unknown_Lambda_letzte_Hoehe = 1E-32; //100 für ein
+	// Messfehlermatrix S_y y*y
+	MPL_Matrix S_y_unknown(Saeulendichten_unknown.m_Elementanzahl, Saeulendichten_unknown.m_Elementanzahl); // quadratische matrix
+	MPL_Matrix S_apriori_unknown(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
+	// AMF_Matrix erstellen // Zeilen wie y spalten wie x
+	MPL_Matrix AMF_unknown(Saeulendichten_unknown.m_Elementanzahl, Grid.m_Anzahl_Punkte);
+	// S_Breite, S_Hoehe, S_Apriori, S_y, AMF aufbauen
+	IERR = 0;
+	//cerr<<"MgI Matrizzen aufbaun\n";
+	if (mache_volles_Retrieval_unknown == "ja") {
+		Matrizzen_Aufbauen(S_Breite, S_Hoehe, S_letzte_Hoehe_unknown, unknown_Lambda_letzte_Hoehe,
+						   S_apriori_unknown, S_y_unknown,
+						   AMF_unknown, unknown_Lambda_apriori,
+						   Saeulendichten_Fehler_unknown,
+						   Spezies_Fenster[2],                        // TODO TODO TODO  1 ist MgI, 0 ist MgII  hier wieder korrigieren
+						   Grid,
+						   Ausgewertete_Limbmessung_unknown,
+						   Ausgewertete_Nadirmessung_unknown,
+						   Konf, IERR);
+		if (IERR != 0) {
+			cerr << "Fehler bei Matrizzen_Aufbauen\n";
+			return -1; //Hauptprogramm beenden
+		}
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// ENDE Spezies unknown
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Spezies FeI //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // einen Vektor der Dichte_n
-    MPL_Matrix Dichte_n_FeI(Grid.m_Anzahl_Punkte,1); //Spaltenvektor
-    Dichte_n_FeI.Null_Initialisierung();
-    //Dichte_n_MgI.in_Datei_speichern("/tmp/mlangowski/0/Dichte_n_MgI");
-    // einen Vektor x_a für die a-priori-Lösung der Dichte (oder Startwert usw)
-    MPL_Matrix Dichte_apriori_FeI(Grid.m_Anzahl_Punkte,1); //Spaltenvektor
-    Dichte_apriori_FeI.Null_Initialisierung();  // Null als Startwert
-    MPL_Matrix S_letzte_Hoehe_FeI(Grid.m_Anzahl_Punkte,Grid.m_Anzahl_Punkte); //quadratische matrix
-     // Vektor mit Zeilendichten  für alle Messungen einer Spezies
-    MPL_Matrix Saeulendichten_FeI( Ausgewertete_Limbmessung_FeI.size()+Ausgewertete_Nadirmessung_FeI.size(),1); //Spaltenvektor
-    MPL_Matrix Saeulendichten_Fehler_FeI( Ausgewertete_Limbmessung_FeI.size()+Ausgewertete_Nadirmessung_FeI.size(),1); //Spaltenvektor
-    // Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
-    for (unsigned int i=0;i<Ausgewertete_Limbmessung_FeI.size();i++)
-    {
-        Saeulendichten_FeI(i)=Ausgewertete_Limbmessung_FeI[i].m_Zeilendichte;
-        Saeulendichten_Fehler_FeI(i)=Ausgewertete_Limbmessung_FeI[i].m_Fehler_Zeilendichten;
-    }
-    for (unsigned int i=Ausgewertete_Limbmessung_FeI.size();i<Ausgewertete_Limbmessung_FeI.size()+Ausgewertete_Nadirmessung_FeI.size();i++)
-    {
-        int Nadir_i=i-Ausgewertete_Limbmessung_FeI.size();
-        Saeulendichten_FeI(i)=Ausgewertete_Nadirmessung_FeI[Nadir_i].m_Zeilendichte;
-        Saeulendichten_Fehler_FeI(i)=Ausgewertete_Nadirmessung_FeI[Nadir_i].m_Fehler_Zeilendichten;
-    }
-    //Ende Säulendichten und Fehler auffüllen
-    double FeI_Lambda_Hoehe=1E-8;// 1E-5;
-    double FeI_Lambda_Breite=1E-8;// 1E-5;
-    double FeI_Lambda_apriori=1E-10;// 5E-5;
-    double FeI_Lambda_letzte_Hoehe=1E-32; //100 für ein
-    // Messfehlermatrix S_y y*y
-    MPL_Matrix S_y_FeI(Saeulendichten_FeI.m_Elementanzahl,Saeulendichten_FeI.m_Elementanzahl); // quadratische matrix
-    MPL_Matrix S_apriori_FeI(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
-    // AMF_Matrix erstellen // Zeilen wie y spalten wie x
-    MPL_Matrix AMF_FeI(Saeulendichten_FeI.m_Elementanzahl, Grid.m_Anzahl_Punkte);
-    // S_Breite, S_Hoehe, S_Apriori, S_y, AMF aufbauen
-    IERR=0;
-    //cerr<<"MgI Matrizzen aufbaun\n";
-    if(mache_volles_Retrieval_FeI=="ja")
-    {   Matrizzen_Aufbauen(S_Breite, S_Hoehe, S_letzte_Hoehe_FeI,FeI_Lambda_letzte_Hoehe,
-                                      S_apriori_FeI, S_y_FeI,
-                                      AMF_FeI, FeI_Lambda_apriori,
-                                      Saeulendichten_Fehler_FeI,
-                                      Spezies_Fenster[3],                        // TODO TODO TODO  Index setzten
-                                      Grid,
-                                      Ausgewertete_Limbmessung_FeI,
-                                      Ausgewertete_Nadirmessung_FeI,
-                                      Konf, IERR);
-        if(IERR!=0)
-        {
-            cerr<<"Fehler bei Matrizzen_Aufbauen\n";
-            return -1; //Hauptprogramm beenden
-        }
-    }
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // ENDE Spezies FeI
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Spezies FeI //
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// einen Vektor der Dichte_n
+	MPL_Matrix Dichte_n_FeI(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
+	Dichte_n_FeI.Null_Initialisierung();
+	//Dichte_n_MgI.in_Datei_speichern("/tmp/mlangowski/0/Dichte_n_MgI");
+	// einen Vektor x_a für die a-priori-Lösung der Dichte (oder Startwert usw)
+	MPL_Matrix Dichte_apriori_FeI(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
+	Dichte_apriori_FeI.Null_Initialisierung();  // Null als Startwert
+	MPL_Matrix S_letzte_Hoehe_FeI(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte); //quadratische matrix
+	// Vektor mit Zeilendichten  für alle Messungen einer Spezies
+	MPL_Matrix Saeulendichten_FeI(Ausgewertete_Limbmessung_FeI.size() + Ausgewertete_Nadirmessung_FeI.size(), 1); //Spaltenvektor
+	MPL_Matrix Saeulendichten_Fehler_FeI(Ausgewertete_Limbmessung_FeI.size() + Ausgewertete_Nadirmessung_FeI.size(), 1); //Spaltenvektor
+	// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
+	for (unsigned int i = 0; i < Ausgewertete_Limbmessung_FeI.size(); i++) {
+		Saeulendichten_FeI(i) = Ausgewertete_Limbmessung_FeI[i].m_Zeilendichte;
+		Saeulendichten_Fehler_FeI(i) = Ausgewertete_Limbmessung_FeI[i].m_Fehler_Zeilendichten;
+	}
+	for (unsigned int i = Ausgewertete_Limbmessung_FeI.size(); i < Ausgewertete_Limbmessung_FeI.size() + Ausgewertete_Nadirmessung_FeI.size(); i++) {
+		int Nadir_i = i - Ausgewertete_Limbmessung_FeI.size();
+		Saeulendichten_FeI(i) = Ausgewertete_Nadirmessung_FeI[Nadir_i].m_Zeilendichte;
+		Saeulendichten_Fehler_FeI(i) = Ausgewertete_Nadirmessung_FeI[Nadir_i].m_Fehler_Zeilendichten;
+	}
+	//Ende Säulendichten und Fehler auffüllen
+	double FeI_Lambda_Hoehe = 1E-8; // 1E-5;
+	double FeI_Lambda_Breite = 1E-8; // 1E-5;
+	double FeI_Lambda_apriori = 1E-10; // 5E-5;
+	double FeI_Lambda_letzte_Hoehe = 1E-32; //100 für ein
+	// Messfehlermatrix S_y y*y
+	MPL_Matrix S_y_FeI(Saeulendichten_FeI.m_Elementanzahl, Saeulendichten_FeI.m_Elementanzahl); // quadratische matrix
+	MPL_Matrix S_apriori_FeI(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
+	// AMF_Matrix erstellen // Zeilen wie y spalten wie x
+	MPL_Matrix AMF_FeI(Saeulendichten_FeI.m_Elementanzahl, Grid.m_Anzahl_Punkte);
+	// S_Breite, S_Hoehe, S_Apriori, S_y, AMF aufbauen
+	IERR = 0;
+	//cerr<<"MgI Matrizzen aufbaun\n";
+	if (mache_volles_Retrieval_FeI == "ja") {
+		Matrizzen_Aufbauen(S_Breite, S_Hoehe, S_letzte_Hoehe_FeI, FeI_Lambda_letzte_Hoehe,
+						   S_apriori_FeI, S_y_FeI,
+						   AMF_FeI, FeI_Lambda_apriori,
+						   Saeulendichten_Fehler_FeI,
+						   Spezies_Fenster[3],                        // TODO TODO TODO  Index setzten
+						   Grid,
+						   Ausgewertete_Limbmessung_FeI,
+						   Ausgewertete_Nadirmessung_FeI,
+						   Konf, IERR);
+		if (IERR != 0) {
+			cerr << "Fehler bei Matrizzen_Aufbauen\n";
+			return -1; //Hauptprogramm beenden
+		}
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// ENDE Spezies FeI
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Matrizzen sind aufgebaut  // Schön wärs 7.7.2010...erstmal weiter, weil es beim Raytracing noch probleme gibt
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Matrizzen sind aufgebaut  // wer hat an der Uhr gedreht 14.9.2010; getestet 4.10.2010
-    //                                       // jetzt auch für Mg II.... oha...schon 7.12.2010
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Matrizzen sind aufgebaut  // Schön wärs 7.7.2010...erstmal weiter, weil es beim Raytracing noch probleme gibt
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Matrizzen sind aufgebaut  // wer hat an der Uhr gedreht 14.9.2010; getestet 4.10.2010
+	//                                       // jetzt auch für Mg II.... oha...schon 7.12.2010
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    time(&Teil3_End);
-    T3_Dauer=Teil3_End-Teil3_Start;
-    /*****************************************************************************************************************************************
-     ENDE TEIL 3
-    ******************************************************************************************************************************************/
+	time(&Teil3_End);
+	T3_Dauer = Teil3_End - Teil3_Start;
+	/*****************************************************************************************************************************************
+	 ENDE TEIL 3
+	******************************************************************************************************************************************/
 
-    /*****************************************************************************************************************************************
-     TEIL 4 AUSFÜHREN DES RETRIEVALS
-     AUFSTELLEN UND LÖSEN DER NORMALGLEICHUNG
-     ******************************************************************************************************************************************/
-    cerr<<"Teil4\n";
-    time(&Teil4_Start);
+	/*****************************************************************************************************************************************
+	 TEIL 4 AUSFÜHREN DES RETRIEVALS
+	 AUFSTELLEN UND LÖSEN DER NORMALGLEICHUNG
+	 ******************************************************************************************************************************************/
+	cerr << "Teil4\n";
+	time(&Teil4_Start);
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Iteration des Retrievals
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////
-    // Spezies Mg I //
-    /////////////////////////
-    //Dichte_n_MgI.in_Datei_speichern("/tmp/mlangowski/0/Dichte_n_MgI");
-    //MPL_Matrix bla;
-    //bla=Dichte_n_MgI;
-    // TODO neue Version fit machen
-    if(mache_volles_Retrieval_MgI=="ja")
-    {   Retrievaliteration_old(Dichte_n_MgI, Dichte_apriori_MgI, Saeulendichten_MgI,
-                             S_apriori_MgI,S_y_MgI,S_Breite,S_Hoehe, S_letzte_Hoehe_MgI, MgI_Lambda_Breite, MgI_Lambda_Hoehe,
-                             AMF_MgI, Konf);
-    }
-    /////////////////////////
-    // Spezies Mg II//
-    /////////////////////////
-    if(mache_volles_Retrieval_MgII=="ja")
-    {   Retrievaliteration_old(Dichte_n_MgII, Dichte_apriori_MgII, Saeulendichten_MgII,
-                             S_apriori_MgII,S_y_MgII,S_Breite,S_Hoehe, S_letzte_Hoehe_MgII, MgII_Lambda_Breite, MgII_Lambda_Hoehe,
-                             AMF_MgII, Konf);
-    }
-    /////////////////////////
-    // Spezies unknown//
-    /////////////////////////
-    if(mache_volles_Retrieval_unknown=="ja")
-    {   Retrievaliteration_old(Dichte_n_unknown, Dichte_apriori_unknown, Saeulendichten_unknown,
-                             S_apriori_unknown,S_y_unknown,S_Breite,S_Hoehe, S_letzte_Hoehe_unknown, unknown_Lambda_Breite, unknown_Lambda_Hoehe,
-                             AMF_unknown, Konf);
-    }
-    /////////////////////////
-    // Spezies FeI   //
-    /////////////////////////
-    if(mache_volles_Retrieval_FeI=="ja")
-    {   Retrievaliteration_old(Dichte_n_FeI, Dichte_apriori_FeI, Saeulendichten_FeI,
-                             S_apriori_FeI,S_y_FeI,S_Breite,S_Hoehe, S_letzte_Hoehe_FeI, FeI_Lambda_Breite, FeI_Lambda_Hoehe,
-                             AMF_FeI, Konf);
-    }
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Iteration des Retrievals
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////
+	// Spezies Mg I //
+	/////////////////////////
+	//Dichte_n_MgI.in_Datei_speichern("/tmp/mlangowski/0/Dichte_n_MgI");
+	//MPL_Matrix bla;
+	//bla=Dichte_n_MgI;
+	// TODO neue Version fit machen
+	if (mache_volles_Retrieval_MgI == "ja") {
+		Retrievaliteration_old(Dichte_n_MgI, Dichte_apriori_MgI, Saeulendichten_MgI,
+							   S_apriori_MgI, S_y_MgI, S_Breite, S_Hoehe, S_letzte_Hoehe_MgI, MgI_Lambda_Breite, MgI_Lambda_Hoehe,
+							   AMF_MgI, Konf);
+	}
+	/////////////////////////
+	// Spezies Mg II//
+	/////////////////////////
+	if (mache_volles_Retrieval_MgII == "ja") {
+		Retrievaliteration_old(Dichte_n_MgII, Dichte_apriori_MgII, Saeulendichten_MgII,
+							   S_apriori_MgII, S_y_MgII, S_Breite, S_Hoehe, S_letzte_Hoehe_MgII, MgII_Lambda_Breite, MgII_Lambda_Hoehe,
+							   AMF_MgII, Konf);
+	}
+	/////////////////////////
+	// Spezies unknown//
+	/////////////////////////
+	if (mache_volles_Retrieval_unknown == "ja") {
+		Retrievaliteration_old(Dichte_n_unknown, Dichte_apriori_unknown, Saeulendichten_unknown,
+							   S_apriori_unknown, S_y_unknown, S_Breite, S_Hoehe, S_letzte_Hoehe_unknown, unknown_Lambda_Breite, unknown_Lambda_Hoehe,
+							   AMF_unknown, Konf);
+	}
+	/////////////////////////
+	// Spezies FeI   //
+	/////////////////////////
+	if (mache_volles_Retrieval_FeI == "ja") {
+		Retrievaliteration_old(Dichte_n_FeI, Dichte_apriori_FeI, Saeulendichten_FeI,
+							   S_apriori_FeI, S_y_FeI, S_Breite, S_Hoehe, S_letzte_Hoehe_FeI, FeI_Lambda_Breite, FeI_Lambda_Hoehe,
+							   AMF_FeI, Konf);
+	}
 
 
-    time(&Teil4_End);
-    T4_Dauer=Teil4_End-Teil4_Start;
-    /*****************************************************************************************************************************************
-    TEIL 5 FEHLERABSCHÄTZUNG
-    BERECHNUNG DER AVERAGING-KERNEL MATRIX UND DER FEHLERMATRIX
-    ******************************************************************************************************************************************/
-    cerr<<"Teil5\n";
-    time(&Teil5_Start);
+	time(&Teil4_End);
+	T4_Dauer = Teil4_End - Teil4_Start;
+	/*****************************************************************************************************************************************
+	TEIL 5 FEHLERABSCHÄTZUNG
+	BERECHNUNG DER AVERAGING-KERNEL MATRIX UND DER FEHLERMATRIX
+	******************************************************************************************************************************************/
+	cerr << "Teil5\n";
+	time(&Teil5_Start);
 
-    // todolist
-    // die LHS Seite der Normalgleichung berechnen
-    // zum Invertieren 1 Matrix anhängen und Diagonalisieren -> Fehlermatrix
-    // die Averaging Kernels erhält man mit Multiplikation der Fehlermatrix mit AMF^T S_y AMF
-    //Retrievalfehler_Abschaetzung();
+	// todolist
+	// die LHS Seite der Normalgleichung berechnen
+	// zum Invertieren 1 Matrix anhängen und Diagonalisieren -> Fehlermatrix
+	// die Averaging Kernels erhält man mit Multiplikation der Fehlermatrix mit AMF^T S_y AMF
+	//Retrievalfehler_Abschaetzung();
 
-    /////////////////////////
-    // Spezies MgI //
-    /////////////////////////
-    MPL_Matrix S_x_MgI(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
-    MPL_Matrix AKM_MgI(Grid.m_Anzahl_Punkte,Grid.m_Anzahl_Punkte); //Averaging Kernel Matrix
-    if(mache_volles_Retrieval_MgI=="ja")
-    {
-        Retrievalfehler_Abschaetzung(S_x_MgI, AKM_MgI,
-                                               S_apriori_MgI,S_y_MgI,S_Breite,S_Hoehe,S_letzte_Hoehe_MgI, MgI_Lambda_Breite, MgI_Lambda_Hoehe,
-                                               AMF_MgI, Konf);
-    }
-    /////////////////////////
-    // Spezies MgII //
-    /////////////////////////
-    MPL_Matrix S_x_MgII(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
-    MPL_Matrix AKM_MgII(Grid.m_Anzahl_Punkte,Grid.m_Anzahl_Punkte); //Averaging Kernel Matrix
-    if(mache_volles_Retrieval_MgII=="ja")
-    {        Retrievalfehler_Abschaetzung(S_x_MgII, AKM_MgII,
-                                               S_apriori_MgII,S_y_MgII,S_Breite,S_Hoehe,S_letzte_Hoehe_MgII, MgII_Lambda_Breite, MgII_Lambda_Hoehe,
-                                               AMF_MgII, Konf);
-    }
-    /////////////////////////
-    // Spezies unknown //
-    /////////////////////////
-    MPL_Matrix S_x_unknown(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
-    MPL_Matrix AKM_unknown(Grid.m_Anzahl_Punkte,Grid.m_Anzahl_Punkte); //Averaging Kernel Matrix
-    if(mache_volles_Retrieval_unknown=="ja")
-    {   Retrievalfehler_Abschaetzung(S_x_unknown , AKM_unknown ,
-                                               S_apriori_unknown ,S_y_unknown ,S_Breite,S_Hoehe, S_letzte_Hoehe_unknown, unknown_Lambda_Breite, unknown_Lambda_Hoehe,
-                                               AMF_unknown , Konf);
-    }
-    /////////////////////////
-    // Spezies FeI  //
-    /////////////////////////
-    MPL_Matrix S_x_FeI(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
-    MPL_Matrix AKM_FeI(Grid.m_Anzahl_Punkte,Grid.m_Anzahl_Punkte); //Averaging Kernel Matrix
-    if(mache_volles_Retrieval_FeI=="ja")
-    {   Retrievalfehler_Abschaetzung(S_x_FeI , AKM_FeI ,
-                                               S_apriori_FeI ,S_y_FeI ,S_Breite,S_Hoehe, S_letzte_Hoehe_FeI, FeI_Lambda_Breite, FeI_Lambda_Hoehe,
-                                               AMF_FeI , Konf);
-    }
-    time(&Teil5_End);
-    T5_Dauer=Teil5_End-Teil5_Start;
-    /*****************************************************************************************************************************************
-    ENDE TEIL 5
-     ******************************************************************************************************************************************/
+	/////////////////////////
+	// Spezies MgI //
+	/////////////////////////
+	MPL_Matrix S_x_MgI(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
+	MPL_Matrix AKM_MgI(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte); //Averaging Kernel Matrix
+	if (mache_volles_Retrieval_MgI == "ja") {
+		Retrievalfehler_Abschaetzung(S_x_MgI, AKM_MgI,
+									 S_apriori_MgI, S_y_MgI, S_Breite, S_Hoehe, S_letzte_Hoehe_MgI, MgI_Lambda_Breite, MgI_Lambda_Hoehe,
+									 AMF_MgI, Konf);
+	}
+	/////////////////////////
+	// Spezies MgII //
+	/////////////////////////
+	MPL_Matrix S_x_MgII(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
+	MPL_Matrix AKM_MgII(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte); //Averaging Kernel Matrix
+	if (mache_volles_Retrieval_MgII == "ja") {
+		Retrievalfehler_Abschaetzung(S_x_MgII, AKM_MgII,
+									 S_apriori_MgII, S_y_MgII, S_Breite, S_Hoehe, S_letzte_Hoehe_MgII, MgII_Lambda_Breite, MgII_Lambda_Hoehe,
+									 AMF_MgII, Konf);
+	}
+	/////////////////////////
+	// Spezies unknown //
+	/////////////////////////
+	MPL_Matrix S_x_unknown(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
+	MPL_Matrix AKM_unknown(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte); //Averaging Kernel Matrix
+	if (mache_volles_Retrieval_unknown == "ja") {
+		Retrievalfehler_Abschaetzung(S_x_unknown , AKM_unknown ,
+									 S_apriori_unknown , S_y_unknown , S_Breite, S_Hoehe, S_letzte_Hoehe_unknown, unknown_Lambda_Breite, unknown_Lambda_Hoehe,
+									 AMF_unknown , Konf);
+	}
+	/////////////////////////
+	// Spezies FeI  //
+	/////////////////////////
+	MPL_Matrix S_x_FeI(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
+	MPL_Matrix AKM_FeI(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte); //Averaging Kernel Matrix
+	if (mache_volles_Retrieval_FeI == "ja") {
+		Retrievalfehler_Abschaetzung(S_x_FeI , AKM_FeI ,
+									 S_apriori_FeI , S_y_FeI , S_Breite, S_Hoehe, S_letzte_Hoehe_FeI, FeI_Lambda_Breite, FeI_Lambda_Hoehe,
+									 AMF_FeI , Konf);
+	}
+	time(&Teil5_End);
+	T5_Dauer = Teil5_End - Teil5_Start;
+	/*****************************************************************************************************************************************
+	ENDE TEIL 5
+	 ******************************************************************************************************************************************/
 
-    /*****************************************************************************************************************************************
-    TEIL 6 ERGEBNISAUSGABE
-    DIE ERGEBNISAUSGABE SCHLIEßT DAS PROGRAMM AB
-    ******************************************************************************************************************************************/
-    cerr<<"Teil6\n";
-    time(&Teil6_Start);
-     //int Ausgabe_Dichten(string Dateiname_out,Retrievalgitter Grid, MPL_Matrix Dichten, MPL_Matrix S_x, MPL_Matrix AKM)
-    string Dateiname_out;
-    // MgI /////////////////////
-    Dateiname_out=Arbeitsverzeichnis+"/"+sssss_MgI+Dateiout_Mittelteil;
-    //cout<<"Dateiname_out: "<<Dateiname_out<<"\n";
-    //cout<<"Dateiout_Mittelteil: "<<Dateiout_Mittelteil<<"\n";
-    if(mache_volles_Retrieval_MgI=="ja")
-    {   Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_MgI,  S_x_MgI,  AKM_MgI);}
-    //////////////////////////////
-    // MgII ////////////////////
-    Dateiname_out=Arbeitsverzeichnis+"/"+sssss_MgII+Dateiout_Mittelteil;
-    //cout<<"Dateiname_out: "<<Dateiname_out<<"\n";
-    if(mache_volles_Retrieval_MgII=="ja")
-    {   Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_MgII,  S_x_MgII,  AKM_MgII);}
-    //////////////////////////////
-    // unknown//////////////
-    Dateiname_out=Arbeitsverzeichnis+"/"+sssss_unknown+Dateiout_Mittelteil;
-    //cout<<"Dateiname_out: "<<Dateiname_out<<"\n";
-    if(mache_volles_Retrieval_unknown=="ja")
-    {   Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_unknown,  S_x_unknown,  AKM_unknown);}
-    // FeI//////////////
-    Dateiname_out=Arbeitsverzeichnis+"/"+sssss_FeI+Dateiout_Mittelteil;
-    //cout<<"Dateiname_out: "<<Dateiname_out<<"\n";
-    if(mache_volles_Retrieval_FeI=="ja")
-    {   Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_FeI,  S_x_FeI,  AKM_FeI);}
+	/*****************************************************************************************************************************************
+	TEIL 6 ERGEBNISAUSGABE
+	DIE ERGEBNISAUSGABE SCHLIEßT DAS PROGRAMM AB
+	******************************************************************************************************************************************/
+	cerr << "Teil6\n";
+	time(&Teil6_Start);
+	//int Ausgabe_Dichten(string Dateiname_out,Retrievalgitter Grid, MPL_Matrix Dichten, MPL_Matrix S_x, MPL_Matrix AKM)
+	string Dateiname_out;
+	// MgI /////////////////////
+	Dateiname_out = Arbeitsverzeichnis + "/" + sssss_MgI + Dateiout_Mittelteil;
+	//cout<<"Dateiname_out: "<<Dateiname_out<<"\n";
+	//cout<<"Dateiout_Mittelteil: "<<Dateiout_Mittelteil<<"\n";
+	if (mache_volles_Retrieval_MgI == "ja") {
+		Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_MgI,  S_x_MgI,  AKM_MgI);
+	}
+	//////////////////////////////
+	// MgII ////////////////////
+	Dateiname_out = Arbeitsverzeichnis + "/" + sssss_MgII + Dateiout_Mittelteil;
+	//cout<<"Dateiname_out: "<<Dateiname_out<<"\n";
+	if (mache_volles_Retrieval_MgII == "ja") {
+		Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_MgII,  S_x_MgII,  AKM_MgII);
+	}
+	//////////////////////////////
+	// unknown//////////////
+	Dateiname_out = Arbeitsverzeichnis + "/" + sssss_unknown + Dateiout_Mittelteil;
+	//cout<<"Dateiname_out: "<<Dateiname_out<<"\n";
+	if (mache_volles_Retrieval_unknown == "ja") {
+		Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_unknown,  S_x_unknown,  AKM_unknown);
+	}
+	// FeI//////////////
+	Dateiname_out = Arbeitsverzeichnis + "/" + sssss_FeI + Dateiout_Mittelteil;
+	//cout<<"Dateiname_out: "<<Dateiname_out<<"\n";
+	if (mache_volles_Retrieval_FeI == "ja") {
+		Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_FeI,  S_x_FeI,  AKM_FeI);
+	}
 
-    time(&Teil6_End);
-    T6_Dauer=Teil6_End-Teil6_Start;
-    /*****************************************************************************************************************************************
-    ENDE TEIL 6
-    ******************************************************************************************************************************************/
-    int Messungen_pro_Limbdatei=7;
-    if(untersuche_limb_mesothermo_states=="ja") {Messungen_pro_Limbdatei=25; }
-    cout<<"Aussortierte Limbmessungen:\n";
-    cout<<"Limb Nachtmessungen: "<<Messungen_pro_Limbdatei*counter_Nachtmessungen<<"\n";
-    cout<<"Limb Messungen mit NLCs:"<<Messungen_pro_Limbdatei*counter_NLC_detektiert<<"\n";
-    cout<<"Limb Messungen mit ungenauen Koordinaten: "<<counter_Richtungsvektor_nicht_ok<<"\n";
-    cout<<"Nadir Nachtmessungen: "<<counter_Nachtmessungen_Nadir<<"\n";
-    cout<<"Nadir Nachtdateien: "<<counter_Nadir_Nacht_Dateien<<"\n";
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Zeitmessung
-    time(&timer1);
-    char buf[256];
-    deltaT=timer1-start_zeit;
-    sprintf(buf,"Gesamtlaufzeit des Programms in Sekunden:\t %ld",deltaT);
-    string dum=buf;
-    Nachricht_Schreiben(dum,10,Prioritylevel);
-    sprintf(buf,"Dauer Teilprozess 1 Vorbereitung:\t\t %ld",T1_Dauer);
-    dum=buf;
-    Nachricht_Schreiben(dum,10,Prioritylevel);
-    sprintf(buf,"Dauer Teilprozess 2 Säulendichtenbestimmung:\t %ld",T2_Dauer);
-    dum=buf;
-    Nachricht_Schreiben(dum,10,Prioritylevel);
-    sprintf(buf,"Dauer Teilprozess 3 Aufbau des Gitters:\t\t %ld",T3_Dauer);
-    dum=buf;
-    Nachricht_Schreiben(dum,10,Prioritylevel);
-    dum="Zeit steckt in Teil 3 im wesentlichen in den Raytracing-Schleifen.";
-    Nachricht_Schreiben(dum,10,Prioritylevel);
-    sprintf(buf,"Dauer Teilprozess 4 Dichte-Retrieval:\t\t %ld",T4_Dauer);
-    dum=buf;
-    Nachricht_Schreiben(dum,10,Prioritylevel);
-    sprintf(buf,"Dauer Teilprozess 5 Fehlerabschätzung:\t\t %ld",T5_Dauer);
-    dum=buf;
-    Nachricht_Schreiben(dum,10,Prioritylevel);
-    sprintf(buf,"Dauer Teilprozess 6 Ausgabe:\t\t\t %ld",T6_Dauer);
-    dum=buf;
-    Nachricht_Schreiben(dum,10,Prioritylevel);
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    Nachricht_Schreiben("Beende Programm regulär...",3,Prioritylevel);
+	time(&Teil6_End);
+	T6_Dauer = Teil6_End - Teil6_Start;
+	/*****************************************************************************************************************************************
+	ENDE TEIL 6
+	******************************************************************************************************************************************/
+	int Messungen_pro_Limbdatei = 7;
+	if (untersuche_limb_mesothermo_states == "ja") {
+		Messungen_pro_Limbdatei = 25;
+	}
+	cout << "Aussortierte Limbmessungen:\n";
+	cout << "Limb Nachtmessungen: " << Messungen_pro_Limbdatei *counter_Nachtmessungen << "\n";
+	cout << "Limb Messungen mit NLCs:" << Messungen_pro_Limbdatei *counter_NLC_detektiert << "\n";
+	cout << "Limb Messungen mit ungenauen Koordinaten: " << counter_Richtungsvektor_nicht_ok << "\n";
+	cout << "Nadir Nachtmessungen: " << counter_Nachtmessungen_Nadir << "\n";
+	cout << "Nadir Nachtdateien: " << counter_Nadir_Nacht_Dateien << "\n";
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Zeitmessung
+	time(&timer1);
+	char buf[256];
+	deltaT = timer1 - start_zeit;
+	sprintf(buf, "Gesamtlaufzeit des Programms in Sekunden:\t %ld", deltaT);
+	string dum = buf;
+	Nachricht_Schreiben(dum, 10, Prioritylevel);
+	sprintf(buf, "Dauer Teilprozess 1 Vorbereitung:\t\t %ld", T1_Dauer);
+	dum = buf;
+	Nachricht_Schreiben(dum, 10, Prioritylevel);
+	sprintf(buf, "Dauer Teilprozess 2 Säulendichtenbestimmung:\t %ld", T2_Dauer);
+	dum = buf;
+	Nachricht_Schreiben(dum, 10, Prioritylevel);
+	sprintf(buf, "Dauer Teilprozess 3 Aufbau des Gitters:\t\t %ld", T3_Dauer);
+	dum = buf;
+	Nachricht_Schreiben(dum, 10, Prioritylevel);
+	dum = "Zeit steckt in Teil 3 im wesentlichen in den Raytracing-Schleifen.";
+	Nachricht_Schreiben(dum, 10, Prioritylevel);
+	sprintf(buf, "Dauer Teilprozess 4 Dichte-Retrieval:\t\t %ld", T4_Dauer);
+	dum = buf;
+	Nachricht_Schreiben(dum, 10, Prioritylevel);
+	sprintf(buf, "Dauer Teilprozess 5 Fehlerabschätzung:\t\t %ld", T5_Dauer);
+	dum = buf;
+	Nachricht_Schreiben(dum, 10, Prioritylevel);
+	sprintf(buf, "Dauer Teilprozess 6 Ausgabe:\t\t\t %ld", T6_Dauer);
+	dum = buf;
+	Nachricht_Schreiben(dum, 10, Prioritylevel);
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	Nachricht_Schreiben("Beende Programm regulär...", 3, Prioritylevel);
 	return 0;
 } // Ende Hauptprogramm

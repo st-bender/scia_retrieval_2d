@@ -19,28 +19,28 @@ using namespace std;
 
 class Winkelstatistik
 {
-    public:
-    //Konstruktor
-    Winkelstatistik();
-    //Methoden
-    int Winkel_berechnen_und_einordnen(MPL_Vektor Verbindungsvektor, MPL_Vektor Tangentenpunkt,
-                                                      int& Winkel_OK);
-    void Statistik_auf_Bildschirm_ausgeben();
-    int Statistik_in_Datei_ausgeben(string Dateiname);
+public:
+	//Konstruktor
+	Winkelstatistik();
+	//Methoden
+	int Winkel_berechnen_und_einordnen(MPL_Vektor Verbindungsvektor, MPL_Vektor Tangentenpunkt,
+									   int &Winkel_OK);
+	void Statistik_auf_Bildschirm_ausgeben();
+	int Statistik_in_Datei_ausgeben(string Dateiname);
 
-    int m_counter_0_001;  //winkel zwischen 0 und 0,001Grad
-    int m_counter_0_002;
-    int m_counter_0_005;
-    int m_counter_0_01;
-    int m_counter_0_02;    //Alles bis hier ist OK
-    int m_counter_0_05;    //Das geht noch
-    int m_counter_0_1;     // Ab hier wird so ziemlich alles falsch
-    int m_counter_0_2;
-    int m_counter_0_5;
-    int m_counter_1;
-    int m_counter_2;
-    int m_counter_5;
-    int m_counter_mehr;
+	int m_counter_0_001;  //winkel zwischen 0 und 0,001Grad
+	int m_counter_0_002;
+	int m_counter_0_005;
+	int m_counter_0_01;
+	int m_counter_0_02;    //Alles bis hier ist OK
+	int m_counter_0_05;    //Das geht noch
+	int m_counter_0_1;     // Ab hier wird so ziemlich alles falsch
+	int m_counter_0_2;
+	int m_counter_0_5;
+	int m_counter_1;
+	int m_counter_2;
+	int m_counter_5;
+	int m_counter_mehr;
 };
 
 

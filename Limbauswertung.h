@@ -21,19 +21,19 @@ using namespace std;
 
 //Argumente von vorne nach hinten nach erster Nutzung sortiert
 int Limb_Auswertung(Orbitliste Orbitlist,
-                                  int l,
-                                  Sonnenspektrum& Solspec,
-                                  vector<Speziesfenster>& Spezies_Fenster,
-                                  int* counter_Nachtmessungen,
-                                  int* counter_NLC_detektiert,
-                                  int* counter_Richtungsvektor_nicht_ok,
-                                  string Arbeitsverzeichnis,
-                                  string mache_Fit_Plots,
-                                  string limb_meso_thermo,       // "ja" oder "nein"
-                                  vector<Ausgewertete_Messung_Limb>& Ausgewertete_Limbmessung_MgI,
-                                  vector<Ausgewertete_Messung_Limb>& Ausgewertete_Limbmessung_MgII,
-                                  vector<Ausgewertete_Messung_Limb>& Ausgewertete_Limbmessung_unknown,
-                                  vector<Ausgewertete_Messung_Limb>& Ausgewertete_Limbmessung_FeI);
+					int l,
+					Sonnenspektrum &Solspec,
+					vector<Speziesfenster>& Spezies_Fenster,
+					int *counter_Nachtmessungen,
+					int *counter_NLC_detektiert,
+					int *counter_Richtungsvektor_nicht_ok,
+					string Arbeitsverzeichnis,
+					string mache_Fit_Plots,
+					string limb_meso_thermo,       // "ja" oder "nein"
+					vector<Ausgewertete_Messung_Limb>& Ausgewertete_Limbmessung_MgI,
+					vector<Ausgewertete_Messung_Limb>& Ausgewertete_Limbmessung_MgII,
+					vector<Ausgewertete_Messung_Limb>& Ausgewertete_Limbmessung_unknown,
+					vector<Ausgewertete_Messung_Limb>& Ausgewertete_Limbmessung_FeI);
 
 
 #endif /* LIMBAUSWERTUNG_HH_ */

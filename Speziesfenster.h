@@ -23,9 +23,9 @@ using namespace std;
 
 class Speziesfenster
 {
-    public:
-    // Funktionen
-    void clear();
+public:
+	// Funktionen
+	void clear();
 
 	//Membervariablen **************************************************************************/
 	string m_Spezies_Name;                          // z.B. Eisen I oder Eisen II
@@ -45,16 +45,16 @@ class Speziesfenster
 
 inline void Speziesfenster::clear()
 {
-    // Die Vektorengrößen auf 0 zurücksetzen
-    m_Wellenlaengen.resize(0);
-    m_Basisfenster_links_WLmin.resize(0);
-    m_Basisfenster_links_WLmax.resize(0);
-    m_Basisfenster_rechts_WLmin.resize(0);
-    m_Basisfenster_rechts_WLmax.resize(0);
-    m_Peakfenster_WLmin.resize(0);
-    m_Peakfenster_WLmax.resize(0);
-    m_Liniendaten.resize(0);
-    m_Liste_der_Plot_Dateinamen.resize(0);
+	// Die Vektorengrößen auf 0 zurücksetzen
+	m_Wellenlaengen.resize(0);
+	m_Basisfenster_links_WLmin.resize(0);
+	m_Basisfenster_links_WLmax.resize(0);
+	m_Basisfenster_rechts_WLmin.resize(0);
+	m_Basisfenster_rechts_WLmax.resize(0);
+	m_Peakfenster_WLmin.resize(0);
+	m_Peakfenster_WLmax.resize(0);
+	m_Liniendaten.resize(0);
+	m_Liste_der_Plot_Dateinamen.resize(0);
 }
 
 

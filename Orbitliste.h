@@ -25,14 +25,14 @@ using namespace std;
 
 class Orbitliste
 {
-    public:
-	    int Liste_Laden(string Dateiname);
-	    int Ist_Messung_Limbmessung(uint Index);   //0 ja alles andere nein
-	    int Ist_Messung_Nadirmessung(uint Index);  //0 ja alles andere nein
-	    vector<string> m_Dateinamen;
+public:
+	int Liste_Laden(string Dateiname);
+	int Ist_Messung_Limbmessung(uint Index);   //0 ja alles andere nein
+	int Ist_Messung_Nadirmessung(uint Index);  //0 ja alles andere nein
+	vector<string> m_Dateinamen;
 
-	    //Wartungsfunktion
-        void In_Datei_Speichern(string Dateiname);
+	//Wartungsfunktion
+	void In_Datei_Speichern(string Dateiname);
 };
 
 

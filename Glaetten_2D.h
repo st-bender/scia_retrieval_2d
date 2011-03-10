@@ -14,7 +14,7 @@
 
 using namespace std;
 
-int SCD_Glaettung(vector<Ausgewertete_Messung_Limb>& AML, int Anzahl_Linien,string limbmesothermo);
+int SCD_Glaettung(vector<Ausgewertete_Messung_Limb>& AML, int Anzahl_Linien, string limbmesothermo);
 
 
 

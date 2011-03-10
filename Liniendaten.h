@@ -15,7 +15,7 @@ using namespace std;
 class Liniendaten
 {
 	//Daten für eine Linie //Da nur wenig Daten-> nicht zeitkritisch
-    public:
+public:
 	//Konstruktor
 	Liniendaten();
 	//Methoden
