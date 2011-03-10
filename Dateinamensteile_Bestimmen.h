@@ -9,7 +9,8 @@
 #define DATEINAMENSTEILE_BESTIMMEN_HH_
 
 
-// Sinn dieser Funktion ist es im Batchprozess die richtigen Dateinamen zu bestimmen die erzeugt werden sollen
+// Sinn dieser Funktion ist es im Batchprozess die richtigen Dateinamen
+// zu bestimmen die erzeugt werden sollen
 // xxxxx Orbit_ID
 // yyyymmdd_hhmm Das Datum der ersten Limbdatei im Orbit
 

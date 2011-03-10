@@ -34,7 +34,8 @@ string yyyymmdd_hhmm_Bestimmen(string Name_erste_Limbdatei)
 	// z.b. SCIA_limb_20040111_084344_1_0_09752.dat.l_mpl_binary
 	int lang = Name_erste_Limbdatei.size();
 	yyyymmdd_hhmm = Name_erste_Limbdatei.substr(lang - 42, 13);
-	//TODO Das eventuell ganz umbennnen...suchen eigentlich nur Datum...Uhrzeit Wuascht
+	//TODO Das eventuell ganz umbennnen...
+	// suchen eigentlich nur Datum...Uhrzeit Wuascht
 	yyyymmdd_hhmm = Name_erste_Limbdatei.substr(lang - 42, 8);
 	return yyyymmdd_hhmm;
 }
