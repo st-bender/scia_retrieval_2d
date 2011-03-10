@@ -45,11 +45,11 @@ public:
 inline void Ausgewertete_Messung_Nadir::Ausgabe_auf_Bildschirm()
 {
 	// Ergebnisse
-	cout << "m_Zeilendichte                    : " << "\t" << m_Zeilendichte << "\n";
-	cout << "m_Fehler_Zeilendichten       : " << "\t" << m_Fehler_Zeilendichten << "\n";
+	cout << "m_Zeilendichte           : " << "\t" << m_Zeilendichte << "\n";
+	cout << "m_Fehler_Zeilendichten   : " << "\t" << m_Fehler_Zeilendichten << "\n";
 	// Zwischenergebnisse
-	cout << "m_Deklination                     : " << "\t" << m_Deklination << "\n";
-	cout << "m_Sonnen_Longitude          : " << "\t" << m_Sonnen_Longitude << "\n";
+	cout << "m_Deklination            : " << "\t" << m_Deklination << "\n";
+	cout << "m_Sonnen_Longitude       : " << "\t" << m_Sonnen_Longitude << "\n";
 	// Zusatzinfo
 	cout << "Wellenlänge des Übergangs: " << "\t" << m_Wellenlaenge << "\n";
 	// Datum
