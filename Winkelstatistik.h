@@ -3,9 +3,12 @@
  *
  *  Created on: 11.10.2010
  *      Author: martin
- *      Die 3 Teilabschnitte, in Luftmassenfaktoren_aufbauen in Matrizzen_Aufbauen.cpp, in denen eine Statistik über die
- *      Winkelabweichungen zwischen Tangentialvektor und Zenitvektor von 90° erfasst werden wird, damit es dort übersichtlicher
- *      aussieht hier implementiert..... Die Winkelstatistik könnte schon früher durchgeführt werden(vermutlich noch vor den
+ *      Die 3 Teilabschnitte, in Luftmassenfaktoren_aufbauen in
+ *      Matrizzen_Aufbauen.cpp, in denen eine Statistik über die
+ *      Winkelabweichungen zwischen Tangentialvektor und Zenitvektor von 90°
+ *      erfasst werden wird, damit es dort übersichtlicher
+ *      aussieht hier implementiert..... Die Winkelstatistik könnte schon
+ *      früher durchgeführt werden(vermutlich noch vor den
  *      Säulendichten...Funktionen hier erleichern die spätere Migration
  */
 
@@ -23,7 +26,8 @@ public:
 	//Konstruktor
 	Winkelstatistik();
 	//Methoden
-	int Winkel_berechnen_und_einordnen(MPL_Vektor Verbindungsvektor, MPL_Vektor Tangentenpunkt,
+	int Winkel_berechnen_und_einordnen(MPL_Vektor Verbindungsvektor,
+									   MPL_Vektor Tangentenpunkt,
 									   int &Winkel_OK);
 	void Statistik_auf_Bildschirm_ausgeben();
 	int Statistik_in_Datei_ausgeben(string Dateiname);

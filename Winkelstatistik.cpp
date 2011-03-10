@@ -41,13 +41,16 @@ Winkelstatistik::Winkelstatistik()
 //////////////////////////////////////////////////////
 // Methodenstart Winkel_berechnen_und_einordnen
 //////////////////////////////////////////////////////
-int Winkelstatistik::Winkel_berechnen_und_einordnen(MPL_Vektor Verbindungsvektor, MPL_Vektor Tangentenpunkt,
+int Winkelstatistik::Winkel_berechnen_und_einordnen(
+		MPL_Vektor Verbindungsvektor, MPL_Vektor Tangentenpunkt,
 		int &Winkel_OK)
 {
 	const double pi = 3.1415926535897;
 	// Winkel OK-> 0 ; nicht OK -> 1
-	//Rückgabewert der Funktion 0 Winkel Klassifizierbar, 1 nicht(irgendwas ist dann falsch im Programm)
-	// Der Tangentenpunkt ist so definiert, dass dort die LOS des Satelliten dort senkrecht zum Zenit steht,
+	//Rückgabewert der Funktion 0 Winkel Klassifizierbar,
+	// 1 nicht (irgendwas ist dann falsch im Programm)
+	// Der Tangentenpunkt ist so definiert,
+	// dass dort die LOS des Satelliten dort senkrecht zum Zenit steht,
 	// Die Abweichungen davon werden hier berechnet
 	MPL_Vektor V_Norm, TP_Norm;
 	V_Norm = Verbindungsvektor / Verbindungsvektor.Betrag_ausgeben();
@@ -155,9 +158,9 @@ void Winkelstatistik::Statistik_auf_Bildschirm_ausgeben()
 	cout << "ok             : " << m_counter_0_001 + m_counter_0_002 +
 		 m_counter_0_005 + m_counter_0_01 +
 		 m_counter_0_02 << "\n";
-	cout << "nicht ok       : " << m_counter_0_05 + m_counter_0_1 + m_counter_0_2 +
-		 m_counter_0_5 + m_counter_1 +
-		 m_counter_2 + m_counter_5 << "\n";
+	cout << "nicht ok       : "
+		 << m_counter_0_05 + m_counter_0_1 + m_counter_0_2
+		  + m_counter_0_5 + m_counter_1 + m_counter_2 + m_counter_5 << "\n";
 
 	return;
 }
@@ -173,7 +176,9 @@ int Winkelstatistik::Statistik_in_Datei_ausgeben(string Dateiname)
 	ofstream outfile;
 	outfile.open(Dateiname.c_str());
 	if (!outfile.is_open()) {
-		cerr << "Datei " << Dateiname << " kann nicht zum schreiben der Winkelstatistik geöffnet werden.\n";
+		cerr << "Datei " << Dateiname
+			 << " kann nicht zum schreiben der Winkelstatistik geöffnet werden."
+			 << endl;
 		return 1;
 	}
 	outfile << "Winkelstatistik\n";
@@ -198,9 +203,9 @@ int Winkelstatistik::Statistik_in_Datei_ausgeben(string Dateiname)
 	outfile << "ok__________: " << m_counter_0_001 + m_counter_0_002 +
 			m_counter_0_005 + m_counter_0_01 +
 			m_counter_0_02 << "\n";
-	outfile << "nicht_ok____: " << m_counter_0_05 + m_counter_0_1 + m_counter_0_2 +
-			m_counter_0_5 + m_counter_1 +
-			m_counter_2 + m_counter_5 << "\n";
+	outfile << "nicht_ok____: "
+			<< m_counter_0_05 + m_counter_0_1 + m_counter_0_2
+			 + m_counter_0_5 + m_counter_1 + m_counter_2 + m_counter_5 << "\n";
 	outfile.close();
 	outfile.clear();
 
