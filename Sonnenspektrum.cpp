@@ -80,6 +80,10 @@ int Sonnenspektrum::Laden_SCIA(string Dateiname, string Fallback_Dateiname)
 	}
 
 	infile >> m_Anzahl_WL;
+	if (m_Anzahl_WL == 0) {
+		cerr << "Sonnenspektrum ist unbrauchbar!" << endl;
+		return 2;
+	}
 	if (m_Anzahl_WL > 850) {
 		//feste Größe..i.a. sollte m_Anzahl 732 sein,
 		//also nach den bisher verwendeten scia2ascii clustern
