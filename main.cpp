@@ -527,8 +527,8 @@ int main(int argc, char *argv[])
 			//NotTODO Die Säulendichtebestimmung kann deutlich schneller
 			//geschehen, Verbesserungen hier sind aber irrelevant
 			Limb_Auswertung(Orbitlist, l, Solspec, Spezies_Fenster,
-							&counter_Nachtmessungen, &counter_NLC_detektiert,
-							&counter_Richtungsvektor_nicht_ok,
+							counter_Nachtmessungen, counter_NLC_detektiert,
+							counter_Richtungsvektor_nicht_ok,
 							Arbeitsverzeichnis, mache_Fit_Plots_limb,
 							untersuche_limb_mesothermo_states,
 							Ausgewertete_Limbmessung_MgI,
@@ -553,8 +553,8 @@ int main(int argc, char *argv[])
 			// verwendet
 			//cerr<<"Nadirauswertung start\n";
 			Nadir_Auswertung(Orbitlist, l, Solspec, Spezies_Fenster,
-							 &counter_Nachtmessungen_Nadir,
-							 &counter_Nadir_Nacht_Dateien,
+							 counter_Nachtmessungen_Nadir,
+							 counter_Nadir_Nacht_Dateien,
 							 Arbeitsverzeichnis, mache_Fit_Plots_nadir,
 							 Ausgewertete_Nadirmessung_MgI,
 							 Ausgewertete_Nadirmessung_MgII,

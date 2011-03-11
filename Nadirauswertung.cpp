@@ -22,8 +22,8 @@ int Nadir_Auswertung(Orbitliste Orbitlist,
 					 int l,
 					 Sonnenspektrum Solspec,
 					 vector<Speziesfenster>& Spezies_Fenster,
-					 int *counter_Nachtmessungen_Nadir,
-					 int *counter_Nadir_Nacht_Dateien,
+					 int &counter_Nachtmessungen_Nadir,
+					 int &counter_Nadir_Nacht_Dateien,
 					 string Arbeitsverzeichnis, string mache_Fit_Plots,
 					 vector<Ausgewertete_Messung_Nadir>& Ausgewertete_Nadirmessung_MgI,
 					 vector<Ausgewertete_Messung_Nadir>& Ausgewertete_Nadirmessung_MgII,
@@ -43,8 +43,8 @@ int Nadir_Auswertung(Orbitliste Orbitlist,
 	bool ist_Nachtmessung;
 	Test_auf_Nachtmessung_Nadir(Rohdaten, Anzahl_Messungen, ist_Nachtmessung);
 	if (ist_Nachtmessung == true) {
-		(*counter_Nachtmessungen_Nadir) += Anzahl_Messungen; //counter setzen
-		(*counter_Nadir_Nacht_Dateien)++;
+		counter_Nachtmessungen_Nadir += Anzahl_Messungen; //counter setzen
+		counter_Nadir_Nacht_Dateien++;
 		// Speicher freimachen /////////////
 		for (int i = 0; i < Anzahl_Messungen; i++) {
 			// das muss sein..unschön..evtl ein Objekt entwerfen, was nur aus

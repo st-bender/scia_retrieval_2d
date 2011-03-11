@@ -113,7 +113,7 @@ int Test_auf_NLC_Limb(vector<Messung_Limb> &Rohdaten, bool &ist_NLC_Messung)
 // Funktionsstart Test_auf_korrekte_geolocations_Limb
 /////////////////////////////////////////////////////////////////////////
 int Test_auf_korrekte_geolocations_Limb(vector<Messung_Limb> &Rohdaten,
-		int *counter_Winkel_nicht_ok)
+		int &counter_Winkel_nicht_ok)
 {
 	//Die Positionen des Tangentenpunktes und des Satelliten werden in
 	//Karthesischen Koordinaten bestimmt.  Der Verbindungsvektor beider Punkte
@@ -158,7 +158,7 @@ int Test_auf_korrekte_geolocations_Limb(vector<Messung_Limb> &Rohdaten,
 		double Winkel = 180.0 / pi * asin(SIN_Winkel);
 		//aussortieren und counter setzen
 		if (Winkel > 0.02) {
-			(*counter_Winkel_nicht_ok)++;
+			counter_Winkel_nicht_ok++;
 			Rohdaten.erase(Rohdaten.begin() + i);
 		} else {
 			i++;

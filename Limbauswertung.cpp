@@ -36,9 +36,9 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 					int l,
 					Sonnenspektrum &Solspec,
 					vector<Speziesfenster>& Spezies_Fenster,
-					int *counter_Nachtmessungen,
-					int *counter_NLC_detektiert,
-					int *counter_Richtungsvektor_nicht_ok,
+					int &counter_Nachtmessungen,
+					int &counter_NLC_detektiert,
+					int &counter_Richtungsvektor_nicht_ok,
 					string Arbeitsverzeichnis, string mache_Fit_Plots,
 					string limb_meso_thermo,       // "ja" oder "nein"
 					vector<Ausgewertete_Messung_Limb>& Ausgewertete_Limbmessung_MgI,
@@ -93,7 +93,7 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 	}
 	if (ist_Nachtmessung == true) {
 		// cout<<"counter_Nachtmessungen vorher: "<<*counter_Nachtmessungen <<"\n";
-		(*counter_Nachtmessungen)++;
+		counter_Nachtmessungen++;
 		// cout<<"counter_Nachtmessungen nacher: "<<*counter_Nachtmessungen <<"\n";
 		return 1;  //Nachtmessung 1
 	}
