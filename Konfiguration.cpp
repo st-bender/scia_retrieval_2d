@@ -12,9 +12,9 @@
 #include "Konfiguration.h" // eigener header
 #include <fstream>         // ifstream
 #include <string>          // string
-#include <stdio.h>         // cout
+#include <cstdio>         // cout
 #include <iostream>        // cout
-#include <stdlib.h>        // für atoi
+#include <cstdlib>        // für atoi
 
 //namespace
 using namespace std;

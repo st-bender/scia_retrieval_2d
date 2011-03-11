@@ -10,10 +10,10 @@
 #include "Ausgewertete_Messung_Limb.h"
 
 #include <vector>
-#include <math.h>
+#include <cmath>
 #include "MPL_Vektor.h"
 #include <iostream>
-#include <stdio.h>
+#include <cstdio>
 #include <fstream>
 
 

@@ -22,7 +22,7 @@
 #ifndef MPL_VEKTOR_HH_
 #define MPL_VEKTOR_HH_
 
-#include <math.h>
+#include <cmath>
 #include <iostream>
 
 using namespace std;

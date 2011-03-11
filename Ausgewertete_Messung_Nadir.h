@@ -9,7 +9,7 @@
 #define AUSGEWERTETE_MESSUNG_NADIR_HH_
 
 #include <string>
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 
 

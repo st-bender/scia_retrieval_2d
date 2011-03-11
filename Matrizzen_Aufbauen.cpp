@@ -18,13 +18,13 @@
 // Luftmassenfaktoren_Matrix_aufbauen(einlesen von Atmosphärendaten)
 #include"Datei_IO.h"
 #include"Konfiguration.h"             // Dateinamen für die Atmosphärendaten
-#include"math.h"                      // trigonometrische Funktionen
+#include <cmath>                      // trigonometrische Funktionen
 
 #include "Koordinatentransformation.h"
 
-#include <time.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <ctime>
+#include <cstdlib>
+#include <cstdio>
 
 
 using namespace std;

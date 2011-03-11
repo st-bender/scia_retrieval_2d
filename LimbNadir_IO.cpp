@@ -8,7 +8,7 @@
 #include"LimbNadir_IO.h"
 
 #include<string>
-#include <stdlib.h>
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
 

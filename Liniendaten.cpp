@@ -10,10 +10,10 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdlib>
+#include <cmath>
 #include <iostream>
-#include <stdio.h>
+#include <cstdio>
 
 #include "Liniendaten.h"
 

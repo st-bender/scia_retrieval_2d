@@ -9,7 +9,7 @@
 #include<vector>
 #include<fstream>
 #include<iostream>
-#include"stdlib.h"
+#include <cstdlib>
 
 using namespace std;
 ////////////////////////////////////////////////////////////////////////////////

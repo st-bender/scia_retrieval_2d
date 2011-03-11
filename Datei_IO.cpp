@@ -5,14 +5,14 @@
  *      Author: martin
  */
 
-#include "math.h"
+#include <cmath>
 #include "Messung_Limb.h"
 #include "Messung_Nadir.h"
 #include <string>
 #include <vector>
 #include <fstream>
 #include <iostream>
-#include "stdlib.h" //system
+#include <cstdlib> //system
 #include "Nachricht_Schreiben.h"
 #include "MPL_Matrix.h"
 #include "LimbNadir_IO.h"

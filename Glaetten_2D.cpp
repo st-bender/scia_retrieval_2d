@@ -9,7 +9,7 @@
 #include <vector>
 #include "Ausgewertete_Messung_Limb.h"
 #include <iostream>
-#include <stdio.h>
+#include <cstdio>
 
 using namespace std;
 

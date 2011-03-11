@@ -5,7 +5,7 @@
  *      Author: martin
  */
 
-#include<math.h>
+#include <cmath>
 #include<iostream>
 
 

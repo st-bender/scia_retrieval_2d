@@ -9,7 +9,7 @@
 
 #include"MPL_Matrix.h"
 #include "Konfiguration.h"
-#include <math.h>
+#include <cmath>
 
 using namespace std;
 

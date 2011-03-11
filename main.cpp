@@ -122,9 +122,9 @@ irgendetwas nicht funktioniert, mich kontaktieren
 //eingebundene Headerfiles
 //standard
 #include <string>           // string
-#include <stdio.h>         // cout
+#include <cstdio>         // cout
 #include <iostream>      // cout
-#include <stdlib.h>        // für atoi
+#include <cstdlib>        // für atoi
 //eigene
 #include "Konfiguration.h"
 #include "Liniendaten.h"
@@ -137,7 +137,7 @@ irgendetwas nicht funktioniert, mich kontaktieren
 #include "Limbauswertung.h"
 #include "Nadirauswertung.h"
 #include "Nachricht_Schreiben.h"
-#include <time.h>  //langsames timing...so auf Sekunden genau
+#include <ctime>  //langsames timing...so auf Sekunden genau
 #include "Retrievalgitter.h"
 #include "MPL_Matrix.h"
 #include "Matrizzen_Aufbauen.h"

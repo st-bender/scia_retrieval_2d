@@ -22,7 +22,7 @@
 #define AUSGEWERTETE_MESSUNG_LIMB_HH_
 
 #include <string>
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 
 using namespace std;

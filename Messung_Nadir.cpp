@@ -13,12 +13,12 @@ if(array!=0)                                 \
 }                                                \
 //Das Makro ist nur Save, falls die arrays alle mit 0 initialisiert werden
 
-#include <stdio.h>
+#include <cstdio>
 #include "Messung_Nadir.h"
 #include <cmath>
-#include "stdlib.h"
+#include <cstdlib>
 #include "Ausgewertete_Messung_Nadir.h"
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 #include "Ausdrucke.h"
 

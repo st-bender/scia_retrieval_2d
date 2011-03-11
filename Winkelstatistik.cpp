@@ -8,7 +8,7 @@
 #include"Winkelstatistik.h"
 #include"MPL_Vektor.h"
 #include<string>
-#include<math.h>
+#include <cmath>
 #include<iostream>
 #include<fstream>
 

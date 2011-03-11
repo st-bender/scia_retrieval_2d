@@ -17,12 +17,12 @@ if(array!=0)                                 \
 
 #include "Messung_Limb.h"
 #include <cmath>
-#include "stdlib.h"
+#include <cstdlib>
 
 #include <fstream>  //für Ausgabe
 #include <iostream>//für Ausgabe
-#include <stdlib.h>  //für Ausgabe
-#include <stdio.h>   //Filekram
+#include <cstdlib>  //für Ausgabe
+#include <cstdio>   //Filekram
 #include "Ausdrucke.h"
 #include "Fit_Polynom.h"
 #include "Glaetten.h"

@@ -46,7 +46,7 @@
 #define MPLMATRIX_HH_
 
 #include<iostream>
-#include<stdio.h>
+#include <cstdio>
 #include<fstream>
 
 
