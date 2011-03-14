@@ -90,7 +90,7 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	//Diese implementation gehört zu den schnellsten ihrer art.
 	//Es handelt sich dabei um 2 Schritte...die LU-Zerlegung selbst und die
 	//Rückeinsetzung Die LU-Zerlegung braucht Zeit, das Rückeinsetzen erfolgt
-	//dagegen fast instantan für positiv definite Matrizzen ist
+	//dagegen fast instantan für positiv definite Matrizen ist
 	//Choleskyzerlegung genauer, das schließt aber negative Säulendichten aus,
 	//also wird LU-benutzt
 	////////////////////////////////////////////////////////////////////////////
@@ -111,7 +111,7 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	// START LU ZERLEGUNG
 	// VORBEREITEN
 	MPL_Matrix A(LHS.m_Spaltenzahl, LHS.m_Zeilenzahl);
-	//Fortran Matrizzen sind zu C++ Matrizzen transponiert
+	//Fortran Matrizen sind zu C++ Matrizen transponiert
 	A = LHS.transponiert();
 	// Man kann auch die MPL_Matrix nach Fortran Nomenklatur anpassen, aber
 	// transponieren ist nicht zeitaufwändig
@@ -284,7 +284,7 @@ int Retrievaliteration_old(MPL_Matrix &Dichten,
 	//Diese implementation gehört zu den schnellsten ihrer art.
 	//Es handelt sich dabei um 2 Schritte...die LU-Zerlegung selbst und die
 	//Rückeinsetzung Die LU-Zerlegung braucht Zeit, das Rückeinsetzen erfolgt
-	//dagegen fast instantan für positiv definite Matrizzen ist
+	//dagegen fast instantan für positiv definite Matrizen ist
 	//Choleskyzerlegung genauer, das schließt aber negative Säulendichten aus,
 	//also wird LU-benutzt
 	////////////////////////////////////////////////////////////////////////////
@@ -303,7 +303,7 @@ int Retrievaliteration_old(MPL_Matrix &Dichten,
 	// START LU ZERLEGUNG
 	// VORBEREITEN
 	MPL_Matrix A(LHS.m_Spaltenzahl, LHS.m_Zeilenzahl);
-	//Fortran Matrizzen sind zu C++ Matrizzen transponiert
+	//Fortran Matrizen sind zu C++ Matrizen transponiert
 	A = LHS.transponiert();
 	// Man kann auch die MPL_Matrix nach Fortran Nomenklatur anpassen, aber
 	// transponieren ist nicht zeitaufwändig

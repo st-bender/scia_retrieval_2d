@@ -77,11 +77,11 @@ auch-> mail)
 
 Dort, wo sich die Flexibilität mit der Geschwindigkeit beißt, muss abgewogen
 werden, was wichtiger ist
- //TODO Matrixmultiplikationen überprüfen, ob die Matrizzen auch in einer
+ //TODO Matrixmultiplikationen überprüfen, ob die Matrizen auch in einer
  //günstigen Reihenfolge Multipliziert werden
- //TODO Matrixoperationen sind z.t. für große Matrizzen langsam, für 200*200
- //Matrizzen ist das Retrieval aber noch schnell Abhilfe schaffen hier
- //Matrizzen der LAPACK Bibliothek....da hab ich auch schon ein Programm was
+ //TODO Matrixoperationen sind z.t. für große Matrizen langsam, für 200*200
+ //Matrizen ist das Retrieval aber noch schnell Abhilfe schaffen hier
+ //Matrizen der LAPACK Bibliothek....da hab ich auch schon ein Programm was
  //LAPACK und ATLAS(BLAS)
  // benutzt und für eine 4000*4000 Matrix die LU-Zerlegung in 5 sekunden
  // schafft (Matlab braucht da 8 für A\x)
@@ -649,19 +649,19 @@ int main(int argc, char *argv[])
 	cerr << "Teil3\n";
 	time(&Teil3_Start);
 	////////////////////////////////////////////////////////////////////////////
-	// Matrizzen und Vektoren aufbauen
+	// Matrizen und Vektoren aufbauen
 	////////////////////////////////////////////////////////////////////////////
 	/***************************************************************************
 	// Wir benötigen das Gitter, auf dem wir die Dichte ausrechnen
-	// Ab nun Vektoren und Matrizzen für jede Spezies bestimmen
+	// Ab nun Vektoren und Matrizen für jede Spezies bestimmen
 	// einen Vektor der Dichte_n
 	// einen Vektor x_a für die a-priori-Lösung der Dichte (oder Startwert usw)
 	// einen Vektor der Zeilendichten
 	// Die Gesamtwichtungsfaktoren Lambda_H und Lambda_PHI
-	// zwei Matrizzen S_H und S_LAT mit den Unrterschieden der
+	// zwei Matrizen S_H und S_LAT mit den Unrterschieden der
 	// Nachbarpunkte(zur Glättung) die Matrix K, in der das Absorbtionsgesetz
 	// für die Lichtwege drinsteckt
-	// Kovarianzmatrizzen S_y und S_a...die man aber als Diagonalvektor benutzt
+	// Kovarianzmatrizen S_y und S_a...die man aber als Diagonalvektor benutzt
 	***************************************************************************/
 	//das hier weg( das erlaubt nur Limbmessungen)
 	Ausgewertete_Nadirmessung_MgI.resize(0);
@@ -737,7 +737,7 @@ int main(int argc, char *argv[])
 	double MgI_Lambda_letzte_Hoehe = 1E-32; //100 für ein
 
 
-	// Speziesunabhängige Matrizzen, alle sind quadratisch
+	// Speziesunabhängige Matrizen, alle sind quadratisch
 	MPL_Matrix S_Breite(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
 	MPL_Matrix S_Hoehe(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
 	MPL_Matrix S_letzte_Hoehe_MgI(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
@@ -749,9 +749,9 @@ int main(int argc, char *argv[])
 	MPL_Matrix AMF_MgI(Saeulendichten_MgI.m_Elementanzahl, Grid.m_Anzahl_Punkte);
 	// S_Breite, S_Hoehe, S_Apriori, S_y, AMF aufbauen
 	int IERR = 0;
-	//cerr<<"MgI Matrizzen aufbaun\n";
+	//cerr<<"MgI Matrizen aufbaun\n";
 	if (mache_volles_Retrieval_MgI == "ja") {
-		Matrizzen_Aufbauen(S_Breite, S_Hoehe, S_letzte_Hoehe_MgI,
+		Matrizen_Aufbauen(S_Breite, S_Hoehe, S_letzte_Hoehe_MgI,
 						   MgI_Lambda_letzte_Hoehe,
 						   S_apriori_MgI, S_y_MgI,
 						   AMF_MgI, MgI_Lambda_apriori,
@@ -763,7 +763,7 @@ int main(int argc, char *argv[])
 						   Ausgewertete_Nadirmessung_MgI,
 						   Konf, IERR);
 		if (IERR != 0) {
-			cerr << "Fehler bei Matrizzen_Aufbauen\n";
+			cerr << "Fehler bei Matrizen_Aufbauen\n";
 			return -1; //Hauptprogramm beenden
 		}
 	}
@@ -825,9 +825,9 @@ int main(int argc, char *argv[])
 	MPL_Matrix AMF_MgII(Saeulendichten_MgII.m_Elementanzahl, Grid.m_Anzahl_Punkte);
 	// S_Breite, S_Hoehe, S_Apriori, S_y, AMF aufbauen
 	IERR = 0;
-	//cerr<<"MgI Matrizzen aufbaun\n";
+	//cerr<<"MgI Matrizen aufbaun\n";
 	if (mache_volles_Retrieval_MgII == "ja") {
-		Matrizzen_Aufbauen(S_Breite, S_Hoehe, S_letzte_Hoehe_MgII,
+		Matrizen_Aufbauen(S_Breite, S_Hoehe, S_letzte_Hoehe_MgII,
 						   MgII_Lambda_letzte_Hoehe,
 						   S_apriori_MgII, S_y_MgII,
 						   AMF_MgII, MgII_Lambda_apriori,
@@ -839,7 +839,7 @@ int main(int argc, char *argv[])
 						   Ausgewertete_Nadirmessung_MgII,
 						   Konf, IERR);
 		if (IERR != 0) {
-			cerr << "Fehler bei Matrizzen_Aufbauen\n";
+			cerr << "Fehler bei Matrizen_Aufbauen\n";
 			return -1; //Hauptprogramm beenden
 		}
 	}
@@ -895,9 +895,9 @@ int main(int argc, char *argv[])
 	MPL_Matrix AMF_unknown(Saeulendichten_unknown.m_Elementanzahl, Grid.m_Anzahl_Punkte);
 	// S_Breite, S_Hoehe, S_Apriori, S_y, AMF aufbauen
 	IERR = 0;
-	//cerr<<"MgI Matrizzen aufbaun\n";
+	//cerr<<"MgI Matrizen aufbaun\n";
 	if (mache_volles_Retrieval_unknown == "ja") {
-		Matrizzen_Aufbauen(S_Breite, S_Hoehe, S_letzte_Hoehe_unknown,
+		Matrizen_Aufbauen(S_Breite, S_Hoehe, S_letzte_Hoehe_unknown,
 						   unknown_Lambda_letzte_Hoehe,
 						   S_apriori_unknown, S_y_unknown,
 						   AMF_unknown, unknown_Lambda_apriori,
@@ -909,7 +909,7 @@ int main(int argc, char *argv[])
 						   Ausgewertete_Nadirmessung_unknown,
 						   Konf, IERR);
 		if (IERR != 0) {
-			cerr << "Fehler bei Matrizzen_Aufbauen\n";
+			cerr << "Fehler bei Matrizen_Aufbauen\n";
 			return -1; //Hauptprogramm beenden
 		}
 	}
@@ -961,9 +961,9 @@ int main(int argc, char *argv[])
 	MPL_Matrix AMF_FeI(Saeulendichten_FeI.m_Elementanzahl, Grid.m_Anzahl_Punkte);
 	// S_Breite, S_Hoehe, S_Apriori, S_y, AMF aufbauen
 	IERR = 0;
-	//cerr<<"MgI Matrizzen aufbaun\n";
+	//cerr<<"MgI Matrizen aufbaun\n";
 	if (mache_volles_Retrieval_FeI == "ja") {
-		Matrizzen_Aufbauen(S_Breite, S_Hoehe, S_letzte_Hoehe_FeI,
+		Matrizen_Aufbauen(S_Breite, S_Hoehe, S_letzte_Hoehe_FeI,
 						   FeI_Lambda_letzte_Hoehe,
 						   S_apriori_FeI, S_y_FeI,
 						   AMF_FeI, FeI_Lambda_apriori,
@@ -974,7 +974,7 @@ int main(int argc, char *argv[])
 						   Ausgewertete_Nadirmessung_FeI,
 						   Konf, IERR);
 		if (IERR != 0) {
-			cerr << "Fehler bei Matrizzen_Aufbauen\n";
+			cerr << "Fehler bei Matrizen_Aufbauen\n";
 			return -1; //Hauptprogramm beenden
 		}
 	}
@@ -983,11 +983,11 @@ int main(int argc, char *argv[])
 	////////////////////////////////////////////////////////////////////////////
 
 	////////////////////////////////////////////////////////////////////////////
-	// Matrizzen sind aufgebaut  // Schön wärs 7.7.2010...erstmal weiter, weil
+	// Matrizen sind aufgebaut  // Schön wärs 7.7.2010...erstmal weiter, weil
 	// es beim Raytracing noch probleme gibt
 	////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////
-	// Matrizzen sind aufgebaut
+	// Matrizen sind aufgebaut
 	// // wer hat an der Uhr gedreht 14.9.2010; getestet 4.10.2010
 	// // jetzt auch für Mg II.... oha...schon 7.12.2010
 	////////////////////////////////////////////////////////////////////////////

@@ -25,8 +25,8 @@
  *
  *  Created on: 28.05.2010
  *      Author: martin
- *      Matrizzendefinitionen gibt es viele, MPL steht dann für meinen Namen,
- *      das führt dann hoffentlich nicht zu doppelt definierten Matrizzentypen,
+ *      Matrixdefinitionen gibt es viele, MPL steht dann für meinen Namen,
+ *      das führt dann hoffentlich nicht zu doppelt definierten Matrixtypen,
  *      was Mit Matrix alleine ziemlich sicher passieren würde.
  *
  *     Es ist durchaus sinnvoll Vektoren als Zeilen und Spaltenvektoren also
@@ -127,7 +127,7 @@ public:
 	MPL_Matrix transponiert(); //transponierte Matrix
 //    MPLMatrix  invertiert();
 //    //inverse Matrix, falls existent...
-//      existiert nur bei quadratischen, nicht singulären Matrizzen
+//      existiert nur bei quadratischen, nicht singulären Matrizen
 	// transponieren, Inverse Matrix / Gauss, LU, Cholesky usw SVD
 	void Zeile_Tauschen(int Zeile_a, int Zeile_b);
 	void Zeile_Multiplizieren(int Zeile, double Faktor);
@@ -527,7 +527,7 @@ inline MPL_Matrix operator * (const double &lhs, const MPL_Matrix &rhs)
 /////////////////////////////////////////////////////////
 inline bool MPL_Matrix::operator == (const MPL_Matrix &rhs) const
 {
-	//2 Matrizzen sind gleich, wenn sie die gleichen Dimensionen haben,
+	//2 Matrizen sind gleich, wenn sie die gleichen Dimensionen haben,
 	//und alle ihre Elemente gleich sind
 	// erstmal Dimensionen prüfen
 	if ((this->m_Spaltenzahl != rhs.m_Spaltenzahl)
@@ -659,7 +659,7 @@ inline void MPL_Matrix::Vielfaches_einer_Zeile_addieren(int Summenzeile,
 ////////////////////////////////////////////////////////////////////////////////
 // Methodenstart Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor
 ////////////////////////////////////////////////////////////////////////////////
-// Die Funktion ist langsamer als Matlab...für 200*200 Matrizzen ok,
+// Die Funktion ist langsamer als Matlab...für 200*200 Matrizen ok,
 // für 4000*4000 nicht (5min gegen 8 sekunden)
 // TODO Funktion durch Lapackfunktion ersetzen oder Matlabcode einbinden
 // oder selbst assembler schreiben...

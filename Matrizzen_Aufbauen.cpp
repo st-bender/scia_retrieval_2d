@@ -1,5 +1,5 @@
 /*
- * Matrizzen_Aufbauen.cpp
+ * Matrizen_Aufbauen.cpp
  *
  *  Created on: 10.06.2010
  *      Author: martin
@@ -29,7 +29,7 @@
 
 using namespace std;
 
-void Matrizzen_Aufbauen(MPL_Matrix &S_Breite, MPL_Matrix &S_Hoehe,
+void Matrizen_Aufbauen(MPL_Matrix &S_Breite, MPL_Matrix &S_Hoehe,
 						MPL_Matrix &S_letzte_Hoehe, double Lambda_letzte_Hoehe,
 						MPL_Matrix &S_apriori, MPL_Matrix &S_y, MPL_Matrix &AMF,
 						double Lambda_apriori, MPL_Matrix Saeulendichten_Fehler,
@@ -39,7 +39,7 @@ void Matrizzen_Aufbauen(MPL_Matrix &S_Breite, MPL_Matrix &S_Hoehe,
 						vector<Ausgewertete_Messung_Nadir> AM_N,
 						Konfiguration &Konf, int &IERR)
 {
-	//Fehlermatrizzen
+	//Fehlermatrizen
 	//cerr<<"S_Breite\n";
 	S_Breite = Differenz_von_benachbarten_Zeilenelementen_Matrix_aufbauen(
 				Grid.m_Anzahl_Hoehen, Grid.m_Anzahl_Breiten);
@@ -54,7 +54,7 @@ void Matrizzen_Aufbauen(MPL_Matrix &S_Breite, MPL_Matrix &S_Hoehe,
 	//cerr<<"S_apriori\n";
 	S_apriori = Einheitsmatrix_aufbauen(S_apriori.m_Zeilenzahl);
 
-	// Fehlermatrizzen mit konstanten Wichtungsfaktoren Multiplizieren
+	// Fehlermatrizen mit konstanten Wichtungsfaktoren Multiplizieren
 	// nur bei apriori...die anderen erst in Normalgleichung
 	S_apriori *= Lambda_apriori;
 	// Flagmatrix oberste Hoehe
@@ -944,7 +944,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 	for (int MessungNR = AM_L.size(); MessungNR < AMF.m_Zeilenzahl; MessungNR++) {
 		//cout<<"MessungNR: "<<MessungNR<<"\n";
 		// ACHTUNG 2 zählweisen
-		// in Matrizzen Messungnummer in Quellvektoren NadirmessungNr
+		// in Matrizen Messungnummer in Quellvektoren NadirmessungNr
 		int Nadir_MessungNR = MessungNR - AM_L.size(); // z.b. für AM_N
 		// DAS STAMMT HIER AUS DER FUNKTION FÜR LIMB(einfach nur copy+paste) ///
 		// Für jede Teilchensorte können mehrere Linien ausgewertet werden.

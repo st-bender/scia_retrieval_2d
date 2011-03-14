@@ -643,8 +643,8 @@ int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter Grid,
 	// Die erste Datei ist die interessanteste davon mit den Dichten.
 	// Sie hat folgende Spalten:
 	// GP_Nummer Max_H H Min_H Max_Lat Lat Min_Lat Dichte Standardabweichung
-	// In den anderen beiden Matrizzen stehen jeweils pro Zeile ein Element der
-	// Matrizzen....  die zuordnung erfolgt aus den Gitterpunktnummern der
+	// In den anderen beiden Matrizen stehen jeweils pro Zeile ein Element der
+	// Matrizen....  die zuordnung erfolgt aus den Gitterpunktnummern der
 	// ersten Datei
 
 

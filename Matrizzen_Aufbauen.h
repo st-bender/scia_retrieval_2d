@@ -1,12 +1,12 @@
 /*
- * Matrizzen_Aufbauen.h
+ * Matrizen_Aufbauen.h
  *
  *  Created on: 10.06.2010
  *      Author: martin
  */
 
-//mit diesen Funktionen werden die Matrizzen für das Retrieval aufgebaut
-// Die Funktion Matrizzen_Aufbauen ruft gleich alle diese Funktionen auf einmal
+//mit diesen Funktionen werden die Matrizen für das Retrieval aufgebaut
+// Die Funktion Matrizen_Aufbauen ruft gleich alle diese Funktionen auf einmal
 // auf
 
 
@@ -22,7 +22,7 @@
 #include"Konfiguration.h"              // Luftmassenfaktoren_Matrix_aufbauen
 #include"Speziesfenster.h"             // Luftmassenfaktoren_Matrix_aufbauen
 
-void Matrizzen_Aufbauen(MPL_Matrix &S_Breite, MPL_Matrix &S_Hoehe,
+void Matrizen_Aufbauen(MPL_Matrix &S_Breite, MPL_Matrix &S_Hoehe,
 						MPL_Matrix &S_letzte_Hoehe, double Lambda_letzte_Hoehe,
 						MPL_Matrix &S_apriori, MPL_Matrix &S_y, MPL_Matrix &AMF,
 						double Lambda_apriori, MPL_Matrix Saeulendichten_Fehler,

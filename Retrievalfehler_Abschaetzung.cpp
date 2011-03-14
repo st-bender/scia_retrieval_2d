@@ -34,7 +34,7 @@ int Retrievalfehler_Abschaetzung(MPL_Matrix &S_x,
 	//TODO Auch hier kann man das Gleichungssystem
 	//mit ATLAS/LAPACK FUNKTIONEN LÖSEN
 
-	// Die Formeln für die Matrizzen findet man in Marcos Arbeit
+	// Die Formeln für die Matrizen findet man in Marcos Arbeit
 	MPL_Matrix S_x_invers;
 	MPL_Matrix AMF_trans;
 	AMF_trans = AMF.transponiert();
@@ -58,7 +58,7 @@ int Retrievalfehler_Abschaetzung(MPL_Matrix &S_x,
 	//   int dim=S_x_invers.m_Zeilenzahl;
 	//   MPL_Matrix Inversionsgleichungssystem(dim,2*dim);
 	//   Inversionsgleichungssystem.Null_Initialisierung();
-	//   S_x_Matrix als linke Blockmatrizze
+	//   S_x_Matrix als linke Blockmatrix
 	//   for(int zeile=0;zeile<dim;zeile++)
 	//  {
 	//    Inversionsgleichungssystem(zeile,dim+zeile)=1;

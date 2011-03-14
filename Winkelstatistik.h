@@ -4,7 +4,7 @@
  *  Created on: 11.10.2010
  *      Author: martin
  *      Die 3 Teilabschnitte, in Luftmassenfaktoren_aufbauen in
- *      Matrizzen_Aufbauen.cpp, in denen eine Statistik über die
+ *      Matrizen_Aufbauen.cpp, in denen eine Statistik über die
  *      Winkelabweichungen zwischen Tangentialvektor und Zenitvektor von 90°
  *      erfasst werden wird, damit es dort übersichtlicher
  *      aussieht hier implementiert..... Die Winkelstatistik könnte schon
