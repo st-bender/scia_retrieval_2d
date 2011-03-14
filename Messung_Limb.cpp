@@ -958,10 +958,11 @@ int Messung_Limb::Deklinationswinkel_bestimmen()
 	//cout<<Tage<<"\n";
 	//double bla=cos(360.0/365.0*(Tage+10.0)*pi/180.0);
 	//cout<<bla<<"\n";
-	this->m_Deklinationswinkel = -23.45 * cos((double)360
-								 / 365 * (Tage + 10) * pi / 180);
+	this->m_Deklinationswinkel = -23.45 * cos(360.0 / 365.0 * (Tage + 10.0)
+								* pi / 180.0);
 	return 0;
 }// int        Deklinationswinkel_bestimmen() ende
+
 //========================================
 //========================================
 // Funktionsstart  Sonnen_Longitude_bestimmen
@@ -971,7 +972,7 @@ int Messung_Limb::Sonnen_Longitude_bestimmen()
 	// (glaub Greenwich, oder zumindest in etwa) im Zenit
 	double Stunden = 0.0;
 	Stunden += this->m_Stunde;
-	Stunden += (double) this->m_Minute / ((double) 60.0);
+	Stunden += (double) this->m_Minute / 60.0;
 
 	this->m_Sonnen_Longitude = 180.0 - 360.0 * (Stunden / 24.0);
 
@@ -1064,10 +1065,10 @@ void Messung_Limb::Fit_Linear(double *x, double *y, double &a0, double &a1,
 	a1 = 0;
 	int i;
 	// benötigt werden die Mittelwerte von x,y,x*y,und x^2 =====================
-	double xsum = 0;
-	double ysum = 0;
-	double xysum = 0;
-	double xxsum = 0;
+	double xsum = 0.;
+	double ysum = 0.;
+	double xysum = 0.;
+	double xxsum = 0.;
 	for (i = Anfangsindex; i <= Endindex; i++) {
 		xsum += x[i];
 		ysum += y[i];
@@ -1075,10 +1076,11 @@ void Messung_Limb::Fit_Linear(double *x, double *y, double &a0, double &a1,
 		xxsum += x[i] * x[i];
 	}
 	//Mittelwerte
-	double x_m = xsum / (Endindex - Anfangsindex + 1);
-	double y_m = ysum / (Endindex - Anfangsindex + 1);
-	double xy_m = xysum / (Endindex - Anfangsindex + 1);
-	double xx_m = xxsum / (Endindex - Anfangsindex + 1);
+	double N = Endindex - Anfangsindex + 1.;
+	double x_m = xsum / N;
+	double y_m = ysum / N;
+	double xy_m = xysum / N;
+	double xx_m = xxsum / N;
 	//==========================================================================
 	// Parameter b
 	a1 = (xy_m - y_m * x_m) / (xx_m - x_m * x_m);
@@ -1223,20 +1225,21 @@ void Messung_Limb::Fit_Peak_hyperbolic(double *x, double *y, double x0,
 	// Funktionwerte y=I/(piFGamma) sind so ist A dann die Säulendichte
 
 	const double pi = 3.14159265;
-	double N = Endindex - Anfangsindex + 1;
 	// Zahl der Messwertpaare
 	// double, damit später keine Probleme beim weiterrechnen
-	double sum_gy = 0;
-	double sum_gg = 0;
+	double sum_gy = 0.;
+	double sum_gg = 0.;
 	double g;
-	double cnorm = 4.0 * pi * sqrt(2.0) / (FWHM * FWHM * FWHM); //lambda m
+	const double cnorm = 4.0 * pi * M_SQRT2 / (FWHM * FWHM * FWHM); //lambda m
+	// (0.5 * FWHM)^4
+	const double fwhm2to4 = 0.0625 * FWHM * FWHM * FWHM * FWHM;
 
-	for (int i = 0; i < N; i++) {
+	for (int i = Anfangsindex; i <= Endindex; i++) {
 		//g berechnen
-		g = 1 / (cnorm * (pow(0.5 * FWHM, 4) + pow(x0 - x[Anfangsindex + i], 4)));
+		g = 1. / (cnorm * (fwhm2to4 + pow(x0 - x[i], 4)));
 		//eine Rechnung...nicht  Zeitkritisch
 		// sum_gy erhöhen
-		sum_gy += g * y[Anfangsindex + i];
+		sum_gy += g * y[i];
 		// sum_gg erhöhen
 		sum_gg += g * g;
 	}
