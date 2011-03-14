@@ -756,8 +756,8 @@ int main(int argc, char *argv[])
 						   S_apriori_MgI, S_y_MgI,
 						   AMF_MgI, MgI_Lambda_apriori,
 						   Saeulendichten_Fehler_MgI,
-						   Spezies_Fenster[1],
 						   // TODO 1 ist MgI, 0 ist MgII hier wieder korrigieren
+						   Spezies_Fenster[1],
 						   Grid,
 						   Ausgewertete_Limbmessung_MgI,
 						   Ausgewertete_Nadirmessung_MgI,
@@ -832,8 +832,8 @@ int main(int argc, char *argv[])
 						   S_apriori_MgII, S_y_MgII,
 						   AMF_MgII, MgII_Lambda_apriori,
 						   Saeulendichten_Fehler_MgII,
-						   Spezies_Fenster[0],
 						   // TODO 1 ist MgI, 0 ist MgII hier wieder korrigieren
+						   Spezies_Fenster[0],
 						   Grid,
 						   Ausgewertete_Limbmessung_MgII,
 						   Ausgewertete_Nadirmessung_MgII,
@@ -902,8 +902,8 @@ int main(int argc, char *argv[])
 						   S_apriori_unknown, S_y_unknown,
 						   AMF_unknown, unknown_Lambda_apriori,
 						   Saeulendichten_Fehler_unknown,
-						   Spezies_Fenster[2],
 						   // TODO 1 ist MgI, 0 ist MgII hier wieder korrigieren
+						   Spezies_Fenster[2],
 						   Grid,
 						   Ausgewertete_Limbmessung_unknown,
 						   Ausgewertete_Nadirmessung_unknown,
