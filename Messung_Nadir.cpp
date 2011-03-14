@@ -208,13 +208,13 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	// Speicherplatzbedarf für die Fenster ermitteln
 	int Bas_l = (Index_Basisfenster_links_max - Index_Basisfenster_links_min + 1);
 	int Bas_r = (Index_Basisfenster_rechts_max - Index_Basisfenster_rechts_min + 1);
-	int Speicherbedarf_Basis = Bas_l + Bas_r;
-	int Speicherbedarf_Peak = Index_Peakfenster_max - Index_Peakfenster_min + 1;
+	int N_Basis = Bas_l + Bas_r;
+	int N_Peak = Index_Peakfenster_max - Index_Peakfenster_min + 1;
 	// Speicher anfordern
-	Basisfenster_WL = new double[Speicherbedarf_Basis];
-	Basisfenster_Intensitaet = new double[Speicherbedarf_Basis];
-	Peakfenster_WL = new double[Speicherbedarf_Peak];
-	Peakfenster_Intensitaet = new double[Speicherbedarf_Peak];
+	Basisfenster_WL = new double[N_Basis];
+	Basisfenster_Intensitaet = new double[N_Basis];
+	Peakfenster_WL = new double[N_Peak];
+	Peakfenster_Intensitaet = new double[N_Peak];
 	// Basisfenster WL und I auffüllen
 	for (int i = 0; i < Bas_l; i++) {
 		Basisfenster_WL[i] = this->m_Wellenlaengen[Index_Basisfenster_links_min + i];
@@ -227,7 +227,7 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 			this->m_Intensitaeten_durch_piF_Gamma[Index_Basisfenster_rechts_min + i];
 	}
 	//Peakfenster WL und I auffüllen
-	for (int i = 0; i < Speicherbedarf_Peak; i++) {
+	for (int i = 0; i < N_Peak; i++) {
 		Peakfenster_WL[i] = m_Wellenlaengen[Index_Peakfenster_min + i];
 		Peakfenster_Intensitaet[i] = m_Intensitaeten_durch_piF_Gamma[Index_Peakfenster_min + i];
 	}
@@ -235,9 +235,9 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	// Proto: Fit_Linear(double* x,double* y, double& a0, double& a1,int Anfangsindex, int Endindex)
 	double a0, a1;
 	Fit_Linear(Basisfenster_WL, Basisfenster_Intensitaet, a0, a1, 0,
-			Speicherbedarf_Basis - 1);
+			N_Basis - 1);
 	// lineare Funktion von Intensitäten des Peakfenster abziehen
-	for (int i = 0; i < Speicherbedarf_Peak; i++) {
+	for (int i = 0; i < N_Peak; i++) {
 		Peakfenster_Intensitaet[i] -= a0 + a1 * Peakfenster_WL[i];
 	}
 	// Hyperboloiden an Peakfenster anfitten
@@ -247,12 +247,12 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	double Flaeche;
 	Fit_Peak_hyperbolic(Peakfenster_WL, Peakfenster_Intensitaet,
 						Spezfenst.m_Wellenlaengen[Index],
-						Spezfenst.m_FWHM, Flaeche, 0, Speicherbedarf_Peak - 1);
+						Spezfenst.m_FWHM, Flaeche, 0, N_Peak - 1);
 	//Fehler des Fits bestimmen...
 	//da Peakfenster_Intensitaet nicht mehr gebraucht wird
 	//die Basislinie für die Fehlerberechnung wieder aufaddiert
 	m_Zeilendichte = Flaeche;
-	for (int i = 0; i < Speicherbedarf_Peak; i++) {
+	for (int i = 0; i < N_Peak; i++) {
 		Peakfenster_Intensitaet[i] += a0 + a1 * Peakfenster_WL[i];
 	}
 	// Funktion double Messung_Limb::Evaluate_Error_primitive(double* x,
@@ -261,18 +261,18 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	m_Fehler_Zeilendichten =
 		Evaluate_Error_primitive(Peakfenster_WL, Peakfenster_Intensitaet,
 				a0, a1, m_Zeilendichte, Spezfenst.m_FWHM,
-				Spezfenst.m_Wellenlaengen[Index], 0, Speicherbedarf_Peak - 1);
+				Spezfenst.m_Wellenlaengen[Index], 0, N_Peak - 1);
 	////////////////////////////////////////////////////////////////////////////
 	// Hier kann man zur Testzwecken noch einen Plot machen  ///////////////////
 	if (mache_Fit_Plots == "ja") {
 		//TODO das als Funktion implementieren
 		double *Funktion;
-		Funktion = new double[Speicherbedarf_Peak];
+		Funktion = new double[N_Peak];
 		const double pi = 3.14159265;
 		double FWHM = Spezfenst.m_FWHM;
 		double cnorm = 4.0 * pi * sqrt(2.0) / (FWHM * FWHM * FWHM);
 
-		for (int i = 0; i < Speicherbedarf_Peak; i++) {
+		for (int i = 0; i < N_Peak; i++) {
 			double Basis = a0 + a1 * Peakfenster_WL[i];
 			double Peak = m_Zeilendichte /
 				(cnorm * (pow(0.5 * FWHM, 4)
@@ -325,12 +325,12 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 		//  int Startindex,int Endindex);
 		//Plot_2xy(s1.c_str(),s1.substr(s1.size()-50,50).c_str(),"$\\lambda$ in nm",
 		// "$\\frac{I}{\\piF\\gamma}$",Peakfenster_WL,Peakfenster_Intensitaet,
-		// Peakfenster_WL,Funktion,0,Speicherbedarf_Peak-1); //-> Fit geht
+		// Peakfenster_WL,Funktion,0,N_Peak-1); //-> Fit geht
 		Plot_2xy(Arbeitsverzeichnis.c_str(), s1.c_str(), s2.c_str(),
 				"Wellenlaenge in nm",
 				"Schraege Saeule bei Peakposition in cm^{-2}/nm",
 				 Peakfenster_WL, Peakfenster_Intensitaet, Peakfenster_WL,
-				 Funktion, 0, Speicherbedarf_Peak - 1,
+				 Funktion, 0, N_Peak - 1,
 				 m_Zeilendichte, m_Fehler_Zeilendichten);
 		SAVEDELETE(Funktion);
 	}

@@ -179,13 +179,13 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	// Speicherplatzbedarf für die Fenster ermitteln
 	int Bas_l = (Index_Basisfenster_links_max - Index_Basisfenster_links_min + 1);
 	int Bas_r = (Index_Basisfenster_rechts_max - Index_Basisfenster_rechts_min + 1);
-	int Speicherbedarf_Basis = Bas_l + Bas_r;
-	int Speicherbedarf_Peak = Index_Peakfenster_max - Index_Peakfenster_min + 1;
+	int N_Basis = Bas_l + Bas_r;
+	int N_Peak = Index_Peakfenster_max - Index_Peakfenster_min + 1;
 	// Speicher anfordern
-	Basisfenster_WL = new double[Speicherbedarf_Basis];
-	Basisfenster_Intensitaet = new double[Speicherbedarf_Basis];
-	Peakfenster_WL = new double[Speicherbedarf_Peak];
-	Peakfenster_Intensitaet = new double[Speicherbedarf_Peak];
+	Basisfenster_WL = new double[N_Basis];
+	Basisfenster_Intensitaet = new double[N_Basis];
+	Peakfenster_WL = new double[N_Peak];
+	Peakfenster_Intensitaet = new double[N_Peak];
 	// Basisfenster WL und I auffüllen
 	for (int i = 0; i < Bas_l; i++) {
 		Basisfenster_WL[i] = this->m_Wellenlaengen[Index_Basisfenster_links_min + i];
@@ -198,7 +198,7 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 			this->m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand[Index_Basisfenster_rechts_min + i];
 	}
 	//Peakfenster WL und I auffüllen
-	for (int i = 0; i < Speicherbedarf_Peak; i++) {
+	for (int i = 0; i < N_Peak; i++) {
 		Peakfenster_WL[i] = m_Wellenlaengen[Index_Peakfenster_min + i];
 		Peakfenster_Intensitaet[i] =
 			m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand[Index_Peakfenster_min + i];
@@ -208,9 +208,9 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	// Anfangsindex, int Endindex)
 	double a0, a1;
 	Fit_Linear(Basisfenster_WL, Basisfenster_Intensitaet, a0, a1, 0,
-			Speicherbedarf_Basis - 1);
+			N_Basis - 1);
 	// lineare Funktion von Intensitäten des Peakfenster abziehen
-	for (int i = 0; i < Speicherbedarf_Peak; i++) {
+	for (int i = 0; i < N_Peak; i++) {
 		Peakfenster_Intensitaet[i] -= a0 + a1 * Peakfenster_WL[i];
 	}
 	// Hyperboloiden an Peakfenster anfitten
@@ -219,7 +219,7 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	double Flaeche;
 	Fit_Peak_hyperbolic(Peakfenster_WL, Peakfenster_Intensitaet,
 						Spezfenst.m_Wellenlaengen[Index],
-						Spezfenst.m_FWHM, Flaeche, 0, Speicherbedarf_Peak - 1);
+						Spezfenst.m_FWHM, Flaeche, 0, N_Peak - 1);
 	// Hier Wellenlängen in nm verwendet..das hebt sich mit dem Gitterabstand
 	// raus
 	//Fehler des Fits bestimmen... da Peakfenster_Intensitaet nicht mehr
@@ -227,7 +227,7 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	m_Zeilendichte = Flaeche;
 	//cout<<m_Zeilendichte<<"\n";
 	//cout<<Spezfenst.m_Liniendaten[Index].m_Gamma<<"\n";
-	for (int i = 0; i < Speicherbedarf_Peak; i++) {
+	for (int i = 0; i < N_Peak; i++) {
 		Peakfenster_Intensitaet[i] += a0 + a1 * Peakfenster_WL[i];
 	}
 	// Funktion double Messung_Limb::Evaluate_Error_primitive(double* x,
@@ -235,19 +235,19 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	// int Anfangsindex, int Endindex)
 	m_Fehler_Zeilendichten = Evaluate_Error_primitive(Peakfenster_WL,
 			Peakfenster_Intensitaet, a0, a1, m_Zeilendichte, Spezfenst.m_FWHM,
-			Spezfenst.m_Wellenlaengen[Index], 0, Speicherbedarf_Peak - 1);
+			Spezfenst.m_Wellenlaengen[Index], 0, N_Peak - 1);
 
 	////////////////////////////////////////////////////////////////////////////
 	// Hier kann man zur Testzwecken noch einen Plot machen  ///////////////////
 	if (mache_Fit_Plots == "ja") {
 		//TODO das als Funktion implementieren
 		double *Funktion;
-		Funktion = new double[Speicherbedarf_Peak];
+		Funktion = new double[N_Peak];
 		const double pi = 3.14159265;
 		double FWHM = Spezfenst.m_FWHM;
 		double cnorm = 4.0 * pi * sqrt(2.0) / (FWHM * FWHM * FWHM);
 
-		for (int i = 0; i < Speicherbedarf_Peak; i++) {
+		for (int i = 0; i < N_Peak; i++) {
 			double Basis = a0 + a1 * Peakfenster_WL[i];
 			double Peak = m_Zeilendichte /
 				(cnorm * (pow(0.5 * FWHM, 4)
@@ -298,13 +298,13 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 		//int Startindex,int Endindex);
 		//Plot_2xy(s1.c_str(),s1.substr(s1.size()-50,50).c_str(),
 		//"$\\lambda$ in nm","$\\frac{I}{\\piF\\gamma}$",Peakfenster_WL,
-		//Peakfenster_Intensitaet,Peakfenster_WL,Funktion,0,Speicherbedarf_Peak-1);
+		//Peakfenster_Intensitaet,Peakfenster_WL,Funktion,0,N_Peak-1);
 		//-> Fit geht
 		Plot_2xy(Arbeitsverzeichnis.c_str(), s1.c_str(), s2.c_str(),
 				 "Wellenlaenge in nm",
 				 "Schraege Saeule bei Peakposition in cm^{-2}/nm",
 				 Peakfenster_WL, Peakfenster_Intensitaet, Peakfenster_WL,
-				 Funktion, 0, Speicherbedarf_Peak - 1,
+				 Funktion, 0, N_Peak - 1,
 				 m_Zeilendichte, m_Fehler_Zeilendichten);
 		SAVEDELETE(Funktion);
 	}
@@ -369,15 +369,15 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 	// Speicherplatzbedarf für die Fenster ermitteln
 	int Bas_l = (Index_Basisfenster_links_max - Index_Basisfenster_links_min + 1);
 	int Bas_r = (Index_Basisfenster_rechts_max - Index_Basisfenster_rechts_min + 1);
-	int Speicherbedarf_Basis = Bas_l + Bas_r;
-	//int Speicherbedarf_Peak=Index_Peakfenster_max-Index_Peakfenster_min+1;
-	int Speicherbedarf_Vollfenster = Index_Basisfenster_rechts_max - Index_Basisfenster_links_min + 1;
+	int N_Basis = Bas_l + Bas_r;
+	//int N_Peak=Index_Peakfenster_max-Index_Peakfenster_min+1;
+	int N_Vollfenster = Index_Basisfenster_rechts_max - Index_Basisfenster_links_min + 1;
 	// Speicher anfordern
-	Basisfenster_WL = new double[Speicherbedarf_Basis];
-	Basisfenster_Intensitaet = new double[Speicherbedarf_Basis];
-	Vollfenster_WL = new double[Speicherbedarf_Vollfenster];
-	Vollfenster_Limb = new double[Speicherbedarf_Vollfenster];
-	Vollfenster_Sonne = new double[Speicherbedarf_Vollfenster];
+	Basisfenster_WL = new double[N_Basis];
+	Basisfenster_Intensitaet = new double[N_Basis];
+	Vollfenster_WL = new double[N_Vollfenster];
+	Vollfenster_Limb = new double[N_Vollfenster];
+	Vollfenster_Sonne = new double[N_Vollfenster];
 
 	// Basisfenster WL und I auffüllen
 	for (int i = 0; i < Bas_l; i++) {
@@ -392,15 +392,15 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 	}
 
 	//Vollfenster Limb und Sonne auffüllen
-	for (int i = 0; i < Speicherbedarf_Vollfenster; i++) {
+	for (int i = 0; i < N_Vollfenster; i++) {
 		Vollfenster_WL[i] = m_Wellenlaengen[Index_Basisfenster_links_min + i];
 		Vollfenster_Limb[i] = m_Intensitaeten[Index_Basisfenster_links_min + i];
 		Vollfenster_Sonne[i] = m_Sonne[Index_Basisfenster_links_min + i];
 	}
 
 	double *Vollfenster_Limb_mittlere_atmo; //zwischen 40 und 60km
-	Vollfenster_Limb_mittlere_atmo = new double[Speicherbedarf_Vollfenster];
-	for (int i = 0; i < Speicherbedarf_Vollfenster; i++) {
+	Vollfenster_Limb_mittlere_atmo = new double[N_Vollfenster];
+	for (int i = 0; i < N_Vollfenster; i++) {
 		Vollfenster_Limb_mittlere_atmo[i] = mean_10_20[Index_Basisfenster_links_min + i];
 	}
 	//Minima vergleichen um Linie herum (5 nachbarpunkte)
@@ -428,13 +428,13 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 		cout << "Minima weit auseinander\n";
 	}
 	double *vor_Verschiebung;
-	vor_Verschiebung = new double[Speicherbedarf_Vollfenster];
-	for (int i = 0; i < Speicherbedarf_Vollfenster; i++) {
+	vor_Verschiebung = new double[N_Vollfenster];
+	for (int i = 0; i < N_Vollfenster; i++) {
 		vor_Verschiebung[i] = Vollfenster_Limb[i];
 	}
-	for (int i = 0; i < Speicherbedarf_Vollfenster; i++) {
+	for (int i = 0; i < N_Vollfenster; i++) {
 		if (!(((i + Verschiebung) < 0)
-			|| (i + Verschiebung >= Speicherbedarf_Vollfenster))) {
+			|| (i + Verschiebung >= N_Vollfenster))) {
 			Vollfenster_Limb[i + Verschiebung] = vor_Verschiebung[i];
 		}
 	}
@@ -443,8 +443,8 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 	// Spektrum glätten
 	int smooth_Nachbarn = 0; //2;
 	int smooth_Iterationen = 0; //4;
-	smooth_data(Speicherbedarf_Vollfenster, Vollfenster_Limb, smooth_Nachbarn, smooth_Iterationen);
-	smooth_data(Speicherbedarf_Vollfenster, Vollfenster_Sonne, smooth_Nachbarn, smooth_Iterationen);
+	smooth_data(N_Vollfenster, Vollfenster_Limb, smooth_Nachbarn, smooth_Iterationen);
+	smooth_data(N_Vollfenster, Vollfenster_Sonne, smooth_Nachbarn, smooth_Iterationen);
 
 	// linearen Fit des Basisfensters durchführen
 	// Proto:
@@ -452,7 +452,7 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 	//   int Anfangsindex, int Endindex)
 	double a0, a1;
 	Fit_Linear(Basisfenster_WL, Basisfenster_Intensitaet, a0, a1, 0,
-			Speicherbedarf_Basis - 1);
+			N_Basis - 1);
 
 	int Polynomgrad = 4;
 	//Get_Index(Spezfenst.m_Wellenlaengen[Index]) darf hier nicht benutzt werden
@@ -480,11 +480,11 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 	double *Vollfenster_fein_WL;
 	double *Vollfenster_fein_Limb;
 	double *Vollfenster_fein_Sonne;
-	int Speicherbedarf_Vollfenster_fein = 1 + (Speicherbedarf_Vollfenster - 1) * 5;
-	Vollfenster_fein_WL = new double[Speicherbedarf_Vollfenster_fein];
-	Vollfenster_fein_Limb = new double[Speicherbedarf_Vollfenster_fein];
-	Vollfenster_fein_Sonne = new double[Speicherbedarf_Vollfenster_fein];
-	for (int i = 0; i < (Speicherbedarf_Vollfenster - 1); i++) {
+	int N_Vollfenster_fein = 1 + (N_Vollfenster - 1) * 5;
+	Vollfenster_fein_WL = new double[N_Vollfenster_fein];
+	Vollfenster_fein_Limb = new double[N_Vollfenster_fein];
+	Vollfenster_fein_Sonne = new double[N_Vollfenster_fein];
+	for (int i = 0; i < (N_Vollfenster - 1); i++) {
 		Vollfenster_fein_WL[5 * i] = Vollfenster_WL[i];
 		Vollfenster_fein_WL[5 * i + 1] = Vollfenster_WL[i] + 0.2 * (Vollfenster_WL[i + 1] - Vollfenster_WL[i]);
 		Vollfenster_fein_WL[5 * i + 2] = Vollfenster_WL[i] + 0.4 * (Vollfenster_WL[i + 1] - Vollfenster_WL[i]);
@@ -492,9 +492,9 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 		Vollfenster_fein_WL[5 * i + 4] = Vollfenster_WL[i] + 0.8 * (Vollfenster_WL[i + 1] - Vollfenster_WL[i]);
 	}
 	//letzter Punkt, nicht verfünffachen
-	Vollfenster_fein_WL[Speicherbedarf_Vollfenster_fein - 1] = Vollfenster_WL[Speicherbedarf_Vollfenster - 1];
+	Vollfenster_fein_WL[N_Vollfenster_fein - 1] = Vollfenster_WL[N_Vollfenster - 1];
 	//Limb und Sonnenspektrum für diskrete Punkte ausrechnen
-	for (int i = 0; i < Speicherbedarf_Vollfenster_fein; i++) {
+	for (int i = 0; i < N_Vollfenster_fein; i++) {
 		Vollfenster_fein_Limb[i] = 0;
 		Vollfenster_fein_Sonne[i] = 0;
 	}
@@ -532,12 +532,12 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 //    cout<<"Sonne_Indexmin: "<<Sonne_Indexmin<<"\n";
 //    cout<<"shift: "<<shift<<"\n";
 
-	vor_shift = new double[Speicherbedarf_Vollfenster_fein];
-	for (int i = 0; i < Speicherbedarf_Vollfenster_fein; i++) {
+	vor_shift = new double[N_Vollfenster_fein];
+	for (int i = 0; i < N_Vollfenster_fein; i++) {
 		vor_shift[i] = Vollfenster_fein_Limb[i];
 	}
-	for (int i = 0; i < Speicherbedarf_Vollfenster_fein; i++) {
-		if (!(((i + shift) < 0) || (i + shift >= Speicherbedarf_Vollfenster_fein))) {
+	for (int i = 0; i < N_Vollfenster_fein; i++) {
+		if (!(((i + shift) < 0) || (i + shift >= N_Vollfenster_fein))) {
 			Vollfenster_fein_Limb[i + shift] = vor_shift[i];
 		}
 	}
@@ -545,18 +545,18 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 	//Die beiden gefitteten Spektren dividieren Limb/Sonne
 	double *Fit_Quotient;
 	double *Messwerte_Quotient;
-	Messwerte_Quotient = new double[Speicherbedarf_Vollfenster];
-	Fit_Quotient = new double[Speicherbedarf_Vollfenster_fein];
-	for (int i = 0; i < Speicherbedarf_Vollfenster; i++) {
+	Messwerte_Quotient = new double[N_Vollfenster];
+	Fit_Quotient = new double[N_Vollfenster_fein];
+	for (int i = 0; i < N_Vollfenster; i++) {
 		Messwerte_Quotient[i] = Vollfenster_Limb[i] / Vollfenster_Sonne[i];
 	}
 	int Ind = Get_Index(Spezfenst.m_Wellenlaengen[Index]);
 	double Delta_WL = (m_Wellenlaengen[Ind + 1] - m_Wellenlaengen[Ind]);
 	double Umrechnung = 1 / (Delta_WL * Spezfenst.m_Liniendaten[Index].m_Gamma);
-	for (int i = 0; i < Speicherbedarf_Vollfenster; i++) {
+	for (int i = 0; i < N_Vollfenster; i++) {
 		Messwerte_Quotient[i] *= Umrechnung;
 	}
-	for (int i = 0; i < Speicherbedarf_Vollfenster_fein; i++) {
+	for (int i = 0; i < N_Vollfenster_fein; i++) {
 		Fit_Quotient[i] = Umrechnung * Vollfenster_fein_Limb[i]
 						  / Vollfenster_fein_Sonne[i];
 		//cout<<Vollfenster_fein_WL[i]<<"\t"<<Fit_Quotient[i]<<"\n";
@@ -564,29 +564,29 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 	}
 
 	//Basislinie abziehen
-	for (int i = 0; i < Speicherbedarf_Vollfenster; i++) {
+	for (int i = 0; i < N_Vollfenster; i++) {
 		Messwerte_Quotient[i] -= a0 + a1 * Vollfenster_WL[i];
 	}
-	for (int i = 0; i < Speicherbedarf_Vollfenster_fein; i++) {
+	for (int i = 0; i < N_Vollfenster_fein; i++) {
 		Fit_Quotient[i]             -= a0 + a1 * Vollfenster_fein_WL[i];
 	}
 	// Falls an der Stelle des Peaks der Wert jetzt negativ ist, alle positiven
 	// Werte abschneiden, sonst negative
 	if (Fit_Quotient[Sonne_Indexmin] < 0) {
-		for (int i = 0; i < Speicherbedarf_Vollfenster_fein; i++) {
+		for (int i = 0; i < N_Vollfenster_fein; i++) {
 			if (Fit_Quotient[i] > 0) {
 				Fit_Quotient[i] = 0;
 			}
 		}
 	} else {
-		for (int i = 0; i < Speicherbedarf_Vollfenster_fein; i++) {
+		for (int i = 0; i < N_Vollfenster_fein; i++) {
 			if (Fit_Quotient[i] < 0) {
 				Fit_Quotient[i] = 0;
 			}
 		}
 	}
 	//Alles Abschneiden, was nicht zum peak beiträgt
-	for (int i = 0; i < Speicherbedarf_Vollfenster_fein; i++) {
+	for (int i = 0; i < N_Vollfenster_fein; i++) {
 		if ((Vollfenster_fein_WL[i] < 284.8) || (Vollfenster_fein_WL[i] > 285.6)) {
 			Fit_Quotient[i] = 0;
 		}
@@ -598,7 +598,7 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 	// as hebt sich mit dem Gitterabstand raus
 	Fit_Peak_hyperbolic(Vollfenster_fein_WL, Fit_Quotient, Sonne_WL_min,
 						Spezfenst.m_FWHM, Flaeche, 0,
-						Speicherbedarf_Vollfenster_fein - 1);
+						N_Vollfenster_fein - 1);
 
 	//Plotroutine aufrufen
 	if (mache_Fit_Plots == "ja") {
@@ -640,11 +640,11 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 		Plot_Slantcoloumns_polyfit_MgI(Arbeitsverzeichnis.c_str(), s1.c_str(),
 									   s2.c_str(),
 									   Vollfenster_WL,
-									   0.35 * (Speicherbedarf_Vollfenster - 1),
-									   0.8 * (Speicherbedarf_Vollfenster - 1),
+									   0.35 * (N_Vollfenster - 1),
+									   0.8 * (N_Vollfenster - 1),
 									   Vollfenster_fein_WL,
-									   0.35 * (Speicherbedarf_Vollfenster_fein - 1),
-									   0.8 * (Speicherbedarf_Vollfenster_fein - 1),
+									   0.35 * (N_Vollfenster_fein - 1),
+									   0.8 * (N_Vollfenster_fein - 1),
 									   Vollfenster_Limb, Vollfenster_fein_Limb,
 									   Vollfenster_Sonne, Vollfenster_fein_Sonne,
 									   Messwerte_Quotient, Fit_Quotient);
@@ -691,17 +691,17 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 	// Speicherplatzbedarf für die Fenster ermitteln
 	int Bas_l = (Index_Basisfenster_links_max - Index_Basisfenster_links_min + 1);
 	int Bas_r = (Index_Basisfenster_rechts_max - Index_Basisfenster_rechts_min + 1);
-	int Speicherbedarf_Basis = Bas_l + Bas_r;
-	//int Speicherbedarf_Peak=Index_Peakfenster_max-Index_Peakfenster_min+1;
-	int Speicherbedarf_Vollfenster = Index_Basisfenster_rechts_max - Index_Basisfenster_links_min + 1;
+	int N_Basis = Bas_l + Bas_r;
+	//int N_Peak=Index_Peakfenster_max-Index_Peakfenster_min+1;
+	int N_Vollfenster = Index_Basisfenster_rechts_max - Index_Basisfenster_links_min + 1;
 	// Speicher anfordern
-	Basisfenster_WL = new double[Speicherbedarf_Basis];
-	Basisfenster_Intensitaet = new double[Speicherbedarf_Basis];
-	Vollfenster_WL = new double[Speicherbedarf_Vollfenster];
-	Vollfenster_Limb = new double[Speicherbedarf_Vollfenster];
-	Vollfenster_Sonne = new double[Speicherbedarf_Vollfenster];
+	Basisfenster_WL = new double[N_Basis];
+	Basisfenster_Intensitaet = new double[N_Basis];
+	Vollfenster_WL = new double[N_Vollfenster];
+	Vollfenster_Limb = new double[N_Vollfenster];
+	Vollfenster_Sonne = new double[N_Vollfenster];
 
-	Vollfenster_Limb_abs_error = new double[Speicherbedarf_Vollfenster];
+	Vollfenster_Limb_abs_error = new double[N_Vollfenster];
 
 	// Basisfenster WL und I auffüllen
 	for (int i = 0; i < Bas_l; i++) {
@@ -717,7 +717,7 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 	}
 
 	//Vollfenster Limb und Sonne auffüllen
-	for (int i = 0; i < Speicherbedarf_Vollfenster; i++) {
+	for (int i = 0; i < N_Vollfenster; i++) {
 		Vollfenster_WL[i] = m_Wellenlaengen[Index_Basisfenster_links_min + i];
 		Vollfenster_Limb[i] = m_Intensitaeten[Index_Basisfenster_links_min + i];
 		Vollfenster_Sonne[i] = m_Sonne[Index_Basisfenster_links_min + i];
@@ -728,8 +728,8 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 	// TODO braucht man das hier überhaupt noch für irgendwas...wenn nicht weg
 	// damit..das verwirrt nur
 	//double* Vollfenster_Limb_mittlere_atmo; //zwischen 40 und 60km
-	//Vollfenster_Limb_mittlere_atmo=new double[Speicherbedarf_Vollfenster];
-	//for(int i=0;i<Speicherbedarf_Vollfenster;i++)
+	//Vollfenster_Limb_mittlere_atmo=new double[N_Vollfenster];
+	//for(int i=0;i<N_Vollfenster;i++)
 	//{
 	//  Vollfenster_Limb_mittlere_atmo[i]
 	//    = mean_10_20[Index_Basisfenster_links_min+i];
@@ -739,8 +739,8 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 	// ...könnte man auch auskommentieren
 	int smooth_Nachbarn = 0; //1;//2;
 	int smooth_Iterationen = 0; //6;//4;
-	smooth_data(Speicherbedarf_Vollfenster, Vollfenster_Limb, smooth_Nachbarn, smooth_Iterationen);
-	smooth_data(Speicherbedarf_Vollfenster, Vollfenster_Sonne, smooth_Nachbarn, smooth_Iterationen);
+	smooth_data(N_Vollfenster, Vollfenster_Limb, smooth_Nachbarn, smooth_Iterationen);
+	smooth_data(N_Vollfenster, Vollfenster_Sonne, smooth_Nachbarn, smooth_Iterationen);
 
 	// linearen Fit des Basisfensters durchführen
 	// TODO Basisfenster neu berechnen
@@ -749,13 +749,13 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 	// int Endindex)
 	double a0, a1;
 	Fit_Linear(Basisfenster_WL, Basisfenster_Intensitaet, a0, a1, 0,
-			Speicherbedarf_Basis - 1);
+			N_Basis - 1);
 	//Die beiden gefitteten Spektren dividieren Limb/Sonne
 	double *Messwerte_Quotient;
 	double *Messwerte_Quotient_error;  // Es wird angenommen, der Fehler liegt nur in Limb vor
-	Messwerte_Quotient = new double[Speicherbedarf_Vollfenster];
-	Messwerte_Quotient_error = new double[Speicherbedarf_Vollfenster];
-	for (int i = 0; i < Speicherbedarf_Vollfenster; i++) {
+	Messwerte_Quotient = new double[N_Vollfenster];
+	Messwerte_Quotient_error = new double[N_Vollfenster];
+	for (int i = 0; i < N_Vollfenster; i++) {
 		Messwerte_Quotient[i] = Vollfenster_Limb[i] / Vollfenster_Sonne[i];
 		// Die relativen Fehler von MW_Q und Vf_L sind gleich...Limb ist linear,
 		// also auch Fehler linear skalieren
@@ -766,13 +766,13 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 	int Ind = Get_Index(Spezfenst.m_Wellenlaengen[Index]);
 	double Delta_WL = (m_Wellenlaengen[Ind + 1] - m_Wellenlaengen[Ind]);
 	double Umrechnung = 1 / (Delta_WL * Spezfenst.m_Liniendaten[Index].m_Gamma);
-	for (int i = 0; i < Speicherbedarf_Vollfenster; i++) {
+	for (int i = 0; i < N_Vollfenster; i++) {
 		Messwerte_Quotient[i] *= Umrechnung;
 		Messwerte_Quotient_error[i] *= Umrechnung;
 	}
 
 	//Basislinie abziehen
-	for (int i = 0; i < Speicherbedarf_Vollfenster; i++) {
+	for (int i = 0; i < N_Vollfenster; i++) {
 		Messwerte_Quotient[i] -= a0 + a1 * Vollfenster_WL[i];
 		// Im besten Fall verändert sich der absolute Fehler nicht...aber der
 		// relative, wenn die Baseline im Vergleich zum peak hoch liegt
@@ -781,20 +781,20 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 	/////////////////////(und nicht den gegebenen Fehler nehmen
 	// Zunächst nochmal den Mittelwert bilden
 	double *Messwerte_Quotient_stabw;
-	Messwerte_Quotient_stabw = new double[Speicherbedarf_Vollfenster];
+	Messwerte_Quotient_stabw = new double[N_Vollfenster];
 	double Mean = 0;
-	for (int i = 0; i < Speicherbedarf_Vollfenster; i++)  {
+	for (int i = 0; i < N_Vollfenster; i++)  {
 		Mean += Messwerte_Quotient[i];
 	}
-	Mean /= Speicherbedarf_Vollfenster;
+	Mean /= N_Vollfenster;
 	double standardabweichung = 0;
-	for (int i = 0; i < Speicherbedarf_Vollfenster; i++) {
+	for (int i = 0; i < N_Vollfenster; i++) {
 		standardabweichung += (Messwerte_Quotient[i] - Mean)
 							  * (Messwerte_Quotient[i] - Mean);
 	}
-	standardabweichung /= Speicherbedarf_Vollfenster - 1;
+	standardabweichung /= N_Vollfenster - 1;
 	standardabweichung = sqrt(standardabweichung);
-	for (int i = 0; i < Speicherbedarf_Vollfenster; i++)    {
+	for (int i = 0; i < N_Vollfenster; i++)    {
 		Messwerte_Quotient_stabw[i] = standardabweichung;
 	}
 	// Ende Fehler aus Residuum abschätzen //////////////
@@ -839,12 +839,12 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 		Plot_Spektren_und_Quotient(Arbeitsverzeichnis.c_str(),
 								   s1.c_str(), s2.c_str(),
 								   Vollfenster_WL, 0,
-								   Speicherbedarf_Vollfenster - 1,
+								   N_Vollfenster - 1,
 								   Vollfenster_Limb, Vollfenster_Limb_abs_error,
 								   Vollfenster_Sonne, Messwerte_Quotient,
 								   Messwerte_Quotient_error);
 		/*Plot_Quotient_mit_Fehler(Arbeitsverzeichnis.c_str(),s1.c_str(), s2.c_str(),
-		                   Vollfenster_WL,0 ,Speicherbedarf_Vollfenster-1,
+		                   Vollfenster_WL,0 ,N_Vollfenster-1,
 		                   Messwerte_Quotient,Messwerte_Quotient_error,
 		                   Messwerte_Quotient_stabw);*/
 	}
@@ -856,7 +856,7 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 	Fit_Peak_hyperbolic(Vollfenster_WL, Messwerte_Quotient,
 						Spezfenst.m_Wellenlaengen[Index],
 						Spezfenst.m_FWHM, Flaeche, 0,
-						Speicherbedarf_Vollfenster - 1);
+						N_Vollfenster - 1);
 	//Fehler des Fits bestimmen... da Peakfenster_Intensitaet nicht mehr
 	//gebraucht wird die Basislinie für die Fehlerberechnung wieder aufaddiert
 	m_Zeilendichte = Flaeche;
@@ -868,7 +868,7 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 								 Messwerte_Quotient, a0, a1, m_Zeilendichte,
 								 Spezfenst.m_FWHM,
 								 Spezfenst.m_Wellenlaengen[Index], 0,
-								 Speicherbedarf_Vollfenster - 1);
+								 N_Vollfenster - 1);
 	//////////////////////////////////////////////
 	/////////////////////////////////////////////
 
