@@ -148,7 +148,7 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	//MinLat=0.0;
 	Breitenzahl = 20; //20
 	//Breitenzahl=10;
-	double Gitterkonstante = (MaxLat - MinLat) / ((double) Breitenzahl - 1);
+	const double Gitterkonstante = (MaxLat - MinLat) / (double)(Breitenzahl - 1);
 	// Hoeheneinteilung
 	// Bisherige Werte für: (mehr Höhen, mehr Rechenzeit,
 	// mehr unterbestimmtheit der Gelichungssysteme
@@ -159,14 +159,14 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	double untere_Hoehe[10];
 	double obere_Hoehe[10];
 	int Anzahl_Hoehen = 10;
-	for (int Hoehenschritt = 0; Hoehenschritt < Anzahl_Hoehen; Hoehenschritt++) {
-		//   mittlere_Hoehe[Hoehenschritt] =69.0+Hoehenschritt;
-		//   obere_Hoehe[Hoehenschritt]    =69.5+Hoehenschritt;
-		//   untere_Hoehe[Hoehenschritt]   =68.5+Hoehenschritt;
+	for (int i = 0; i < Anzahl_Hoehen; i++) {
+		//   mittlere_Hoehe[i] =69.0+i;
+		//   obere_Hoehe[i]    =69.5+i;
+		//   untere_Hoehe[i]   =68.5+i;
 		// 3km Schritte
-		mittlere_Hoehe[Hoehenschritt] = 70.0 + Hoehenschritt * 3; //30 Höhen
-		obere_Hoehe[Hoehenschritt]    = 71.5 + Hoehenschritt * 3;
-		untere_Hoehe[Hoehenschritt]   = 68.5 + Hoehenschritt * 3;
+		mittlere_Hoehe[i] = 70.0 + i * 3.; //30 Höhen
+		obere_Hoehe[i]    = 71.5 + i * 3.;
+		untere_Hoehe[i]   = 68.5 + i * 3.;
 	}
 	/////////////////////////////
 
@@ -183,12 +183,12 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	this->m_Anzahl_Punkte = m_Anzahl_Breiten * m_Anzahl_Hoehen;
 	//cerr<<"m_Anzahl_Punkte: "<<m_Anzahl_Punkte<<"\n";
 	m_Gitter = new Gitterpunkt[m_Anzahl_Punkte];
+	Gitterpunkt GP;
 	//Gitterpunkte des Gitters erzeugen sortiert nach Höhen und Breiten
 	//cout<<"Anfang for i\n";
 	for (int i = 0; i < Breitenzahl; i++) { //Breiten von Nord nach Süd
 		//cout<<"Anfang for j\n";
 		for (int j = 0; j < Anzahl_Hoehen; j++) { //Höhen von unten nach oben
-			Gitterpunkt GP;
 			//Index des Punktes
 			// so sind alle Höhen in einer Zeile und Breiten in einer Spalte
 			GP.m_eigener_Index = i + j * Breitenzahl;
