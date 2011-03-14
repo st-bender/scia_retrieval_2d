@@ -231,8 +231,6 @@ int Retrievaliteration_old(MPL_Matrix &Dichten,
 						   MPL_Matrix &AMF,
 						   Konfiguration &Konf)
 {
-	//FIXME ACHTUNG TRESHOLD UND ITMAX WERDEN HIER PER HAND GESETZT
-	//  UND NICHT AUS KONF ÜBERNOMMEN
 	// Die Iteration ist schlecht.... apriori sollte nicht neu gesetzt werden
 	// Lieber eine iteration mit dem Rest, der noch da ist
 
@@ -291,7 +289,6 @@ int Retrievaliteration_old(MPL_Matrix &Dichten,
 	int Itmax = Konf.m_Max_Zahl_Iterationen;
 	double Threshold = Konf.m_Convergence_Treshold;
 	//Threshold=1E-5;  // für 12 Hoehen gut
-	Threshold = 1E-2;
 	MPL_Matrix Dichten_alt = Dichten;
 	MPL_Matrix RHS(Dichten.m_Zeilenzahl, 1);
 	//cout<<"RHS.m_Zeilenzahl: "<<RHS.m_Zeilenzahl<<"\n";
@@ -343,7 +340,6 @@ int Retrievaliteration_old(MPL_Matrix &Dichten,
 	RHS_Teil1 = AMF_trans * (S_y * Saeulendichten);
 
 	//Die Schleife ist echt schnell...das sollten höchstens 10 sekunden sein
-	Itmax = 10000;
 
 	for (int Iterationsschritt = 0; Iterationsschritt < Itmax; Iterationsschritt++) {
 
