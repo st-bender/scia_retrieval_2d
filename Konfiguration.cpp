@@ -14,14 +14,14 @@
 #include <string>          // string
 #include <cstdio>         // cout
 #include <iostream>        // cout
+#include <sstream>
 #include <cstdlib>        // für atoi
 
 //namespace
 using namespace std;
 
 //Protos für Hilfsfunktionen
-vector<double> String_mit_double_Zahlen_in_Vektor_schreiben(string Zeile);
-vector<int>     String_mit_int_Zahlen_in_Vektor_schreiben(string Zeile);
+template <class T> vector<T> string_to_vector(string zeile);
 
 //Destructor
 Konfiguration::~Konfiguration()
@@ -55,13 +55,16 @@ int Konfiguration::Konfiguration_einlesen()
 	// am besten SCIA2D.conf ausdrucken und verfolgen
 	string Zeile;
 	while (!(infile.eof())) {
+		stringstream ss;
+		int Zeilenzahl;
 		getline(infile, Zeile);
 		// Einträge abarbeiten
 		// Directory Structure /////
 		if (Zeile == "Number of emitters") {
 			//cout<<"Number of emitters\n";
 			getline(infile, Zeile);
-			this->m_Anzahl_der_Emitter = atoi(Zeile.c_str());
+			ss << Zeile;
+			ss >> m_Anzahl_der_Emitter;
 			continue;
 		}
 		if (Zeile == "Solar spectra") {
@@ -98,7 +101,7 @@ int Konfiguration::Konfiguration_einlesen()
 			//cout<<"ABS WL\n";
 			getline(infile, Zeile);
 			// Zeile bei whitespace zeichen teilen
-			m_AbsorbtionsWL_der_Atmosphaerengase = String_mit_double_Zahlen_in_Vektor_schreiben(Zeile);
+			m_AbsorbtionsWL_der_Atmosphaerengase = string_to_vector<double>(Zeile);
 			continue;
 		}
 		// Input DATA /////
@@ -117,7 +120,7 @@ int Konfiguration::Konfiguration_einlesen()
 		if (Zeile == "MinAlt and MaxAlt") {
 			//cout<<"Minalt maxalt\n";
 			getline(infile, Zeile);
-			vector<double> dummy = String_mit_double_Zahlen_in_Vektor_schreiben(Zeile);
+			vector<double> dummy = string_to_vector<double>(Zeile);
 			this->m_MinAlt = dummy[0];
 			this->m_MaxAlt = dummy[1];
 			continue;
@@ -125,11 +128,12 @@ int Konfiguration::Konfiguration_einlesen()
 		if (Zeile == "Altitude grid extensions") {
 			//cout<<"Altitude grid extensions\n";
 			getline(infile, Zeile);
-			int Zeilenzahl = atoi(Zeile.c_str());
+			ss << Zeile;
+			ss >> Zeilenzahl;
 			this->m_Anzahl_zusaetzliche_Hoehengitterpunkte = Zeilenzahl;
 			for (int i = 0; i < Zeilenzahl; i++) {
 				getline(infile, Zeile);
-				vector<double> dummy = String_mit_double_Zahlen_in_Vektor_schreiben(Zeile);
+				vector<double> dummy = string_to_vector<double>(Zeile);
 				this->m_Grid_ext_low.push_back(dummy[0]);
 				this->m_Grid_ext_high.push_back(dummy[1]);
 			}
@@ -138,62 +142,70 @@ int Konfiguration::Konfiguration_einlesen()
 		if (Zeile == "TOA") {
 			//cout<<"TOA\n";
 			getline(infile, Zeile);
-			this->m_TOA = atof(Zeile.c_str());
+			ss << Zeile;
+			ss >> m_TOA;
 			continue;
 		}
 		// Selection rules /////
 		if (Zeile == "Nadir retrieval") {
 			//cout<<"Nadir Retrieval\n";
 			getline(infile, Zeile);
-			this->m_Nadir_only = atoi(Zeile.c_str());
+			ss << Zeile;
+			ss >> this->m_Nadir_only;
 			continue;
 		}
 		if (Zeile == "Night") {
 			//cout<<"Night\n";
 			getline(infile, Zeile);
-			this->m_Nachtmessung = atoi(Zeile.c_str());
+			ss << Zeile;
+			ss >> this->m_Nachtmessung;
 			continue;
 		}
 		if (Zeile == "Geolocation") {
 			//cout<<Zeile<<"\n";
 			getline(infile, Zeile);
-			this->m_Geolocation = atoi(Zeile.c_str());
+			ss << Zeile;
+			ss >> this->m_Geolocation;
 			continue;
 		}
 		if (Zeile == "Large SZA") {
 			//cout<<Zeile<<"\n";
 			getline(infile, Zeile);
-			this->m_Large_SZA = atoi(Zeile.c_str());
+			ss << Zeile;
+			ss >> this->m_Large_SZA;
 			continue;
 		}
 		if (Zeile == "NLC") {
 			//cout<<Zeile<<"\n";
 			getline(infile, Zeile);
-			this->m_NLC = atoi(Zeile.c_str());
+			ss << Zeile;
+			ss >> this->m_NLC;
 			continue;
 		}
 		if (Zeile == "Maximal SZA") {
 			//cout<<Zeile<<"\n";
 			getline(infile, Zeile);
-			this->m_Maximaler_SZA = atof(Zeile.c_str());
+			ss << Zeile;
+			ss >> this->m_Maximaler_SZA;
 			continue;
 		}
 		if (Zeile == "Geolocation boundaries") {
 			//cout<<Zeile<<"\n";
 			getline(infile, Zeile);
 			//cout<<Zeile<<"\n";
-			m_Geolocation_Grenzen = String_mit_double_Zahlen_in_Vektor_schreiben(Zeile);
+			m_Geolocation_Grenzen = string_to_vector<double>(Zeile);
 			continue;
 		}
 		// Baseline fit parameters /////
 		if (Zeile == "Baseline windows") {
 			//cout<<Zeile<<"\n";
 			getline(infile, Zeile);
-			int Zeilenzahl = atoi(Zeile.c_str());
+			ss << Zeile;
+			ss >> Zeilenzahl;
 			this->m_Anzahl_Baseline_Intervalle = Zeilenzahl;
 			for (int i = 0; i < Zeilenzahl; i++) {
 				getline(infile, Zeile);
-				vector<double> dummy = String_mit_double_Zahlen_in_Vektor_schreiben(Zeile);
+				vector<double> dummy = string_to_vector<double>(Zeile);
 				this->m_Baselinefenster_WL_low.push_back(dummy[0]);
 				this->m_Baselinefenster_WL_high.push_back(dummy[1]);
 			}
@@ -203,12 +215,13 @@ int Konfiguration::Konfiguration_einlesen()
 		if (Zeile == "Retrieval windows") {
 			//cout<<Zeile<<"\n";
 			getline(infile, Zeile);
-			int Zeilenzahl = atoi(Zeile.c_str());
+			ss << Zeile;
+			ss >> Zeilenzahl;
 			this->m_Anzahl_Retrieval_Intervalle = Zeilenzahl;
 			//cout<<this->m_Anzahl_Retrieval_Intervalle<<"\n\n";
 			for (int i = 0; i < Zeilenzahl; i++) {
 				getline(infile, Zeile);
-				vector<double> dummy = String_mit_double_Zahlen_in_Vektor_schreiben(Zeile);
+				vector<double> dummy = string_to_vector<double>(Zeile);
 				this->m_Retrievalfenster_WL_low.push_back(dummy[0]);
 				this->m_Retrievalfenster_WL_high.push_back(dummy[1]);
 			}
@@ -217,7 +230,7 @@ int Konfiguration::Konfiguration_einlesen()
 		if (Zeile == "Assignment of wl windows") {
 			getline(infile, Zeile);
 			//cout<<Zeile<<"\n\n";
-			m_Assignment_of_WL_Windows = String_mit_int_Zahlen_in_Vektor_schreiben(Zeile);
+			m_Assignment_of_WL_Windows = string_to_vector<int>(Zeile);
 			//cout<<Zeile<<"blabla\n\n";
 			continue;
 		}
@@ -235,7 +248,7 @@ int Konfiguration::Konfiguration_einlesen()
 						Zeile[j] = 'E';
 				}
 				//cout<<Zeile<<"\n";
-				vector<double> dummy = String_mit_double_Zahlen_in_Vektor_schreiben(Zeile);
+				vector<double> dummy = string_to_vector<double>(Zeile);
 				for (int j = 0; j < m_Anzahl_der_Emitter; j++) {
 					m_Retrieval_Kovarianzen[j + i * m_Anzahl_der_Emitter] = dummy[j];
 				}
@@ -246,19 +259,21 @@ int Konfiguration::Konfiguration_einlesen()
 		if (Zeile == "Error thresholds") {
 			//cout<<Zeile<<"\n";
 			getline(infile, Zeile);
-			this->m_Fehlergrenzen = String_mit_double_Zahlen_in_Vektor_schreiben(Zeile);
+			this->m_Fehlergrenzen = string_to_vector<double>(Zeile);
 			continue;
 		}
 		if (Zeile == "Spectral FWHM") {
 			//cout<<Zeile<<"\n";
 			getline(infile, Zeile);
-			this->m_FWHM = atof(Zeile.c_str());
+			ss << Zeile;
+			ss >> this->m_FWHM;
 			continue;
 		}
 		if (Zeile == "Do correction of radiances") {
 			//cout<<Zeile<<"\n";
 			getline(infile, Zeile);
-			this->m_Do_Corrections_of_Radiances = atoi(Zeile.c_str());
+			ss << Zeile;
+			ss >> this->m_Do_Corrections_of_Radiances;
 			continue;
 		}
 		if (Zeile == "OS type") {
@@ -270,7 +285,7 @@ int Konfiguration::Konfiguration_einlesen()
 		if (Zeile == "Maximal number of LM steps and scaling factor") {
 			//cout<<Zeile<<"\n";
 			getline(infile, Zeile);
-			vector<double> dummy = String_mit_double_Zahlen_in_Vektor_schreiben(Zeile);
+			vector<double> dummy = string_to_vector<double>(Zeile);
 			this->m_Max_Zahl_Levenberg_Schritte = dummy[0];
 			this->m_Levenberg_Schrittweite = (int) dummy[1];
 			continue;
@@ -278,7 +293,7 @@ int Konfiguration::Konfiguration_einlesen()
 		if (Zeile == "Maximal number of iteration steps and convergence threshold") {
 			//cout<<Zeile<<"\n";
 			getline(infile, Zeile);
-			vector<double> dummy = String_mit_double_Zahlen_in_Vektor_schreiben(Zeile);
+			vector<double> dummy = string_to_vector<double>(Zeile);
 			this->m_Max_Zahl_Iterationen = (int) dummy[0];
 			this->m_Convergence_Treshold = dummy[1];
 			continue;
@@ -377,81 +392,18 @@ int Konfiguration::Konfiguration_anzeigen()
 	return 0;
 }//ende Konfiguration_anzeigen
 
-// HILFSFUNTIONEN /////////////////////////////////////////////////////
-vector<double> String_mit_double_Zahlen_in_Vektor_schreiben(string Zeile)
+// HILFSFUNTION /////////////////////////////////////////////////////
+template <class T> vector<T> string_to_vector(string zeile)
 {
-	vector<double> Zahlen;
-	int IndexWortanfang = 0;
-	int IndexWortende = 0;
-	for (uint i = 0; i < Zeile.size(); i++) {
-		if (Zeile[i] == ' ') {
-			IndexWortende = i;
-			string Wort = Zeile.substr(IndexWortanfang, IndexWortende - IndexWortanfang + 1);
-			if (IndexWortende > IndexWortanfang + 1) {
-				double Zahl = atof(Wort.c_str());
-				Zahlen.push_back(Zahl);
-				//	cout<<IndexWortanfang<<" "<<IndexWortende<<" "<<Zahl<<"\n";
-			}
-			IndexWortanfang = IndexWortende;
-		}
-	}
-	//letzte Zahl
-	if (Zeile[Zeile.size() - 1] != ' ') {
-		IndexWortende = Zeile.size() - 1;
-		string Wort = Zeile.substr(IndexWortanfang, IndexWortende - IndexWortanfang + 1);
-		if (IndexWortende > IndexWortanfang + 1) {
-			double Zahl = atof(Wort.c_str());
-			Zahlen.push_back(Zahl);
-			//	cout<<IndexWortanfang<<" "<<IndexWortende<<" "<<Zahl<<"\n";
-		}
-		//IndexWortanfang=IndexWortende;  // wird nicht gebraucht...letzte Zeile
-	}
-	return Zahlen;
-}//ende String_mit_double_Zahlen_in_Vektor_schreiben
+	vector<T> zahlen;
+	T zahl;
+	istringstream iss(zeile);
 
-////////////////////////////////////////////////
+	while (iss >> zahl)
+		zahlen.push_back(zahl);
 
-vector<int> String_mit_int_Zahlen_in_Vektor_schreiben(string Zeile)
-{
-	vector<int> Zahlen;
-	int IndexWortanfang = 0;
-	int IndexWortende = 0;
-	//cout<<"blalbla\n";
-	for (uint i = 0; i < Zeile.size(); i++) {
-		if (Zeile[i] == ' ') {
-			IndexWortende = i;
-			string Wort = Zeile.substr(IndexWortanfang, IndexWortende - IndexWortanfang + 1);
-			//cout<<Wort<<"\n";
-			int Buchstaben = 0; //nichtleerzeichen im String zählen
-			for (uint j = 0; j < Wort.size(); j++) {
-				if (Wort[j] != ' ')
-					Buchstaben += 1;
-			}
-			if (Buchstaben != 0) {
-				int Zahl = atoi(Wort.c_str());
-				//	cout<<Zahl<<"\n\n";
-				Zahlen.push_back(Zahl);
-			}
-			IndexWortanfang = IndexWortende;
-		}
-	}
-	//letzte Zahl
-	if (Zeile[Zeile.size() - 1] != ' ') {
-		IndexWortende = Zeile.size() - 1;
-		string Wort = Zeile.substr(IndexWortanfang, IndexWortende - IndexWortanfang + 1);
-		int Buchstaben = 0;
-		for (uint j = 0; j < Wort.size(); j++) {
-			if (Wort[j] != ' ')
-				Buchstaben += 1;
-		}
-		if (Buchstaben != 0) {
-			int Zahl = atoi(Wort.c_str());
-			Zahlen.push_back(Zahl);
-		}
-
-	}
-	return Zahlen;
-}//ende String_mit_int_Zahlen_in_Vektor_schreiben
-// HILFSFUNTIONEN ende /////////////////////////////////////////////////////
+	return zahlen;
+}
+// HILFSFUNTION ende /////////////////////////////////////////////////////
 
 
