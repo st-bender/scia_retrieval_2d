@@ -6,7 +6,7 @@
  */
 
 
-#include"Matrizzen_Aufbauen.h"
+#include"Matrizen_Aufbauen.h"
 #include"MPL_Matrix.h"
 #include"MPL_Vektor.h"
 

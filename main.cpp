@@ -140,7 +140,7 @@ irgendetwas nicht funktioniert, mich kontaktieren
 #include <ctime>  //langsames timing...so auf Sekunden genau
 #include "Retrievalgitter.h"
 #include "MPL_Matrix.h"
-#include "Matrizzen_Aufbauen.h"
+#include "Matrizen_Aufbauen.h"
 #include "Retrievaliteration.h"
 #include "Retrievalfehler_Abschaetzung.h"
 #include "Ausdrucke.h"                              // Plots_Zusammenfassen
