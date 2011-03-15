@@ -19,14 +19,18 @@
 <folderInfo id="cdt.managedbuild.toolchain.gnu.solaris.base.1819864612.525773004" name="/" resourcePath="">
 <toolChain id="cdt.managedbuild.toolchain.gnu.solaris.base.1798195620" name="cdt.managedbuild.toolchain.gnu.solaris.base" superClass="cdt.managedbuild.toolchain.gnu.solaris.base">
 <targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.target.gnu.solaris.base.2058496166" name="Debug Platform" osList="solaris" superClass="cdt.managedbuild.target.gnu.solaris.base"/>
-<builder buildPath="${workspace_loc:/scia_retrieval_2d/Solaris GCC}" id="cdt.managedbuild.target.gnu.builder.solaris.base.1223839120" keepEnvironmentInBuildfile="true" managedBuildOn="true" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.solaris.base"/>
+<builder buildPath="${workspace_loc:/scia_retrieval_2d/Solaris GCC}" id="cdt.managedbuild.target.gnu.builder.solaris.base.1223839120" keepEnvironmentInBuildfile="true" managedBuildOn="true" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="4" superClass="cdt.managedbuild.target.gnu.builder.solaris.base"/>
 <tool id="cdt.managedbuild.tool.gnu.archiver.base.117624321" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
 <tool id="cdt.managedbuild.tool.gnu.solaris.cpp.compiler.base.1766099636" name="Solaris C++ Compiler" superClass="cdt.managedbuild.tool.gnu.solaris.cpp.compiler.base">
 <option id="gnu.cpp.compiler.option.other.other.1439123815" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -m64" valueType="string"/>
+<option id="gnu.cpp.compiler.option.optimization.level.569744046" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.more" valueType="enumerated"/>
+<option id="gnu.cpp.compiler.option.optimization.flags.162964016" name="Other optimization flags" superClass="gnu.cpp.compiler.option.optimization.flags" value="-mtune=native" valueType="string"/>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.82400017" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.solaris.c.compiler.base.863019344" name="Solaris C Compiler" superClass="cdt.managedbuild.tool.gnu.solaris.c.compiler.base">
 <option id="gnu.c.compiler.option.misc.other.1771861722" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 -m64" valueType="string"/>
+<option id="gnu.c.compiler.option.optimization.level.838202384" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" value="gnu.c.optimization.level.more" valueType="enumerated"/>
+<option id="gnu.c.compiler.option.optimization.flags.726963795" name="Other optimization flags" superClass="gnu.c.compiler.option.optimization.flags" value="-mtune=native" valueType="string"/>
 <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1457218916" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.c.linker.base.46946176" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base"/>
@@ -365,6 +369,7 @@
 </profile>
 </scannerConfigBuildInfo>
 </storageModule>
+<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
 </cconfiguration>
 </storageModule>
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">
