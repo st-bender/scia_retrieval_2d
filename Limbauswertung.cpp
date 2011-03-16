@@ -135,11 +135,11 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 				// Die Phasenfunktion, steckt so nun in den Slant Coloumns drin
 				//cout<<Spezfenst.m_Liniendaten[k].m_theta<<"\n";
 				Spezies_Fenster[j].m_Liniendaten[k].Emissivitaet_ermitteln();
-				//cout<<Spezfenst.m_Basisfenster_rechts_WLmin[k]<<"\n";
-				//cout<<"j:"<<j<<"\t"<<"k:"<<k<<"\t"
-				//  <<Spezfenst.m_Wellenlaengen[k]<<"\t"
-				//  <<Spezfenst.m_Liniendaten[k].m_E1<<"\t"
-				//  <<Spezfenst.m_Liniendaten[k].m_Gamma<<"\n";
+				//cerr<<Spezies_Fenster[j].m_Basisfenster_rechts_WLmin[k]<<"\n";
+				//cerr<<"j:"<<j<<"\t"<<"k:"<<k<<"\t"
+				//  <<Spezies_Fenster[j].m_Wellenlaengen[k]<<"\t"
+				//  <<Spezies_Fenster[j].m_Liniendaten[k].m_E1<<"\t"
+				//  <<Spezies_Fenster[j].m_Liniendaten[k].m_Gamma<<"\n";
 				Messung.Intensitaeten_durch_piF_Gamma_berechnen(Spezies_Fenster[j], k);
 				Messung.Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Spezies_Fenster[j], k);
 				// In der Formel ist piF in W/(m^2*Wellenlänge) verlangt..
