@@ -35,8 +35,6 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	// Die Sache mit dem Apriori ist noch glaub ich noch nicht ganz sauber...
 	// bei 0 apriori kein problem beim nachiterieren
 
-	//FIXME ACHTUNG TRESHOLD UND ITMAX WERDEN HIER PER HAND GESETZT
-	//  UND NICHT AUS KONF ÜBERNOMMEN
 	// Kritik an alter Version;
 	// Die Iteration ist schlecht.... apriori sollte nicht neu gesetzt werden
 	// Lieber eine iteration mit dem Rest, der noch da ist
@@ -150,12 +148,10 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	double Threshold = Konf.m_Convergence_Treshold;
 	//Threshold=1E-5;  // für 12 Hoehen gut
 	//Threshold=1E-2;
-	Threshold = 1E-5;
 	//cout<<"Itmax: "<<Itmax<<"\n";
 	//MPL_Matrix RHS_Teil1;
 	//RHS_Teil1=AMF_trans*(S_y*Saeulendichten);
 	//Die Schleife ist echt schnell...das sollten höchstens 10 sekunden sein
-	Itmax = 100;
 	///////////////////////////////////////
 	// erster Schritt
 	///////////////////////////////////////
@@ -382,6 +378,10 @@ int Retrievaliteration_old(MPL_Matrix &Dichten,
 		// /sqrt((double)LHS.m_Zeilenzahl-1);
 		//cout<<"Iterationsschritt: "<<Iterationsschritt<<"\n";
 		//cout<<"Residual: "<<Residual<<"\n";
+		if ((Iterationsschritt == 0) || (Iterationsschritt == Itmax - 1)) {
+			cerr << "Iterationsschritt:" << Iterationsschritt << "\t"
+				 << "Residual: " << Residual << "\n";
+		}
 		if (Iterationsschritt == 0) {
 			// erstes Residuum als ungefähre Fehlerabschätzung
 			Residual_1 = Residual;
@@ -393,7 +393,7 @@ int Retrievaliteration_old(MPL_Matrix &Dichten,
 			//cout<<"Threshold: "<<Threshold<<"\n";
 			//cout<<"Threshold*Residual_1: "<<Threshold*Residual_1<<"\n";
 			//evtl konvergenzflag setzen
-			//cout<<"Konvergenz bei Iterationsschritt: "<<Iterationsschritt<<"\n";
+			cerr << "Konvergenz bei Iterationsschritt: " << Iterationsschritt << "\n";
 			break;
 			// achtung mit break und continue in for-schleifen
 			// (vor allem mit continue->(i++; continue;)
