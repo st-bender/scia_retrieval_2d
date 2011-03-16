@@ -20,7 +20,7 @@ using namespace std;
 
 int Nadir_Auswertung(Orbitliste Orbitlist,
 					 int l,
-					 Sonnenspektrum Solspec,
+					 Sonnenspektrum &Solspec,
 					 vector<Speziesfenster>& Spezies_Fenster,
 					 int &counter_Nachtmessungen_Nadir,
 					 int &counter_Nadir_Nacht_Dateien,
@@ -30,7 +30,7 @@ int Nadir_Auswertung(Orbitliste Orbitlist,
 					 vector<Ausgewertete_Messung_Nadir>& Ausgewertete_Nadirmessung_unknown,
 					 vector<Ausgewertete_Messung_Nadir>& Ausgewertete_Nadirmessung_FeI)
 {
-	//cout<<"Start_Nadirauswertung\n";
+	//cerr<<"Start_Nadirauswertung\n";
 	unsigned int j, k;
 	Messung_Nadir *Rohdaten = 0;
 	int Anzahl_Messungen = 0;
@@ -59,8 +59,9 @@ int Nadir_Auswertung(Orbitliste Orbitlist,
 		return 1;  //Nachtmessung 1
 	}
 
-
-	//cout<<Anzahl_Messungen<<"\n";
+	//Sonnenspektrum interpolieren
+	Solspec.Interpolieren(Rohdaten[0]);
+	//cerr<<"Anzahl_Messungen: "<<Anzahl_Messungen<<"\n";
 	for (int i = 0; i < Anzahl_Messungen; i++) { //Schleife über alle Rohdaten
 		Messung_Nadir Messung = Rohdaten[i];
 		Messung.Deklinationswinkel_bestimmen();
@@ -86,9 +87,11 @@ int Nadir_Auswertung(Orbitliste Orbitlist,
 						Arbeitsverzeichnis, mache_Fit_Plots, i);
 
 				// Zu Testzwecken fertige Messung in Datei Speichern
+				/*
 				if ((k == 0) && (j == 0) && (i == 0)) {
 					Messung.Ausgabe_in_Datei("CHECKDATA/Messung_Nadir_Fenster0_Hoehe_74km_0teLinie.txt");
 				}
+				// */
 				// Ergebnis zusammenfassen
 				Ausgewertete_Messung_Nadir Ergebnis = Messung.Ergebnis_Zusammenfassen();
 				// Die braucht man später für die Luftmassenmatrix

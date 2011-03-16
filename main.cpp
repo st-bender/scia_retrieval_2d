@@ -341,6 +341,7 @@ int main(int argc, char *argv[])
 	Spez.m_FWHM = 0.22;
 	//Wellenlaenge 1
 	Spez.m_Wellenlaengen.push_back(285.213);
+	//Spez.m_Wellenlaengen.push_back(285.313);  //evtl. shift
 	Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[0] - 3);
 	//Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[0]-10);
 	Spez.m_Basisfenster_links_WLmax.push_back(Spez.m_Wellenlaengen[0] - 1);
@@ -398,7 +399,7 @@ int main(int argc, char *argv[])
 	Spez.m_Peakfenster_WLmax.push_back(Spez.m_Wellenlaengen[0] + 2);
 	// Liniendaten
 	Lindat.m_Wellenlaenge = Spez.m_Wellenlaengen[0];
-	Lindat.m_rel_Einstein = 0.19; // stimmt nicht
+	Lindat.m_rel_Einstein = 0.19; // stimmt nicht...doch stimmt?
 	Lindat.m_f_Wert = 0.543;
 	// ^5D_4 nach ^5F*_5 übergang j=4, dj=1 (Funktion für Matlab geschrieben)
 	Lindat.m_E1 = 0.1733;

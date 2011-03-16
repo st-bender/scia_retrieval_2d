@@ -14,6 +14,7 @@
 using namespace std;
 
 //=============================================================================
+/*
 int Sonnenspektrum::Laden_GOME(string Dateiname, string Fallback_Dateiname)
 {
 	double dummy;
@@ -52,8 +53,46 @@ int Sonnenspektrum::Laden_GOME(string Dateiname, string Fallback_Dateiname)
 	infile.close();
 	return 0;
 }//Sonnenspektrum::Laden(string Dateiname, string Fallback_Dateiname) ende
+// */
 //=============================================================================
 //=============================================================================
+
+////////////////////////////////////////////////////
+// Konstruktor und Destruktor
+/////////////////////////////////////////////////////
+Sonnenspektrum::Sonnenspektrum()
+{
+	m_Wellenlaengen = 0;
+	m_WL_interpoliert = 0;
+	m_Intensitaeten = 0;
+	m_Int_interpoliert = 0;
+}
+
+Sonnenspektrum::~Sonnenspektrum()
+{
+	if (m_Wellenlaengen != 0) {
+		delete[] m_Wellenlaengen;
+		m_Wellenlaengen = 0;
+		m_Anzahl_WL = 0;
+	}
+	if (m_WL_interpoliert != 0) {
+		delete[] m_WL_interpoliert;
+		m_WL_interpoliert = 0;
+		m_Anzahl_WL_interpoliert = 0;
+	}
+	if (m_Intensitaeten != 0)    {
+		delete[] m_Intensitaeten;
+		m_Intensitaeten = 0;
+	}
+	if (m_Int_interpoliert != 0)  {
+		delete[] m_Int_interpoliert;
+		m_Int_interpoliert = 0;
+	}
+}
+////////////////////////////////////////////////////
+// Konstruktor und Destruktor ENDE
+/////////////////////////////////////////////////////
+
 ////////////////////////////////////////////////////
 // Methodenstart  Laden_Scia
 /////////////////////////////////////////////////////
@@ -84,22 +123,23 @@ int Sonnenspektrum::Laden_SCIA(string Dateiname, string Fallback_Dateiname)
 		cerr << "Sonnenspektrum ist unbrauchbar!" << endl;
 		return 2;
 	}
-	if (m_Anzahl_WL > 850) {
-		//feste Größe..i.a. sollte m_Anzahl 732 sein,
-		//also nach den bisher verwendeten scia2ascii clustern
-		m_Anzahl_WL = 850;
+
+	if (m_Intensitaeten != 0) {
+		delete[] m_Intensitaeten;
+		m_Intensitaeten = 0;
 	}
+	if (m_Wellenlaengen != 0) {
+		delete[] m_Wellenlaengen;
+		m_Wellenlaengen = 0;
+	}
+	m_Wellenlaengen = new double[m_Anzahl_WL];
+	m_Intensitaeten = new double[m_Anzahl_WL];
+
 	getline(infile, s_dummy); // Rest der Zeile
 	for (int i = 0; i < m_Anzahl_WL; i++) {
 		infile >> m_Wellenlaengen[i]
 			   >> m_Intensitaeten[i]
 			   >> dummy;
-	}
-	//Rest füllen
-	for (int i = m_Anzahl_WL; i < 850; i++) {
-		m_Wellenlaengen[i]
-			= m_Wellenlaengen[m_Anzahl_WL - 1] + 0.2 * (i - (m_Anzahl_WL - 1));
-		m_Intensitaeten[i] = 0;
 	}
 	infile.close();
 	return 0;
@@ -131,7 +171,26 @@ int Sonnenspektrum::Interpolieren(Messung_Limb &Messung_Erdschein)
 	int Index_kleine_WL, Index_grosse_WL;
 	// cout<<Messung_Erdschein.m_Wellenlaengen[0]<<"\n";
 	//cout<<Messung_Erdschein.m_Intensitaeten[0]<<"\n";
-	for (int i = 0; i < 826; i++) { //Für alle Punkte des neuen Sonnenspektrums
+	// Größe des neuen Sonnenspektrums rausfinden
+	m_Anzahl_WL_interpoliert = Messung_Erdschein.m_Number_of_Wavelength;
+	if (m_Int_interpoliert != 0) {
+		delete[] m_Int_interpoliert;
+		m_Int_interpoliert = 0;
+	}
+	if (m_WL_interpoliert != 0) {
+		delete[] m_WL_interpoliert;
+		m_WL_interpoliert = 0;
+	}
+	m_WL_interpoliert = new double[m_Anzahl_WL_interpoliert];
+	m_Int_interpoliert = new double[m_Anzahl_WL_interpoliert];
+
+	for (int i = 0; i < m_Anzahl_WL_interpoliert; i++) {
+		//Für alle Punkte des neuen Sonnenspektrums
+		///////////////////////////////////////////////////////////////////////////////
+		///////////////////////////////////////////////////////////////////////////////
+		///////////////////////////////////////////////////////////////////////////////
+		// Das ging hier nur für Kanal1
+		/*
 		// Startpunkt
 		kleine_WL = m_Wellenlaengen[i + 18]; // ein bisschen drüber anfangen
 		for (int j = 18; kleine_WL > Messung_Erdschein.m_Wellenlaengen[i]; j--) {
@@ -145,9 +204,37 @@ int Sonnenspektrum::Interpolieren(Messung_Limb &Messung_Erdschein)
 			kleine_WL = m_Wellenlaengen[i + j];
 		}
 		Index_grosse_WL = Index_kleine_WL + 1;
+		// */
+		///////////////////////////////////////////////////////////////////////////////
+		///////////////////////////////////////////////////////////////////////////////
+		///////////////////////////////////////////////////////////////////////////////
+		// sequentielle Suche ...eventuell etwas langsam....
+		// TODO später auf quicksearch umsteigen
+		Index_kleine_WL = 0;
+		for (int j = 0; j < m_Anzahl_WL; j++) {
+			if (m_Wellenlaengen[j] < Messung_Erdschein.m_Wellenlaengen[i]) {
+				Index_kleine_WL = j;
+			} else {
+				break;
+			}
+		}
+		Index_grosse_WL = m_Anzahl_WL - 1;
+		for (int j = m_Anzahl_WL - 1; j > 0; j--) {
+			if (m_Wellenlaengen[j] >= Messung_Erdschein.m_Wellenlaengen[i]) {
+				Index_grosse_WL = j;
+			} else {
+				break;
+			}
+		}
+		// Ende sequentielle Suche
+		///////////////////////////////////////////////////////////////////////////
+		kleine_WL = m_Wellenlaengen[Index_kleine_WL];
 		grosse_WL = m_Wellenlaengen[Index_grosse_WL];
-		I2 = (Messung_Erdschein.m_Wellenlaengen[i] - kleine_WL)
-			 / (grosse_WL - kleine_WL);
+		if (grosse_WL == kleine_WL)
+			I2 = 1.0;
+		else
+			I2 = (Messung_Erdschein.m_Wellenlaengen[i] - kleine_WL)
+				/ (grosse_WL - kleine_WL);
 		I1 = 1.0 - I2;
 		// Einfach altes Fenster überschreiben, das wird nicht
 		m_Int_interpoliert[i] = I1 * m_Intensitaeten[Index_kleine_WL]
@@ -157,13 +244,101 @@ int Sonnenspektrum::Interpolieren(Messung_Limb &Messung_Erdschein)
 	//cout<<Messung_Erdschein.m_Wellenlaengen[0]<<"\n";
 	return 0;
 }//Interpolieren(Messung_Limb Messung_Erdschein) ende
+
+int Sonnenspektrum::Interpolieren(Messung_Nadir &Messung_Erdschein)
+{
+	//checken nach seg_faults
+	double I1, I2;
+	//Beide Spektren haben nur einen offset,
+	//aber bei fast allen Messungen den selben
+	//Der 16+1te Punkt des Sonnenspektrums entspircht in etwa
+	//dem 1 Punkt des Limbspektrums (Bei GOME)
+	//
+	//Dies ist ein guter Startwert für den linken und den rechten
+	//Interpolationspunkt, bei Bedarf können dann noch
+	//bis zu 5 Schritte in beide Richtungen gemacht werden...
+	//falls das mal nicht so geht, so Programmabbruch
+	// Damit müssen in fast allen Fällen nur 2 bis 3 Schritte gemacht werden,
+	// was deutlich schneller geht, als eine
+	// allgemeine Interpolation ala quicksearch
+	// (auch wenn die vermutlich bei 800 Messpunkten auch nur ca. 10 Schritte braucht)
+
+	// die sciaspektren müssen im Prinzip nicht interpoliert werden,
+	// da die gleich sind...aber trotzdem (geht schnell, kein Risiko)
+
+	double kleine_WL, grosse_WL;
+	int Index_kleine_WL, Index_grosse_WL;
+	// cout<<Messung_Erdschein.m_Wellenlaengen[0]<<"\n";
+	//cout<<Messung_Erdschein.m_Intensitaeten[0]<<"\n";
+	// Größe des neuen Sonnenspektrums rausfinden
+	m_Anzahl_WL_interpoliert = Messung_Erdschein.m_Number_of_Wavelength;
+	if (m_Int_interpoliert != 0)    {
+		delete[] m_Int_interpoliert;
+		m_Int_interpoliert = 0;
+	}
+	if (m_WL_interpoliert != 0) {
+		delete[] m_WL_interpoliert;
+		m_WL_interpoliert = 0;
+	}
+	m_WL_interpoliert = new double[m_Anzahl_WL_interpoliert];
+	m_Int_interpoliert = new double[m_Anzahl_WL_interpoliert];
+	for (int i = 0; i < m_Anzahl_WL_interpoliert; i++) {
+		//Für alle Punkte des neuen Sonnenspektrums
+		// sequentielle Suche ...eventuell etwas langsam....
+		// TODO später auf quicksearch umsteigen
+		Index_kleine_WL = 0;
+		for (int j = 0; j < m_Anzahl_WL; j++) {
+			if (m_Wellenlaengen[j] < Messung_Erdschein.m_Wellenlaengen[i]) {
+				Index_kleine_WL = j;
+			} else {
+				break;
+			}
+		}
+		Index_grosse_WL = m_Anzahl_WL - 1;
+		for (int j = m_Anzahl_WL - 1; j > 0; j--) {
+			if (m_Wellenlaengen[j] >= Messung_Erdschein.m_Wellenlaengen[i]) {
+				Index_grosse_WL = j;
+			} else {
+				break;
+			}
+		}
+		// Ende sequentielle Suche
+		///////////////////////////////////////////////////////////////////////////
+		kleine_WL = m_Wellenlaengen[Index_kleine_WL];
+		grosse_WL = m_Wellenlaengen[Index_grosse_WL];
+		if (grosse_WL == kleine_WL)
+			I2 = 1.0;
+		else
+			I2 = (Messung_Erdschein.m_Wellenlaengen[i] - kleine_WL)
+				/ (grosse_WL - kleine_WL);
+		I1 = 1.0 - I2;
+		// Einfach altes Fenster überschreiben, das wird nicht
+		m_Int_interpoliert[i] = I1 * m_Intensitaeten[Index_kleine_WL]
+			+ I2 * m_Intensitaeten[Index_grosse_WL];
+		m_WL_interpoliert[i] = Messung_Erdschein.m_Wellenlaengen[i];
+	}// schleife i
+	//cout<<Messung_Erdschein.m_Wellenlaengen[0]<<"\n";
+	return 0;
+}//Interpolieren(Messung_Nadir& Messung_Erdschein) ende
 //=============================================================================
 ///////////////////////////////////////////////////
 // Methodenstart nicht interpolieren
 ///////////////////////////////////////////////////
 int Sonnenspektrum::nicht_interpolieren()
 {
-	for (int i = 0; i < 826; i++) {
+	m_Anzahl_WL_interpoliert = m_Anzahl_WL;
+	if (m_Int_interpoliert != 0) {
+		delete[] m_Int_interpoliert;
+		m_Int_interpoliert = 0;
+	}
+	if (m_WL_interpoliert != 0) {
+		delete[] m_WL_interpoliert;
+		m_WL_interpoliert = 0;
+	}
+	m_WL_interpoliert = new double[m_Anzahl_WL_interpoliert];
+	m_Int_interpoliert = new double[m_Anzahl_WL_interpoliert];
+
+	for (int i = 0; i < m_Anzahl_WL_interpoliert; i++) {
 		m_Int_interpoliert[i] = m_Intensitaeten[i];
 		m_WL_interpoliert[i] = m_Wellenlaengen[i];
 	}
@@ -174,9 +349,6 @@ int Sonnenspektrum::nicht_interpolieren()
 // ENDE nicht interpolieren
 ///////////////////////////////////////////////////
 
-
-
-
 int Sonnenspektrum::Speichern(string Dateiname)  //zur Kontrolle
 {
 	ofstream outfile;
@@ -186,7 +358,7 @@ int Sonnenspektrum::Speichern(string Dateiname)  //zur Kontrolle
 		return 1;
 	}
 	outfile << "WL\t\t" << "I" << "\n";
-	for (int i = 0; i < 826; i++) {
+	for (int i = 0; i < m_Anzahl_WL_interpoliert; i++) {
 		outfile << m_WL_interpoliert[i] << "\t" << m_Int_interpoliert[i] << "\n";
 	}
 	outfile.close();
@@ -202,7 +374,7 @@ int Sonnenspektrum::Speichern_was_geladen_wurde(string Dateiname)
 		return 1;
 	}
 	outfile << "WL\t\t" << "I\n";
-	for (int i = 0; i < 850; i++) {
+	for (int i = 0; i < m_Anzahl_WL; i++) {
 		outfile << this->m_Wellenlaengen[i] << "\t"
 				<< this->m_Intensitaeten[i] << "\n";
 	}

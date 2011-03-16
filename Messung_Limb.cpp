@@ -55,7 +55,15 @@ Messung_Limb::Messung_Limb()
 	m_Hoehe_TP = 0;
 	m_Hoehe_Sat = 0;
 	m_Erdradius = 0;
-	//statische Felder werden erstmal nicht 0 gesetzt
+
+	//Arrays initialisieren
+	m_Wellenlaengen = 0;
+	m_Sonne = 0;
+	m_Intensitaeten = 0;
+	m_Intensitaeten_relativer_Fehler = 0;
+	m_Intensitaeten_durch_piF = 0;
+	m_Intensitaeten_durch_piF_Gamma = 0;
+	m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand = 0;
 }
 //========================================
 //
@@ -64,6 +72,15 @@ Messung_Limb::Messung_Limb()
 //========================================
 Messung_Limb::Messung_Limb(const Messung_Limb &rhs)
 {
+	//Arrays initialisieren
+	m_Wellenlaengen = 0;
+	m_Sonne = 0;
+	m_Intensitaeten = 0;
+	m_Intensitaeten_relativer_Fehler = 0;
+	m_Intensitaeten_durch_piF = 0;
+	m_Intensitaeten_durch_piF_Gamma = 0;
+	m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand = 0;
+
 	*this = rhs;
 }//copyconstructor ende
 
@@ -104,7 +121,45 @@ Messung_Limb &Messung_Limb::operator =(const Messung_Limb &rhs)
 	m_Hoehe_TP = rhs.m_Hoehe_TP;
 	m_Erdradius = rhs.m_Erdradius;
 	m_Number_of_Wavelength = rhs.m_Number_of_Wavelength;
-	for (int i = 0; i < 826; i++) {
+	// Speicher neu Anmelden
+	if (m_Wellenlaengen != 0) {
+		delete[] m_Wellenlaengen;
+		m_Wellenlaengen = 0;
+	}
+	m_Wellenlaengen = new double[m_Number_of_Wavelength];
+	if (m_Sonne != 0) {
+		delete[] m_Sonne ;
+		m_Sonne = 0;
+	}
+	m_Sonne = new double[m_Number_of_Wavelength];
+	if (m_Intensitaeten != 0) {
+		delete[] m_Intensitaeten ;
+		m_Intensitaeten = 0;
+	}
+	m_Intensitaeten = new double[m_Number_of_Wavelength];
+	if (m_Intensitaeten_relativer_Fehler != 0) {
+		delete[] m_Intensitaeten_relativer_Fehler ;
+		m_Intensitaeten_relativer_Fehler = 0;
+	}
+	m_Intensitaeten_relativer_Fehler = new double[m_Number_of_Wavelength];
+	if (m_Intensitaeten_durch_piF != 0) {
+		delete[] m_Intensitaeten_durch_piF ;
+		m_Intensitaeten_durch_piF = 0;
+	}
+	m_Intensitaeten_durch_piF = new double[m_Number_of_Wavelength];
+	if (m_Intensitaeten_durch_piF_Gamma != 0) {
+		delete[] m_Intensitaeten_durch_piF_Gamma ;
+		m_Intensitaeten_durch_piF_Gamma = 0;
+	}
+	m_Intensitaeten_durch_piF_Gamma = new double[m_Number_of_Wavelength];
+	if (m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand != 0) {
+		delete[] m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand ;
+		m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand = 0;
+	}
+	m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand
+		= new double[m_Number_of_Wavelength];
+
+	for (int i = 0; i < m_Number_of_Wavelength; i++) {
 		// Das hier ist ein zeitintensiver schritt
 		m_Wellenlaengen[i] = rhs.m_Wellenlaengen[i];
 		m_Intensitaeten[i] = rhs.m_Intensitaeten[i];
@@ -887,7 +942,7 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 ////////////////////////////////////////////////////////////////////////////////
 // ENDE Plots_der_Spektren_erzeugen
 ////////////////////////////////////////////////////////////////////////////////
-int Messung_Limb::Intensitaeten_normieren(double Teiler[826])
+int Messung_Limb::Intensitaeten_normieren(double *Sonnen_Intensitaet)
 {
 	//Teiler wurde vorher interpoliert
 	//todo prüfen
@@ -895,9 +950,10 @@ int Messung_Limb::Intensitaeten_normieren(double Teiler[826])
 	//cout<<"m_Wellenlangen[0]: "<<m_Wellenlaengen[0]<<"\n";
 	//cout<<"m_Intensitaeten[0]: "<<m_Intensitaeten[0]<<"\n";
 	//cout<<"Teiler[0]: "<<Teiler[0]<<"\n";
-	for (int i = 0; i < 826; i++) {
-		this->m_Intensitaeten_durch_piF[i] = this->m_Intensitaeten[i] / Teiler[i];
-		this->m_Sonne[i] = Teiler[i];
+	for (int i = 0; i < m_Number_of_Wavelength; i++) {
+		this->m_Intensitaeten_durch_piF[i]
+			= this->m_Intensitaeten[i] / Sonnen_Intensitaet[i];
+		this->m_Sonne[i] = Sonnen_Intensitaet[i];
 	}
 	return 0;
 }
@@ -906,8 +962,9 @@ int Messung_Limb::Intensitaeten_normieren(double Teiler[826])
 int Messung_Limb::Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfenst, int Index)
 {
 
-	//Auf dem ganzen Fenster...Verschwendung !!!!!...
-	for (int i = 0; i < 826; i++) { //langsam, optimierbar
+	//Auf dem ganzen Fenster...Verschwendung !!!!!
+	//.....aber absolut nicht zeitkritisch
+	for (int i = 0; i < m_Number_of_Wavelength; i++) { //langsam, optimierbar
 		this->m_Intensitaeten_durch_piF_Gamma[i]
 			= this->m_Intensitaeten_durch_piF[i]
 			  / Spezfenst.m_Liniendaten[Index].m_Gamma;
@@ -918,6 +975,7 @@ int Messung_Limb::Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Spez
 {
 
 	//Auf dem ganzen Fenster...Verschwendung !!!!!
+	//.....aber absolut nicht zeitkritisch
 
 	// Wir berechnen den Gitterabstand nur einmal
 	// Am besten gleich bei der Wellenlänge des Übergangs....
@@ -927,7 +985,7 @@ int Messung_Limb::Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Spez
 	double Delta_WL = (m_Wellenlaengen[Ind + 1] - m_Wellenlaengen[Ind]);
 	// Nun alles damit multiplizieren....wie gesagt..das ist etwas langsam,
 	// da es sich um nen konstanten Faktor handelt
-	for (int i = 0; i < 826; i++) { //langsam, optimierbar
+	for (int i = 0; i < m_Number_of_Wavelength; i++) { //langsam, optimierbar
 		//m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand[i]=m_Intensitaeten
 		//_durch_piF_Gamma[i]*Delta_WL;
 		// Delta_Wl ist in nm gegeben...
@@ -1029,8 +1087,8 @@ int Messung_Limb::Get_Index(double WL)
 	// Maximale Schrittzahl ist ceil(log_2 N) also 10 Schritte
 	bool gefunden = false;
 	int unterer_Fensterindex = 0;
-	int oberer_Fensterindex = 825;
-	int startindex = 412;
+	int oberer_Fensterindex = m_Number_of_Wavelength - 1;
+	int startindex = m_Number_of_Wavelength / 2; //integerdivision gewollt
 	int aktueller_Index = startindex;
 
 	if (abs(this->m_Wellenlaengen[oberer_Fensterindex] - WL) < 0.08) {

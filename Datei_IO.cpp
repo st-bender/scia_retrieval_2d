@@ -83,48 +83,89 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
 		Ergebnisvektor[i].m_Hoehe_TP = Limbdaten[i + 23].m_Tangentenhoehe;
 		Ergebnisvektor[i].m_Erdradius = Limbdaten[i + 23].m_Erdradius;
 		Ergebnisvektor[i].m_Number_of_Wavelength = no_of_pix;
+		//Speicher reservieren
+		if (Ergebnisvektor[i].m_Wellenlaengen != 0) {
+			delete[] Ergebnisvektor[i].m_Wellenlaengen;
+			Ergebnisvektor[i].m_Wellenlaengen = 0;
+		}
+		Ergebnisvektor[i].m_Wellenlaengen
+				= new double[Ergebnisvektor[i].m_Number_of_Wavelength];
+		if (Ergebnisvektor[i].m_Sonne != 0) {
+			delete[] Ergebnisvektor[i].m_Sonne;
+			Ergebnisvektor[i].m_Sonne = 0;
+		}
+		Ergebnisvektor[i].m_Sonne
+				= new double[Ergebnisvektor[i].m_Number_of_Wavelength];
+		if (Ergebnisvektor[i].m_Intensitaeten != 0) {
+			delete[] Ergebnisvektor[i].m_Intensitaeten;
+			Ergebnisvektor[i].m_Intensitaeten = 0;
+		}
+		Ergebnisvektor[i].m_Intensitaeten
+				= new double[Ergebnisvektor[i].m_Number_of_Wavelength];
+		if (Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler != 0) {
+			delete[] Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler;
+			Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler = 0;
+		}
+		Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler
+				= new double[Ergebnisvektor[i].m_Number_of_Wavelength];
+		if (Ergebnisvektor[i].m_Intensitaeten_durch_piF != 0) {
+			delete[] Ergebnisvektor[i].m_Intensitaeten_durch_piF;
+			Ergebnisvektor[i].m_Intensitaeten_durch_piF = 0;
+		}
+		Ergebnisvektor[i].m_Intensitaeten_durch_piF
+				= new double[Ergebnisvektor[i].m_Number_of_Wavelength];
+		if (Ergebnisvektor[i].m_Intensitaeten_durch_piF_Gamma != 0) {
+			delete[] Ergebnisvektor[i].m_Intensitaeten_durch_piF_Gamma;
+			Ergebnisvektor[i].m_Intensitaeten_durch_piF_Gamma = 0;
+		}
+		Ergebnisvektor[i].m_Intensitaeten_durch_piF_Gamma
+				= new double[Ergebnisvektor[i].m_Number_of_Wavelength];
+		if (Ergebnisvektor[i].m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand != 0) {
+			delete[] Ergebnisvektor[i].m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand;
+			Ergebnisvektor[i].m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand = 0;
+		}
+		Ergebnisvektor[i].m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand
+				= new double[Ergebnisvektor[i].m_Number_of_Wavelength];
+
 		for (int j = 0; j < no_of_pix; j++) {
 			Ergebnisvektor[i].m_Wellenlaengen[j] = Wellenlaengen[j];
 			Ergebnisvektor[i].m_Intensitaeten[j] = Limbdaten[i + 23].m_radiance[j]; //-Limbdaten[30].m_radiance[j];(nicht gut bei MgI)
 			Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler[j] = Limbdaten[i + 23].m_error[j]; //-Limbdaten[30].m_radiance[j];
 		}
-		for (int j = no_of_pix; j < 826; j++) {
-			Ergebnisvektor[i].m_Wellenlaengen[j] = 0;
-			Ergebnisvektor[i].m_Intensitaeten[j] = 0;
-			Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler[j] = 0;
-		}
-		for (int j = no_of_pix; j < 826; j++) {
-			//Überzählige Pixel(weil leider noch nicht dynamisch)
-			Ergebnisvektor[i].m_Intensitaeten[j] = 0;
-		}
 		// Der Pixel 552 (282,03nm zeigt bei nadir( und nur dort, einen Peak)
 		// ....interpretation dead pixel
 		//Datei beginnt bei Pixel 16
-		Ergebnisvektor[i].m_Intensitaeten[536] = (Ergebnisvektor[i].m_Intensitaeten[535] + Ergebnisvektor[i].m_Intensitaeten[537]) / 2;
+		//Ergebnisvektor[i].m_Intensitaeten[536] = (Ergebnisvektor[i].m_Intensitaeten[535] + Ergebnisvektor[i].m_Intensitaeten[537]) / 2;
 	}// ende for i
 	//Teile von Schritt 4 nochmal für die Troposhärische Säule
 	//Eigentlich reichen Intensitäten
+	//Speicher für troposäule reservieren
+	//cerr<<"Speicher für troposäule reservieren\n";
+	if (Troposphaerische_Saeule.m_Intensitaeten != 0) {
+		delete[] Troposphaerische_Saeule.m_Intensitaeten;
+		Troposphaerische_Saeule.m_Intensitaeten = 0;
+	}
+	Troposphaerische_Saeule.m_Intensitaeten = new double[no_of_pix];
+
 	for (int j = 0; j < no_of_pix; j++) {
 		Troposphaerische_Saeule.m_Intensitaeten[j] = Limbdaten[2].m_radiance[j];
 	}
-	for (int j = no_of_pix; j < 826; j++) {
-		//Überzählige Pixel(weil leider noch nicht dynamisch)
-		Troposphaerische_Saeule.m_Intensitaeten[j] = 0;
-	}
 	// und für den Mittelwert, der Höhen 10 bis 20
+	//Speicher für mean_10_20 reservieren
+	//cerr<<"Speicher für mean_10_20 reservieren\n";
+	if (mean_10_20.m_Intensitaeten != 0) {
+		delete[] mean_10_20.m_Intensitaeten;
+		mean_10_20.m_Intensitaeten = 0;
+	}
+	mean_10_20.m_Intensitaeten = new double[no_of_pix];
+
 	for (int j = 0; j < no_of_pix; j++) {
 		mean_10_20.m_Intensitaeten[j] = 0;
 		for (int k = 10; k < 21; k++) {
-			mean_10_20.m_Intensitaeten[j] += Limbdaten[k].m_error[j];
+			mean_10_20.m_Intensitaeten[j] += Limbdaten[k].m_radiance[j];
 		}
 		mean_10_20.m_Intensitaeten[j] /= 11.0;
 	}
-
-	for (int j = no_of_pix; j < 826; j++) {
-		//Überzählige Pixel(weil leider noch nicht dynamisch)
-		mean_10_20.m_Intensitaeten[j] = 0;
-	}
-
 
 	// 5. Speicherfreigabe
 	delete[] Wellenlaengen;
@@ -217,33 +258,71 @@ vector<Messung_Limb> ReadL1C_Limb_meso_thermo_mpl_binary(string Dateiname,
 		Ergebnisvektor[i].m_Hoehe_TP = Limbdaten[24 - i].m_Tangentenhoehe;
 		Ergebnisvektor[i].m_Erdradius = Limbdaten[24 - i].m_Erdradius;
 		Ergebnisvektor[i].m_Number_of_Wavelength = no_of_pix;
+		//Speicher reservieren
+		if (Ergebnisvektor[i].m_Wellenlaengen != 0) {
+			delete[] Ergebnisvektor[i].m_Wellenlaengen;
+			Ergebnisvektor[i].m_Wellenlaengen = 0;
+		}
+		Ergebnisvektor[i].m_Wellenlaengen
+				= new double[Ergebnisvektor[i].m_Number_of_Wavelength];
+		if (Ergebnisvektor[i].m_Sonne != 0) {
+			delete[] Ergebnisvektor[i].m_Sonne;
+			Ergebnisvektor[i].m_Sonne = 0;
+		}
+		Ergebnisvektor[i].m_Sonne
+				= new double[Ergebnisvektor[i].m_Number_of_Wavelength];
+		if (Ergebnisvektor[i].m_Intensitaeten != 0) {
+			delete[] Ergebnisvektor[i].m_Intensitaeten;
+			Ergebnisvektor[i].m_Intensitaeten = 0;
+		}
+		Ergebnisvektor[i].m_Intensitaeten
+				= new double[Ergebnisvektor[i].m_Number_of_Wavelength];
+		if (Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler != 0) {
+			delete[] Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler;
+			Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler = 0;
+		}
+		Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler
+				= new double[Ergebnisvektor[i].m_Number_of_Wavelength];
+		if (Ergebnisvektor[i].m_Intensitaeten_durch_piF != 0) {
+			delete[] Ergebnisvektor[i].m_Intensitaeten_durch_piF;
+			Ergebnisvektor[i].m_Intensitaeten_durch_piF = 0;
+		}
+		Ergebnisvektor[i].m_Intensitaeten_durch_piF
+				= new double[Ergebnisvektor[i].m_Number_of_Wavelength];
+		if (Ergebnisvektor[i].m_Intensitaeten_durch_piF_Gamma != 0) {
+			delete[] Ergebnisvektor[i].m_Intensitaeten_durch_piF_Gamma;
+			Ergebnisvektor[i].m_Intensitaeten_durch_piF_Gamma = 0;
+		}
+		Ergebnisvektor[i].m_Intensitaeten_durch_piF_Gamma
+				= new double[Ergebnisvektor[i].m_Number_of_Wavelength];
+		if (Ergebnisvektor[i].m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand != 0) {
+			delete[] Ergebnisvektor[i].m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand;
+			Ergebnisvektor[i].m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand	= 0;
+		}
+		Ergebnisvektor[i].m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand
+				= new double[Ergebnisvektor[i].m_Number_of_Wavelength];
+
 		for (int j = 0; j < no_of_pix; j++) {
 			Ergebnisvektor[i].m_Wellenlaengen[j] = Wellenlaengen[j];
 			Ergebnisvektor[i].m_Intensitaeten[j] = Limbdaten[24 - i].m_radiance[j] - Limbdaten[30].m_radiance[j];
 			Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler[j] = Limbdaten[24 - i].m_error[j] + Limbdaten[30].m_error[j];
 		}
-		for (int j = no_of_pix; j < 826; j++) {
-			Ergebnisvektor[i].m_Wellenlaengen[j] = 0;
-			Ergebnisvektor[i].m_Intensitaeten[j] = 0;
-			Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler[j] = 0;
-		}
-		for (int j = no_of_pix; j < 826; j++) {
-			//Überzählige Pixel(weil leider noch nicht dynamisch)
-			Ergebnisvektor[i].m_Intensitaeten[j] = 0;
-		}
 		// Der Pixel 552 282,03nm ist die Kanalgrenze zwischen 1a und 1b und es
 		// gibt manchmal überlapp(->Peak)
 		//...also über grenze glätten
 		//Datei beginnt bei Pixel 16
-		Ergebnisvektor[i].m_Intensitaeten[536] = (Ergebnisvektor[i].m_Intensitaeten[535] + Ergebnisvektor[i].m_Intensitaeten[537]) / 2;
+		//Ergebnisvektor[i].m_Intensitaeten[536] = (Ergebnisvektor[i].m_Intensitaeten[535] + Ergebnisvektor[i].m_Intensitaeten[537]) / 2;
 	}// ende for i
 	//Teile von Schritt 4 nochmal für die niedrigste Höhe
 	//Eigentlich reichen Intensitäten
+	if (niedrigste_Hoehe.m_Intensitaeten != 0) {
+		delete[] niedrigste_Hoehe.m_Intensitaeten;
+		niedrigste_Hoehe.m_Intensitaeten = 0;
+	}
+	niedrigste_Hoehe.m_Intensitaeten = new double[no_of_pix];
+
 	for (int j = 0; j < no_of_pix; j++) {
 		niedrigste_Hoehe.m_Intensitaeten[j] = Limbdaten[29].m_radiance[j];
-	}
-	for (int j = no_of_pix; j < 826; j++) { //Überzählige Pixel
-		niedrigste_Hoehe.m_Intensitaeten[j] = 0;
 	}
 	// 5. Speicherfreigabe
 	delete[] Wellenlaengen;
@@ -339,33 +418,71 @@ ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(string Dateiname,
 		Ergebnisvektor[i].m_Hoehe_TP = Limbdaten[24 - i].m_Tangentenhoehe;
 		Ergebnisvektor[i].m_Erdradius = Limbdaten[24 - i].m_Erdradius;
 		Ergebnisvektor[i].m_Number_of_Wavelength = no_of_pix;
+		//Speicher reservieren
+		if (Ergebnisvektor[i].m_Wellenlaengen != 0) {
+			delete[] Ergebnisvektor[i].m_Wellenlaengen;
+			Ergebnisvektor[i].m_Wellenlaengen = 0;
+		}
+		Ergebnisvektor[i].m_Wellenlaengen
+				= new double[Ergebnisvektor[i].m_Number_of_Wavelength];
+		if (Ergebnisvektor[i].m_Sonne != 0) {
+			delete[] Ergebnisvektor[i].m_Sonne;
+			Ergebnisvektor[i].m_Sonne = 0;
+		}
+		Ergebnisvektor[i].m_Sonne
+				= new double[Ergebnisvektor[i].m_Number_of_Wavelength];
+		if (Ergebnisvektor[i].m_Intensitaeten != 0) {
+			delete[] Ergebnisvektor[i].m_Intensitaeten;
+			Ergebnisvektor[i].m_Intensitaeten = 0;
+		}
+		Ergebnisvektor[i].m_Intensitaeten
+				= new double[Ergebnisvektor[i].m_Number_of_Wavelength];
+		if (Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler != 0) {
+			delete[] Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler;
+			Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler = 0;
+		}
+		Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler
+				= new double[Ergebnisvektor[i].m_Number_of_Wavelength];
+		if (Ergebnisvektor[i].m_Intensitaeten_durch_piF != 0) {
+			delete[] Ergebnisvektor[i].m_Intensitaeten_durch_piF;
+			Ergebnisvektor[i].m_Intensitaeten_durch_piF = 0;
+		}
+		Ergebnisvektor[i].m_Intensitaeten_durch_piF
+				= new double[Ergebnisvektor[i].m_Number_of_Wavelength];
+		if (Ergebnisvektor[i].m_Intensitaeten_durch_piF_Gamma != 0) {
+			delete[] Ergebnisvektor[i].m_Intensitaeten_durch_piF_Gamma;
+			Ergebnisvektor[i].m_Intensitaeten_durch_piF_Gamma = 0;
+		}
+		Ergebnisvektor[i].m_Intensitaeten_durch_piF_Gamma
+				= new double[Ergebnisvektor[i].m_Number_of_Wavelength];
+		if (Ergebnisvektor[i].m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand	!= 0) {
+			delete[] Ergebnisvektor[i].m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand;
+			Ergebnisvektor[i].m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand	= 0;
+		}
+		Ergebnisvektor[i].m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand
+				= new double[Ergebnisvektor[i].m_Number_of_Wavelength];
+
 		for (int j = 0; j < no_of_pix; j++) {
 			Ergebnisvektor[i].m_Wellenlaengen[j] = Wellenlaengen[j];
 			Ergebnisvektor[i].m_Intensitaeten[j] = Limbdaten[24 - i].m_radiance[j] - Limbdaten[30].m_radiance[j];
 			Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler[j] = Limbdaten[24 - i].m_error[j] + Limbdaten[30].m_error[j];
 		}
-		for (int j = no_of_pix; j < 826; j++) {
-			Ergebnisvektor[i].m_Wellenlaengen[j] = 0;
-			Ergebnisvektor[i].m_Intensitaeten[j] = 0;
-			Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler[j] = 0;
-		}
-		for (int j = no_of_pix; j < 826; j++) {
-			//Überzählige Pixel(weil leider noch nicht dynamisch)
-			Ergebnisvektor[i].m_Intensitaeten[j] = 0;
-		}
 		// Der Pixel 552 282,03nm ist die Kanalgrenze zwischen 1a und 1b und es
 		// gibt manchmal überlapp(->Peak)
 		//...also über grenze glätten
 		//Datei beginnt bei Pixel 16
-		Ergebnisvektor[i].m_Intensitaeten[536] = (Ergebnisvektor[i].m_Intensitaeten[535] + Ergebnisvektor[i].m_Intensitaeten[537]) / 2;
+		//Ergebnisvektor[i].m_Intensitaeten[536] = (Ergebnisvektor[i].m_Intensitaeten[535] + Ergebnisvektor[i].m_Intensitaeten[537]) / 2;
 	}// ende for i
 	//Teile von Schritt 4 nochmal für die niedrigste Höhe
 	//Eigentlich reichen Intensitäten
+	if (niedrigste_Hoehe.m_Intensitaeten != 0) {
+		delete[] niedrigste_Hoehe.m_Intensitaeten;
+		niedrigste_Hoehe.m_Intensitaeten = 0;
+	}
+	niedrigste_Hoehe.m_Intensitaeten = new double[no_of_pix];
+
 	for (int j = 0; j < no_of_pix; j++) {
 		niedrigste_Hoehe.m_Intensitaeten[j] = Limbdaten[29].m_radiance[j];
-	}
-	for (int j = no_of_pix; j < 826; j++) { //Überzählige Pixel
-		niedrigste_Hoehe.m_Intensitaeten[j] = 0;
 	}
 	// 5. Speicherfreigabe
 	delete[] Wellenlaengen;
