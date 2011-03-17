@@ -42,8 +42,9 @@ int Load_Limb_Ascii(string Datei_in, string textheader[31], int &no_of_alt,
 		cout << Datei_in << " konnte nicht zum lesen geöffnet werden\n";
 		return 1;
 	}
+	infile >> lang_textheader; // number of comment lines
 	// Datenstrukturen einlesen
-	for (int i = 0; i < lang_textheader; i++) {
+	for (int i = 0; i <= lang_textheader; i++) {
 		getline(infile, textheader[i]);
 	}
 	infile >> no_of_alt;
