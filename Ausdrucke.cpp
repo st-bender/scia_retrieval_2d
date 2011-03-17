@@ -17,13 +17,136 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 			 string title, string xlabel, string ylabel,
-			 double *x1, double *y1, double *x2, double *y2,
+			 double *x1, double *y1, double *x2, vector<double> &y2,
 			 int Startindex, int Endindex, double Mittelwert, double Fehler)
 {
-	string Rohdaten_Name = Arbeitsverzeichnis
-		+ "/Rohdaten_extrem_unwahrscheinliche_Endung_g";
-	string Temp_Skript_Name = Arbeitsverzeichnis
-		+ "/Skript_extrem_unwahrscheinliche_Endung_g";
+	string Rohdaten_Name =  Dateiname + ".raw.dat";
+		// + "/Rohdaten_extrem_unwahrscheinliche_Endung_g";
+	string Temp_Skript_Name =  Dateiname + ".plt";
+		//+ "/Skript_extrem_unwahrscheinliche_Endung_g";
+
+	ofstream outfile1, outfile2;
+	outfile1.open(Rohdaten_Name.c_str());
+	////////////////////////////////////////////////////////////////////////////
+	// Gnuplotscript Rohdatenfile schreiben
+	////////////////////////////////////////////////////////////////////////////
+	for (int i = Startindex; i < Endindex; i++) {
+		outfile1 << x1[i] << "\t" << y1[i] << "\t" << x2[i] << "\t"
+				 << y2[i] << "\n";
+	}
+	//letzte Zeile
+	outfile1 << x1[Endindex] << "\t" << y1[Endindex] << "\t" << x2[Endindex]
+			 << "\t" << y2[Endindex];
+	////////////////////////////////////////////////////////////////////////////
+	// Gnuplotscript Rohdatenfile schreiben ENDE
+	////////////////////////////////////////////////////////////////////////////
+	outfile1.close();
+	// x und y Grenzen des Datensatzes finden //////////////////////////////
+	double x_min, x_max, y_min, y_max;
+	x_min = x1[Startindex];
+	x_max = x1[Startindex];
+	y_min = y1[Startindex];
+	y_max = y1[Startindex];
+	double x_min_test, x_max_test, y_min_test, y_max_test;
+	for (int i = Startindex; i <= Endindex; i++) {
+		if (x1[i] < x2[i]) {
+			x_min_test = x1[i];
+			x_max_test = x2[i];
+		} else {
+			x_min_test = x2[i];
+			x_max_test = x1[i];
+		}
+		if (y1[i] < y2[i]) {
+			y_min_test = y1[i];
+			y_max_test = y2[i];
+		} else {
+			y_min_test = y2[i];
+			y_max_test = y1[i];
+		}
+		if (x_min_test < x_min) { //XMIN
+			x_min = x_min_test;
+		}
+		if (x_max_test > x_max) { //XMAX
+			x_max = x_max_test;
+		}
+		if (y_min_test < y_min) { //YMIN
+			y_min = y_min_test;
+		}
+		if (y_max_test > y_max) { //YMAX
+			y_max = y_max_test;
+		}
+	}
+	char buf[256];
+	sprintf(buf, " Saeulendichte (ohne Phase): %1.3E cm^{-2}", Mittelwert);
+	string text_messwert = buf;
+	sprintf(buf, " Residuum: %1.3E cm^{-2}", Fehler);
+	string text_Fehler = buf;
+	////////////////////////////////////////////////////////////////////////////
+	// Gnuplotscript schreiben
+	////////////////////////////////////////////////////////////////////////////
+	outfile2.open(Temp_Skript_Name.c_str());
+	//outfile2<<"set terminal x11\n";   // Betriebssystemabhängig, standard auf
+	//was ungefährliches setzen
+	outfile2 << "#!/opt/sfw/bin/gnuplot -persist" << endl;
+	outfile2 << "#set terminal postscript landscape enhanced color "
+			 << "\"NimbusSans-Regu\" 12\n";
+	outfile2 << "set style line 1 lc 1 lt 1 lw 3 pt 7 ps 4\n";
+	outfile2 << "set style line 2 lc 2 lt 2 lw 3 pt 5 ps 4\n";
+	outfile2 << "set output '" << Dateiname.c_str() << "'\n";
+	outfile2 << "set title \'" << title.c_str() << "\'\n";
+	outfile2 << "set xlabel \'" << xlabel.c_str() << "\'\n";
+	outfile2 << "set ylabel \'" << ylabel.c_str() << "\'\n";
+	outfile2 << "set nokey \n"; //keine Legende
+	outfile2 << "set mxtics 10\n";
+	outfile2 << "set label \"" << text_messwert.c_str() << "\" at "
+			 << x_min + 0.6 * (x_max - x_min) << ","
+			 << y_min + 0.95 * (y_max - y_min) << "\n";
+	outfile2 << "set label \"" << text_Fehler.c_str() << "\" at "
+			 << x_min + 0.6 * (x_max - x_min) << ","
+			 << y_min + 0.9 * (y_max - y_min) << "\n";
+	// nun beide Datenreihen mit  Linien Plotten
+	outfile2 << "plot '" << Rohdaten_Name.c_str()
+			 << "' using 1:2 with lines ls 1, '" << Rohdaten_Name.c_str()
+			 << "' using 3:4 with lines ls 2\n";
+
+//    outfile2<<"set terminal postscript landscape enhanced color "
+//            <<"\"NimbusSans-Regu\" 28\n";
+	//outfile2<<"set terminal epslatex \"NimbusSans-Regu\" 28\n";
+	//-> funzt nicht, wies soll
+//   outfile2<<"set output '"<<Dateiname.c_str()<<"'\n";
+//    outfile2<<"replot\n";
+//    outfile2<<"set terminal x11\n";
+	////////////////////////////////////////////////////////////////////////////
+	// Gnuplotscript schreiben ENDE
+	////////////////////////////////////////////////////////////////////////////
+	outfile2.close();
+	////////////////////////////////////////////////////////////////////////////
+	// Gnuplotscript ausführen
+	////////////////////////////////////////////////////////////////////////////
+	string befehl;
+	befehl = "gnuplot " + Temp_Skript_Name;
+	//system(befehl.c_str());
+	////////////////////////////////////////////////////////////////////////////
+	// Gnuplotscript löschen
+	////////////////////////////////////////////////////////////////////////////
+	// hmm Wartet der, bis Gnuplot fertig ist?---sollte er, in system steckt ja
+	// waitpid drin
+	befehl = "rm " + Temp_Skript_Name;
+	//system(befehl.c_str());
+	befehl = "rm " + Rohdaten_Name;
+	//system(befehl.c_str());
+	return 0;
+};
+int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
+			 string title, string xlabel, string ylabel,
+			 vector<double> &x1, vector<double> &y1,
+			 vector<double> &x2, vector<double> &y2,
+			 int Startindex, int Endindex, double Mittelwert, double Fehler)
+{
+	string Rohdaten_Name =  Dateiname + ".raw.dat";
+		// + "/Rohdaten_extrem_unwahrscheinliche_Endung_g";
+	string Temp_Skript_Name =  Dateiname + ".plt";
+		//+ "/Skript_extrem_unwahrscheinliche_Endung_g";
 
 	ofstream outfile1, outfile2;
 	outfile1.open(Rohdaten_Name.c_str());

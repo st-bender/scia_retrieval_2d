@@ -266,8 +266,9 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	// Hier kann man zur Testzwecken noch einen Plot machen  ///////////////////
 	if (mache_Fit_Plots == "ja") {
 		//TODO das als Funktion implementieren
-		double *Funktion;
-		Funktion = new double[N_Peak];
+		//double *Funktion;
+		//Funktion = new double[N_Peak];
+		vector<double> Funktion;
 		const double pi = 3.14159265;
 		double FWHM = Spezfenst.m_FWHM;
 		double cnorm = 4.0 * pi * sqrt(2.0) / (FWHM * FWHM * FWHM);
@@ -280,7 +281,7 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 							  - Spezfenst.m_Wellenlaengen[Index], 4)));
 			//cout<<Peak<<"\n";
 			//cout<<m_Zeilendichte<<"\n";
-			Funktion[i] = Peak + Basis;
+			Funktion.push_back(Peak + Basis);
 		}
 
 		string s1, s_OrbNum, s2;
@@ -332,7 +333,7 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 				 Peakfenster_WL, Peakfenster_Intensitaet, Peakfenster_WL,
 				 Funktion, 0, N_Peak - 1,
 				 m_Zeilendichte, m_Fehler_Zeilendichten);
-		SAVEDELETE(Funktion);
+		//SAVEDELETE(Funktion);
 	}
 	// Ende Plot ///////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////

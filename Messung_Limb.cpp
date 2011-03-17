@@ -165,10 +165,10 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	// Formel später nochmal zurück Das spätere Retrieval ermittelt dann die
 	// Dichte n aus der rechten Seite
 
-	double *Basisfenster_WL;
-	double *Basisfenster_Intensitaet;
-	double *Peakfenster_WL;
-	double *Peakfenster_Intensitaet;
+	//double *Basisfenster_WL;
+	//double *Basisfenster_Intensitaet;
+	//double *Peakfenster_WL;
+	//double *Peakfenster_Intensitaet;
 	//Zunächst Indizes der Wellenlaengen der Basisfensterbestimmen
 	int Index_Basisfenster_links_min = Get_Index(Spezfenst.m_Basisfenster_links_WLmin[Index]);
 	int Index_Basisfenster_links_max = Get_Index(Spezfenst.m_Basisfenster_links_WLmax[Index]);
@@ -182,10 +182,14 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	int N_Basis = Bas_l + Bas_r;
 	int N_Peak = Index_Peakfenster_max - Index_Peakfenster_min + 1;
 	// Speicher anfordern
-	Basisfenster_WL = new double[N_Basis];
-	Basisfenster_Intensitaet = new double[N_Basis];
-	Peakfenster_WL = new double[N_Peak];
-	Peakfenster_Intensitaet = new double[N_Peak];
+	//Basisfenster_WL = new double[N_Basis];
+	//Basisfenster_Intensitaet = new double[N_Basis];
+	//Peakfenster_WL = new double[N_Peak];
+	//Peakfenster_Intensitaet = new double[N_Peak];
+	vector<double> Basisfenster_WL(N_Basis);
+	vector<double> Basisfenster_Intensitaet(N_Basis);
+	vector<double> Peakfenster_WL(N_Peak);
+	vector<double> Peakfenster_Intensitaet(N_Peak);
 	// Basisfenster WL und I auffüllen
 	for (int i = 0; i < Bas_l; i++) {
 		Basisfenster_WL[i] = this->m_Wellenlaengen[Index_Basisfenster_links_min + i];
@@ -241,8 +245,7 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	// Hier kann man zur Testzwecken noch einen Plot machen  ///////////////////
 	if (mache_Fit_Plots == "ja") {
 		//TODO das als Funktion implementieren
-		double *Funktion;
-		Funktion = new double[N_Peak];
+		vector<double> Funktion(N_Peak);
 		const double pi = 3.14159265;
 		double FWHM = Spezfenst.m_FWHM;
 		double cnorm = 4.0 * pi * sqrt(2.0) / (FWHM * FWHM * FWHM);
@@ -306,15 +309,14 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 				 Peakfenster_WL, Peakfenster_Intensitaet, Peakfenster_WL,
 				 Funktion, 0, N_Peak - 1,
 				 m_Zeilendichte, m_Fehler_Zeilendichten);
-		SAVEDELETE(Funktion);
 	}
 	// Ende Plot ///////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////
 	//dynamische Felder der Funktion löschen
-	SAVEDELETE(Basisfenster_WL);
-	SAVEDELETE(Basisfenster_Intensitaet);
-	SAVEDELETE(Peakfenster_WL);
-	SAVEDELETE(Peakfenster_Intensitaet);
+	//SAVEDELETE(Basisfenster_WL);
+	//SAVEDELETE(Basisfenster_Intensitaet);
+	//SAVEDELETE(Peakfenster_WL);
+	//SAVEDELETE(Peakfenster_Intensitaet);
 	return 0;
 }//int Zeilendichte_Bestimmen() ende
 //========================================
@@ -1087,7 +1089,37 @@ void Messung_Limb::Fit_Linear(double *x, double *y, double &a0, double &a1,
 	//Parameter a
 	a0 = y_m - a1 * x_m;
 }
-//Ende Fit_linear
+void Messung_Limb::Fit_Linear(vector<double> &x, vector<double> &y, double &a0, double &a1,
+		int Anfangsindex, int Endindex)
+{
+	//fit der Funktion y=a0+a1x;
+	//Bestimmung von a und b im Intervall zwischen Anfangs und endindex
+	a0 = 0.;
+	a1 = 0.;
+	int i;
+	// benötigt werden die Mittelwerte von x,y,x*y,und x^2 =====================
+	double xsum = 0.;
+	double ysum = 0.;
+	double xysum = 0.;
+	double xxsum = 0.;
+	for (i = Anfangsindex; i <= Endindex; i++) {
+		xsum += x[i];
+		ysum += y[i];
+		xysum += x[i] * y[i];
+		xxsum += x[i] * x[i];
+	}
+	//Mittelwerte
+	double N = Endindex - Anfangsindex + 1.;
+	double x_m = xsum / N;
+	double y_m = ysum / N;
+	double xy_m = xysum / N;
+	double xx_m = xxsum / N;
+	//==========================================================================
+	// Parameter b
+	a1 = (xy_m - y_m * x_m) / (xx_m - x_m * x_m);
+	//Parameter a
+	a0 = y_m - a1 * x_m;
+}//Ende Fit_linear
 
 void Messung_Limb::Fit_Polynom_4ten_Grades(double *x, double *y, double x0,
 		double *Par_a0, double *Par_a1, double *Par_a2, double *Par_a3,
@@ -1245,10 +1277,84 @@ void Messung_Limb::Fit_Peak_hyperbolic(double *x, double *y, double x0,
 	}
 	A = sum_gy / sum_gg;
 }
+void Messung_Limb::Fit_Peak_hyperbolic(vector<double> &x, vector<double> &y,
+		double x0, double FWHM, double &A, int Anfangsindex, int Endindex)
+{
+	//Folgende Funktion ist fürs Integral über alles ordentlich auf 1 normiert
+	//Spaltfunktion
+	//cnorm           = 4.*PI*sqrt(2.) / FWHM**3      ! Normierung stimmt MPL
+	//SlitFuncSPEC    = 1./( ( (.5*FWHM)**4 + X**4 ) * cnorm )
+	//Im folgenden nenne ich SlitFuncSPEC==g
+	//
+	//Für einen Linearen Parameterfit der Funktion A*g gilt:
+	// cih^2=sum(y-Ag)^2=sum(y^2-2Agy+A^2g^2)
+	//dchi^2/dA=-2sum(gy)+2 A sum(g^2) das soll 0 sein
+	//-> A=sum(gy)/sum(g^2)
+	//
+	// FWHM muss gegeben werden und wir werten die Funktion um den Mittelwert
+	// x0 aus also statt X-> X-x0
+
+	// In dieser Funktion wird die Fläche A der Spaltfunktion bestimmt, da die
+	// Funktionwerte y=I/(piFGamma) sind so ist A dann die Säulendichte
+
+	const double pi = 3.14159265;
+	// Zahl der Messwertpaare
+	// double, damit später keine Probleme beim weiterrechnen
+	double sum_gy = 0.;
+	double sum_gg = 0.;
+	double g;
+	const double cnorm = 4.0 * pi * M_SQRT2 / (FWHM * FWHM * FWHM); //lambda m
+	// (0.5 * FWHM)^4
+	const double fwhm2to4 = 0.0625 * FWHM * FWHM * FWHM * FWHM;
+
+	for (int i = Anfangsindex; i <= Endindex; i++) {
+		//g berechnen
+		g = 1. / (cnorm * (fwhm2to4 + pow(x0 - x[i], 4)));
+		//eine Rechnung...nicht  Zeitkritisch
+		// sum_gy erhöhen
+		sum_gy += g * y[i];
+		// sum_gg erhöhen
+		sum_gg += g * g;
+	}
+	A = sum_gy / sum_gg;
+}
 
 double Messung_Limb::Evaluate_Error_primitive(double *x, double *y, double a0,
 		double a1, double A, double FWHM, double x0, int Anfangsindex,
 		int Endindex)
+{
+	/***************************************************************************
+	Wie der Name schon sagt, ist dies eine eher einfache Berechnung des Fehlers.
+	Summe der Quadratischen Abweichungen-> Chi^2 hmm nicht gut... aber als
+	Wichtungsfaktor noch akzeptabel
+	 **************************************************************************/
+	double Error = 0;
+	const double pi = 3.14159265;
+	double cnorm = 4.0 * pi * sqrt(2.0) / (FWHM * FWHM * FWHM);
+	//double y_quadrat=0;
+	for (int i = Anfangsindex; i < Endindex + 1; i++) {
+		//Funktionswert Bestimmen
+		double Basis = a0 + a1 * x[i];
+		double Peak = A / (cnorm * (pow(0.5 * FWHM, 4) + pow(x0 - x[i], 4)));
+		double Funktionswert = Peak + Basis;
+		// Quadratische Abweichung des Funktionswerts zum Messwert Bestimmen
+		// und aufaddieren
+		Error += (Funktionswert - y[i]) * (Funktionswert - y[i]);
+		//y_quadrat+=y[i]*y[i];
+	}
+	Error /= (Endindex - Anfangsindex + 1);
+	Error = sqrt(Error);
+	//Das ist nach Numerical Recipes der Fehlerbalken der Messpunkte Es ist
+	//vermutlich anschaulicher diesen Fehler noch durch den Mittelwert zu
+	//teilen;
+	//y_quadrat/=(Endindex-Anfangsindex+1);
+	//double quot=Error/sqrt(y_quadrat);
+	//cout<<quot<<"\n";
+	return Error;
+}
+double Messung_Limb::Evaluate_Error_primitive(vector<double> &x,
+		vector<double> &y, double a0, double a1, double A, double FWHM,
+		double x0, int Anfangsindex, int Endindex)
 {
 	/***************************************************************************
 	Wie der Name schon sagt, ist dies eine eher einfache Berechnung des Fehlers.

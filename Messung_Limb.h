@@ -56,6 +56,14 @@ public:
 			double &A, int Anfangsindex, int Endindex);
 	double Evaluate_Error_primitive(double *x, double *y, double a0, double a1,
 			double A, double FWHM, double x0, int Anfangsindex, int Endindex);
+	// vectorised prototypes
+	void Fit_Linear(vector<double> &x, vector<double> &y, double &a0, double &a1,
+			int Anfangsindex, int Endindex);
+	void Fit_Peak_hyperbolic(vector<double> &x, vector<double> &y, double x0,
+			double FWHM, double &A, int Anfangsindex, int Endindex);
+	double Evaluate_Error_primitive(vector<double> &x, vector<double> &y,
+			double a0, double a1, double A, double FWHM, double x0,
+			int Anfangsindex, int Endindex);
 	//Wartungsfunktionen
 	//können und sollten sogar später auskommentiert werden,
 	//und dienen im wesentlichen zum debuggen
