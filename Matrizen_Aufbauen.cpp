@@ -1755,12 +1755,14 @@ int Pixel_finden_und_AMF_erhoehen_LOS(MPL_Matrix &AMF, Retrievalgitter &Grid,
 	}  // kein Punkt des Gitters
 	if (Punkt_Hoehe < Grid.m_Gitter[0].m_Min_Hoehe) {
 		Pixelnummer = -1;
+		/*
 		cout << "Fall2d\n";
 		cout << "Achtung...der Fall verfälscht das Ergebnis stark\n";
 		cout << "MessungNr: " << MessungNr << "\n";
 		cout << "Punkt_Hoehe: " << Punkt_Hoehe << "\n";
 		cout << "Grid.m_Gitter[0].m_Min_Hoehe: "
 			 << Grid.m_Gitter[0].m_Min_Hoehe << "\n";
+		// */
 		return 2;
 	}  // kein Punkt des Gitters
 	//FALL3 Alle Punkte des Pixelgitters absuchen
