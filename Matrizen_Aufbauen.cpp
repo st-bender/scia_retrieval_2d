@@ -439,7 +439,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		//cout<<"TOA_Schritt: "<<TOA_Schritt(0)<<"\t"
 		//  <<TOA_Schritt(1)<<"\t"<<TOA_Schritt(2)<<"\n";
 		//initialisierung...keine Absorption bei TOA auf der Satellitenseite
-		double Tau_LOS = 0;
+		double Tau_LOS = 0.;
 		// Startpixel festlegen... im alten Algorithmus werden alle ca. 200
 		// Pixel untersucht, ob der neu berechnete Punkt drin liegt.  Das ist
 		// nicht nötig. Da es reicht, wenn man den alten Punkt kennt, nur
@@ -455,7 +455,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		Grid.Alle_Durchstosspunkte_Null_setzen();
 
 		// RAYTRACINGSCHLEIFE LOS///////////////////////////////////////////////
-		double Cos_Streuwinkel;
+		double Cos_Streuwinkel = -1.;
 		for (int aktuelle_Schritt_Nr = 0;
 				aktuelle_Schritt_Nr < Schrittzahl; aktuelle_Schritt_Nr++) {
 			//cerr<<"aktuelle_Schritt_Nr: "<<aktuelle_Schritt_Nr<<"\n";
@@ -622,7 +622,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			// Funktion int Find_Pixel_and_increase_AMF
 			//Parameter E1 und E2 für Phasenfunktion
 			//cerr<<"bla\n";
-			double E1, E2;
+			double E1 = 0., E2 = 1.;
 			unsigned int PeakNr;
 			for (PeakNr = 0; PeakNr < Spezies_Fenster.m_Wellenlaengen.size(); PeakNr++) {
 				//cerr<<"Spezies_Fenster.m_Wellenlaengen.size(): "
@@ -1030,7 +1030,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		////////////////////////////////////////////////////////////////////////
 		//Nadir LOS Raytracingschleife /////////////////////////////////////////
 		double Tau_Nadir_LOS = 0.0;
-		double Cos_Streuwinkel = 0.0;
+		double Cos_Streuwinkel = -1.0;
 		Grid.Alle_Durchstosspunkte_Null_setzen();
 		//Startparameter fürs Raytracing, -1 sagt,
 		//dass der aktuelle Gitterpunkt nicht bekannt ist
@@ -1109,7 +1109,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			}
 
 			// Phasenfunktion bestimmen
-			double E1, E2;
+			double E1 = 0., E2 = 1.;
 			unsigned int PeakNr;
 			for (PeakNr = 0; PeakNr < Spezies_Fenster.m_Wellenlaengen.size(); PeakNr++) {
 				if (AM_N[Nadir_MessungNR].m_Wellenlaenge == Spezies_Fenster.m_Wellenlaengen[PeakNr]) {
