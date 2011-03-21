@@ -68,67 +68,60 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
 	// Interessant sind Höhen über 70 km...also 23 bis 29
 	int offset = 23;
 	int no_of_heights = 7;
-	vector<Messung_Limb> Ergebnisvektor(no_of_heights);
+	vector<Messung_Limb> Ergebnisvektor;
 
 	for (int i = 0; i < no_of_heights; i++) {
-		Ergebnisvektor[i].m_Dateiname_L1C = Dateiname;
-		Ergebnisvektor[i].m_Jahr = Datum[0];
-		Ergebnisvektor[i].m_Monat = Datum[1];
-		Ergebnisvektor[i].m_Tag = Datum[2];
-		Ergebnisvektor[i].m_Stunde = Datum[3];
-		Ergebnisvektor[i].m_Minute = Datum[4];
-		Ergebnisvektor[i].m_orbit_phase = orbit_phase;
-		Ergebnisvektor[i].m_Lattidude_Sat = Limbdaten[i + offset].m_Sub_Sat_Lat; //achtung geodätische Koordinaten
-		Ergebnisvektor[i].m_Longitude_Sat = Limbdaten[i + offset].m_Sub_Sat_Lon;
-		Ergebnisvektor[i].m_Hoehe_Sat = Limbdaten[i + offset].m_Sat_Hoehe;
-		Ergebnisvektor[i].m_Lattidude_TP = Limbdaten[i + offset].m_TP_Lat;
-		Ergebnisvektor[i].m_Longitude_TP = Limbdaten[i + offset].m_TP_Lon;
-		Ergebnisvektor[i].m_Hoehe_TP = Limbdaten[i + offset].m_Tangentenhoehe;
-		Ergebnisvektor[i].m_Erdradius = Limbdaten[i + offset].m_Erdradius;
-		Ergebnisvektor[i].m_TP_SZA = Limbdaten[i + offset].m_TP_SZA;
-		Ergebnisvektor[i].m_Number_of_Wavelength = no_of_pix;
+		Messung_Limb ml;
+		ml.m_Dateiname_L1C = Dateiname;
+		ml.m_Jahr = Datum[0];
+		ml.m_Monat = Datum[1];
+		ml.m_Tag = Datum[2];
+		ml.m_Stunde = Datum[3];
+		ml.m_Minute = Datum[4];
+		ml.m_orbit_phase = orbit_phase;
+		ml.m_Lattidude_Sat = Limbdaten[i + offset].m_Sub_Sat_Lat; //achtung geodätische Koordinaten
+		ml.m_Longitude_Sat = Limbdaten[i + offset].m_Sub_Sat_Lon;
+		ml.m_Hoehe_Sat = Limbdaten[i + offset].m_Sat_Hoehe;
+		ml.m_Lattidude_TP = Limbdaten[i + offset].m_TP_Lat;
+		ml.m_Longitude_TP = Limbdaten[i + offset].m_TP_Lon;
+		ml.m_Hoehe_TP = Limbdaten[i + offset].m_Tangentenhoehe;
+		ml.m_Erdradius = Limbdaten[i + offset].m_Erdradius;
+		ml.m_TP_SZA = Limbdaten[i + offset].m_TP_SZA;
+		ml.m_Number_of_Wavelength = no_of_pix;
+
 		for (int j = 0; j < no_of_pix; j++) {
-			Ergebnisvektor[i].m_Wellenlaengen[j] = Wellenlaengen[j];
-			Ergebnisvektor[i].m_Intensitaeten[j] = Limbdaten[i + offset].m_radiance[j]; //-Limbdaten[30].m_radiance[j];(nicht gut bei MgI)
-			Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler[j] = Limbdaten[i + offset].m_error[j]; //-Limbdaten[30].m_radiance[j];
+			ml.m_Wellenlaengen.push_back(Wellenlaengen[j]);
+			ml.m_Intensitaeten.push_back(Limbdaten[i + offset].m_radiance[j]);
+			// - Limbdaten[30].m_radiance[j];(nicht gut bei MgI)
+			ml.m_Intensitaeten_relativer_Fehler.push_back(Limbdaten[i + offset].m_error[j]);
+			// - Limbdaten[30].m_radiance[j];
+			ml.m_Sonne.push_back(0.);
+			ml.m_Intensitaeten_durch_piF.push_back(0.);
+			ml.m_Intensitaeten_durch_piF_Gamma.push_back(0.);
+			ml.m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand.push_back(0.);
 		}
-		for (int j = no_of_pix; j < 826; j++) {
-			Ergebnisvektor[i].m_Wellenlaengen[j] = 0;
-			Ergebnisvektor[i].m_Intensitaeten[j] = 0;
-			Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler[j] = 0;
-		}
-		for (int j = no_of_pix; j < 826; j++) {
-			//Überzählige Pixel(weil leider noch nicht dynamisch)
-			Ergebnisvektor[i].m_Intensitaeten[j] = 0;
-		}
+
 		// Der Pixel 552 (282,03nm zeigt bei nadir( und nur dort, einen Peak)
 		// ....interpretation dead pixel
 		//Datei beginnt bei Pixel 16
-		Ergebnisvektor[i].m_Intensitaeten[536] = (Ergebnisvektor[i].m_Intensitaeten[535] + Ergebnisvektor[i].m_Intensitaeten[537]) / 2;
+		ml.m_Intensitaeten.at(536) = 0.5 * (ml.m_Intensitaeten.at(535) + ml.m_Intensitaeten.at(537));
+		Ergebnisvektor.push_back(ml);
 	}// ende for i
+
 	//Teile von Schritt 4 nochmal für die Troposhärische Säule
 	//Eigentlich reichen Intensitäten
 	for (int j = 0; j < no_of_pix; j++) {
-		Troposphaerische_Saeule.m_Intensitaeten[j] = Limbdaten[2].m_radiance[j];
-	}
-	for (int j = no_of_pix; j < 826; j++) {
-		//Überzählige Pixel(weil leider noch nicht dynamisch)
-		Troposphaerische_Saeule.m_Intensitaeten[j] = 0;
+		Troposphaerische_Saeule.m_Intensitaeten.push_back(Limbdaten[2].m_radiance[j]);
 	}
 	// und für den Mittelwert, der Höhen 10 bis 20
 	for (int j = 0; j < no_of_pix; j++) {
-		mean_10_20.m_Intensitaeten[j] = 0;
+		double mean = 0.;
 		for (int k = 10; k < 21; k++) {
-			mean_10_20.m_Intensitaeten[j] += Limbdaten[k].m_error[j];
+			mean += Limbdaten[k].m_error[j];
 		}
-		mean_10_20.m_Intensitaeten[j] /= 11.0;
+		mean /= 11.0;
+		mean_10_20.m_Intensitaeten.push_back(mean);
 	}
-
-	for (int j = no_of_pix; j < 826; j++) {
-		//Überzählige Pixel(weil leider noch nicht dynamisch)
-		mean_10_20.m_Intensitaeten[j] = 0;
-	}
-
 
 	// 5. Speicherfreigabe
 	delete[] Wellenlaengen;

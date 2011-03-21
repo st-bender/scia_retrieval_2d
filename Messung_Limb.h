@@ -104,12 +104,12 @@ public:
 	//double  m_SAA_TP;     // alt
 	// Datenfelder
 	int m_Number_of_Wavelength;
-	double m_Wellenlaengen[826];
-	double m_Sonne[826];
-	double m_Intensitaeten[826];  // genauer genommen photonen/(s cm^2nm)
-	double m_Intensitaeten_relativer_Fehler[826]; // 1=100% vom Messwert
-	double m_Intensitaeten_durch_piF[826];
-	double m_Intensitaeten_durch_piF_Gamma[826]; // ein bisschen mehr Speicher...optimierbar
-	double m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand[826];
+	vector<double> m_Wellenlaengen;
+	vector<double> m_Sonne;
+	vector<double> m_Intensitaeten;  // genauer genommen photonen/(s cm^2nm)
+	vector<double> m_Intensitaeten_relativer_Fehler; // 1=100% vom Messwert
+	vector<double> m_Intensitaeten_durch_piF;
+	vector<double> m_Intensitaeten_durch_piF_Gamma; // ein bisschen mehr Speicher...optimierbar
+	vector<double> m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand;
 };
 #endif /* MESSUNG_LIMB_HH_ */

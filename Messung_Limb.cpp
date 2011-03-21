@@ -103,22 +103,17 @@ Messung_Limb &Messung_Limb::operator =(const Messung_Limb &rhs)
 	m_Longitude_TP = rhs.m_Longitude_TP;
 	m_Hoehe_TP = rhs.m_Hoehe_TP;
 	m_Erdradius = rhs.m_Erdradius;
+	m_TP_SZA = rhs.m_TP_SZA;
 	m_Number_of_Wavelength = rhs.m_Number_of_Wavelength;
-	for (int i = 0; i < 826; i++) {
-		// Das hier ist ein zeitintensiver schritt
-		m_Wellenlaengen[i] = rhs.m_Wellenlaengen[i];
-		m_Intensitaeten[i] = rhs.m_Intensitaeten[i];
-		m_Intensitaeten_relativer_Fehler[i]
-			= rhs.m_Intensitaeten_relativer_Fehler[i];
-		m_Sonne[i] = rhs.m_Sonne[i];
-		// Die drei Zeilen zur Geschwindigkeitsoptimierung auch auskommentierbar
-		// ...aber dann keine ECHTE Kopie mehr !!!!
-		m_Intensitaeten_durch_piF[i] = rhs.m_Intensitaeten_durch_piF[i];
-		m_Intensitaeten_durch_piF_Gamma[i]
-			= rhs.m_Intensitaeten_durch_piF_Gamma[i];
-		m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand[i]
-			= rhs.m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand[i];
-	}
+	// copy vectors
+	m_Wellenlaengen = rhs.m_Wellenlaengen;
+	m_Intensitaeten = rhs.m_Intensitaeten;
+	m_Sonne = rhs.m_Sonne;
+	m_Intensitaeten_durch_piF = rhs.m_Intensitaeten_durch_piF;
+	m_Intensitaeten_durch_piF_Gamma = rhs.m_Intensitaeten_durch_piF_Gamma;
+	m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand
+		= rhs.m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand;
+
 	// Return a reference to *this object.
 	return *this;
 }// Assignmentoperator Overload ende
