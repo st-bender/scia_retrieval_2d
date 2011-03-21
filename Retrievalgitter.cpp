@@ -155,10 +155,10 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	//  MgI 82 Gitterpunkte bis 150 km in 1km Schritten
 	//  MgII 132 Gitterpunkte bis 200 km in 1km Schritten
 	//  unbekannte Spezies bei niedrigen Hoehen......teste bis 110
-	double mittlere_Hoehe[10];   // 82  //42  //132
-	double untere_Hoehe[10];
-	double obere_Hoehe[10];
-	int Anzahl_Hoehen = 10;
+	int Anzahl_Hoehen = 20;   // 82  //42  //132
+	vector<double> untere_Hoehe(Anzahl_Hoehen);
+	vector<double> mittlere_Hoehe(Anzahl_Hoehen);
+	vector<double> obere_Hoehe(Anzahl_Hoehen);
 	for (int i = 0; i < Anzahl_Hoehen; i++) {
 		//   mittlere_Hoehe[i] =69.0+i;
 		//   obere_Hoehe[i]    =69.5+i;

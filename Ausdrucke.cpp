@@ -333,7 +333,7 @@ int Plot_Slantcoloumns_polyfit_MgI(string Arbeitsverzeichnis, string Dateiname,
 	outfile3 << "set origin 0.0, 0.66\n"; //# oben links
 	outfile3 << "set title '" << title.c_str()
 			 << "' font \"NimbusSans-Regu,10\" \n"; // todo input!!!!
-	//set title 'Orbit 12485 Limb TP: Lat 68.298 {/Symbol \260}N Lon 201.956 \
+	//set title 'Orbit 12485 Limb TP: Lat 68.298 {/Symbol \260}N Lon 201.956
 	// {/Symbol \260}E TH 84.04 km' font \"NimbusSans-Regu,10\"
 	outfile3 << "set xlabel 'wavelength[nm]'\n";
 	outfile3 << "set ylabel 'l:limb, r:sun'\n";
@@ -485,7 +485,7 @@ int Plot_Spektren_und_Quotient(string Arbeitsverzeichnis, string Dateiname,
 	outfile3 << "set origin 0.0, 0.5\n"; //# oben links
 	outfile3 << "set title '" << title.c_str()
 			 << "' font \"NimbusSans-Regu,10\" \n"; // todo input!!!!
-	//set title 'Orbit 12485 Limb TP: Lat 68.298 {/Symbol \260}N Lon 201.956 \
+	//set title 'Orbit 12485 Limb TP: Lat 68.298 {/Symbol \260}N Lon 201.956
 	//{/Symbol \260}E TH 84.04 km' font \"NimbusSans-Regu,10\"
 	outfile3 << "set xlabel 'wavelength[nm]'\n";
 	outfile3 << "set ylabel 'l:limb, r:sun'\n";

@@ -128,7 +128,7 @@ int Sonnenspektrum::Interpolieren(Messung_Limb &Messung_Erdschein)
 	// gleich sind...aber trotzdem( geht schnell, kein Risiko)
 
 	double kleine_WL, grosse_WL;
-	int Index_kleine_WL, Index_grosse_WL;
+	int Index_kleine_WL = 0, Index_grosse_WL = 1;
 	// cout<<Messung_Erdschein.m_Wellenlaengen[0]<<"\n";
 	//cout<<Messung_Erdschein.m_Intensitaeten[0]<<"\n";
 	for (int i = 0; i < 826; i++) { //Für alle Punkte des neuen Sonnenspektrums

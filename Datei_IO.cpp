@@ -64,10 +64,13 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
 	// 3. Nachbearbeitung/Ausschlusskriterien
 	// Wird jetzt nach dem Laden durchgeführt
 	// 4. Erstellung des Übergabevektors
-	vector<Messung_Limb> Ergebnisvektor;
+
 	// Interessant sind Höhen über 70 km...also 23 bis 29
-	Ergebnisvektor.resize(7);
-	for (int i = 0; i < 7; i++) {
+	int offset = 23;
+	int no_of_heights = 7;
+	vector<Messung_Limb> Ergebnisvektor(no_of_heights);
+
+	for (int i = 0; i < no_of_heights; i++) {
 		Ergebnisvektor[i].m_Dateiname_L1C = Dateiname;
 		Ergebnisvektor[i].m_Jahr = Datum[0];
 		Ergebnisvektor[i].m_Monat = Datum[1];
@@ -75,18 +78,19 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
 		Ergebnisvektor[i].m_Stunde = Datum[3];
 		Ergebnisvektor[i].m_Minute = Datum[4];
 		Ergebnisvektor[i].m_orbit_phase = orbit_phase;
-		Ergebnisvektor[i].m_Lattidude_Sat = Limbdaten[i + 23].m_Sub_Sat_Lat; //achtung geodätische Koordinaten
-		Ergebnisvektor[i].m_Longitude_Sat = Limbdaten[i + 23].m_Sub_Sat_Lon;
-		Ergebnisvektor[i].m_Hoehe_Sat = Limbdaten[i + 23].m_Sat_Hoehe;
-		Ergebnisvektor[i].m_Lattidude_TP = Limbdaten[i + 23].m_TP_Lat;
-		Ergebnisvektor[i].m_Longitude_TP = Limbdaten[i + 23].m_TP_Lon;
-		Ergebnisvektor[i].m_Hoehe_TP = Limbdaten[i + 23].m_Tangentenhoehe;
-		Ergebnisvektor[i].m_Erdradius = Limbdaten[i + 23].m_Erdradius;
+		Ergebnisvektor[i].m_Lattidude_Sat = Limbdaten[i + offset].m_Sub_Sat_Lat; //achtung geodätische Koordinaten
+		Ergebnisvektor[i].m_Longitude_Sat = Limbdaten[i + offset].m_Sub_Sat_Lon;
+		Ergebnisvektor[i].m_Hoehe_Sat = Limbdaten[i + offset].m_Sat_Hoehe;
+		Ergebnisvektor[i].m_Lattidude_TP = Limbdaten[i + offset].m_TP_Lat;
+		Ergebnisvektor[i].m_Longitude_TP = Limbdaten[i + offset].m_TP_Lon;
+		Ergebnisvektor[i].m_Hoehe_TP = Limbdaten[i + offset].m_Tangentenhoehe;
+		Ergebnisvektor[i].m_Erdradius = Limbdaten[i + offset].m_Erdradius;
+		Ergebnisvektor[i].m_TP_SZA = Limbdaten[i + offset].m_TP_SZA;
 		Ergebnisvektor[i].m_Number_of_Wavelength = no_of_pix;
 		for (int j = 0; j < no_of_pix; j++) {
 			Ergebnisvektor[i].m_Wellenlaengen[j] = Wellenlaengen[j];
-			Ergebnisvektor[i].m_Intensitaeten[j] = Limbdaten[i + 23].m_radiance[j]; //-Limbdaten[30].m_radiance[j];(nicht gut bei MgI)
-			Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler[j] = Limbdaten[i + 23].m_error[j]; //-Limbdaten[30].m_radiance[j];
+			Ergebnisvektor[i].m_Intensitaeten[j] = Limbdaten[i + offset].m_radiance[j]; //-Limbdaten[30].m_radiance[j];(nicht gut bei MgI)
+			Ergebnisvektor[i].m_Intensitaeten_relativer_Fehler[j] = Limbdaten[i + offset].m_error[j]; //-Limbdaten[30].m_radiance[j];
 		}
 		for (int j = no_of_pix; j < 826; j++) {
 			Ergebnisvektor[i].m_Wellenlaengen[j] = 0;
