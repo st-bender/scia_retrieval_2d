@@ -92,7 +92,7 @@ public:
 	double m_Erdradius;
 
 	double m_orbit_phase;
-	//double  m_SZA_TP;      // alt
+	double m_TP_SZA;      // alt
 	//double  m_SAA_TP;     // alt
 	// Datenfelder
 	int m_Number_of_Wavelength;

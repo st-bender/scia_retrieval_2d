@@ -87,9 +87,9 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 	bool ist_Nachtmessung;
 	bool NLC_detektiert;
 	if (limb_meso_thermo != "ja") {
-		Test_auf_Nachtmessung_Limb(Tropo, ist_Nachtmessung);
+		ist_Nachtmessung = Test_auf_Nachtmessung_Limb(Tropo);
 	} else {
-		Test_auf_Nachtmessung_Limb_meso_thermo(Tropo, ist_Nachtmessung);
+		ist_Nachtmessung = Test_auf_Nachtmessung_Limb_meso_thermo(Tropo);
 	}
 	if (ist_Nachtmessung == true) {
 		// cout<<"counter_Nachtmessungen vorher: "<<*counter_Nachtmessungen <<"\n";

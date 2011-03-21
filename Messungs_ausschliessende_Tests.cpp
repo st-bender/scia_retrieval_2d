@@ -17,7 +17,7 @@ using namespace std;
 //////////////////////////////////////////////////////////////////////////
 // Funktionsstart Test_auf_Nachtmessung_Limb
 /////////////////////////////////////////////////////////////////////////
-int Test_auf_Nachtmessung_Limb(Messung_Limb &Tropo, bool &ist_Nachtmessung)
+bool Test_auf_Nachtmessung_Limb(Messung_Limb &Tropo)
 {
 	// Der Test überprüft im Intervall 290nm bis 295 nm, ob die mittleren
 	// Signale bei der Tangentenhöhe -1km (wie bei Marco) einen kritischen
@@ -25,7 +25,7 @@ int Test_auf_Nachtmessung_Limb(Messung_Limb &Tropo, bool &ist_Nachtmessung)
 	// zumeist mindestenz um einen Faktor 10 überschritten, während bei
 	// Nachtmessungen die Unterschreitung noch deutlicher ist
 	// 1E7 bis 1E8
-	ist_Nachtmessung = false;
+	bool ist_Nachtmessung = false;
 	int Index1 = 608;
 	//Die Indizes könnte man auch ermitteln, aber die sind ja immer gleich
 	int Index2 = 653;
@@ -39,18 +39,21 @@ int Test_auf_Nachtmessung_Limb(Messung_Limb &Tropo, bool &ist_Nachtmessung)
 		//cout<<"Troposignal:"<<Troposignal<<"\n";
 		ist_Nachtmessung = true;
 	}
-	return 0;
+	// schaue nach Sonnenzenitwinkel < 88°
+	if (fabs(Tropo.m_TP_SZA) < 88.0)
+		ist_Nachtmessung = true;
+
+	return ist_Nachtmessung;
 }
 //////////////////////////////////////////////////////////////////////////
 // ENDE Test_auf_Nachtmessung_Limb
 /////////////////////////////////////////////////////////////////////////
 
-int Test_auf_Nachtmessung_Limb_meso_thermo(Messung_Limb &niedrigste_hoehe,
-		bool &ist_Nachtmessung)
+bool Test_auf_Nachtmessung_Limb_meso_thermo(Messung_Limb &niedrigste_hoehe)
 {
 	//Wie im Limbfall nur leider nicht bei -1km TH, weil Messung nicht vorhanden
 	// TODO Schwellenenergie heraufinden
-	ist_Nachtmessung = false;
+	bool ist_Nachtmessung = false;
 	int Index1 = 608;
 	//Die Indizes könnte man auch ermitteln, aber die sind ja immer gleich
 	int Index2 = 653;
@@ -66,7 +69,8 @@ int Test_auf_Nachtmessung_Limb_meso_thermo(Messung_Limb &niedrigste_hoehe,
 		//cerr<<"Signal 290nm-295nm 53km:"<<Signal<<"\n";
 		ist_Nachtmessung = true;
 	}
-	return 0;
+
+	return ist_Nachtmessung;
 }
 
 
@@ -173,8 +177,8 @@ int Test_auf_korrekte_geolocations_Limb(vector<Messung_Limb> &Rohdaten,
 //////////////////////////////////////////////////////////////////////////
 // Funktionsstart Test_auf_Nachtmessung_Nadir
 /////////////////////////////////////////////////////////////////////////
-int Test_auf_Nachtmessung_Nadir(Messung_Nadir *Rohdaten,
-		int Anzahl_Datensaetze, bool &ist_Nachtmessung)
+bool Test_auf_Nachtmessung_Nadir(Messung_Nadir *Rohdaten,
+		int Anzahl_Datensaetze)
 {
 	// Der Test überprüft im Intervall 290nm bis 295 nm, ob die mittleren
 	// Signale einen kritischen Mittelwert unterschreiten (5E8) bei
@@ -191,7 +195,7 @@ int Test_auf_Nachtmessung_Nadir(Messung_Nadir *Rohdaten,
 		n = Anzahl_Datensaetze - 1;
 	}
 	////////////////////////////// Der Rest ist ziemlich analog zu Limb
-	ist_Nachtmessung = false;
+	bool ist_Nachtmessung = false;
 	int Index1 = 608;
 	//Die Indizes könnte man auch ermitteln, aber die sind ja immer gleich
 	int Index2 = 653;
@@ -205,7 +209,8 @@ int Test_auf_Nachtmessung_Nadir(Messung_Nadir *Rohdaten,
 		//cout<<"Signal_Nadir:"<<Signal<<"\n";
 		ist_Nachtmessung = true;
 	}
-	return 0;
+
+	return ist_Nachtmessung;
 }
 //////////////////////////////////////////////////////////////////////////
 // ENDE Test_auf_Nachtmessung_Nadir

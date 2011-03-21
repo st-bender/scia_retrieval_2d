@@ -85,6 +85,7 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
 		Ergebnisvektor[i].m_Longitude_TP = Limbdaten[i + offset].m_TP_Lon;
 		Ergebnisvektor[i].m_Hoehe_TP = Limbdaten[i + offset].m_Tangentenhoehe;
 		Ergebnisvektor[i].m_Erdradius = Limbdaten[i + offset].m_Erdradius;
+		Ergebnisvektor[i].m_TP_SZA = Limbdaten[i + offset].m_TP_SZA;
 		Ergebnisvektor[i].m_Number_of_Wavelength = no_of_pix;
 		for (int j = 0; j < no_of_pix; j++) {
 			Ergebnisvektor[i].m_Wellenlaengen[j] = Wellenlaengen[j];

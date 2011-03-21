@@ -41,7 +41,7 @@ int Nadir_Auswertung(Orbitliste Orbitlist,
 
 	// Hier erste Messungen aussortieren
 	bool ist_Nachtmessung;
-	Test_auf_Nachtmessung_Nadir(Rohdaten, Anzahl_Messungen, ist_Nachtmessung);
+	ist_Nachtmessung = Test_auf_Nachtmessung_Nadir(Rohdaten, Anzahl_Messungen);
 	if (ist_Nachtmessung == true) {
 		counter_Nachtmessungen_Nadir += Anzahl_Messungen; //counter setzen
 		counter_Nadir_Nacht_Dateien++;
