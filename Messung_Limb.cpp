@@ -884,18 +884,17 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 ////////////////////////////////////////////////////////////////////////////////
 // ENDE Plots_der_Spektren_erzeugen
 ////////////////////////////////////////////////////////////////////////////////
-int Messung_Limb::Intensitaeten_normieren(double Teiler[826])
+int Messung_Limb::Intensitaeten_normieren(vector<double> &Sonnen_Intensitaet)
 {
 	//Teiler wurde vorher interpoliert
 	//todo prüfen
 	// der Teiler ist das interpolierte Sonnenspektrum
-	//cout<<"m_Wellenlangen[0]: "<<m_Wellenlaengen[0]<<"\n";
-	//cout<<"m_Intensitaeten[0]: "<<m_Intensitaeten[0]<<"\n";
-	//cout<<"Teiler[0]: "<<Teiler[0]<<"\n";
-	for (int i = 0; i < 826; i++) {
-		this->m_Intensitaeten_durch_piF[i] = this->m_Intensitaeten[i] / Teiler[i];
-		this->m_Sonne[i] = Teiler[i];
+	for (int i = 0; i < m_Number_of_Wavelength; i++) {
+		this->m_Intensitaeten_durch_piF[i]
+			= this->m_Intensitaeten[i] / Sonnen_Intensitaet[i];
 	}
+	m_Sonne = Sonnen_Intensitaet;
+
 	return 0;
 }
 //========================================

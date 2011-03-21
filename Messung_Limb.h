@@ -32,7 +32,7 @@ public:
 	int Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst, int Index,
 			string Arbeitsverzeichnis, string mache_Fit_Plots,
 			double *mean_10_20);
-	int Intensitaeten_normieren(double Teiler[826]);
+	int Intensitaeten_normieren(vector<double> &Sonnen_Intensitaet);
 	//int        Intensitaeten_normieren(Sonnenspektrum Solspec, Fenster);
 	// hier müsste überlegt werden, wie man mehrfachkorrekturen umgeht
 	int Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfenst,

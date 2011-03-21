@@ -24,12 +24,12 @@ public:
 
 	int Interpolieren(Messung_Limb &Messung_Erdschein);
 	int nicht_interpolieren();
-	double m_Wellenlaengen[850]; // wie lang sind die eigentlich
-	double m_Intensitaeten[850];
+	vector<double> m_Wellenlaengen; // wie lang sind die eigentlich
+	vector<double> m_Intensitaeten;
 	// Auf Erdschein-Messungs-Wellenlängen Interpolierte Intensität
 	// (Wellenlängen sind dann gleich dem ErdscheinWL)
-	double m_Int_interpoliert[826];
-	double m_WL_interpoliert[826]; //für Ausgabe
+	vector<double> m_Int_interpoliert;
+	vector<double> m_WL_interpoliert; //für Ausgabe
 	int m_Anzahl_WL;
 	//Wartungsfunktion
 	int Speichern(string Dateiname);  //zur Kontrolle

@@ -352,12 +352,12 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 //////////////////////////////////////////////////
 //Intensitaeten_normieren
 //////////////////////////////////////////////////
-int Messung_Nadir::Intensitaeten_normieren(double *Teiler)
+int Messung_Nadir::Intensitaeten_normieren(vector<double> &Sonnen_Intensitaet)
 // Da das Limbspektrum mehr Wellenlängen hat, ist das kein Problem
 {
 	for (int i = 0; i < this->m_Number_of_Wavelength; i++) {
 		this->m_Intensitaeten_durch_piF[i]
-			= this->m_Intensitaeten[i] / Teiler[i];
+			= this->m_Intensitaeten[i] / Sonnen_Intensitaet[i];
 	}
 	return 0;
 }

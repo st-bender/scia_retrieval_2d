@@ -20,7 +20,7 @@ using namespace std;
 
 int Nadir_Auswertung(Orbitliste Orbitlist,
 					 int l,
-					 Sonnenspektrum Solspec,
+					 Sonnenspektrum &Solspec,
 					 vector<Speziesfenster>& Spezies_Fenster,
 					 int &counter_Nachtmessungen_Nadir,
 					 int &counter_Nadir_Nacht_Dateien,

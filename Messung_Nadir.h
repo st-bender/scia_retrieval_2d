@@ -36,7 +36,7 @@ public:
 			string Arbeitsverzeichnis, string mache_Fit_Plots, int MessungsNr);
 	//int Sauelendichte_Bestimmen_MgI(Speziesfenster& Spezfenst, int Index,
 	//  string Arbeitsverzeichnis, string mache_Fit_Plots, int MessungsNr);
-	int Intensitaeten_normieren(double *Teiler);
+	int Intensitaeten_normieren(vector<double> &Sonnen_Intensitaet);
 	int Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfenst, int Index);
 	int Deklinationswinkel_bestimmen();
 	int Sonnen_Longitude_bestimmen();

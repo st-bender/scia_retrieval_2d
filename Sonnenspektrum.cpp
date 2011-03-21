@@ -61,7 +61,7 @@ int Sonnenspektrum::Laden_SCIA(string Dateiname, string Fallback_Dateiname)
 {
 	// Lädt das Sonnenspektrum das mit SCIAMACHY während des gleichen Orbits
 	// gemessen wird
-	double dummy;
+	double read_wl, read_int, dummy;
 	string s_dummy;
 	ifstream infile;
 	infile.open(Dateiname.c_str());
@@ -84,23 +84,14 @@ int Sonnenspektrum::Laden_SCIA(string Dateiname, string Fallback_Dateiname)
 		cerr << "Sonnenspektrum ist unbrauchbar!" << endl;
 		return 2;
 	}
-	if (m_Anzahl_WL > 850) {
-		//feste Größe..i.a. sollte m_Anzahl 732 sein,
-		//also nach den bisher verwendeten scia2ascii clustern
-		m_Anzahl_WL = 850;
-	}
+
 	getline(infile, s_dummy); // Rest der Zeile
 	for (int i = 0; i < m_Anzahl_WL; i++) {
-		infile >> m_Wellenlaengen[i]
-			   >> m_Intensitaeten[i]
-			   >> dummy;
+		infile >> read_wl >> read_int >> dummy;
+		m_Wellenlaengen.push_back(read_wl);
+		m_Intensitaeten.push_back(read_int);
 	}
-	//Rest füllen
-	for (int i = m_Anzahl_WL; i < 850; i++) {
-		m_Wellenlaengen[i]
-			= m_Wellenlaengen[m_Anzahl_WL - 1] + 0.2 * (i - (m_Anzahl_WL - 1));
-		m_Intensitaeten[i] = 0;
-	}
+
 	infile.close();
 	return 0;
 }
@@ -128,6 +119,7 @@ int Sonnenspektrum::Interpolieren(Messung_Limb &Messung_Erdschein)
 	// gleich sind...aber trotzdem( geht schnell, kein Risiko)
 
 	double kleine_WL, grosse_WL;
+	double int_interp, wl_interp;
 	int Index_kleine_WL = 0, Index_grosse_WL = 1;
 	// cout<<Messung_Erdschein.m_Wellenlaengen[0]<<"\n";
 	//cout<<Messung_Erdschein.m_Intensitaeten[0]<<"\n";
@@ -150,9 +142,11 @@ int Sonnenspektrum::Interpolieren(Messung_Limb &Messung_Erdschein)
 			 / (grosse_WL - kleine_WL);
 		I1 = 1.0 - I2;
 		// Einfach altes Fenster überschreiben, das wird nicht
-		m_Int_interpoliert[i] = I1 * m_Intensitaeten[Index_kleine_WL]
+		int_interp = I1 * m_Intensitaeten[Index_kleine_WL]
 			+ I2 * m_Intensitaeten[Index_grosse_WL];
-		m_WL_interpoliert[i] = Messung_Erdschein.m_Wellenlaengen[i];
+		wl_interp = Messung_Erdschein.m_Wellenlaengen[i];
+		m_Int_interpoliert.push_back(int_interp);
+		m_WL_interpoliert.push_back(wl_interp);
 	}// schleife i
 	//cout<<Messung_Erdschein.m_Wellenlaengen[0]<<"\n";
 	return 0;
@@ -202,7 +196,7 @@ int Sonnenspektrum::Speichern_was_geladen_wurde(string Dateiname)
 		return 1;
 	}
 	outfile << "WL\t\t" << "I\n";
-	for (int i = 0; i < 850; i++) {
+	for (int i = 0; i < m_Anzahl_WL; i++) {
 		outfile << this->m_Wellenlaengen[i] << "\t"
 				<< this->m_Intensitaeten[i] << "\n";
 	}
