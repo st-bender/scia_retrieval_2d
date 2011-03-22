@@ -8,6 +8,8 @@
 #include <string>
 #include<fstream>
 #include<iostream>
+#include <iterator>
+#include <algorithm>
 
 #include "Messung_Limb.h"
 
@@ -121,34 +123,35 @@ int Sonnenspektrum::Interpolieren(Messung_Limb &Messung_Erdschein)
 	double kleine_WL, grosse_WL;
 	double int_interp, wl_interp;
 	int Index_kleine_WL = 0, Index_grosse_WL = 1;
+	vector<double>::iterator low, me_wl_it;
 	// cout<<Messung_Erdschein.m_Wellenlaengen[0]<<"\n";
 	//cout<<Messung_Erdschein.m_Intensitaeten[0]<<"\n";
-	for (int i = 0; i < Messung_Erdschein.m_Number_of_Wavelength; i++) {
+	for (me_wl_it = Messung_Erdschein.m_Wellenlaengen.begin();
+			me_wl_it != Messung_Erdschein.m_Wellenlaengen.end();
+			++me_wl_it) {
 		//Für alle Punkte des neuen Sonnenspektrums
 		// Startpunkt
-		kleine_WL = m_Wellenlaengen[i + 18]; // ein bisschen drüber anfangen
-		for (int j = 18; kleine_WL > Messung_Erdschein.m_Wellenlaengen[i]; j--) {
-			Index_kleine_WL = i + j;
-			// Das hier kann zu einem Segmentation Fault führen,
-			// falls die Spektren komisch sind,
-			// was aber eher gut als schlecht ist
-			if (Index_kleine_WL < 0)    {
-				Index_kleine_WL = 0;
-			}
-			kleine_WL = m_Wellenlaengen[i + j];
+		low = lower_bound(m_Wellenlaengen.begin(), m_Wellenlaengen.end(),
+				(*me_wl_it));
+		if (low == m_Wellenlaengen.begin()) {
+			I1 = 1.;
+			I2 = 0.;
+		} else {
+			if (low == m_Wellenlaengen.end()) --low; // use the last one
+			Index_kleine_WL = distance(m_Wellenlaengen.begin(), low) - 1;
+			Index_grosse_WL = Index_kleine_WL + 1;
+			kleine_WL = m_Wellenlaengen[Index_kleine_WL];
+			grosse_WL = m_Wellenlaengen[Index_grosse_WL];
+			I2 = ((*me_wl_it) - kleine_WL) / (grosse_WL - kleine_WL);
+			I1 = 1.0 - I2;
 		}
-		Index_grosse_WL = Index_kleine_WL + 1;
-		grosse_WL = m_Wellenlaengen[Index_grosse_WL];
-		I2 = (Messung_Erdschein.m_Wellenlaengen[i] - kleine_WL)
-			 / (grosse_WL - kleine_WL);
-		I1 = 1.0 - I2;
 		// Einfach altes Fenster überschreiben, das wird nicht
 		int_interp = I1 * m_Intensitaeten[Index_kleine_WL]
 			+ I2 * m_Intensitaeten[Index_grosse_WL];
-		wl_interp = Messung_Erdschein.m_Wellenlaengen[i];
+		wl_interp = (*me_wl_it);
 		m_Int_interpoliert.push_back(int_interp);
 		m_WL_interpoliert.push_back(wl_interp);
-	}// schleife i
+	}
 	//cout<<Messung_Erdschein.m_Wellenlaengen[0]<<"\n";
 	return 0;
 }//Interpolieren(Messung_Limb Messung_Erdschein) ende
