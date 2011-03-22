@@ -123,7 +123,8 @@ int Sonnenspektrum::Interpolieren(Messung_Limb &Messung_Erdschein)
 	int Index_kleine_WL = 0, Index_grosse_WL = 1;
 	// cout<<Messung_Erdschein.m_Wellenlaengen[0]<<"\n";
 	//cout<<Messung_Erdschein.m_Intensitaeten[0]<<"\n";
-	for (int i = 0; i < 826; i++) { //Für alle Punkte des neuen Sonnenspektrums
+	for (int i = 0; i < Messung_Erdschein.m_Number_of_Wavelength; i++) {
+		//Für alle Punkte des neuen Sonnenspektrums
 		// Startpunkt
 		kleine_WL = m_Wellenlaengen[i + 18]; // ein bisschen drüber anfangen
 		for (int j = 18; kleine_WL > Messung_Erdschein.m_Wellenlaengen[i]; j--) {

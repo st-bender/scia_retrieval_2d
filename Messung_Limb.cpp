@@ -903,7 +903,7 @@ int Messung_Limb::Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfen
 {
 
 	//Auf dem ganzen Fenster...Verschwendung !!!!!...
-	for (int i = 0; i < 826; i++) { //langsam, optimierbar
+	for (int i = 0; i < m_Number_of_Wavelength; i++) { //langsam, optimierbar
 		this->m_Intensitaeten_durch_piF_Gamma[i]
 			= this->m_Intensitaeten_durch_piF[i]
 			  / Spezfenst.m_Liniendaten[Index].m_Gamma;
@@ -923,7 +923,7 @@ int Messung_Limb::Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Spez
 	double Delta_WL = (m_Wellenlaengen[Ind + 1] - m_Wellenlaengen[Ind]);
 	// Nun alles damit multiplizieren....wie gesagt..das ist etwas langsam,
 	// da es sich um nen konstanten Faktor handelt
-	for (int i = 0; i < 826; i++) { //langsam, optimierbar
+	for (int i = 0; i < m_Number_of_Wavelength; i++) { //langsam, optimierbar
 		//m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand[i]=m_Intensitaeten
 		//_durch_piF_Gamma[i]*Delta_WL;
 		// Delta_Wl ist in nm gegeben...
@@ -1441,7 +1441,7 @@ int Messung_Limb::Ausgabe_in_Datei(string Dateiname)
 			"m_Intensitaeten_durch_piF_Gamma",
 			"m_Intensitaeten_durch_piF_Gamma*ds");
 	//for(int i=0;i<m_Number_of_Wavelength;i++)
-	for (int i = 0; i < 826; i++) {
+	for (int i = 0; i < m_Number_of_Wavelength; i++) {
 		//die letzte Zeile der Datei ist leer, da \n in der Vorletzten steht
 		fprintf(outfile, "%1.5E %1.5E %1.5E %1.5E %1.5E\n",
 				m_Wellenlaengen[i], m_Intensitaeten[i],
