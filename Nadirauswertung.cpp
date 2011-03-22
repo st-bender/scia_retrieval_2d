@@ -31,7 +31,7 @@ int Nadir_Auswertung(Orbitliste Orbitlist,
 					 vector<Ausgewertete_Messung_Nadir>& Ausgewertete_Nadirmessung_FeI)
 {
 	//cout<<"Start_Nadirauswertung\n";
-	unsigned int j, k;
+	unsigned int i, j, k;
 	vector<Messung_Nadir> Rohdaten;
 	int Anzahl_Messungen = 0;
 	Rohdaten = ReadL1C_Nadir_mpl_binary(Orbitlist.m_Dateinamen[l], Anzahl_Messungen);
@@ -50,53 +50,58 @@ int Nadir_Auswertung(Orbitliste Orbitlist,
 	}
 
 	//cout<<Anzahl_Messungen<<"\n";
-	for (int i = 0; i < Anzahl_Messungen; i++) { //Schleife über alle Rohdaten
-		Messung_Nadir Messung = Rohdaten[i];
-		Messung.Deklinationswinkel_bestimmen();
-		Messung.Sonnen_Longitude_bestimmen();
-		Messung.Intensitaeten_normieren(Solspec.m_Int_interpoliert);
+	vector<Messung_Nadir>::iterator mnit;
+	vector<Speziesfenster>::iterator sfit;
+	vector<Liniendaten>::iterator ldit;
+	//Schleife über alle Rohdaten
+	for (i = 0, mnit = Rohdaten.begin(); mnit != Rohdaten.end(); i++, ++mnit) {
+		(*mnit).Deklinationswinkel_bestimmen();
+		(*mnit).Sonnen_Longitude_bestimmen();
+		(*mnit).Intensitaeten_normieren(Solspec.m_Int_interpoliert);
 
-		for (j = 0; j < Spezies_Fenster.size(); j++) {
-			//Schleife über alle Spezies wie z.b. Mg oder Mg+
+		//Schleife über alle Spezies wie z.b. Mg oder Mg+
+		for (j = 0, sfit = Spezies_Fenster.begin();
+				sfit != Spezies_Fenster.end(); j++, ++sfit) {
 
-			//Speziesfenster  Spezfenst=Spezies_Fenster[j];
-			for (k = 0; k < Spezies_Fenster[j].m_Wellenlaengen.size(); k++) {
+			//Schleife über alle Linien dieser Spezies
+			for (k = 0, ldit = (*sfit).m_Liniendaten.begin();
+					ldit != (*sfit).m_Liniendaten.end(); k++, ++ldit) {
 				//Schleife über alle Linien dieser Spezies
 				//Streuwinkel schon beim einlesen bestimmt
 				//Spezfenst.m_Liniendaten[k].m_theta=Messung.m_Streuwinkel;
 				//Streuwinkel muss woanders ermittelt werden
-				Spezies_Fenster[j].m_Liniendaten[k].Emissivitaet_ermitteln();
+				(*ldit).Emissivitaet_ermitteln();
 				//Spezfenst.m_Liniendaten[k].Auf_Bildschirm_Ausgeben();
 
-				Messung.Intensitaeten_durch_piF_Gamma_berechnen(Spezies_Fenster[j], k);
+				(*mnit).Intensitaeten_durch_piF_Gamma_berechnen((*sfit), k);
 
 				// Jetzt Zeilendichte und Fehler bestimmen
-				Messung.Zeilendichte_Bestimmen(Spezies_Fenster[j], k,
+				(*mnit).Zeilendichte_Bestimmen((*sfit), k,
 						Arbeitsverzeichnis, mache_Fit_Plots, i);
 
 				// Zu Testzwecken fertige Messung in Datei Speichern
 				if ((k == 0) && (j == 0) && (i == 0)) {
-					Messung.Ausgabe_in_Datei("CHECKDATA/Messung_Nadir_Fenster0_Hoehe_74km_0teLinie.txt");
+					(*mnit).Ausgabe_in_Datei("CHECKDATA/Messung_Nadir_Fenster0_Hoehe_74km_0teLinie.txt");
 				}
 				// Ergebnis zusammenfassen
-				Ausgewertete_Messung_Nadir Ergebnis = Messung.Ergebnis_Zusammenfassen();
+				Ausgewertete_Messung_Nadir Ergebnis = (*mnit).Ergebnis_Zusammenfassen();
 				// Die braucht man später für die Luftmassenmatrix
-				Ergebnis.m_Wellenlaenge = Spezies_Fenster[j].m_Wellenlaengen[k];
+				Ergebnis.m_Wellenlaenge = (*sfit).m_Wellenlaengen[k];
 				//Ergebnis.Ausgabe_auf_Bildschirm();
 				// Zusammenfassung der Zwischenresultate dem Vektor
 				// für die jeweilige Spezies zuordnen
 				//cout<<Spezies_Fenster[j].m_Spezies_Name<<"\n";
-				if (Spezies_Fenster[j].m_Spezies_Name == "MgI") {
+				if ((*sfit).m_Spezies_Name == "MgI") {
 					//cout<<"Ausgewertete_Nadirmessung_MgI.push_back(Ergebnis)\n";
 					Ausgewertete_Nadirmessung_MgI.push_back(Ergebnis);
 				}
-				if (Spezies_Fenster[j].m_Spezies_Name == "MgII") {
+				if ((*sfit).m_Spezies_Name == "MgII") {
 					Ausgewertete_Nadirmessung_MgII.push_back(Ergebnis);
 				}
-				if (Spezies_Fenster[j].m_Spezies_Name == "unknown") {
+				if ((*sfit).m_Spezies_Name == "unknown") {
 					Ausgewertete_Nadirmessung_unknown.push_back(Ergebnis);
 				}
-				if (Spezies_Fenster[j].m_Spezies_Name == "FeI") {
+				if ((*sfit).m_Spezies_Name == "FeI") {
 					Ausgewertete_Nadirmessung_FeI.push_back(Ergebnis);
 				}
 			}//ende k Linie
