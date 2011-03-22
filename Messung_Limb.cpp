@@ -162,10 +162,6 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	// Formel später nochmal zurück Das spätere Retrieval ermittelt dann die
 	// Dichte n aus der rechten Seite
 
-	//double *Basisfenster_WL;
-	//double *Basisfenster_Intensitaet;
-	//double *Peakfenster_WL;
-	//double *Peakfenster_Intensitaet;
 	//Zunächst Indizes der Wellenlaengen der Basisfensterbestimmen
 	int Index_Basisfenster_links_min = Get_Index(Spezfenst.m_Basisfenster_links_WLmin[Index]);
 	int Index_Basisfenster_links_max = Get_Index(Spezfenst.m_Basisfenster_links_WLmax[Index]);
@@ -179,10 +175,6 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	int N_Basis = Bas_l + Bas_r;
 	int N_Peak = Index_Peakfenster_max - Index_Peakfenster_min + 1;
 	// Speicher anfordern
-	//Basisfenster_WL = new double[N_Basis];
-	//Basisfenster_Intensitaet = new double[N_Basis];
-	//Peakfenster_WL = new double[N_Peak];
-	//Peakfenster_Intensitaet = new double[N_Peak];
 	vector<double> Basisfenster_WL(N_Basis);
 	vector<double> Basisfenster_Intensitaet(N_Basis);
 	vector<double> Peakfenster_WL(N_Peak);
@@ -308,12 +300,7 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 				 m_Zeilendichte, m_Fehler_Zeilendichten);
 	}
 	// Ende Plot ///////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////
-	//dynamische Felder der Funktion löschen
-	//SAVEDELETE(Basisfenster_WL);
-	//SAVEDELETE(Basisfenster_Intensitaet);
-	//SAVEDELETE(Peakfenster_WL);
-	//SAVEDELETE(Peakfenster_Intensitaet);
+
 	return 0;
 }//int Zeilendichte_Bestimmen() ende
 //========================================
