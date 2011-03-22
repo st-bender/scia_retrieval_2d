@@ -19,12 +19,12 @@ int Retrievalfehler_Abschaetzung(MPL_Matrix &S_x,
 								 MPL_Matrix &Averaging_Kernel_Matrix,
 								 const MPL_Matrix &S_apriori,
 								 const MPL_Matrix &S_y,
-								 MPL_Matrix S_Breite,
-								 MPL_Matrix S_Hoehe,
-								 MPL_Matrix S_letzte_Hoehe,
+								 MPL_Matrix &S_Breite,
+								 MPL_Matrix &S_Hoehe,
+								 MPL_Matrix &S_letzte_Hoehe,
 								 const double &Lambda_Breite,
 								 const double &Lambda_Hoehe,
-								 MPL_Matrix AMF,
+								 MPL_Matrix &AMF,
 								 const Konfiguration &Konf);
 void Matrix_Invertieren(MPL_Matrix &M);
 

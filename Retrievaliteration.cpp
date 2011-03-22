@@ -219,9 +219,9 @@ int Retrievaliteration_old(MPL_Matrix &Dichten,
 						   MPL_Matrix &Saeulendichten,
 						   MPL_Matrix &S_apriori,
 						   MPL_Matrix &S_y,
-						   MPL_Matrix S_Breite,
-						   MPL_Matrix S_Hoehe,
-						   MPL_Matrix S_letzte_Hoehe,
+						   MPL_Matrix &S_Breite,
+						   MPL_Matrix &S_Hoehe,
+						   MPL_Matrix &S_letzte_Hoehe,
 						   const double &Lambda_Breite,
 						   const double &Lambda_Hoehe,
 						   MPL_Matrix &AMF,
@@ -240,11 +240,11 @@ int Retrievaliteration_old(MPL_Matrix &Dichten,
 //    cout<<"Dim S_y: "<<S_y.m_Zeilenzahl<<"\t"<<S_y.m_Spaltenzahl<<"\n";
 //    cout<<"AMF: "<<AMF.m_Zeilenzahl<<"\t"<<AMF.m_Spaltenzahl<<"\n";
 //    cout<<"AMF_trans: "<<AMF_trans.m_Zeilenzahl<<"\t"<<AMF_trans.m_Spaltenzahl<<"\n";
-	LHS = (AMF_trans * (S_y * AMF)) +
-		  (S_apriori) +
-		  (Lambda_Breite * (S_Breite_trans * S_Breite)) +  // Breitenglattung
-		  (Lambda_Hoehe * (S_Hoehe_trans * S_Hoehe)) + // Hoehenglattung
-		  S_letzte_Hoehe_trans * S_letzte_Hoehe;  // letzte Hoehe auf 0 zwingen
+	LHS = (AMF_trans * (S_y * AMF));
+	LHS += (S_apriori);
+	LHS += (Lambda_Breite * (S_Breite_trans * S_Breite));  // Breitenglattung
+	LHS += (Lambda_Hoehe * (S_Hoehe_trans * S_Hoehe)); // Hoehenglattung
+	LHS += S_letzte_Hoehe_trans * S_letzte_Hoehe;  // letzte Hoehe auf 0 zwingen
 //    cout<<"LHS: "<<LHS.m_Zeilenzahl<<"\t"<<LHS.m_Spaltenzahl<<"\n";
 	////////////////////////////////////////////////////////////////////////////
 	// ich halte mich erstmal an Marcos Routine, bis auf die Diagonalisierung
