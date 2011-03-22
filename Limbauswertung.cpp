@@ -114,6 +114,7 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 	// durchgeführt
 	vector<Messung_Limb>::iterator mlit;
 	vector<Speziesfenster>::iterator sfit;
+	vector<Liniendaten>::iterator ldit;
 	//Schleife über alle Rohdaten
 	for (mlit = Rohdaten.begin(); mlit != Rohdaten.end(); ++mlit) {
 		//Übergabe der Rohdaten, sodass diese nicht verändert werden
@@ -129,7 +130,8 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 		//Schleife über alle Spezies wie z.b. Mg oder Mg+
 		for (sfit = Spezies_Fenster.begin(); sfit != Spezies_Fenster.end(); ++sfit) {
 			//Schleife über alle Linien dieser Spezies
-			for (k = 0; k < (*sfit).m_Wellenlaengen.size(); k++) {
+			for (k = 0, ldit = (*sfit).m_Liniendaten.begin();
+					ldit != (*sfit).m_Liniendaten.end(); k++, ++ldit) {
 				// Aus SZA_TP und SAA_TP lässt sich die Polararisation in den
 				// Liniendaten des Speziesfensters ermitteln, und damit die
 				// Emissivität berechnen
@@ -137,7 +139,7 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 				//der Streuwinkel muss woanders berechnet werden
 				// Die Phasenfunktion, steckt so nun in den Slant Coloumns drin
 				//cout<<Spezfenst.m_Liniendaten[k].m_theta<<"\n";
-				(*sfit).m_Liniendaten[k].Emissivitaet_ermitteln();
+				(*ldit).Emissivitaet_ermitteln();
 				//cerr<<Spezies_Fenster[j].m_Basisfenster_rechts_WLmin[k]<<"\n";
 				//cerr<<"j:"<<j<<"\t"<<"k:"<<k<<"\t"
 				//  <<Spezies_Fenster[j].m_Wellenlaengen[k]<<"\t"
