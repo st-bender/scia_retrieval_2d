@@ -158,12 +158,11 @@ int Sonnenspektrum::Interpolieren(Messung_Limb &Messung_Erdschein)
 ///////////////////////////////////////////////////
 int Sonnenspektrum::nicht_interpolieren()
 {
-	for (int i = 0; i < 826; i++) {
-		m_Int_interpoliert[i] = m_Intensitaeten[i];
-		m_WL_interpoliert[i] = m_Wellenlaengen[i];
-	}
-	return 0;
+	// vector copies
+	m_Int_interpoliert = m_Intensitaeten;
+	m_WL_interpoliert = m_Wellenlaengen;
 
+	return 0;
 }
 ///////////////////////////////////////////////////
 // ENDE nicht interpolieren
