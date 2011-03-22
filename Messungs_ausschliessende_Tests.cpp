@@ -177,7 +177,7 @@ int Test_auf_korrekte_geolocations_Limb(vector<Messung_Limb> &Rohdaten,
 //////////////////////////////////////////////////////////////////////////
 // Funktionsstart Test_auf_Nachtmessung_Nadir
 /////////////////////////////////////////////////////////////////////////
-bool Test_auf_Nachtmessung_Nadir(Messung_Nadir *Rohdaten,
+bool Test_auf_Nachtmessung_Nadir(vector<Messung_Nadir> &Rohdaten,
 		int Anzahl_Datensaetze)
 {
 	// Der Test überprüft im Intervall 290nm bis 295 nm, ob die mittleren

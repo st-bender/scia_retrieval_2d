@@ -265,13 +265,74 @@ ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(string Dateiname,
 ////////////////////////////////////////////////////////////////////////////////
 
 
+// helper function to copy Limb_Datensatz *Limbdaten and
+// float *Wellenlaengen into a vector<Messung_Limb>
+vector<Messung_Nadir> make_messung_nadir_vector(string Dateiname,
+		Nadir_Datensatz *Nadirdaten, float *Wellenlaenge,
+		int No_of_Messungen, int No_of_Pix, int *Kanal_Nr)
+{
+	// 4. Erstellung des Übergabevektors
+	vector<Messung_Nadir> mn_vec;
+
+	for (int i = 0; i < No_of_Messungen; i++) {
+		Messung_Nadir mn;
+		//Herkunftsmerkmale
+		mn.m_Dateiname_L1C = Dateiname;
+		mn.m_Messung_ID = Nadirdaten[i].m_Messung_ID;
+		//Datum
+		mn.m_Jahr = Nadirdaten[i].m_Jahr;
+		mn.m_Monat = Nadirdaten[i].m_Monat;
+		mn.m_Tag = Nadirdaten[i].m_Tag;
+		mn.m_Stunde = Nadirdaten[i].m_Stunde;
+		mn.m_Minute = Nadirdaten[i].m_Minute;
+		//Geolokationen
+		mn.m_Lattitude_Sat = Nadirdaten[i].m_Sat_Lat;
+		mn.m_Longitude_Sat = Nadirdaten[i].m_Sat_Lon;
+		mn.m_Hoehe_Sat = Nadirdaten[i].m_Hoehe;
+		mn.m_Lattitude_Ground = Nadirdaten[i].m_geo_nadir_center_lat;
+		mn.m_Longitude_Ground = Nadirdaten[i].m_geo_nadir_center_lon;
+		mn.m_Erdradius = Nadirdaten[i].m_Sat_Erdradius;
+		mn.m_orbit_phase = Nadirdaten[i].m_orbit_phase;
+
+		//Füllbare Felder
+		mn.m_Number_of_Wavelength = No_of_Pix;
+		//Felder allokieren
+		//Deep Copy der Wellenlängen und Intensitäten
+		for (int j = 0; j < No_of_Pix; j++) {
+			mn.m_Wellenlaengen.push_back(Wellenlaenge[j]);
+			mn.m_Intensitaeten.push_back(Nadirdaten[i].m_radiance[j]);
+			mn.m_Intensitaeten_relativer_Fehler.push_back(Nadirdaten[i].m_error[j]);
+			mn.m_Intensitaeten_durch_piF.push_back(0.);
+			mn.m_Intensitaeten_durch_piF_Gamma.push_back(0.);
+		}
+		// Der Pixel 552 (282,03nm zeigt bei nadir( und nur dort, einen Peak)
+		// Das ist die Kanalgrenze zwischen Kanal1a und Kanal1b
+		// Interpolieren zwischen 282 und 283 nm
+		//mn.m_Intensitaeten[536]=(mn.m_Intensitaeten[535]+mn.m_Intensitaeten[537])/2;
+		//mn.m_Intensitaeten_relativer_Fehler[536]=(mn.m_Intensitaeten_relativer_Fehler[535]+mn.m_Intensitaeten_relativer_Fehler[537])/2;
+		double f1 = 0.9, f2 = 0.1;
+		for (int i = 536; i < 545; i++) {
+			mn.m_Intensitaeten[i]
+				= f1 * mn.m_Intensitaeten[535] + f2 * mn.m_Intensitaeten[545];
+			mn.m_Intensitaeten_relativer_Fehler[536]
+				= f1 * mn.m_Intensitaeten_relativer_Fehler[535]
+				+ f2 * mn.m_Intensitaeten_relativer_Fehler[545];
+			f1 -= 0.1;
+			f2 += 0.1;
+		}
+
+		mn_vec.push_back(mn);
+	}
+
+	return mn_vec;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Funktionsstart ReadL1C_Nadir_mpl_binary
 //
 ////////////////////////////////////////////////////////////////////////////////
-Messung_Nadir *ReadL1C_Nadir_mpl_binary(string Dateiname, int &Anzahl_Messungen)
+vector<Messung_Nadir> ReadL1C_Nadir_mpl_binary(string Dateiname, int &Anzahl_Messungen)
 {
 	// 1. Zur Verfügung Stellung der Speicherstrukturen zur Aufnahme der Datei
 	// 2. Laden der Datei
@@ -296,65 +357,10 @@ Messung_Nadir *ReadL1C_Nadir_mpl_binary(string Dateiname, int &Anzahl_Messungen)
 	// Dieser Schritt wird erst nach dem Laden aufgerufen
 	// 4. Erstellung des Übergabefelds
 	Anzahl_Messungen = No_of_Messungen;
-	Messung_Nadir *aus;
-	aus = new Messung_Nadir[Anzahl_Messungen];
-	for (int i = 0; i < Anzahl_Messungen; i++) {
-		//Herkunftsmerkmale
-		aus[i].m_Dateiname_L1C = Dateiname;
-		aus[i].m_Messung_ID = Nadirdaten[i].m_Messung_ID;
-		//Datum
-		aus[i].m_Jahr = Nadirdaten[i].m_Jahr;
-		aus[i].m_Monat = Nadirdaten[i].m_Monat;
-		aus[i].m_Tag = Nadirdaten[i].m_Tag;
-		aus[i].m_Stunde = Nadirdaten[i].m_Stunde;
-		aus[i].m_Minute = Nadirdaten[i].m_Minute;
-		//Geolokationen
-		aus[i].m_Lattitude_Sat = Nadirdaten[i].m_Sat_Lat;
-		aus[i].m_Longitude_Sat = Nadirdaten[i].m_Sat_Lon;
-		aus[i].m_Hoehe_Sat = Nadirdaten[i].m_Hoehe;
-		aus[i].m_Lattitude_Ground = Nadirdaten[i].m_geo_nadir_center_lat;
-		aus[i].m_Longitude_Ground = Nadirdaten[i].m_geo_nadir_center_lon;
-		aus[i].m_Erdradius = Nadirdaten[i].m_Sat_Erdradius;
-		aus[i].m_orbit_phase = Nadirdaten[i].m_orbit_phase;
+	vector<Messung_Nadir> aus
+		= make_messung_nadir_vector(Dateiname, Nadirdaten, Wellenlaenge,
+				No_of_Messungen, No_of_Pix, Kanal_Nr);
 
-		//Füllbare Felder
-		aus[i].m_Number_of_Wavelength = No_of_Pix;
-		//Felder allokieren
-		aus[i].m_Wellenlaengen = new double[No_of_Pix];
-		aus[i].m_Intensitaeten = new double[No_of_Pix];
-		aus[i].m_Intensitaeten_relativer_Fehler = new double[No_of_Pix];
-		aus[i].m_Intensitaeten_durch_piF = new double[No_of_Pix];
-		aus[i].m_Intensitaeten_durch_piF_Gamma = new double[No_of_Pix];
-		//Deep Copy der Wellenlängen und Intensitäten
-		for (int j = 0; j < No_of_Pix; j++) {
-			aus[i].m_Wellenlaengen[j] = Wellenlaenge[j];
-			aus[i].m_Intensitaeten[j] = Nadirdaten[i].m_radiance[j];
-			aus[i].m_Intensitaeten_relativer_Fehler[j] = Nadirdaten[i].m_error[j];
-		}
-		// Der Pixel 552 (282,03nm zeigt bei nadir( und nur dort, einen Peak)
-		// Das ist die Kanalgrenze zwischen Kanal1a und Kanal1b
-		// Interpolieren zwischen 282 und 283 nm
-		//aus[i].m_Intensitaeten[536]=(aus[i].m_Intensitaeten[535]+aus[i].m_Intensitaeten[537])/2;
-		//aus[i].m_Intensitaeten_relativer_Fehler[536]=(aus[i].m_Intensitaeten_relativer_Fehler[535]+aus[i].m_Intensitaeten_relativer_Fehler[537])/2;
-		aus[i].m_Intensitaeten[536] = 0.9 * aus[i].m_Intensitaeten[535] + 0.1 * aus[i].m_Intensitaeten[545];
-		aus[i].m_Intensitaeten[537] = 0.8 * aus[i].m_Intensitaeten[535] + 0.2 * aus[i].m_Intensitaeten[545];
-		aus[i].m_Intensitaeten[538] = 0.7 * aus[i].m_Intensitaeten[535] + 0.3 * aus[i].m_Intensitaeten[545];
-		aus[i].m_Intensitaeten[539] = 0.6 * aus[i].m_Intensitaeten[535] + 0.4 * aus[i].m_Intensitaeten[545];
-		aus[i].m_Intensitaeten[540] = 0.5 * aus[i].m_Intensitaeten[535] + 0.5 * aus[i].m_Intensitaeten[545];
-		aus[i].m_Intensitaeten[541] = 0.4 * aus[i].m_Intensitaeten[535] + 0.6 * aus[i].m_Intensitaeten[545];
-		aus[i].m_Intensitaeten[542] = 0.3 * aus[i].m_Intensitaeten[535] + 0.7 * aus[i].m_Intensitaeten[545];
-		aus[i].m_Intensitaeten[543] = 0.2 * aus[i].m_Intensitaeten[535] + 0.8 * aus[i].m_Intensitaeten[545];
-		aus[i].m_Intensitaeten[544] = 0.1 * aus[i].m_Intensitaeten[535] + 0.9 * aus[i].m_Intensitaeten[545];
-		aus[i].m_Intensitaeten_relativer_Fehler[536] = 0.9 * aus[i].m_Intensitaeten_relativer_Fehler[535] + 0.1 * aus[i].m_Intensitaeten_relativer_Fehler[545];
-		aus[i].m_Intensitaeten_relativer_Fehler[537] = 0.8 * aus[i].m_Intensitaeten_relativer_Fehler[535] + 0.2 * aus[i].m_Intensitaeten_relativer_Fehler[545];
-		aus[i].m_Intensitaeten_relativer_Fehler[538] = 0.7 * aus[i].m_Intensitaeten_relativer_Fehler[535] + 0.3 * aus[i].m_Intensitaeten_relativer_Fehler[545];
-		aus[i].m_Intensitaeten_relativer_Fehler[539] = 0.6 * aus[i].m_Intensitaeten_relativer_Fehler[535] + 0.4 * aus[i].m_Intensitaeten_relativer_Fehler[545];
-		aus[i].m_Intensitaeten_relativer_Fehler[540] = 0.5 * aus[i].m_Intensitaeten_relativer_Fehler[535] + 0.5 * aus[i].m_Intensitaeten_relativer_Fehler[545];
-		aus[i].m_Intensitaeten_relativer_Fehler[541] = 0.4 * aus[i].m_Intensitaeten_relativer_Fehler[535] + 0.6 * aus[i].m_Intensitaeten_relativer_Fehler[545];
-		aus[i].m_Intensitaeten_relativer_Fehler[542] = 0.3 * aus[i].m_Intensitaeten_relativer_Fehler[535] + 0.7 * aus[i].m_Intensitaeten_relativer_Fehler[545];
-		aus[i].m_Intensitaeten_relativer_Fehler[543] = 0.2 * aus[i].m_Intensitaeten_relativer_Fehler[535] + 0.8 * aus[i].m_Intensitaeten_relativer_Fehler[545];
-		aus[i].m_Intensitaeten_relativer_Fehler[544] = 0.1 * aus[i].m_Intensitaeten_relativer_Fehler[535] + 0.9 * aus[i].m_Intensitaeten_relativer_Fehler[545];
-	}
 	// 5. Speicherfreigabe
 	delete[] Kanal_Nr;
 	delete[] Wellenlaenge;

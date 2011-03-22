@@ -26,12 +26,9 @@ public:
 	Messung_Nadir();
 	// copyconstructor
 	Messung_Nadir(const Messung_Nadir &rhs);
-	//Destructor
-	~Messung_Nadir();
 	// Assignmentoperator Overload
 	Messung_Nadir &operator =(const Messung_Nadir &rhs);
 	//Methoden
-	void save_delete_all_memory();// Speicher löschen
 	int Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 			string Arbeitsverzeichnis, string mache_Fit_Plots, int MessungsNr);
 	//int Sauelendichte_Bestimmen_MgI(Speziesfenster& Spezfenst, int Index,
@@ -84,11 +81,11 @@ public:
 	double m_orbit_phase;
 	//Füllbare Felder
 	int m_Number_of_Wavelength;
-	double *m_Wellenlaengen;
-	double *m_Intensitaeten;
-	double *m_Intensitaeten_relativer_Fehler;
-	double *m_Intensitaeten_durch_piF;
-	double *m_Intensitaeten_durch_piF_Gamma;
+	vector<double> m_Wellenlaengen;
+	vector<double> m_Intensitaeten;
+	vector<double> m_Intensitaeten_relativer_Fehler;
+	vector<double> m_Intensitaeten_durch_piF;
+	vector<double> m_Intensitaeten_durch_piF_Gamma;
 };
 
 #endif /* MESSUNG_NADIR_HH_ */

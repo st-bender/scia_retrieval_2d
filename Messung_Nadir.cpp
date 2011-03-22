@@ -28,12 +28,30 @@ using namespace std;
 //////////////////////////////////////////////////
 Messung_Nadir::Messung_Nadir()
 {
-	//Pointer als NULL-Pointer initialisieren
-	m_Wellenlaengen = 0;
-	m_Intensitaeten = 0;
-	m_Intensitaeten_relativer_Fehler = 0;
-	m_Intensitaeten_durch_piF = 0;
-	m_Intensitaeten_durch_piF_Gamma = 0;
+	//initialisierung
+	// Ergebnisse
+	m_Zeilendichte = 0;
+	m_Fehler_Zeilendichten = 0;
+	//Zwischenergebnisse
+	m_Deklinationswinkel = 0;
+	m_Sonnen_Longitude = 0;
+	// Herkunftsmerkmale
+	m_Dateiname_L1C = "dummy";
+	m_Messung_ID = 0;
+	//Datum
+	m_Jahr = 0;
+	m_Monat = 0;
+	m_Tag = 0;
+	m_Stunde = 0;
+	m_Minute = 0;
+	// Geolokationen für Raytrace
+	m_Lattitude_Sat = 0;
+	m_Longitude_Sat = 0;
+	m_Hoehe_Sat = 0;
+	m_Lattitude_Ground = 0;
+	m_Longitude_Ground = 0;
+	m_Erdradius = 0;
+	m_Number_of_Wavelength = 0;
 }
 //////////////////////////////////////////////////
 //constructor ENDE
@@ -43,28 +61,12 @@ Messung_Nadir::Messung_Nadir()
 //////////////////////////////////////////////////
 Messung_Nadir::Messung_Nadir(const Messung_Nadir &rhs)
 {
-	//Pointer als NULL-Pointer initialisieren
-	m_Wellenlaengen = 0;
-	m_Intensitaeten = 0;
-	m_Intensitaeten_relativer_Fehler = 0;
-	m_Intensitaeten_durch_piF = 0;
-	m_Intensitaeten_durch_piF_Gamma = 0;
-	//Restproblem bei Assignement Operator gelöst
 	*this = rhs;
 }
 //////////////////////////////////////////////////
 // copyconstructor ENDE
 //////////////////////////////////////////////////
-//////////////////////////////////////////////////
-//Destructor
-//////////////////////////////////////////////////
-Messung_Nadir::~Messung_Nadir()
-{
-	save_delete_all_memory();
-}
-//////////////////////////////////////////////////
-//Destructor ENDE
-//////////////////////////////////////////////////
+
 //////////////////////////////////////////////////
 // Assignmentoperator Overload
 //////////////////////////////////////////////////
@@ -100,34 +102,17 @@ Messung_Nadir &Messung_Nadir::operator =(const Messung_Nadir &rhs)
 	m_orbit_phase = rhs.m_orbit_phase;
 	//für Füllbare Felder Wichtig
 	m_Number_of_Wavelength = rhs.m_Number_of_Wavelength;
+
 	////////////////////////////////////////////////////////////////////////
-	//Füllbare Felder   Hier DEEPCOPY machen
-	// TODO später nochmal prüfen, eigentlich wird hier 2*zuviel kopiert...
-	// evtl eine eigene copy routine für jedes Feld
-	//cout<<"speicher freimachen\n";
-	// Erstmal die Felder löschen
-	save_delete_all_memory();
-	// Felder neu anlegen
-	//cout<<"speicher neu anmelden\n";
-	m_Wellenlaengen = new double[this->m_Number_of_Wavelength];
-	m_Intensitaeten = new double[this->m_Number_of_Wavelength];
-	m_Intensitaeten_relativer_Fehler = new double[this->m_Number_of_Wavelength];
-	m_Intensitaeten_durch_piF = new double[this->m_Number_of_Wavelength];
-	m_Intensitaeten_durch_piF_Gamma = new double[this->m_Number_of_Wavelength];
-	// Nun Füllbare Felder auffüllen -> Zeitintensiv
-	//cout<<"Felder Fuellen\n";
-	for (int i = 0; i < m_Number_of_Wavelength; i++) {
-		m_Wellenlaengen[i] = rhs.m_Wellenlaengen[i];
-		m_Intensitaeten[i] = rhs.m_Intensitaeten[i];
-		m_Intensitaeten_relativer_Fehler[i]
-			= rhs.m_Intensitaeten_relativer_Fehler[i];
-		m_Intensitaeten_durch_piF[i] = rhs.m_Intensitaeten_durch_piF[i];
-		m_Intensitaeten_durch_piF_Gamma[i]
-			= rhs.m_Intensitaeten_durch_piF_Gamma[i];
-	}
-	////////////////////////////////////////////////////////////////////////
-	//Füllbare Felder ENDE
-	////////////////////////////////////////////////////////////////////////
+	// vector copies
+	m_Wellenlaengen = rhs.m_Wellenlaengen;
+	m_Intensitaeten = rhs.m_Intensitaeten;
+	m_Intensitaeten_relativer_Fehler
+		= rhs.m_Intensitaeten_relativer_Fehler;
+	m_Intensitaeten_durch_piF = rhs.m_Intensitaeten_durch_piF;
+	m_Intensitaeten_durch_piF_Gamma
+		= rhs.m_Intensitaeten_durch_piF_Gamma;
+
 	return *this;
 }
 //////////////////////////////////////////////////
@@ -136,21 +121,7 @@ Messung_Nadir &Messung_Nadir::operator =(const Messung_Nadir &rhs)
 //////////////////////////////////////////////////////////////////////////
 //Methoden
 //////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////
-//save_delete_all_memory()
-//////////////////////////////////////////////////////////////////////////
-void Messung_Nadir::save_delete_all_memory()// Speicher löschen
-{
-	// Die 4 Felder Sicher löschen
-	SAVEDELETE(this->m_Wellenlaengen);
-	SAVEDELETE(this->m_Intensitaeten);
-	SAVEDELETE(this->m_Intensitaeten_relativer_Fehler);
-	SAVEDELETE(this->m_Intensitaeten_durch_piF);
-	SAVEDELETE(this->m_Intensitaeten_durch_piF_Gamma);
-}
-//////////////////////////////////////////////////
-//save_delete_all_memory() ENDE
-//////////////////////////////////////////////////
+
 //////////////////////////////////////////////////
 //Zeilendichte_Bestimmen
 //////////////////////////////////////////////////

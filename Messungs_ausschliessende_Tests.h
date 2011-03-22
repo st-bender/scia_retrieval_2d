@@ -22,7 +22,7 @@ bool Test_auf_Nachtmessung_Limb_meso_thermo(Messung_Limb &niedrigste_hoehe);
 int Test_auf_NLC_Limb(vector<Messung_Limb> &Rohdaten, bool &ist_NLC_Messung);
 int Test_auf_korrekte_geolocations_Limb(vector<Messung_Limb> &Rohdaten,
 		int &counter_Winkel_nicht_ok);
-bool Test_auf_Nachtmessung_Nadir(Messung_Nadir *Rohdaten,
+bool Test_auf_Nachtmessung_Nadir(vector<Messung_Nadir> &Rohdaten,
 		int Anzahl_Datensaetze);
 
 
