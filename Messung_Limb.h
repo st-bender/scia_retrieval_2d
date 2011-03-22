@@ -47,6 +47,8 @@ public:
 
 	//Hilfsfunktionen  //nur intern aufrufen!!!
 	int Get_Index(double WL);
+	int sb_Get_Index(double WL);
+	int sb_Get_closest_index(double WL);
 	void Fit_Linear(double *x, double *y, double &a0, double &a1,
 			int Anfangsindex, int Endindex);
 	void Fit_Polynom_4ten_Grades(double *x, double *y, double x0,

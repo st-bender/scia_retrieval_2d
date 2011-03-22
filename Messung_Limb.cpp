@@ -18,6 +18,8 @@ if(array!=0)                                 \
 #include "Messung_Limb.h"
 #include <cmath>
 #include <cstdlib>
+#include <iterator>
+#include <algorithm>
 
 #include <fstream>  //für Ausgabe
 #include <iostream>//für Ausgabe
@@ -1051,6 +1053,24 @@ int Messung_Limb::Get_Index(double WL)
 	// soweit sollte es eigentlich nicht kommen...
 	// aber damit die Warnung verschwindet geben wir mal was zurück
 }//ende int Messung_Limb::Get_Index(double WL)
+
+int Messung_Limb::sb_Get_Index(double WL)
+{
+	vector<double>::iterator low;
+	low = lower_bound(m_Wellenlaengen.begin(), m_Wellenlaengen.end(), WL);
+
+	// catch edge cases
+	if (low == m_Wellenlaengen.begin()) return 0;
+	if (low == m_Wellenlaengen.end()) --low;
+
+	return distance(m_Wellenlaengen.begin(), low) - 1;
+}
+
+int Messung_Limb::sb_Get_closest_index(double WL)
+{
+	int i = sb_Get_Index(WL);
+	return (WL - m_Wellenlaengen[i]) < (m_Wellenlaengen[i + 1] - WL) ? i : i + 1;
+}
 
 void Messung_Limb::Fit_Linear(double *x, double *y, double &a0, double &a1,
 		int Anfangsindex, int Endindex)
