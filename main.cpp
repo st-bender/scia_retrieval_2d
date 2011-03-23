@@ -163,7 +163,7 @@ using namespace std;
 ///////////////////////////////////////
 // START globale Variablen
 //Nachrichtenprioritäten
-int Prioritylevel = 10;
+int Prioritylevel = 0;
 // ENDE globale Variablen
 ///////////////////////////////////////
 
