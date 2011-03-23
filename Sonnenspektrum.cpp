@@ -126,6 +126,8 @@ int Sonnenspektrum::Interpolieren(Messung_Limb &Messung_Erdschein)
 	vector<double>::iterator low, me_wl_it;
 	// cout<<Messung_Erdschein.m_Wellenlaengen[0]<<"\n";
 	//cout<<Messung_Erdschein.m_Intensitaeten[0]<<"\n";
+	m_Int_interpoliert.resize(0);
+	m_WL_interpoliert.resize(0);
 	for (me_wl_it = Messung_Erdschein.m_Wellenlaengen.begin();
 			me_wl_it != Messung_Erdschein.m_Wellenlaengen.end();
 			++me_wl_it) {
