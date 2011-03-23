@@ -40,7 +40,7 @@ bool Test_auf_Nachtmessung_Limb(Messung_Limb &Tropo)
 		ist_Nachtmessung = true;
 	}
 	// schaue nach Sonnenzenitwinkel < 88°
-	if (fabs(Tropo.m_TP_SZA) < 88.0)
+	if (fabs(Tropo.m_TP_SZA) > 88.0)
 		ist_Nachtmessung = true;
 
 	return ist_Nachtmessung;
@@ -69,6 +69,9 @@ bool Test_auf_Nachtmessung_Limb_meso_thermo(Messung_Limb &niedrigste_hoehe)
 		//cerr<<"Signal 290nm-295nm 53km:"<<Signal<<"\n";
 		ist_Nachtmessung = true;
 	}
+	// schaue nach Sonnenzenitwinkel < 88°
+	if (fabs(niedrigste_hoehe.m_TP_SZA) > 88.0)
+		ist_Nachtmessung = true;
 
 	return ist_Nachtmessung;
 }
