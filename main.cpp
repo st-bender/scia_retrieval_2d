@@ -825,7 +825,7 @@ int main(int argc, char *argv[])
 	MPL_Matrix AMF_MgII(Saeulendichten_MgII.m_Elementanzahl, Grid.m_Anzahl_Punkte);
 	// S_Breite, S_Hoehe, S_Apriori, S_y, AMF aufbauen
 	IERR = 0;
-	//cerr<<"MgI Matrizen aufbaun\n";
+	//cerr<<"MgII Matrizen aufbaun\n";
 	if (mache_volles_Retrieval_MgII == "ja") {
 		Matrizen_Aufbauen(S_Breite, S_Hoehe, S_letzte_Hoehe_MgII,
 						   MgII_Lambda_letzte_Hoehe,
