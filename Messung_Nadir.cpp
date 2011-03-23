@@ -330,7 +330,7 @@ int Messung_Nadir::Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfe
 	for (int i = 0; i < this->m_Number_of_Wavelength; i++) {
 		//langsam, optimierbar
 		this->m_Intensitaeten_durch_piF_Gamma[i] =
-			this->m_Intensitaeten_durch_piF[i] / Spezfenst.m_Liniendaten[Index].m_Gamma * 0.11;
+			this->m_Intensitaeten_durch_piF[i] / Spezfenst.m_Liniendaten[Index].m_Gamma / 0.11;
 		// Faktor 0.11 siehe Diskussion über Emissivitäten LimbLimb
 	}
 	//cout<<"m_Intensitaeten_durch_piF[0] "<<m_Intensitaeten_durch_piF[0]
