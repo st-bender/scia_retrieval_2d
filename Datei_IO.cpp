@@ -54,9 +54,9 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 
 		for (int j = 0; j < no_of_pix; j++) {
 			ml.m_Wellenlaengen.push_back(Wellenlaengen[j]);
-			ml.m_Intensitaeten.push_back(Limbdaten[i + offset].m_radiance[j]);
+			ml.m_Intensitaeten.push_back(Limbdaten[offset + direction * i].m_radiance[j]);
 			// - Limbdaten[30].m_radiance[j];(nicht gut bei MgI)
-			ml.m_Intensitaeten_relativer_Fehler.push_back(Limbdaten[i + offset].m_error[j]);
+			ml.m_Intensitaeten_relativer_Fehler.push_back(Limbdaten[offset + direction * i].m_error[j]);
 			// - Limbdaten[30].m_radiance[j];
 			ml.m_Sonne.push_back(0.);
 			ml.m_Intensitaeten_durch_piF.push_back(0.);
