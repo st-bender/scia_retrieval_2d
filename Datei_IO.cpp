@@ -124,6 +124,7 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
 	for (int j = 0; j < no_of_pix; j++) {
 		Troposphaerische_Saeule.m_Intensitaeten.push_back(Limbdaten[2].m_radiance[j]);
 	}
+	Troposphaerische_Saeule.m_TP_SZA = Limbdaten[2].m_TP_SZA;
 	// und für den Mittelwert, der Höhen 10 bis 20
 	for (int j = 0; j < no_of_pix; j++) {
 		double mean = 0.;
@@ -241,7 +242,7 @@ ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(string Dateiname,
 	for (int j = 0; j < no_of_pix; j++) {
 		niedrigste_Hoehe.m_Intensitaeten.push_back(Limbdaten[29].m_radiance[j]);
 	}
-
+	niedrigste_Hoehe.m_TP_SZA = Limbdaten[29].m_TP_SZA;
 	// 5. Speicherfreigabe
 	delete[] Wellenlaengen;
 	for (int i = 0; i < no_of_alt; i++) {

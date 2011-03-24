@@ -109,7 +109,7 @@ public:
 	// binary operators
 	//TODO mit DGEMM
 	MPL_Matrix operator * (const MPL_Matrix &rhs) const;   //matmul
-	MPL_Matrix operator +(const MPL_Matrix &rhs) const;   //matadd
+	MPL_Matrix operator + (const MPL_Matrix &rhs) const;   //matadd
 	MPL_Matrix operator - (const MPL_Matrix &rhs) const;   //matsub
 	MPL_Matrix operator * (const double &rhs) const;       //skalare Mult
 	MPL_Matrix operator / (const double &rhs) const;       //skalare Div
@@ -320,7 +320,7 @@ inline MPL_Matrix &MPL_Matrix::operator /= (double rhs)
 		return *this;
 	}
 	for (int i = 0; i < m_Elementanzahl; i++) {
-		this->m_Elemente[i] *= rhs;
+		this->m_Elemente[i] /= rhs;
 	}
 	return *this;
 }// ende /=

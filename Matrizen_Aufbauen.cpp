@@ -32,11 +32,11 @@ using namespace std;
 void Matrizen_Aufbauen(MPL_Matrix &S_Breite, MPL_Matrix &S_Hoehe,
 						MPL_Matrix &S_letzte_Hoehe, double Lambda_letzte_Hoehe,
 						MPL_Matrix &S_apriori, MPL_Matrix &S_y, MPL_Matrix &AMF,
-						double Lambda_apriori, MPL_Matrix Saeulendichten_Fehler,
+						double Lambda_apriori, MPL_Matrix &Saeulendichten_Fehler,
 						Speziesfenster &Spezies_Fenster,
 						Retrievalgitter &Grid,
-						vector<Ausgewertete_Messung_Limb> AM_L,
-						vector<Ausgewertete_Messung_Nadir> AM_N,
+						vector<Ausgewertete_Messung_Limb> &AM_L,
+						vector<Ausgewertete_Messung_Nadir> &AM_N,
 						Konfiguration &Konf, int &IERR)
 {
 	//Fehlermatrizen
@@ -98,7 +98,7 @@ MPL_Matrix Einheitsmatrix_aufbauen(int Dimension)
 ////////////////////////////////////////////////////////////////////////////////
 //Funktionsstart  Werte_bei_maximaler_Hoehe_Flagmatrix_Aufbauen
 ////////////////////////////////////////////////////////////////////////////////
-MPL_Matrix Werte_bei_maximaler_Hoehe_Flagmatrix_Aufbauen(Retrievalgitter Grid)
+MPL_Matrix Werte_bei_maximaler_Hoehe_Flagmatrix_Aufbauen(Retrievalgitter &Grid)
 {
 	MPL_Matrix Flagmatrix(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
 	// Matrix mit 0 initialisieren
@@ -196,8 +196,8 @@ MPL_Matrix Differenz_von_benachbarten_Spaltenelementen_Matrix_aufbauen(
 ////////////////////////////////////////////////////////////////////////////////
 MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 	Retrievalgitter &Grid,
-	vector<Ausgewertete_Messung_Limb> AM_L,
-	vector<Ausgewertete_Messung_Nadir> AM_N,
+	vector<Ausgewertete_Messung_Limb> &AM_L,
+	vector<Ausgewertete_Messung_Nadir> &AM_N,
 	Konfiguration &Konf, Speziesfenster &Spezies_Fenster, int &IERR)
 {
 	IERR = 0; //0 ist ok
@@ -1354,7 +1354,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 ////////////////////////////////////////////////////////////////////////////////
 //Funktionsstart  interpolieren()
 ////////////////////////////////////////////////////////////////////////////////
-int interpolieren(MPL_Matrix M, int x_Spalte, int y_Spalte,
+int interpolieren(MPL_Matrix &M, int x_Spalte, int y_Spalte,
 		double x_Wert_des_gesuchten_Wertes, double &gesuchter_Wert)
 {
 	// TODO Die Funktion ist, falls sie sehr oft aufgerufen wird eine ziemliche
@@ -1846,8 +1846,8 @@ bool Punkt_Pruefen_und_ggf_AMF_erhoehen(MPL_Matrix &AMF, Retrievalgitter &Grid,
 ////////////////////////////////////////////////////////////////////////////////
 //Funktionsstart  Punkt_auf_Strecke_bei_Radius
 ////////////////////////////////////////////////////////////////////////////////
-MPL_Vektor Punkt_auf_Strecke_bei_Radius(MPL_Vektor Streckenstartpunkt,
-		MPL_Vektor Streckenvektor, double Radius, double Genauigkeit)
+MPL_Vektor Punkt_auf_Strecke_bei_Radius(MPL_Vektor &Streckenstartpunkt,
+		MPL_Vektor &Streckenvektor, double Radius, double Genauigkeit)
 // int max iterationen...lass ich weg
 {
 	// ACHTUNG...die Funktion muss richtig aufgerufen werden
