@@ -44,7 +44,8 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 					vector<Ausgewertete_Messung_Limb>& Ausgewertete_Limbmessung_MgI,
 					vector<Ausgewertete_Messung_Limb>& Ausgewertete_Limbmessung_MgII,
 					vector<Ausgewertete_Messung_Limb>& Ausgewertete_Limbmessung_unknown,
-					vector<Ausgewertete_Messung_Limb>& Ausgewertete_Limbmessung_FeI)
+					vector<Ausgewertete_Messung_Limb>& Ausgewertete_Limbmessung_FeI,
+					Konfiguration &Konf)
 {
 	unsigned int i, j, k;
 	//Einmalig die Rohdaten aus der Datei Laden
@@ -87,9 +88,9 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 	bool ist_Nachtmessung;
 	bool NLC_detektiert;
 	if (limb_meso_thermo != "ja") {
-		ist_Nachtmessung = Test_auf_Nachtmessung_Limb(Tropo);
+		ist_Nachtmessung = Test_auf_Nachtmessung_Limb(Tropo, Konf);
 	} else {
-		ist_Nachtmessung = Test_auf_Nachtmessung_Limb_meso_thermo(Tropo);
+		ist_Nachtmessung = Test_auf_Nachtmessung_Limb_meso_thermo(Tropo, Konf);
 	}
 	if (ist_Nachtmessung == true) {
 		// cout<<"counter_Nachtmessungen vorher: "<<*counter_Nachtmessungen <<"\n";
