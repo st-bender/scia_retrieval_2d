@@ -568,12 +568,14 @@ int main(int argc, char *argv[])
 
 	//////// TEIL 2B/////////////////////
 	// Glätten der Ausgewerteten Messunge
+	/*
 	for (int i = 0; i < 3; i++) {
 		SCD_Glaettung(Ausgewertete_Limbmessung_MgI, 1, untersuche_limb_mesothermo_states);
 		SCD_Glaettung(Ausgewertete_Limbmessung_unknown, 1, untersuche_limb_mesothermo_states);
 		SCD_Glaettung(Ausgewertete_Limbmessung_MgII, 2, untersuche_limb_mesothermo_states);
 		SCD_Glaettung(Ausgewertete_Limbmessung_FeI, 1, untersuche_limb_mesothermo_states);
 	}
+	// */
 
 	//////// TEIL 2B/////////////////////
 	////////////////////////////////////////////////////////////////////////////
