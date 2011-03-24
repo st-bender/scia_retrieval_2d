@@ -27,7 +27,7 @@ extern int Prioritylevel;
 // float *Wellenlaengen into a vector<Messung_Limb>
 vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 		Limb_Datensatz *Limbdaten, float *Wellenlaengen,
-		int no_of_pix, float orbit_phase, int Datum[6],
+		int no_of_pix, int no_of_alt, float orbit_phase, int Datum[6],
 		int no_of_heights, int offset, int direction)
 {
 	// 4. Erstellung des Übergabevektors
@@ -54,9 +54,13 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 
 		for (int j = 0; j < no_of_pix; j++) {
 			ml.m_Wellenlaengen.push_back(Wellenlaengen[j]);
-			ml.m_Intensitaeten.push_back(Limbdaten[offset + direction * i].m_radiance[j]);
+			ml.m_Intensitaeten.push_back(
+					Limbdaten[offset + direction * i].m_radiance[j]
+					- Limbdaten[no_of_alt - 1].m_radiance[j]);
 			// - Limbdaten[30].m_radiance[j];(nicht gut bei MgI)
-			ml.m_Intensitaeten_relativer_Fehler.push_back(Limbdaten[offset + direction * i].m_error[j]);
+			ml.m_Intensitaeten_relativer_Fehler.push_back(
+					Limbdaten[offset + direction * i].m_error[j]
+					+ Limbdaten[no_of_alt - 1].m_error[j]);
 			// - Limbdaten[30].m_radiance[j];
 			ml.m_Sonne.push_back(0.);
 			ml.m_Intensitaeten_durch_piF.push_back(0.);
@@ -117,7 +121,7 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
 	// 4. Erstellung des Übergabevektors
 	vector<Messung_Limb> Ergebnisvektor
 		= make_messung_limb_vector(Dateiname, Limbdaten, Wellenlaengen,
-				no_of_pix, orbit_phase, Datum, 7, 23, 1);
+				no_of_pix, no_of_alt, orbit_phase, Datum, 7, 23, 1);
 
 	//Teile von Schritt 4 nochmal für die Troposhärische Säule
 	//Eigentlich reichen Intensitäten
@@ -235,7 +239,8 @@ ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(string Dateiname,
 	// 4. Erstellung des Übergabevektors
 	vector<Messung_Limb> Ergebnisvektor
 		= make_messung_limb_vector(Dateiname, Limbdaten, Wellenlaengen,
-				no_of_pix, orbit_phase, Datum, Anzahl_Hoehen, 24, -1);
+				no_of_pix, no_of_alt, orbit_phase, Datum,
+				Anzahl_Hoehen, Anzahl_Hoehen - 1, -1);
 
 	//Teile von Schritt 4 nochmal für die niedrigste Höhe
 	//Eigentlich reichen Intensitäten
