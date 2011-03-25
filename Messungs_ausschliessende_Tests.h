@@ -17,8 +17,9 @@ using namespace std;
 //so werden ganze Dateien aussortiert
 //Bei den selten vorkommenden Geolocations ist zumeist nur eine Messung falsch
 //(die einzige, die je aufgefallen ist)
-bool Test_auf_Nachtmessung_Limb(Messung_Limb &Tropo);
-bool Test_auf_Nachtmessung_Limb_meso_thermo(Messung_Limb &niedrigste_hoehe);
+bool Test_auf_Nachtmessung_Limb(Messung_Limb &Tropo, Konfiguration &Konf);
+bool Test_auf_Nachtmessung_Limb_meso_thermo(Messung_Limb &niedrigste_hoehe,
+		Konfiguration &Konf);
 int Test_auf_NLC_Limb(vector<Messung_Limb> &Rohdaten, bool &ist_NLC_Messung);
 int Test_auf_korrekte_geolocations_Limb(vector<Messung_Limb> &Rohdaten,
 		int &counter_Winkel_nicht_ok);

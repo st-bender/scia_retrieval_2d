@@ -34,7 +34,8 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 					vector<Ausgewertete_Messung_Limb>& Ausgewertete_Limbmessung_MgI,
 					vector<Ausgewertete_Messung_Limb>& Ausgewertete_Limbmessung_MgII,
 					vector<Ausgewertete_Messung_Limb>& Ausgewertete_Limbmessung_unknown,
-					vector<Ausgewertete_Messung_Limb>& Ausgewertete_Limbmessung_FeI);
+					vector<Ausgewertete_Messung_Limb>& Ausgewertete_Limbmessung_FeI,
+					Konfiguration &Konf);
 
 
 #endif /* LIMBAUSWERTUNG_HH_ */

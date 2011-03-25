@@ -534,7 +534,8 @@ int main(int argc, char *argv[])
 							Ausgewertete_Limbmessung_MgI,
 							Ausgewertete_Limbmessung_MgII,
 							Ausgewertete_Limbmessung_unknown,
-							Ausgewertete_Limbmessung_FeI);
+							Ausgewertete_Limbmessung_FeI,
+							Konf);
 			//cerr<<"limbauswertung Ende\n";
 			// Die Zwischenergebnisse stehen nun in
 			// Ausgewertete_Limbmessung_MgI und  Ausgewertete_Limbmessung_MgII

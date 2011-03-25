@@ -11,6 +11,7 @@
 #include <string>
 #include "Speziesfenster.h"
 #include "Ausgewertete_Messung_Limb.h"
+#include "Konfiguration.h"
 
 
 using namespace std;
