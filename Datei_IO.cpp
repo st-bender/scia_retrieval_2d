@@ -10,6 +10,9 @@
 #include "Messung_Nadir.h"
 #include <string>
 #include <vector>
+#include <iterator>
+#include <algorithm>
+#include <numeric>
 #include <fstream>
 #include <iostream>
 #include <cstdlib> //system
@@ -22,6 +25,55 @@
 using namespace std;
 
 extern int Prioritylevel;
+
+// calculates the intensity average over a range of wavelengths.
+// when median is set to true, it returns the median in the range,
+// otherwise the arithmetic mean is returned (the default case)
+double average_int_over_wl_range(Limb_Datensatz &ld, float *Wellenlaengen,
+		int N_wl, double wl_start, double wl_end, bool median = false)
+{
+	int i;
+	int start, end;
+	double avg = 0.;
+	// copy to a vector for <algorithm>
+	vector<float> wl(Wellenlaengen, Wellenlaengen + N_wl);
+	vector<float>::iterator wl_low, wl_up;
+	vector<float> rad;
+
+	if (wl_start > wl_end) {
+		// swap
+		double tmp = wl_start;
+		wl_start = wl_end;
+		wl_end = tmp;
+	}
+
+	wl_low = lower_bound(wl.begin(), wl.end(), wl_start);
+	if (wl_low == wl.end()) return 0.; // not in range
+
+	wl_up = upper_bound(wl.begin(), wl.end(), wl_end);
+	if (wl_up != wl.begin()) --wl_up;
+
+	if (wl_up == wl_low) return 0.; // nothing to average
+
+	start = distance(wl.begin(), wl_low);
+	end = distance(wl.begin(), wl_up);
+
+	// copy the intensities to a vector
+	for (i = start; i < end; i++)
+		rad.push_back(ld.m_radiance[i]);
+
+	if (median == false) {
+		// build the arithmetic mean
+		avg = accumulate(rad.begin(), rad.end(), 0.);
+		avg /= rad.size();
+	} else {
+		// find the median
+		nth_element(rad.begin(), rad.begin() + rad.size() / 2, rad.end());
+		avg = rad.at(rad.size() / 2);
+	}
+
+	return avg;
+}
 
 // helper function to copy Limb_Datensatz *Limbdaten and
 // float *Wellenlaengen into a vector<Messung_Limb>
