@@ -29,7 +29,7 @@ extern int Prioritylevel;
 // calculates the intensity average over a range of wavelengths.
 // when median is set to true, it returns the median in the range,
 // otherwise the arithmetic mean is returned (the default case)
-double average_int_over_wl_range(Limb_Datensatz &ld, float *Wellenlaengen,
+double average_over_wl_range(float *input, float *Wellenlaengen,
 		int N_wl, double wl_start, double wl_end, bool median = false)
 {
 	int i;
@@ -60,7 +60,7 @@ double average_int_over_wl_range(Limb_Datensatz &ld, float *Wellenlaengen,
 
 	// copy the intensities to a vector
 	for (i = start; i < end; i++)
-		rad.push_back(ld.m_radiance[i]);
+		rad.push_back(input[i]);
 
 	if (median == false) {
 		// build the arithmetic mean
