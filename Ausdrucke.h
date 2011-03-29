@@ -24,11 +24,6 @@ using namespace std;
 
 int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 			 string title, string xlabel, string ylabel,
-			 double *x1, double *y1, double *x2, vector<double> &y2,
-			 int Startindex, int Endindex,
-			 double Mittelwert, double Fehler);
-int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
-			 string title, string xlabel, string ylabel,
 			 vector<double> &x1, vector<double> &y1,
 			 vector<double> &x2, vector<double> &y2,
 			 int Startindex, int Endindex,
