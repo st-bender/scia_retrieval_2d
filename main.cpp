@@ -620,12 +620,13 @@ int main(int argc, char *argv[])
 	//cerr<<"Plotdateien zusammenfassen\n";
 	//Plotdateien zusammenfassen
 	if ((mache_Fit_Plots_limb == "ja") || (mache_Fit_Plots_nadir == "ja")) {
-		for (unsigned int i = 0; i < Spezies_Fenster.size(); i++) {
+		vector<Speziesfenster>::iterator sfit;
+		for (sfit = Spezies_Fenster.begin(); sfit != Spezies_Fenster.end(); ++sfit) {
 			// Namen der Ausgabedatei zusammenschustern
 			string pdf_Datei = Arbeitsverzeichnis + "/Plots/Orbit_" + xxxxx
-				+ "_" + Spezies_Fenster[i].m_Spezies_Name + "Fits.pdf";
+				+ "_" + (*sfit).m_Spezies_Name + "Fits.pdf";
 			Plots_Zusammenfassen(Pfad_multips2pdf, Pfad_multips2ps, pdf_Datei,
-					Spezies_Fenster[i].m_Liste_der_Plot_Dateinamen);
+					(*sfit).m_Liste_der_Plot_Dateinamen);
 		}
 	}
 	////////////////////////////////////////////////////////////////////////////
