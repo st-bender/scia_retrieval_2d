@@ -538,6 +538,7 @@ int Plots_Zusammenfassen(string Pfad_multips2pdf, string Pfad_multips2ps,
 	// als 2^8 genommen werden
 	int M = 200;
 	vector<string> Liste_der_grossen_ps;
+	vector<string>::iterator sit;
 	string Befehlszeile;
 	int Max_Zahl_grosse_ps = Liste_der_ps_Dateinamen.size() / M;
 	//Achtung integerdivision ist absicht
@@ -566,19 +567,22 @@ int Plots_Zusammenfassen(string Pfad_multips2pdf, string Pfad_multips2ps,
 	cout << "Erzeuge große pdf\n";
 	// die großen ps zu einer pdf zusammenfassen
 	Befehlszeile = Pfad_multips2pdf + " " + Name_pdf_Datei;
-	for (unsigned int i = 0; i < Liste_der_grossen_ps.size(); i++) {
-		Befehlszeile += " " + Liste_der_grossen_ps[i];
+	for (sit = Liste_der_grossen_ps.begin();
+			sit != Liste_der_grossen_ps.end(); ++sit ) {
+		Befehlszeile += " " + *sit;
 	}
 	//cout<<Liste_der_ps_Dateinamen.size()<<"\n";
 	system(Befehlszeile.c_str());
 	//Die ps sind jetzt im pdf drin, können also gelöscht werden
 	cout << "lösche die ps\n";
-	for (unsigned int i = 0; i < Liste_der_ps_Dateinamen.size(); i++) {
-		Befehlszeile = "rm " + Liste_der_ps_Dateinamen[i];
+	for (sit = Liste_der_ps_Dateinamen.begin();
+			sit != Liste_der_ps_Dateinamen.end(); ++sit ) {
+		Befehlszeile = "rm " + *sit;
 		//system(Befehlszeile.c_str());
 	}
-	for (unsigned int i = 0; i < Liste_der_grossen_ps.size(); i++) {
-		Befehlszeile = "rm " + Liste_der_grossen_ps[i];
+	for (sit = Liste_der_grossen_ps.begin();
+			sit != Liste_der_grossen_ps.end(); ++sit ) {
+		Befehlszeile = "rm " + *sit;
 		//system(Befehlszeile.c_str());
 	}
 	return 0;
