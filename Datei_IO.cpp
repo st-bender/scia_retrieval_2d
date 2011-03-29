@@ -82,6 +82,10 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 		int no_of_pix, int no_of_alt, float orbit_phase, int Datum[6],
 		int no_of_heights, int offset, int direction)
 {
+	double dark_sig = average_over_wl_range(Limbdaten[no_of_alt - 1].m_radiance,
+			Wellenlaengen, no_of_pix, 278.0, 282.0, false);
+	double dark_err = average_over_wl_range(Limbdaten[no_of_alt - 1].m_error,
+			Wellenlaengen, no_of_pix, 278.0, 282.0, false);
 	// 4. Erstellung des Übergabevektors
 	vector<Messung_Limb> Ergebnisvektor;
 
@@ -106,14 +110,15 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 
 		for (int j = 0; j < no_of_pix; j++) {
 			ml.m_Wellenlaengen.push_back(Wellenlaengen[j]);
+			// the old corrections
+			//dark_sig = Limbdaten[no_of_alt - 1].m_radiance[j];
+			//dark_err = Limbdaten[no_of_alt - 1].m_error[j];
 			ml.m_Intensitaeten.push_back(
 					Limbdaten[offset + direction * i].m_radiance[j]
-					- Limbdaten[no_of_alt - 1].m_radiance[j]);
-			// - Limbdaten[30].m_radiance[j];(nicht gut bei MgI)
+					- dark_sig);
 			ml.m_Intensitaeten_relativer_Fehler.push_back(
 					Limbdaten[offset + direction * i].m_error[j]
-					+ Limbdaten[no_of_alt - 1].m_error[j]);
-			// - Limbdaten[30].m_radiance[j];
+					+ dark_err);
 			ml.m_Sonne.push_back(0.);
 			ml.m_Intensitaeten_durch_piF.push_back(0.);
 			ml.m_Intensitaeten_durch_piF_Gamma.push_back(0.);
