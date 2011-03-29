@@ -140,7 +140,7 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	// ENDE LU Zerlegung der LHS
 	////////////////////////////////////////////////////////////////////////////
 
-	double Residual, Residual_1;
+	double Residual, Residual_1, residual_prev = 0.;
 	MPL_Matrix Mat_Residual;
 	Residual = 0;
 	Residual_1 = 0;
@@ -187,6 +187,9 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 		if (Residual < Threshold * Residual_1) {
 			break;
 		}
+		if (abs(residual_prev - Residual) / Residual < Threshold)
+			break;
+		residual_prev = Residual;
 		//RHS sollte ein Spaltenvektor sein
 		RHS = AMF_trans * (S_y * Saeulendichten_rest)
 			  + S_apriori * Dichten_apriori_rest;
@@ -323,7 +326,7 @@ int Retrievaliteration_old(MPL_Matrix &Dichten,
 	//cout<<"RHS.m_Zeilenzahl: "<<RHS.m_Zeilenzahl<<"\n";
 
 	//cout<<"Itmax: "<<Itmax<<"\n";
-	double Residual, Residual_1;
+	double Residual, Residual_1, residual_prev = 0.;
 	Residual = 0;
 	Residual_1 = 0;
 	/*{
@@ -398,6 +401,9 @@ int Retrievaliteration_old(MPL_Matrix &Dichten,
 			// achtung mit break und continue in for-schleifen
 			// (vor allem mit continue->(i++; continue;)
 		}
+		if (abs(residual_prev - Residual) / Residual < Threshold)
+			break;
+		residual_prev = Residual;
 
 		Dichten_apriori = Dichten;
 		if (Iterationsschritt == (Itmax - 1)) {
