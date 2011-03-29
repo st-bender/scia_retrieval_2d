@@ -86,9 +86,9 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	outfile2.open(Temp_Skript_Name.c_str());
 	//outfile2<<"set terminal x11\n";   // Betriebssystemabhängig, standard auf
 	//was ungefährliches setzen
-	outfile2 << "#!/opt/sfw/bin/gnuplot -persist" << endl;
-	outfile2 << "#set terminal postscript landscape enhanced color "
-			 << "\"NimbusSans-Regu\" 12\n";
+	outfile2 << "#!/usr/bin/env gnuplot" << endl;
+	outfile2 << "set terminal postscript landscape enhanced color "
+			 << "\"FreeSans\" 14\n";
 	outfile2 << "set style line 1 lc 1 lt 1 lw 3 pt 7 ps 4\n";
 	outfile2 << "set style line 2 lc 2 lt 2 lw 3 pt 5 ps 4\n";
 	outfile2 << "set output '" << Dateiname.c_str() << "'\n";
@@ -124,16 +124,16 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	////////////////////////////////////////////////////////////////////////////
 	string befehl;
 	befehl = "gnuplot " + Temp_Skript_Name;
-	//system(befehl.c_str());
+	system(befehl.c_str());
 	////////////////////////////////////////////////////////////////////////////
 	// Gnuplotscript löschen
 	////////////////////////////////////////////////////////////////////////////
 	// hmm Wartet der, bis Gnuplot fertig ist?---sollte er, in system steckt ja
 	// waitpid drin
 	befehl = "rm " + Temp_Skript_Name;
-	//system(befehl.c_str());
+	system(befehl.c_str());
 	befehl = "rm " + Rohdaten_Name;
-	//system(befehl.c_str());
+	system(befehl.c_str());
 	return 0;
 };
 ////////////////////////////////////////////////////////////////////////////////
@@ -561,7 +561,7 @@ int Plots_Zusammenfassen(string Pfad_multips2pdf, string Pfad_multips2ps,
 			//statt size mal potenzen von 2 Probieren
 			Befehlszeile += " " + Liste_der_ps_Dateinamen[i + k * M];
 		}
-		//system(Befehlszeile.c_str());
+		system(Befehlszeile.c_str());
 	}
 	cout << "Erzeuge große pdf\n";
 	// die großen ps zu einer pdf zusammenfassen
@@ -570,7 +570,7 @@ int Plots_Zusammenfassen(string Pfad_multips2pdf, string Pfad_multips2ps,
 		Befehlszeile += " " + Liste_der_grossen_ps[i];
 	}
 	//cout<<Liste_der_ps_Dateinamen.size()<<"\n";
-	//system(Befehlszeile.c_str());
+	system(Befehlszeile.c_str());
 	//Die ps sind jetzt im pdf drin, können also gelöscht werden
 	cout << "lösche die ps\n";
 	for (unsigned int i = 0; i < Liste_der_ps_Dateinamen.size(); i++) {
