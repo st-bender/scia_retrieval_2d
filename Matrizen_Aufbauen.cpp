@@ -362,6 +362,12 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		//  genauer ist bis 200
 		//cerr<<"Max_Hoehe_Absorbtion: "<<Max_Hoehe_Absorbtion<<"\n";
 		// cout<<"Max_Hoehe_Absorbtion:"<<Max_Hoehe_Absorbtion<<"\n";
+		if (TP_Pos.Betrag_ausgeben() > Hoehe_TOA) {
+			// prevents inifite loops below
+			cout << "TP außerhalb des Grids, Anzahl_Hoehen ist zu erhöhen."
+				 << endl;
+			continue;
+		}
 		// Die Standardatmosphären sind bis 200km höhe vorhanden, Absorption
 		// gibts aber auch ab 100 km kaum noch...  auch bei 200km liegt daher
 		// der größte Teil des Weges im ALL und trägt nicht bei...ist es
@@ -381,8 +387,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		//cout<<"Sat_Pos_Betrag: "<<Sat_Pos.Betrag_ausgeben()<<"\n";
 		double Epsilon = 0.1; // in km (100m)
 		//int counter =0;
-		while (!(((aktueller_Vektor.Betrag_ausgeben() - Epsilon) < Hoehe_TOA)
-			&& ((aktueller_Vektor.Betrag_ausgeben() + Epsilon) > Hoehe_TOA))) {
+		while (abs(aktueller_Vektor.Betrag_ausgeben() - Hoehe_TOA) > 2.*Epsilon) {
 			// Die Schleife scheint ein bisschen Zeit zu fressen....
 			// vll 0.5 Sekunden
 			//  cout<<"Veraenderung:"<<Veraenderung<<"\n";
@@ -396,7 +401,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			//  <<aktueller_Vektor.Betrag_ausgeben()<<"\n";
 			//cout<<"Hoehe_TOA: "<<Hoehe_TOA<<"\n";
 			//sleep(2);
-			if ((aktueller_Vektor.Betrag_ausgeben() + Epsilon) <= Hoehe_TOA) {
+			if (aktueller_Vektor.Betrag_ausgeben() <= Hoehe_TOA) {
 				TOA_Faktor -= Veraenderung;
 			} else {
 				TOA_Faktor += Veraenderung;
