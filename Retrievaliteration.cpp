@@ -50,10 +50,10 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 
 	// Solange man die lambdas für die constraints nicht ändern will,
 	// sieht die LHS immer gleich aus
-	LHS = (AMF_trans * (S_y * AMF)) +
-		  (S_apriori) +
-		  (Lambda_Breite * (S_Breite_trans * S_Breite)) +
-		  (Lambda_Hoehe * (S_Hoehe_trans * S_Hoehe));
+	LHS = (AMF_trans * (S_y * AMF));
+	LHS += (S_apriori);
+	LHS += (Lambda_Breite * (S_Breite_trans * S_Breite));  // Breitenglattung
+	LHS += (Lambda_Hoehe * (S_Hoehe_trans * S_Hoehe)); // Hoehenglattung
 //    cout<<"LHS: "<<LHS.m_Zeilenzahl<<"\t"<<LHS.m_Spaltenzahl<<"\n";
 	////////////////////////////////////////////////////////////////////////////
 	// TODO Der Absatz muss neu geschrieben werden, weil stimmt nichtmehr
