@@ -226,7 +226,7 @@ int main(int argc, char *argv[])
 	//TODO ACHTUNG ACHUTNG
 	// Falls ja läuft das Laden der Limbdaten anders ab und
 	// die Ausschlusskriterien müssen anders angewendet werden;
-	string untersuche_limb_mesothermo_states = "nein";
+	string untersuche_limb_mesothermo_states = "ja";
 
 	string mache_Fit_Plots_limb = "nein";
 	string mache_Fit_Plots_nadir = "nein";
