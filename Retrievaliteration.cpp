@@ -108,9 +108,8 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	// in der Iteration dann nur das Rückeinsetzen nutzen
 	// START LU ZERLEGUNG
 	// VORBEREITEN
-	MPL_Matrix A(LHS.m_Spaltenzahl, LHS.m_Zeilenzahl);
 	//Fortran Matrizen sind zu C++ Matrizen transponiert
-	A = LHS.transponiert();
+	MPL_Matrix A = LHS.transponiert();
 	// Man kann auch die MPL_Matrix nach Fortran Nomenklatur anpassen, aber
 	// transponieren ist nicht zeitaufwändig
 	// Feldgröße Speed propto N^3, LHS ist quadratisch, N ist Anzahl
@@ -298,9 +297,8 @@ int Retrievaliteration_old(MPL_Matrix &Dichten,
 	// in der Iteration dann nur das Rückeinsetzen nutzen
 	// START LU ZERLEGUNG
 	// VORBEREITEN
-	MPL_Matrix A(LHS.m_Spaltenzahl, LHS.m_Zeilenzahl);
 	//Fortran Matrizen sind zu C++ Matrizen transponiert
-	A = LHS.transponiert();
+	MPL_Matrix A = LHS.transponiert();
 	// Man kann auch die MPL_Matrix nach Fortran Nomenklatur anpassen, aber
 	// transponieren ist nicht zeitaufwändig
 	// Feldgröße Speed propto N^3, LHS ist quadratisch,
