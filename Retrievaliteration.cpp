@@ -50,10 +50,10 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 
 	// Solange man die lambdas für die constraints nicht ändern will,
 	// sieht die LHS immer gleich aus
-	LHS = (AMF_trans * (S_y * AMF)) +
-		  (S_apriori) +
-		  (Lambda_Breite * (S_Breite_trans * S_Breite)) +
-		  (Lambda_Hoehe * (S_Hoehe_trans * S_Hoehe));
+	LHS = (AMF_trans * (S_y * AMF));
+	LHS += (S_apriori);
+	LHS += (Lambda_Breite * (S_Breite_trans * S_Breite));  // Breitenglattung
+	LHS += (Lambda_Hoehe * (S_Hoehe_trans * S_Hoehe)); // Hoehenglattung
 //    cout<<"LHS: "<<LHS.m_Zeilenzahl<<"\t"<<LHS.m_Spaltenzahl<<"\n";
 	////////////////////////////////////////////////////////////////////////////
 	// TODO Der Absatz muss neu geschrieben werden, weil stimmt nichtmehr
@@ -108,9 +108,8 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	// in der Iteration dann nur das Rückeinsetzen nutzen
 	// START LU ZERLEGUNG
 	// VORBEREITEN
-	MPL_Matrix A(LHS.m_Spaltenzahl, LHS.m_Zeilenzahl);
 	//Fortran Matrizen sind zu C++ Matrizen transponiert
-	A = LHS.transponiert();
+	MPL_Matrix A = LHS.transponiert();
 	// Man kann auch die MPL_Matrix nach Fortran Nomenklatur anpassen, aber
 	// transponieren ist nicht zeitaufwändig
 	// Feldgröße Speed propto N^3, LHS ist quadratisch, N ist Anzahl
@@ -140,7 +139,7 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	// ENDE LU Zerlegung der LHS
 	////////////////////////////////////////////////////////////////////////////
 
-	double Residual, Residual_1;
+	double Residual, Residual_1, residual_prev = 0.;
 	MPL_Matrix Mat_Residual;
 	Residual = 0;
 	Residual_1 = 0;
@@ -187,6 +186,9 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 		if (Residual < Threshold * Residual_1) {
 			break;
 		}
+		if (abs(residual_prev - Residual) / Residual < Threshold)
+			break;
+		residual_prev = Residual;
 		//RHS sollte ein Spaltenvektor sein
 		RHS = AMF_trans * (S_y * Saeulendichten_rest)
 			  + S_apriori * Dichten_apriori_rest;
@@ -295,9 +297,8 @@ int Retrievaliteration_old(MPL_Matrix &Dichten,
 	// in der Iteration dann nur das Rückeinsetzen nutzen
 	// START LU ZERLEGUNG
 	// VORBEREITEN
-	MPL_Matrix A(LHS.m_Spaltenzahl, LHS.m_Zeilenzahl);
 	//Fortran Matrizen sind zu C++ Matrizen transponiert
-	A = LHS.transponiert();
+	MPL_Matrix A = LHS.transponiert();
 	// Man kann auch die MPL_Matrix nach Fortran Nomenklatur anpassen, aber
 	// transponieren ist nicht zeitaufwändig
 	// Feldgröße Speed propto N^3, LHS ist quadratisch,
@@ -323,7 +324,7 @@ int Retrievaliteration_old(MPL_Matrix &Dichten,
 	//cout<<"RHS.m_Zeilenzahl: "<<RHS.m_Zeilenzahl<<"\n";
 
 	//cout<<"Itmax: "<<Itmax<<"\n";
-	double Residual, Residual_1;
+	double Residual, Residual_1, residual_prev = 0.;
 	Residual = 0;
 	Residual_1 = 0;
 	/*{
@@ -398,6 +399,9 @@ int Retrievaliteration_old(MPL_Matrix &Dichten,
 			// achtung mit break und continue in for-schleifen
 			// (vor allem mit continue->(i++; continue;)
 		}
+		if (abs(residual_prev - Residual) / Residual < Threshold)
+			break;
+		residual_prev = Residual;
 
 		Dichten_apriori = Dichten;
 		if (Iterationsschritt == (Itmax - 1)) {

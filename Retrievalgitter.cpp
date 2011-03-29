@@ -155,7 +155,7 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	//  MgI 82 Gitterpunkte bis 150 km in 1km Schritten
 	//  MgII 132 Gitterpunkte bis 200 km in 1km Schritten
 	//  unbekannte Spezies bei niedrigen Hoehen......teste bis 110
-	int Anzahl_Hoehen = 20;   // 82  //42  //132
+	int Anzahl_Hoehen = 27;   // 82  //42  //132
 	vector<double> untere_Hoehe(Anzahl_Hoehen);
 	vector<double> mittlere_Hoehe(Anzahl_Hoehen);
 	vector<double> obere_Hoehe(Anzahl_Hoehen);
