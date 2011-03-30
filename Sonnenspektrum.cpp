@@ -136,6 +136,8 @@ int Sonnenspektrum::Interpolieren(Messung_Limb &Messung_Erdschein)
 		low = lower_bound(m_Wellenlaengen.begin(), m_Wellenlaengen.end(),
 				(*me_wl_it));
 		if (low == m_Wellenlaengen.begin()) {
+			Index_kleine_WL = 0;
+			Index_grosse_WL = 1;
 			I1 = 1.;
 			I2 = 0.;
 		} else {
