@@ -11,5 +11,8 @@
 void smooth_data(int Datasize, double *Data, int Anzahl_Nachbarn_eine_Seite,
 		int Zahl_der_Iterationen);
 
+int my_moving_average(vector<double> &y, int ws);
+int my_savitzky_golay(vector<double> &y, int ws);
+
 
 #endif /* GLAETTEN_HH_ */
