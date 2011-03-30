@@ -12,6 +12,7 @@
 #include <algorithm>
 
 #include "Messung_Limb.h"
+#include "Glaetten.h"
 
 using namespace std;
 
@@ -100,6 +101,15 @@ int Sonnenspektrum::Laden_SCIA(string Dateiname, string Fallback_Dateiname)
 ////////////////////////////////////////////////////
 // ENDE  Laden_Scia
 /////////////////////////////////////////////////////
+
+int Sonnenspektrum::moving_average(int window_size)
+{
+	return my_moving_average(m_Intensitaeten, window_size);
+}
+int Sonnenspektrum::savitzky_golay(int window_size)
+{
+	return my_savitzky_golay(m_Intensitaeten, window_size);
+}
 
 int Sonnenspektrum::Interpolieren(Messung_Limb &Messung_Erdschein)
 {

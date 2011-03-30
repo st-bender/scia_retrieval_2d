@@ -22,6 +22,8 @@ public:
 	//Sciamachy Sonnenspektrum des Orbits
 	int Laden_SCIA(string Dateiname, string Fallback_Dateiname);
 
+	int moving_average(int window_size);
+	int savitzky_golay(int window_size);
 	int Interpolieren(Messung_Limb &Messung_Erdschein);
 	int nicht_interpolieren();
 	vector<double> m_Wellenlaengen; // wie lang sind die eigentlich
