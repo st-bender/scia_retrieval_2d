@@ -873,6 +873,14 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 ////////////////////////////////////////////////////////////////////////////////
 // ENDE Plots_der_Spektren_erzeugen
 ////////////////////////////////////////////////////////////////////////////////
+int Messung_Limb::moving_average(int window_size)
+{
+	return my_moving_average(m_Intensitaeten, window_size);
+}
+int Messung_Limb::savitzky_golay(int window_size)
+{
+	return my_savitzky_golay(m_Intensitaeten, window_size);
+}
 int Messung_Limb::Intensitaeten_normieren(vector<double> &Sonnen_Intensitaet)
 {
 	//Teiler wurde vorher interpoliert

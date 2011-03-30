@@ -33,6 +33,8 @@ public:
 	int Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst, int Index,
 			string Arbeitsverzeichnis, string mache_Fit_Plots,
 			double *mean_10_20);
+	int moving_average(int window_size);
+	int savitzky_golay(int window_size);
 	int Intensitaeten_normieren(vector<double> &Sonnen_Intensitaet);
 	//int        Intensitaeten_normieren(Sonnenspektrum Solspec, Fenster);
 	// hier müsste überlegt werden, wie man mehrfachkorrekturen umgeht
