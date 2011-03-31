@@ -45,10 +45,10 @@ Messung_Nadir::Messung_Nadir()
 	m_Stunde = 0;
 	m_Minute = 0;
 	// Geolokationen für Raytrace
-	m_Lattitude_Sat = 0;
+	m_Latitude_Sat = 0;
 	m_Longitude_Sat = 0;
 	m_Hoehe_Sat = 0;
-	m_Lattitude_Ground = 0;
+	m_Latitude_Ground = 0;
 	m_Longitude_Ground = 0;
 	m_Erdradius = 0;
 	m_Number_of_Wavelength = 0;
@@ -93,10 +93,10 @@ Messung_Nadir &Messung_Nadir::operator =(const Messung_Nadir &rhs)
 	m_Stunde = rhs.m_Stunde;
 	m_Minute = rhs.m_Minute;
 	//Geolocations
-	m_Lattitude_Sat = rhs.m_Lattitude_Sat;
+	m_Latitude_Sat = rhs.m_Latitude_Sat;
 	m_Longitude_Sat = rhs.m_Longitude_Sat;
 	m_Hoehe_Sat = rhs.m_Hoehe_Sat;
-	m_Lattitude_Ground = rhs.m_Lattitude_Ground;
+	m_Latitude_Ground = rhs.m_Latitude_Ground;
 	m_Longitude_Ground = rhs.m_Longitude_Ground;
 	m_Erdradius = rhs.m_Erdradius;
 	m_orbit_phase = rhs.m_orbit_phase;
@@ -282,8 +282,8 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 		}
 		//Orbitnummer ermittelt///////
 		sprintf(buf, "Orbit %5s Nadir GP: Lat: %G G(rad)  Lon: %G G Sat: Lat: %G G Lon: %G",
-				s_OrbNum.c_str(), m_Lattitude_Ground, m_Longitude_Ground,
-				m_Lattitude_Sat, m_Longitude_Sat);
+				s_OrbNum.c_str(), m_Latitude_Ground, m_Longitude_Ground,
+				m_Latitude_Sat, m_Longitude_Sat);
 		s2 = buf;
 		//cout<<s1<<"\n";
 		//int Plot_2xy(string Dateiname,string title, string xlabel,
@@ -404,10 +404,10 @@ Ausgewertete_Messung_Nadir  Messung_Nadir::Ergebnis_Zusammenfassen()
 	aus.m_Stunde = this->m_Stunde;
 	aus.m_Minute = this->m_Minute;
 	// Geolokationen
-	aus.m_Lattitude_Sat = this->m_Lattitude_Sat;
+	aus.m_Latitude_Sat = this->m_Latitude_Sat;
 	aus.m_Longitude_Sat = this->m_Longitude_Sat;
 	aus.m_Hoehe_Sat = this->m_Hoehe_Sat;
-	aus.m_Lattitude_Ground = this->m_Lattitude_Ground;
+	aus.m_Latitude_Ground = this->m_Latitude_Ground;
 	aus.m_Longitude_Ground = this->m_Longitude_Ground;
 	aus.m_Erdradius = this->m_Erdradius;
 	return aus;
@@ -738,10 +738,10 @@ int Messung_Nadir::Ausgabe_in_Datei(string Dateiname)
 	fprintf(outfile, "%12s %i\n", "m_Stunde: ", m_Stunde);
 	fprintf(outfile, "%12s %i\n", "m_Minute: ", m_Minute);
 	// Geolokationen
-	fprintf(outfile, "%12s %1.5E\n", "m_Lattitude_Sat: ", m_Lattitude_Sat);
+	fprintf(outfile, "%12s %1.5E\n", "m_Latitude_Sat: ", m_Latitude_Sat);
 	fprintf(outfile, "%12s %1.5E\n", "m_Longitude_Sat: ", m_Longitude_Sat);
 	fprintf(outfile, "%12s %1.5E\n", "m_Hoehe_Sat: ", m_Hoehe_Sat);
-	fprintf(outfile, "%12s %1.5E\n", "m_Lattitude_Ground: ", m_Lattitude_Ground);
+	fprintf(outfile, "%12s %1.5E\n", "m_Latitude_Ground: ", m_Latitude_Ground);
 	fprintf(outfile, "%12s %1.5E\n", "m_Longitude_Ground: ", m_Longitude_Ground);
 	fprintf(outfile, "%12s %1.5E\n", "m_Erdradius: ", m_Erdradius);
 	//Füllbare Felder

@@ -50,9 +50,9 @@ Messung_Limb::Messung_Limb()
 	m_Minute = 0;
 	m_Deklinationswinkel = 0;
 	m_Sonnen_Longitude = 0;
-	m_Lattidude_TP = 0;
+	m_Latitude_TP = 0;
 	m_Longitude_TP = 0;
-	m_Lattidude_Sat = 0;
+	m_Latitude_Sat = 0;
 	m_Longitude_Sat = 0;
 	m_Hoehe_TP = 0;
 	m_Hoehe_Sat = 0;
@@ -98,10 +98,10 @@ Messung_Limb &Messung_Limb::operator =(const Messung_Limb &rhs)
 	m_Stunde = rhs.m_Stunde;
 	m_Minute = rhs.m_Minute;
 	// Geolocation
-	m_Lattidude_Sat = rhs.m_Lattidude_Sat;
+	m_Latitude_Sat = rhs.m_Latitude_Sat;
 	m_Longitude_Sat = rhs.m_Longitude_Sat;
 	m_Hoehe_Sat = rhs.m_Hoehe_Sat;
-	m_Lattidude_TP = rhs.m_Lattidude_TP;
+	m_Latitude_TP = rhs.m_Latitude_TP;
 	m_Longitude_TP = rhs.m_Longitude_TP;
 	m_Hoehe_TP = rhs.m_Hoehe_TP;
 	m_Erdradius = rhs.m_Erdradius;
@@ -282,7 +282,7 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 		}
 		//Orbitnummer ermittelt///////
 		sprintf(buf, "Orbit %5s Limb TP: Lat: %G Grad  Lon: %G Grad Hoehe: %G km",
-				s_OrbNum.c_str(), m_Lattidude_TP, m_Longitude_TP, m_Hoehe_TP);
+				s_OrbNum.c_str(), m_Latitude_TP, m_Longitude_TP, m_Hoehe_TP);
 		s2 = buf;
 		//cout<<s1<<"\n";
 		//int Plot_2xy(string Dateiname,string title, string xlabel,
@@ -620,7 +620,7 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 		}
 		//Orbitnummer ermittelt///////
 		sprintf(buf, "Orbit %5s Limb TP: Lat: %G {/Symbol \\260}  Lon: %G {/Symbol \\260} Hoehe: %G km",
-				s_OrbNum.c_str(), m_Lattidude_TP, m_Longitude_TP, m_Hoehe_TP);
+				s_OrbNum.c_str(), m_Latitude_TP, m_Longitude_TP, m_Hoehe_TP);
 		s2 = buf;
 		//cout<<s1<<"\n";
 		Plot_Slantcoloumns_polyfit_MgI(Arbeitsverzeichnis.c_str(), s1.c_str(),
@@ -819,7 +819,7 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 		}
 		//Orbitnummer ermittelt///////
 		sprintf(buf, "Orbit %5s Limb TP: Lat: %G {/Symbol \\260}  Lon: %G {/Symbol \\260} Hoehe: %G km",
-				s_OrbNum.c_str(), m_Lattidude_TP, m_Longitude_TP, m_Hoehe_TP);
+				s_OrbNum.c_str(), m_Latitude_TP, m_Longitude_TP, m_Hoehe_TP);
 		s2 = buf;
 		//cout<<s1<<"\n";
 		Plot_Spektren_und_Quotient(Arbeitsverzeichnis.c_str(),
@@ -993,10 +993,10 @@ Ausgewertete_Messung_Limb Messung_Limb::Ergebnis_Zusammenfassen()
 	aus.m_Stunde = this->m_Stunde;
 	aus.m_Minute = this->m_Minute;
 	// Geolocation
-	aus.m_Lattidude_Sat = this->m_Lattidude_Sat;
+	aus.m_Latitude_Sat = this->m_Latitude_Sat;
 	aus.m_Longitude_Sat = this->m_Longitude_Sat;
 	aus.m_Hoehe_Sat = this->m_Hoehe_Sat;
-	aus.m_Lattidude_TP = this->m_Lattidude_TP;
+	aus.m_Latitude_TP = this->m_Latitude_TP;
 	aus.m_Longitude_TP = this->m_Longitude_TP;
 	aus.m_Hoehe_TP = this->m_Hoehe_TP;
 	aus.m_Erdradius = this->m_Erdradius;
@@ -1443,10 +1443,10 @@ int Messung_Limb::Ausgabe_in_Datei(string Dateiname)
 	fprintf(outfile, "%20s %1.5E\n", "m_Sonnen_Longitude: ",
 			m_Sonnen_Longitude);
 	//Geolokationen
-	fprintf(outfile, "%20s %1.5E\n", "m_Lattidude_Sat: ", m_Lattidude_Sat);
+	fprintf(outfile, "%20s %1.5E\n", "m_Latitude_Sat: ", m_Latitude_Sat);
 	fprintf(outfile, "%20s %1.5E\n", "m_Longitude_Sat: ", m_Longitude_Sat);
 	fprintf(outfile, "%20s %1.5E\n", "m_Hoehe_Sat: ", m_Hoehe_Sat);
-	fprintf(outfile, "%20s %1.5E\n", "m_Lattidude_TP: ", m_Lattidude_TP);
+	fprintf(outfile, "%20s %1.5E\n", "m_Latitude_TP: ", m_Latitude_TP);
 	fprintf(outfile, "%20s %1.5E\n", "m_Longitude_TP: ", m_Longitude_TP);
 	fprintf(outfile, "%20s %1.5E\n", "m_Hoehe_TP: ", m_Hoehe_TP);
 	fprintf(outfile, "%20s %1.5E\n", "m_Erdradius: ", m_Erdradius);

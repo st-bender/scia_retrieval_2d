@@ -122,7 +122,7 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 		// wegen Parallelisierung
 		// sin und cos sind langsame Funktionen...
 		// werden aber hierbei auch nicht oft eingesetzt
-		(*mlit).Deklinationswinkel_bestimmen(); //Sonnenlattitude
+		(*mlit).Deklinationswinkel_bestimmen(); //Sonnenlatitude
 		(*mlit).Sonnen_Longitude_bestimmen();
 		(*mlit).Intensitaeten_normieren(Solspec.m_Int_interpoliert);
 		// m_Intensitaeten enthält nun nichtmehr I sondern I/(piF)
@@ -175,7 +175,7 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 				//    Messung.Ausgabe_in_Datei("CHECKDATA/Messung_Limb_Fenster0_Hoehe_74km_0teLinie.txt");
 				//}
 				// Todo...wieder rausnehmen
-				//if(Messung.m_Lattidude_TP<5.0) {   continue;    }
+				//if(Messung.m_Latitude_TP<5.0) {   continue;    }
 
 				// Ergebnis zusammenfassen
 				Ausgewertete_Messung_Limb Ergebnis

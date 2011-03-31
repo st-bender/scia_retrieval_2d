@@ -153,11 +153,11 @@ int Test_auf_korrekte_geolocations_Limb(vector<Messung_Limb> &Rohdaten,
 		MPL_Vektor Ort_Sat(3), Ort_TP(3);
 		Umwandlung_Kugel_in_Karthesisch(Rohdaten[i].m_Erdradius + Rohdaten[i].m_Hoehe_Sat,
 										Rohdaten[i].m_Longitude_Sat,
-										Rohdaten[i].m_Lattidude_Sat,
+										Rohdaten[i].m_Latitude_Sat,
 										Ort_Sat(0), Ort_Sat(1), Ort_Sat(2));
 		Umwandlung_Kugel_in_Karthesisch(Rohdaten[i].m_Erdradius + Rohdaten[i].m_Hoehe_TP,
 										Rohdaten[i].m_Longitude_TP,
-										Rohdaten[i].m_Lattidude_TP,
+										Rohdaten[i].m_Latitude_TP,
 										Ort_TP(0), Ort_TP(1), Ort_TP(2));
 
 		//Verbindungsvektor
@@ -199,7 +199,7 @@ bool Test_auf_Nachtmessung_Nadir(vector<Messung_Nadir> &Rohdaten,
 	// Die letzte Datei ist am Südpol die dunkelste
 	// Es wird also erst auf Nord oder Südhalbkugel geprüft
 	int n;// n wie Messungnummer
-	if (Rohdaten[0].m_Lattitude_Sat > 0) {
+	if (Rohdaten[0].m_Latitude_Sat > 0) {
 		n = 0;
 	} else {
 		n = Anzahl_Datensaetze - 1;

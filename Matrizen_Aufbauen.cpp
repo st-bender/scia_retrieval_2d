@@ -309,14 +309,14 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		Umwandlung_Kugel_in_Karthesisch(AM_L[MessungNR].m_Erdradius
 											+ AM_L[MessungNR].m_Hoehe_Sat,
 										AM_L[MessungNR].m_Longitude_Sat,
-										AM_L[MessungNR].m_Lattidude_Sat,
+										AM_L[MessungNR].m_Latitude_Sat,
 										Sat_Pos(0), Sat_Pos(1), Sat_Pos(2));
 		// Position des Tangentenpunkts in kartesischen Koordinaten
 		MPL_Vektor TP_Pos(3);
 		Umwandlung_Kugel_in_Karthesisch(AM_L[MessungNR].m_Erdradius
 											+ AM_L[MessungNR].m_Hoehe_TP,
 										AM_L[MessungNR].m_Longitude_TP,
-										AM_L[MessungNR].m_Lattidude_TP,
+										AM_L[MessungNR].m_Latitude_TP,
 										TP_Pos(0), TP_Pos(1), TP_Pos(2));
 		// Verbindungsvektor Sat-TP startend vom Satelliten
 		MPL_Vektor Verbindungsvektor(3);
@@ -506,10 +506,10 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			              cout<<"\n\n";
 			              cout<<"AM_L[38].m_Hoehe_TP:  "<<AM_L[38].m_Hoehe_TP<<"\n";
 			              cout<<"AM_L[38].m_Erdradius:  " <<AM_L[38].m_Erdradius<<"\n";
-			              cout<<"AM_L[38].m_Lattidude_TP:  "<<AM_L[38].m_Lattidude_TP<<"\n";
+			              cout<<"AM_L[38].m_Latitude_TP:  "<<AM_L[38].m_Latitude_TP<<"\n";
 			              cout<<"AM_L[38].m_Longitude_TP:  "<<AM_L[38].m_Longitude_TP<<"\n";
 			              cout<<"AM_L[38].m_Hoehe_Sat:  "<<AM_L[38].m_Hoehe_Sat<<"\n";
-			              cout<<"AM_L[38].m_Lattidude_Sat:  "<<AM_L[38].m_Lattidude_Sat<<"\n";
+			              cout<<"AM_L[38].m_Latitude_Sat:  "<<AM_L[38].m_Latitude_Sat<<"\n";
 			              cout<<"AM_L[38].m_Longitude_Sat:  "<<AM_L[38].m_Longitude_Sat<<"\n";
 
 			             // usleep(1000000);
@@ -983,11 +983,11 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		Umwandlung_Kugel_in_Karthesisch(
 				AM_N[Nadir_MessungNR].m_Hoehe_Sat + AM_N[Nadir_MessungNR].m_Erdradius,
 				AM_N[Nadir_MessungNR].m_Longitude_Sat,
-				AM_N[Nadir_MessungNR].m_Lattitude_Sat,
+				AM_N[Nadir_MessungNR].m_Latitude_Sat,
 				Sat_POS(0), Sat_POS(1), Sat_POS(2));
 		Umwandlung_Kugel_in_Karthesisch(AM_N[Nadir_MessungNR].m_Erdradius,
 				AM_N[Nadir_MessungNR].m_Longitude_Ground,
-				AM_N[Nadir_MessungNR].m_Lattitude_Ground,
+				AM_N[Nadir_MessungNR].m_Latitude_Ground,
 				GP_POS(0), GP_POS(1), GP_POS(2));
 		Umwandlung_Kugel_in_Karthesisch(149.6E6,
 				AM_N[Nadir_MessungNR].m_Sonnen_Longitude,

@@ -98,10 +98,10 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 		ml.m_Stunde = Datum[3];
 		ml.m_Minute = Datum[4];
 		ml.m_orbit_phase = orbit_phase;
-		ml.m_Lattidude_Sat = Limbdaten[offset + direction * i].m_Sub_Sat_Lat; //achtung geodätische Koordinaten
+		ml.m_Latitude_Sat = Limbdaten[offset + direction * i].m_Sub_Sat_Lat; //achtung geodätische Koordinaten
 		ml.m_Longitude_Sat = Limbdaten[offset + direction * i].m_Sub_Sat_Lon;
 		ml.m_Hoehe_Sat = Limbdaten[offset + direction * i].m_Sat_Hoehe;
-		ml.m_Lattidude_TP = Limbdaten[offset + direction * i].m_TP_Lat;
+		ml.m_Latitude_TP = Limbdaten[offset + direction * i].m_TP_Lat;
 		ml.m_Longitude_TP = Limbdaten[offset + direction * i].m_TP_Lon;
 		ml.m_Hoehe_TP = Limbdaten[offset + direction * i].m_Tangentenhoehe;
 		ml.m_Erdradius = Limbdaten[offset + direction * i].m_Erdradius;
@@ -349,10 +349,10 @@ vector<Messung_Nadir> make_messung_nadir_vector(string Dateiname,
 		mn.m_Stunde = Nadirdaten[i].m_Stunde;
 		mn.m_Minute = Nadirdaten[i].m_Minute;
 		//Geolokationen
-		mn.m_Lattitude_Sat = Nadirdaten[i].m_Sat_Lat;
+		mn.m_Latitude_Sat = Nadirdaten[i].m_Sat_Lat;
 		mn.m_Longitude_Sat = Nadirdaten[i].m_Sat_Lon;
 		mn.m_Hoehe_Sat = Nadirdaten[i].m_Hoehe;
-		mn.m_Lattitude_Ground = Nadirdaten[i].m_geo_nadir_center_lat;
+		mn.m_Latitude_Ground = Nadirdaten[i].m_geo_nadir_center_lat;
 		mn.m_Longitude_Ground = Nadirdaten[i].m_geo_nadir_center_lon;
 		mn.m_Erdradius = Nadirdaten[i].m_Sat_Erdradius;
 		mn.m_orbit_phase = Nadirdaten[i].m_orbit_phase;
@@ -477,8 +477,8 @@ int Ausgabe_Saeulendichten(string Dateiname,
 				"  %1.5E  %1.5E            %1.5E %1.5E"
 				"        %1.5E      %1.5E\n",
 				A_Messung_L[i].m_Jahr, A_Messung_L[i].m_Monat, A_Messung_L[i].m_Tag,
-				A_Messung_L[i].m_Lattidude_Sat, A_Messung_L[i].m_Longitude_Sat,
-				A_Messung_L[i].m_Lattidude_TP,
+				A_Messung_L[i].m_Latitude_Sat, A_Messung_L[i].m_Longitude_Sat,
+				A_Messung_L[i].m_Latitude_TP,
 				A_Messung_L[i].m_Longitude_TP,
 				A_Messung_L[i].m_Hoehe_TP, A_Messung_L[i].m_Erdradius,
 				A_Messung_L[i].m_Deklination,
@@ -530,8 +530,8 @@ int Ausgabe_Saeulendichten(string Dateiname,
 				"%1.5E  %1.5E   %1.5E "
 				"    %1.5E       %1.5E\n",
 				A_Messung_N[i].m_Jahr, A_Messung_N[i].m_Monat, A_Messung_N[i].m_Tag,
-				A_Messung_N[i].m_Lattitude_Sat, A_Messung_N[i].m_Longitude_Sat,
-				A_Messung_N[i].m_Lattitude_Ground,
+				A_Messung_N[i].m_Latitude_Sat, A_Messung_N[i].m_Longitude_Sat,
+				A_Messung_N[i].m_Latitude_Ground,
 				A_Messung_N[i].m_Longitude_Ground,
 				A_Messung_N[i].m_Erdradius, A_Messung_N[i].m_Deklination,
 				A_Messung_N[i].m_Sonnen_Longitude,

@@ -75,7 +75,7 @@ void Liniendaten::Emissivitaet_ermitteln()
 {
 	//!!!! ACHTUNG HIER GIBTS NOCH DISKUSSIONSBEDARF!!!!!
 	//
-	// In  David Cleary, " Daytime High Lattitude Rocket Observations of the NO
+	// In  David Cleary, " Daytime High Latitude Rocket Observations of the NO
 	// gamma, delta, epsilon bands, 1986
 	//
 	// Wird angeführt, dass zuerst über die gemessene Intensität Integriert

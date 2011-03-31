@@ -35,10 +35,10 @@ public:
 	int m_Stunde;
 	int m_Minute;
 	// Geolokationen
-	double m_Lattitude_Sat;
+	double m_Latitude_Sat;
 	double m_Longitude_Sat;
 	double m_Hoehe_Sat;
-	double m_Lattitude_Ground;
+	double m_Latitude_Ground;
 	double m_Longitude_Ground;
 	double m_Erdradius;
 };
@@ -59,10 +59,10 @@ inline void Ausgewertete_Messung_Nadir::Ausgabe_auf_Bildschirm()
 	cout << "m_Stunde: " << "\t" << m_Stunde << "\n";
 	cout << "m_Minute: " << "\t" << m_Minute << "\n";
 	// Geolokationen
-	cout << "m_Lattitude_Sat: " << "\t" << m_Lattitude_Sat << "\n";
+	cout << "m_Latitude_Sat: " << "\t" << m_Latitude_Sat << "\n";
 	cout << "m_Longitude_Sat: " << "\t" << m_Longitude_Sat << "\n";
 	cout << "m_Hoehe_Sat: " << "\t" << m_Hoehe_Sat << "\n";
-	cout << "m_Lattidude_Ground: " << "\t" << m_Lattitude_Ground << "\n";
+	cout << "m_Latitude_Ground: " << "\t" << m_Latitude_Ground << "\n";
 	cout << "m_Longitude_Ground: " << "\t" << m_Longitude_Ground << "\n";
 	cout << "m_Erdradius: " << "\t" << m_Erdradius << "\n";
 }

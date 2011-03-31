@@ -79,10 +79,10 @@ public:
 	int m_Stunde;
 	int m_Minute;
 	// Geolokationen für Raytrace
-	double m_Lattitude_Sat;
+	double m_Latitude_Sat;
 	double m_Longitude_Sat;
 	double m_Hoehe_Sat;
-	double m_Lattitude_Ground;
+	double m_Latitude_Ground;
 	double m_Longitude_Ground;
 	double m_Erdradius;
 	double m_orbit_phase;

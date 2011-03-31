@@ -80,7 +80,7 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	// Zur Zeitaufwandsabschätzung: Das Gitter wird am Ende aus Rund 20 Lats
 	// bestehen, und für jede Nord_Sued Bestimmung werden auch weniger als 1000
 	// Rechenschritte gemacht
-	//Zunächst Lattitudes in einen Vektor schreiben, aber nur die, welche noch
+	//Zunächst Latitudes in einen Vektor schreiben, aber nur die, welche noch
 	//nicht vorgekommen sind Es wird davon ausgegangen, dass der Datensatz nach
 	//Zeit sortiert ist
 	vector<double> Lats_Messung;
@@ -91,14 +91,14 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 		bool doppelt = false;
 
 		for (lat_it = Lats_Messung.begin(); lat_it != Lats_Messung.end(); lat_it++) {
-			if (abs((*aml_it).m_Lattidude_TP - (*lat_it)) < Epsilon + Epsilon) {
+			if (abs((*aml_it).m_Latitude_TP - (*lat_it)) < Epsilon + Epsilon) {
 				doppelt = true;
 				break;
 			}
 		}
 
 		if (!(doppelt)) {
-			Lats_Messung.push_back((*aml_it).m_Lattidude_TP);
+			Lats_Messung.push_back((*aml_it).m_Latitude_TP);
 		}
 	}
 	// Lats_Messung enthält nun alle Lats nur einmal und in Zeitgeordneter
@@ -467,7 +467,7 @@ void Retrievalgitter::In_Datei_Ausgeben(string Dateiname)
     // bestehen, und für jede Nord_Sued Bestimmung werden auch weniger als 1000
     // Rechenschritte gemacht
 
-    //Zunächst Lattitudes in einen Vektor schreiben, aber nur die, welche noch
+    //Zunächst Latitudes in einen Vektor schreiben, aber nur die, welche noch
     //nicht vorgekommen sind Es wird davon ausgegangen, dass der Datensatz nach
     //Zeit sortiert ist
     vector<double> Lats_Messung;

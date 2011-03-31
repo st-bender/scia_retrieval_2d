@@ -96,10 +96,10 @@ public:
 	int m_Stunde;
 	int m_Minute;
 	// Geolocation
-	double m_Lattidude_Sat;   // hierfür muss das Programm noch geändert werden
+	double m_Latitude_Sat;   // hierfür muss das Programm noch geändert werden
 	double m_Longitude_Sat;
 	double m_Hoehe_Sat;
-	double m_Lattidude_TP;
+	double m_Latitude_TP;
 	double m_Longitude_TP;
 	double m_Hoehe_TP;
 	double m_Erdradius;

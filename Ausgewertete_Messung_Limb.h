@@ -47,10 +47,10 @@ public:
 	int m_Stunde;
 	int m_Minute;
 	// Geolocation
-	double m_Lattidude_Sat;
+	double m_Latitude_Sat;
 	double m_Longitude_Sat;
 	double m_Hoehe_Sat;
-	double m_Lattidude_TP;
+	double m_Latitude_TP;
 	double m_Longitude_TP;
 	double m_Hoehe_TP;
 	double m_Erdradius;
@@ -69,10 +69,10 @@ inline void Ausgewertete_Messung_Limb::Ausgabe_auf_Bildschirm()
 	cout << "Tag                      : " << "\t" << m_Tag << "\n";
 	cout << "Stunde                   : " << "\t" << m_Stunde << "\n";
 	cout << "Minute                   : " << "\t" << m_Minute << "\n";
-	cout << "m_Lattidude_Sat          : " << "\t" << m_Lattidude_Sat << "\n";
+	cout << "m_Latitude_Sat           : " << "\t" << m_Latitude_Sat << "\n";
 	cout << "m_Longitude_Sat          : " << "\t" << m_Longitude_Sat << "\n";
 	cout << "m_Hoehe_Sat              : " << "\t" << m_Hoehe_Sat << "\n";
-	cout << "m_Lattidude_TP           : " << "\t" << m_Lattidude_TP << "\n";
+	cout << "m_Latitude_TP            : " << "\t" << m_Latitude_TP << "\n";
 	cout << "m_Longitude_TP           : " << "\t" << m_Longitude_TP << "\n";
 	cout << "m_Hoehe_TP               : " << "\t" << m_Hoehe_TP << "\n";
 	cout << "m_Erdradius              : " << "\t" << m_Erdradius << "\n";
