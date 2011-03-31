@@ -163,12 +163,12 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	// Dichte n aus der rechten Seite
 
 	//Zunächst Indizes der Wellenlaengen der Basisfensterbestimmen
-	int Index_Basisfenster_links_min = Get_Index(Spezfenst.m_Basisfenster_links_WLmin[Index]);
-	int Index_Basisfenster_links_max = Get_Index(Spezfenst.m_Basisfenster_links_WLmax[Index]);
-	int Index_Basisfenster_rechts_min = Get_Index(Spezfenst.m_Basisfenster_rechts_WLmin[Index]);
-	int Index_Basisfenster_rechts_max = Get_Index(Spezfenst.m_Basisfenster_rechts_WLmax[Index]);
-	int Index_Peakfenster_min = Get_Index(Spezfenst.m_Peakfenster_WLmin[Index]);
-	int Index_Peakfenster_max = Get_Index(Spezfenst.m_Peakfenster_WLmax[Index]);
+	int Index_Basisfenster_links_min = sb_Get_closest_index(Spezfenst.m_Basisfenster_links_WLmin[Index]);
+	int Index_Basisfenster_links_max = sb_Get_closest_index(Spezfenst.m_Basisfenster_links_WLmax[Index]);
+	int Index_Basisfenster_rechts_min = sb_Get_closest_index(Spezfenst.m_Basisfenster_rechts_WLmin[Index]);
+	int Index_Basisfenster_rechts_max = sb_Get_closest_index(Spezfenst.m_Basisfenster_rechts_WLmax[Index]);
+	int Index_Peakfenster_min = sb_Get_closest_index(Spezfenst.m_Peakfenster_WLmin[Index]);
+	int Index_Peakfenster_max = sb_Get_closest_index(Spezfenst.m_Peakfenster_WLmax[Index]);
 	// Speicherplatzbedarf für die Fenster ermitteln
 	int Bas_l = (Index_Basisfenster_links_max - Index_Basisfenster_links_min + 1);
 	int Bas_r = (Index_Basisfenster_rechts_max - Index_Basisfenster_rechts_min + 1);
@@ -916,7 +916,7 @@ int Messung_Limb::Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Spez
 	// Am besten gleich bei der Wellenlänge des Übergangs....
 	// eigentlich reicht 0,11nm, falls es mal schneller gehn soll
 	// die Gitterabstände sind aber über große Bereiche doch schon nicht linear
-	int Ind = Get_Index(Spezfenst.m_Wellenlaengen[Index]);
+	int Ind = sb_Get_Index(Spezfenst.m_Wellenlaengen[Index]);
 	double Delta_WL = (m_Wellenlaengen[Ind + 1] - m_Wellenlaengen[Ind]);
 	// Nun alles damit multiplizieren....wie gesagt..das ist etwas langsam,
 	// da es sich um nen konstanten Faktor handelt
