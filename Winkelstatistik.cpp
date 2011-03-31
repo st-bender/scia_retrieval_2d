@@ -45,7 +45,7 @@ int Winkelstatistik::Winkel_berechnen_und_einordnen(
 		MPL_Vektor Verbindungsvektor, MPL_Vektor Tangentenpunkt,
 		int &Winkel_OK)
 {
-	const double pi = 3.1415926535897;
+	const double pi = M_PI;
 	// Winkel OK-> 0 ; nicht OK -> 1
 	//Rückgabewert der Funktion 0 Winkel Klassifizierbar,
 	// 1 nicht (irgendwas ist dann falsch im Programm)

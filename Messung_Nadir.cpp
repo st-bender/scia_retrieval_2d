@@ -234,9 +234,9 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	if (mache_Fit_Plots == "ja") {
 		//TODO das als Funktion implementieren
 		vector<double> Funktion;
-		const double pi = 3.14159265;
+		const double pi = M_PI;
 		double FWHM = Spezfenst.m_FWHM;
-		double cnorm = 4.0 * pi * sqrt(2.0) / (FWHM * FWHM * FWHM);
+		double cnorm = 4.0 * pi * M_SQRT2 / (FWHM * FWHM * FWHM);
 
 		for (int i = 0; i < N_Peak; i++) {
 			double Basis = a0 + a1 * Peakfenster_WL[i];
@@ -345,7 +345,7 @@ int Messung_Nadir::Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfe
 //////////////////////////////////////////////////
 int Messung_Nadir::Deklinationswinkel_bestimmen() // auch gleich wie bei Limb
 {
-	const double pi = 3.14159265;
+	const double pi = M_PI;
 	// Formel nach der englischen Wikipedia
 	//theta=-23,45*cos(360° *(N+10)/365);
 	// dieser Winkel ändert sich nicht sehr stark von Tag zu Tag
@@ -556,7 +556,7 @@ void Messung_Nadir::Fit_Peak_hyperbolic(double *x, double *y, double x0,
 	// da die Funktionwerte y=I/(piFGamma) sind
 	// so ist A dann die Säulendichte
 
-	const double pi = 3.14159265;
+	const double pi = M_PI;
 	// Zahl der Messwertpaare
 	// double, damit später keine Probleme beim weiterrechnen
 	double sum_gy = 0.;
@@ -598,7 +598,7 @@ void Messung_Nadir::Fit_Peak_hyperbolic(vector<double> &x, vector<double> &y,
 	// da die Funktionwerte y=I/(piFGamma) sind
 	// so ist A dann die Säulendichte
 
-	const double pi = 3.14159265;
+	const double pi = M_PI;
 	// Zahl der Messwertpaare
 	// double, damit später keine Probleme beim weiterrechnen
 	double sum_gy = 0.;
@@ -634,10 +634,10 @@ double Messung_Nadir::Evaluate_Error_primitive(double *x, double *y, double a0,
 	Summe der Quadratischen Abweichungen-> Chi^2 hmm nicht gut...
 	aber als Wichtungsfaktor noch akzeptabel
 	***************************************************************************/
-	const double pi = 3.14159265;
+	const double pi = M_PI;
 	double Error = 0.;
 	double N = Endindex - Anfangsindex + 1.;
-	double cnorm = 4.0 * pi * sqrt(2.0) / (FWHM * FWHM * FWHM);
+	double cnorm = 4.0 * pi * M_SQRT2 / (FWHM * FWHM * FWHM);
 	// (0.5 * FWHM)^4
 	const double fwhm2to4 = 0.0625 * FWHM * FWHM * FWHM * FWHM;
 
@@ -666,7 +666,7 @@ double Messung_Nadir::Evaluate_Error_primitive(vector<double> &x, vector<double>
 	Summe der Quadratischen Abweichungen-> Chi^2 hmm nicht gut...
 	aber als Wichtungsfaktor noch akzeptabel
 	***************************************************************************/
-	const double pi = 3.14159265;
+	const double pi = M_PI;
 	double Error = 0.;
 	double N = Endindex - Anfangsindex + 1.;
 	double cnorm = 4.0 * pi * M_SQRT2 / (FWHM * FWHM * FWHM);

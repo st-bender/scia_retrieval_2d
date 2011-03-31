@@ -87,7 +87,7 @@ void Liniendaten::Emissivitaet_ermitteln()
 	//
 
 	//Konstanten
-	const double pi = 3.1415926535898; //const pi=3.1415926535897932384626433;
+	const double pi = M_PI; //const pi=3.1415926535897932384626433;
 	const double r_elektron_klassisch = 2.8179402894e-6; // in nm
 	//Teilformeln
 	//double Phasenfunktion=0.75*m_E1*(cos(pi/180*m_theta)*cos(pi/180*m_theta)+1)+m_E2;

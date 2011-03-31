@@ -146,7 +146,7 @@ int Test_auf_korrekte_geolocations_Limb(vector<Messung_Limb> &Rohdaten,
 	//Unterschied, kam eine verdächtige
 	//Fehlermeldung)
 	//Die meisten Messwerte liegen zwischen 0.01 und 0.02
-	const double pi = 3.1415926535897;
+	const double pi = M_PI;
 	unsigned int i = 0; //i wie INDEX
 	while (i < Rohdaten.size()) {
 		//Ortsvektoren bestimmen

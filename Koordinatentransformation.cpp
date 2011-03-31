@@ -22,7 +22,7 @@ void Umwandlung_Kugel_in_Karthesisch(double r, double phi, double theta,
 		double &x, double &y, double &z)
 {
 	// Winkel in Grad
-	const double pi = 3.1415926535897;
+	const double pi = M_PI;
 
 	x = r * cos(theta * pi / 180.0) * cos(phi * pi / 180.0);
 	y = r * cos(theta * pi / 180.0) * sin(phi * pi / 180.0);
@@ -41,7 +41,7 @@ void Umwandlung_Karthesisch_in_Kugel(double x, double y, double z, double &r,
 {
 	// Winkel in Grad
 	// Der Punkt 0,0,0 ist ausgeschlossen
-	const double pi = 3.1415926535897;
+	const double pi = M_PI;
 	const double epsilon = 0.001; //
 
 	r = sqrt(x * x + y * y + z * z);
