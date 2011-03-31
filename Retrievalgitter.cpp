@@ -84,19 +84,23 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	//nicht vorgekommen sind Es wird davon ausgegangen, dass der Datensatz nach
 	//Zeit sortiert ist
 	vector<double> Lats_Messung;
-	for (unsigned int i = 0; i < AM_Limb.size(); i++) {
+	vector<double>::iterator lat_it;
+	vector<Ausgewertete_Messung_Limb>::iterator aml_it;
+
+	for (aml_it = AM_Limb.begin(); aml_it != AM_Limb.end(); aml_it++) {
 		bool doppelt = false;
-		for (unsigned int j = 0; j < Lats_Messung.size(); j++) {
-			if ((AM_Limb[i].m_Lattidude_TP <= Lats_Messung[j] + Epsilon)  &&
-					(AM_Limb[i].m_Lattidude_TP > Lats_Messung[j] - Epsilon)) {
+
+		for (lat_it = Lats_Messung.begin(); lat_it != Lats_Messung.end(); lat_it++) {
+			if (abs((*aml_it).m_Lattidude_TP - (*lat_it)) < Epsilon + Epsilon) {
 				doppelt = true;
 				break;
 			}
 		}
+
 		if (!(doppelt)) {
-			Lats_Messung.push_back(AM_Limb[i].m_Lattidude_TP);
+			Lats_Messung.push_back((*aml_it).m_Lattidude_TP);
 		}
-	}// ende for i
+	}
 	// Lats_Messung enthält nun alle Lats nur einmal und in Zeitgeordneter
 	// Reihenfolge Der Satellit auf dem Stück zwischen Maximaler und Minimaler
 	// Höhe in Nord nach Süd Richtung
