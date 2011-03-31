@@ -304,7 +304,7 @@ int main(int argc, char *argv[])
 	Spez.m_Spezies_Name = "MgII"; //bitte zusammenhängend
 	Spez.m_FWHM = 0.22;
 	//Wellenlaenge 1
-	Spez.m_Wellenlaengen.push_back(279.635);
+	Spez.m_Wellenlaengen.push_back(279.553);
 	Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[0] - 3);
 	Spez.m_Basisfenster_links_WLmax.push_back(Spez.m_Wellenlaengen[0] - 1);
 	Spez.m_Basisfenster_rechts_WLmin.push_back(Spez.m_Wellenlaengen[0] + 1);
@@ -314,7 +314,7 @@ int main(int argc, char *argv[])
 	Lindat.Einlesen("DATA/LinePars.dat", Spez.m_Wellenlaengen[0]);
 	Spez.m_Liniendaten.push_back(Lindat);
 	//Wellenlänge 2
-	Spez.m_Wellenlaengen.push_back(280.353);
+	Spez.m_Wellenlaengen.push_back(280.270);
 	Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[1] - 3);
 	Spez.m_Basisfenster_links_WLmax.push_back(Spez.m_Wellenlaengen[1] - 1);
 	Spez.m_Basisfenster_rechts_WLmin.push_back(Spez.m_Wellenlaengen[1] + 1);
