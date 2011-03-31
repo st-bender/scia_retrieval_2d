@@ -37,14 +37,14 @@ vector<Messung_Nadir> ReadL1C_Nadir_mpl_binary(string Dateiname, int &Anzahl_Mes
 //Besser ein dynamisches Array einlesen, schneller als Vektor
 ////////////////////////////////////////////////////////////////////////////////
 int Ausgabe_Saeulendichten(string Dateiname,
-		vector<Ausgewertete_Messung_Limb> A_Messung_L);
+		vector<Ausgewertete_Messung_Limb> &A_Messung_L);
 int Ausgabe_Saeulendichten(string Dateiname,
-		vector<Ausgewertete_Messung_Nadir> A_Messung_N);
+		vector<Ausgewertete_Messung_Nadir> &A_Messung_N);
 //funktion ist ja überladbar
 
 MPL_Matrix Read_Atmodatei(string Dateiname);
 //Ausgeben
-int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter Grid,
-		MPL_Matrix Dichten, MPL_Matrix S_x, MPL_Matrix AKM);
+int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
+		MPL_Matrix &Dichten, MPL_Matrix &S_x, MPL_Matrix &AKM);
 
 #endif /* DATEI_IO_HH_ */

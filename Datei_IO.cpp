@@ -453,7 +453,7 @@ vector<Messung_Nadir> ReadL1C_Nadir_mpl_binary(string Dateiname, int &Anzahl_Mes
 //********************************************************************//
 ////////////////////////////////////////////////////////////////////////////////
 int Ausgabe_Saeulendichten(string Dateiname,
-		vector<Ausgewertete_Messung_Limb> A_Messung_L)
+		vector<Ausgewertete_Messung_Limb> &A_Messung_L)
 {
 	//Formatierte Ausgabe
 	FILE *outfile;
@@ -503,7 +503,7 @@ int Ausgabe_Saeulendichten(string Dateiname,
 //********************************************************************//
 ////////////////////////////////////////////////////////////////////////////////
 int Ausgabe_Saeulendichten(string Dateiname,
-		vector<Ausgewertete_Messung_Nadir> A_Messung_N)
+		vector<Ausgewertete_Messung_Nadir> &A_Messung_N)
 {
 	//Formatierte Ausgabe
 	FILE *outfile;
@@ -579,8 +579,8 @@ MPL_Matrix Read_Atmodatei(string Dateiname)
 ////////////////////////////////////////////////////////////////////////////////
 // Funktionsstart Ausgabe_Dichten
 ////////////////////////////////////////////////////////////////////////////////
-int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter Grid,
-		MPL_Matrix Dichten, MPL_Matrix S_x, MPL_Matrix AKM)
+int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
+		MPL_Matrix &Dichten, MPL_Matrix &S_x, MPL_Matrix &AKM)
 {
 	// Die Ausgabe erfolgt in 3 Dateien mit zusätzlichem Namen
 	// _Dichten.txt, _Sx.txt und  _AKM.txt
