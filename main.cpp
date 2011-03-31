@@ -273,6 +273,7 @@ int main(int argc, char *argv[])
 	 **************************************************************************/
 	cerr << "Teil1\n";
 	time(&Teil1_Start);
+	double wl; // central peak position wavelength
 	unsigned int i, j, k, l; // Meine Zählvariablen
 	i = 0;
 	j = 0;
@@ -304,24 +305,26 @@ int main(int argc, char *argv[])
 	Spez.m_Spezies_Name = "MgII"; //bitte zusammenhängend
 	Spez.m_FWHM = 0.22;
 	//Wellenlaenge 1
-	Spez.m_Wellenlaengen.push_back(279.553);
-	Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[0] - 3);
-	Spez.m_Basisfenster_links_WLmax.push_back(Spez.m_Wellenlaengen[0] - 1);
-	Spez.m_Basisfenster_rechts_WLmin.push_back(Spez.m_Wellenlaengen[0] + 1);
-	Spez.m_Basisfenster_rechts_WLmax.push_back(Spez.m_Wellenlaengen[0] + 3);
-	Spez.m_Peakfenster_WLmin.push_back(Spez.m_Wellenlaengen[0] - 3);
-	Spez.m_Peakfenster_WLmax.push_back(Spez.m_Wellenlaengen[0] + 3);
-	Lindat.Einlesen("DATA/LinePars.dat", Spez.m_Wellenlaengen[0]);
+	wl = 279.553;
+	Spez.m_Wellenlaengen.push_back(wl);
+	Spez.m_Basisfenster_links_WLmin.push_back(wl - 3);
+	Spez.m_Basisfenster_links_WLmax.push_back(wl - 1);
+	Spez.m_Basisfenster_rechts_WLmin.push_back(wl + 1);
+	Spez.m_Basisfenster_rechts_WLmax.push_back(wl + 3);
+	Spez.m_Peakfenster_WLmin.push_back(wl - 3);
+	Spez.m_Peakfenster_WLmax.push_back(wl + 3);
+	Lindat.Einlesen("DATA/LinePars.dat", wl);
 	Spez.m_Liniendaten.push_back(Lindat);
 	//Wellenlänge 2
-	Spez.m_Wellenlaengen.push_back(280.270);
-	Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[1] - 3);
-	Spez.m_Basisfenster_links_WLmax.push_back(Spez.m_Wellenlaengen[1] - 1);
-	Spez.m_Basisfenster_rechts_WLmin.push_back(Spez.m_Wellenlaengen[1] + 1);
-	Spez.m_Basisfenster_rechts_WLmax.push_back(Spez.m_Wellenlaengen[1] + 3);
-	Spez.m_Peakfenster_WLmin.push_back(Spez.m_Wellenlaengen[1] - 3);
-	Spez.m_Peakfenster_WLmax.push_back(Spez.m_Wellenlaengen[1] + 3);
-	Lindat.Einlesen("DATA/LinePars.dat", Spez.m_Wellenlaengen[1]);
+	wl = 280.270;
+	Spez.m_Wellenlaengen.push_back(wl);
+	Spez.m_Basisfenster_links_WLmin.push_back(wl - 3);
+	Spez.m_Basisfenster_links_WLmax.push_back(wl - 1);
+	Spez.m_Basisfenster_rechts_WLmin.push_back(wl + 1);
+	Spez.m_Basisfenster_rechts_WLmax.push_back(wl + 3);
+	Spez.m_Peakfenster_WLmin.push_back(wl - 3);
+	Spez.m_Peakfenster_WLmax.push_back(wl + 3);
+	Lindat.Einlesen("DATA/LinePars.dat", wl);
 	Spez.m_Liniendaten.push_back(Lindat);
 	// weitere Wellenlängen
 	Spezies_Fenster.push_back(Spez);
@@ -340,16 +343,17 @@ int main(int argc, char *argv[])
 	Spez.m_Spezies_Name = "MgI"; //bitte zusammenhängend
 	Spez.m_FWHM = 0.22;
 	//Wellenlaenge 1
-	Spez.m_Wellenlaengen.push_back(285.213);
-	Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[0] - 3);
+	wl = 285.213;
+	Spez.m_Wellenlaengen.push_back(wl);
+	Spez.m_Basisfenster_links_WLmin.push_back(wl - 3);
 	//Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[0]-10);
-	Spez.m_Basisfenster_links_WLmax.push_back(Spez.m_Wellenlaengen[0] - 1);
-	Spez.m_Basisfenster_rechts_WLmin.push_back(Spez.m_Wellenlaengen[0] + 1);
-	Spez.m_Basisfenster_rechts_WLmax.push_back(Spez.m_Wellenlaengen[0] + 3);
+	Spez.m_Basisfenster_links_WLmax.push_back(wl - 1);
+	Spez.m_Basisfenster_rechts_WLmin.push_back(wl + 1);
+	Spez.m_Basisfenster_rechts_WLmax.push_back(wl + 3);
 	//Spez.m_Basisfenster_rechts_WLmax.push_back(Spez.m_Wellenlaengen[0]+4);
-	Spez.m_Peakfenster_WLmin.push_back(Spez.m_Wellenlaengen[0] - 3);
-	Spez.m_Peakfenster_WLmax.push_back(Spez.m_Wellenlaengen[0] + 3);
-	Lindat.Einlesen("DATA/LinePars.dat", Spez.m_Wellenlaengen[0]);
+	Spez.m_Peakfenster_WLmin.push_back(wl - 3);
+	Spez.m_Peakfenster_WLmax.push_back(wl + 3);
+	Lindat.Einlesen("DATA/LinePars.dat", wl);
 	Spez.m_Liniendaten.push_back(Lindat);
 	// weitere Wellenlängen
 	//**************************************************************************
@@ -360,17 +364,18 @@ int main(int argc, char *argv[])
 	Spez.m_Spezies_Name = "unknown"; //bitte zusammenhängend
 	Spez.m_FWHM = 0.22;
 	//Wellenlaenge 1
-	Spez.m_Wellenlaengen.push_back(288.2);
-	Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[0] - 2);
+	wl = 288.2;
+	Spez.m_Wellenlaengen.push_back(wl);
+	Spez.m_Basisfenster_links_WLmin.push_back(wl - 2);
 	//Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[0]-10);
-	Spez.m_Basisfenster_links_WLmax.push_back(Spez.m_Wellenlaengen[0] - 1);
-	Spez.m_Basisfenster_rechts_WLmin.push_back(Spez.m_Wellenlaengen[0] + 1);
-	Spez.m_Basisfenster_rechts_WLmax.push_back(Spez.m_Wellenlaengen[0] + 3);
+	Spez.m_Basisfenster_links_WLmax.push_back(wl - 1);
+	Spez.m_Basisfenster_rechts_WLmin.push_back(wl + 1);
+	Spez.m_Basisfenster_rechts_WLmax.push_back(wl + 3);
 	//Spez.m_Basisfenster_rechts_WLmax.push_back(Spez.m_Wellenlaengen[0]+4);
-	Spez.m_Peakfenster_WLmin.push_back(Spez.m_Wellenlaengen[0] - 2);
-	Spez.m_Peakfenster_WLmax.push_back(Spez.m_Wellenlaengen[0] + 3);
+	Spez.m_Peakfenster_WLmin.push_back(wl - 2);
+	Spez.m_Peakfenster_WLmax.push_back(wl + 3);
 	// Lindat sind unbekannt
-	Lindat.m_Wellenlaenge = Spez.m_Wellenlaengen[0];
+	Lindat.m_Wellenlaenge = wl;
 	Lindat.m_rel_Einstein = 1; // stimmt nicht
 	Lindat.m_f_Wert = 0.162; //0.162;  // für Si
 	Lindat.m_E1 = 0; //0.01;         //für Si
@@ -389,15 +394,16 @@ int main(int argc, char *argv[])
 	Spez.m_Spezies_Name = "FeI"; //bitte zusammenhängend
 	Spez.m_FWHM = 0.22;
 	//Wellenlaenge 1
-	Spez.m_Wellenlaengen.push_back(248.32707);
-	Spez.m_Basisfenster_links_WLmin.push_back(Spez.m_Wellenlaengen[0] - 1);
-	Spez.m_Basisfenster_links_WLmax.push_back(Spez.m_Wellenlaengen[0] - 0.5);
-	Spez.m_Basisfenster_rechts_WLmin.push_back(Spez.m_Wellenlaengen[0] + 1);
-	Spez.m_Basisfenster_rechts_WLmax.push_back(Spez.m_Wellenlaengen[0] + 2);
-	Spez.m_Peakfenster_WLmin.push_back(Spez.m_Wellenlaengen[0] - 1);
-	Spez.m_Peakfenster_WLmax.push_back(Spez.m_Wellenlaengen[0] + 2);
+	wl = 248.32707;
+	Spez.m_Wellenlaengen.push_back(wl);
+	Spez.m_Basisfenster_links_WLmin.push_back(wl - 1);
+	Spez.m_Basisfenster_links_WLmax.push_back(wl - 0.5);
+	Spez.m_Basisfenster_rechts_WLmin.push_back(wl + 1);
+	Spez.m_Basisfenster_rechts_WLmax.push_back(wl + 2);
+	Spez.m_Peakfenster_WLmin.push_back(wl - 1);
+	Spez.m_Peakfenster_WLmax.push_back(wl + 2);
 	// Liniendaten
-	Lindat.m_Wellenlaenge = Spez.m_Wellenlaengen[0];
+	Lindat.m_Wellenlaenge = wl;
 	Lindat.m_rel_Einstein = 0.19; // stimmt nicht
 	Lindat.m_f_Wert = 0.543;
 	// ^5D_4 nach ^5F*_5 übergang j=4, dj=1 (Funktion für Matlab geschrieben)
