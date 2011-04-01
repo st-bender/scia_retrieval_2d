@@ -825,7 +825,7 @@ int main(int argc, char *argv[])
 	//double MgII_Lambda_Hoehe= 5E-7;  // für 3km
 	double MgII_Lambda_Hoehe = 1E-5; // für 1km
 	double MgII_Lambda_Breite = 1E-5;
-	double MgII_Lambda_apriori = 5E-4;
+	double MgII_Lambda_apriori = 1E-6;
 	double MgII_Lambda_letzte_Hoehe = 1E-32; //100 für ein
 	// Messfehlermatrix S_y y*y
 	// quadratische matrix
