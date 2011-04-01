@@ -1036,11 +1036,20 @@ int main(int argc, char *argv[])
 	// Spezies Mg II//
 	/////////////////////////
 	if (mache_volles_Retrieval_MgII == "ja") {
+		/*
 		Retrievaliteration_old(Dichte_n_MgII, Dichte_apriori_MgII,
 							   Saeulendichten_MgII,
 							   S_apriori_MgII, S_y_MgII, S_Breite, S_Hoehe,
 							   S_letzte_Hoehe_MgII, MgII_Lambda_Breite,
 							   MgII_Lambda_Hoehe, AMF_MgII, Konf);
+		// */
+		//*
+		Retrievaliteration(Dichte_n_MgII, Dichte_apriori_MgII,
+						   Saeulendichten_MgII,
+						   S_apriori_MgII, S_y_MgII, S_Breite, S_Hoehe,
+						   MgII_Lambda_Breite,
+						   MgII_Lambda_Hoehe, AMF_MgII, Konf);
+		// */
 	}
 	/////////////////////////
 	// Spezies unknown//
