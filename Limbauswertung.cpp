@@ -154,28 +154,9 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 				// ->hmm 4e7...keine Ahnung ob das Sinn macht
 
 				// Jetzt Zeilendichte und Fehler bestimmen
-//                if (Spezies_Fenster[j].m_Spezies_Name=="MgI")
-//                {   //Messung.Saeulendichte_Bestimmen_MgI285nm(Spezies_Fenster[j],
-//                        k,Arbeitsverzeichnis,mache_Fit_Plots,
-//                        mean_10_20.m_Intensitaeten);
-//                    Messung.Plots_der_Spektren_erzeugen(Spezies_Fenster[j],
-//                        k,Arbeitsverzeichnis,mache_Fit_Plots,
-//                        mean_10_20.m_Intensitaeten);
-//                }
-//                else
-//                {
 				// Hmm hier gibts noch Diskussionsbedarf
 				(*mlit).Zeilendichte_Bestimmen((*sfit), k,
 						Arbeitsverzeichnis, mache_Fit_Plots);
-//                }
-
-				// Zu Testzwecken fertige Messung in Datei Speichern
-				//if((k==0) && (j==0)&&(i==0))
-				//{
-				//    Messung.Ausgabe_in_Datei("CHECKDATA/Messung_Limb_Fenster0_Hoehe_74km_0teLinie.txt");
-				//}
-				// Todo...wieder rausnehmen
-				//if(Messung.m_Latitude_TP<5.0) {   continue;    }
 
 				// Ergebnis zusammenfassen
 				Ausgewertete_Messung_Limb Ergebnis
@@ -196,8 +177,6 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 							= Ergebnis.m_Fehler_Zeilendichten;
 						Ausgewertete_Limbmessung_MgI.push_back(Ergebnis);
 					}
-					//cout<<Ausgewertete_Limbmessung_MgI[0].m_Zeilendichte<<"\n";
-					//-das geht
 				}
 				if ((*sfit).m_Spezies_Name == "MgII") {
 					Ausgewertete_Limbmessung_MgII.push_back(Ergebnis);
