@@ -40,45 +40,12 @@ int Retrievalfehler_Abschaetzung(MPL_Matrix &S_x,
 	MPL_Matrix S_Breite_trans = S_Breite.transponiert();
 	MPL_Matrix S_letzte_Hoehe_trans = S_Breite.transponiert();
 
-
 	S_x = (AMF_trans * (S_y * AMF)); // hier noch invers, also noch invertieren
 	S_x += S_apriori;
 	S_x += Lambda_Hoehe * (S_Hoehe_trans * S_Hoehe);
 	S_x += Lambda_Breite * (S_Breite_trans * S_Breite);
 	S_x += S_letzte_Hoehe_trans * S_letzte_Hoehe;
 	Matrix_Invertieren(S_x);
-	//  cout<<S_x_invers.m_Zeilenzahl<<"\t"<<S_x_invers.m_Spaltenzahl<<"\n";
-	//  Die Matrix sollte quadratisch sein
-	//  INVERSION
-	//   int dim=S_x_invers.m_Zeilenzahl;
-	//   MPL_Matrix Inversionsgleichungssystem(dim,2*dim);
-	//   Inversionsgleichungssystem.Null_Initialisierung();
-	//   S_x_Matrix als linke Blockmatrix
-	//   for(int zeile=0;zeile<dim;zeile++)
-	//  {
-	//    Inversionsgleichungssystem(zeile,dim+zeile)=1;
-	//    for(int spalte=0;spalte<dim;spalte++)
-	//    {
-	//        Inversionsgleichungssystem(zeile,spalte)=S_x_invers(zeile,spalte);
-	//    }//for spalte
-	//  }// for zeile
-	//  // Diagonalisieren
-	//    int IERR;
-	//  IERR=Inversionsgleichungssystem.Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor();
-	//  if(IERR==1)
-	//  {
-	//      cout<<"Inversion zur Bestimmung der Fehlermatrix gescheitert \n";
-	//    return 1;
-	//  }
-	//Inversionsgleichungssystem.in_Datei_speichern("/tmp/mlangowski/0/Inversionsgleichungssystem.txt");
-	// Rechte Block Matrix übergeben
-	//for(int zeile=0;zeile<dim;zeile++)
-	//{
-	//    for(int spalte=0;spalte<dim;spalte++)
-	//    {
-	//        S_x(zeile,spalte)=Inversionsgleichungssystem(zeile,dim+spalte);
-	//    }//ende spalte
-	//}//ende zeile
 	//Nun noch die Averaging Kernel Matrix bestimmen
 	Averaging_Kernel_Matrix = S_x * (AMF_trans * (S_y * AMF));
 	return 0;
