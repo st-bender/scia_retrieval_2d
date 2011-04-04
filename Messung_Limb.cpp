@@ -123,6 +123,16 @@ Messung_Limb &Messung_Limb::operator =(const Messung_Limb &rhs)
 //========================================
 //Methoden
 //========================================
+// helper function for the slit function
+double slit_func(double fwhm, double x0, double x)
+{
+	const double fwhm2 = fwhm * fwhm;
+	const double cnorm = 4. * M_PI * M_SQRT2 / (fwhm2 * fwhm);
+	// (0.5 * FWHM)^4
+	const double fwhm2to4 = 0.0625 * fwhm2 * fwhm2;
+
+	return 1. / (cnorm * (fwhm2to4 + pow(x0 - x, 4)));
+}
 //========================================
 int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 		string Arbeitsverzeichnis, string mache_Fit_Plots)
@@ -235,15 +245,12 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	if (mache_Fit_Plots == "ja") {
 		//TODO das als Funktion implementieren
 		vector<double> Funktion(N_Peak);
-		const double pi = M_PI;
-		double FWHM = Spezfenst.m_FWHM;
-		double cnorm = 4.0 * pi * M_SQRT2 / (FWHM * FWHM * FWHM);
 
 		for (int i = 0; i < N_Peak; i++) {
 			double Basis = a0 + a1 * Peakfenster_WL[i];
-			double Peak = m_Zeilendichte /
-				(cnorm * (pow(0.5 * FWHM, 4)
-				 + pow(Peakfenster_WL[i] - Spezfenst.m_Wellenlaengen[Index], 4)));
+			double Peak = m_Zeilendichte *
+				slit_func(Spezfenst.m_FWHM,
+						Spezfenst.m_Wellenlaengen[Index], Peakfenster_WL[i]);
 			//cout<<Peak<<"\n";
 			//cout<<m_Zeilendichte<<"\n";
 			Funktion[i] = Peak + Basis;
@@ -1265,19 +1272,15 @@ void Messung_Limb::Fit_Peak_hyperbolic(double *x, double *y, double x0,
 	// In dieser Funktion wird die Fläche A der Spaltfunktion bestimmt, da die
 	// Funktionwerte y=I/(piFGamma) sind so ist A dann die Säulendichte
 
-	const double pi = M_PI;
 	// Zahl der Messwertpaare
 	// double, damit später keine Probleme beim weiterrechnen
 	double sum_gy = 0.;
 	double sum_gg = 0.;
 	double g;
-	const double cnorm = 4.0 * pi * M_SQRT2 / (FWHM * FWHM * FWHM); //lambda m
-	// (0.5 * FWHM)^4
-	const double fwhm2to4 = 0.0625 * FWHM * FWHM * FWHM * FWHM;
 
 	for (int i = Anfangsindex; i <= Endindex; i++) {
 		//g berechnen
-		g = 1. / (cnorm * (fwhm2to4 + pow(x0 - x[i], 4)));
+		g = slit_func(FWHM, x0, x[i]);
 		//eine Rechnung...nicht  Zeitkritisch
 		// sum_gy erhöhen
 		sum_gy += g * y[i];
@@ -1286,6 +1289,7 @@ void Messung_Limb::Fit_Peak_hyperbolic(double *x, double *y, double x0,
 	}
 	A = sum_gy / sum_gg;
 }
+
 void Messung_Limb::Fit_Peak_hyperbolic(vector<double> &x, vector<double> &y,
 		double x0, double FWHM, double &A, int Anfangsindex, int Endindex)
 {
@@ -1306,19 +1310,15 @@ void Messung_Limb::Fit_Peak_hyperbolic(vector<double> &x, vector<double> &y,
 	// In dieser Funktion wird die Fläche A der Spaltfunktion bestimmt, da die
 	// Funktionwerte y=I/(piFGamma) sind so ist A dann die Säulendichte
 
-	const double pi = M_PI;
 	// Zahl der Messwertpaare
 	// double, damit später keine Probleme beim weiterrechnen
 	double sum_gy = 0.;
 	double sum_gg = 0.;
 	double g;
-	const double cnorm = 4.0 * pi * M_SQRT2 / (FWHM * FWHM * FWHM); //lambda m
-	// (0.5 * FWHM)^4
-	const double fwhm2to4 = 0.0625 * FWHM * FWHM * FWHM * FWHM;
 
 	for (int i = Anfangsindex; i <= Endindex; i++) {
 		//g berechnen
-		g = 1. / (cnorm * (fwhm2to4 + pow(x0 - x[i], 4)));
+		g = slit_func(FWHM, x0, x[i]);
 		//eine Rechnung...nicht  Zeitkritisch
 		// sum_gy erhöhen
 		sum_gy += g * y[i];
@@ -1338,13 +1338,11 @@ double Messung_Limb::Evaluate_Error_primitive(double *x, double *y, double a0,
 	Wichtungsfaktor noch akzeptabel
 	 **************************************************************************/
 	double Error = 0;
-	const double pi = M_PI;
-	double cnorm = 4.0 * pi * M_SQRT2 / (FWHM * FWHM * FWHM);
 	//double y_quadrat=0;
 	for (int i = Anfangsindex; i < Endindex + 1; i++) {
 		//Funktionswert Bestimmen
 		double Basis = a0 + a1 * x[i];
-		double Peak = A / (cnorm * (pow(0.5 * FWHM, 4) + pow(x0 - x[i], 4)));
+		double Peak = A * slit_func(FWHM, x0, x[i]);
 		double Funktionswert = Peak + Basis;
 		// Quadratische Abweichung des Funktionswerts zum Messwert Bestimmen
 		// und aufaddieren
@@ -1371,13 +1369,11 @@ double Messung_Limb::Evaluate_Error_primitive(vector<double> &x,
 	Wichtungsfaktor noch akzeptabel
 	 **************************************************************************/
 	double Error = 0;
-	const double pi = M_PI;
-	double cnorm = 4.0 * pi * M_SQRT2 / (FWHM * FWHM * FWHM);
 	//double y_quadrat=0;
 	for (int i = Anfangsindex; i < Endindex + 1; i++) {
 		//Funktionswert Bestimmen
 		double Basis = a0 + a1 * x[i];
-		double Peak = A / (cnorm * (pow(0.5 * FWHM, 4) + pow(x0 - x[i], 4)));
+		double Peak = A * slit_func(FWHM, x0, x[i]);
 		double Funktionswert = Peak + Basis;
 		// Quadratische Abweichung des Funktionswerts zum Messwert Bestimmen
 		// und aufaddieren
