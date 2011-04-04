@@ -341,15 +341,6 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		// nicht hier...früher
 		// ENDE kleine Statistik für Winkelabweichungen bei Limb   /////////////
 
-		//if(MessungNR==38)
-		//{
-		//    cout<<"TP_Pos: "<<TP_Pos(0)<<"\t"<<TP_Pos(1)<<"\t"<<TP_Pos(2)<<"\n";
-		//    cout<<"Sat_Pos: "<<Sat_Pos(0)<<"\t"<<Sat_Pos(1)<<"\t"<<Sat_Pos(2)<<"\n";
-		//    cout<<"Verbindungsvektor: "<<Verbindungsvektor(0)<<"\t"
-		//      <<Verbindungsvektor(1)<<"\t"<<Verbindungsvektor(2)<<"\n";
-		//    sleep(2);
-		//}
-
 		//Die Höchste Höhe steckt in der letzten Zeile, also im Zweifel im
 		//letzten Element Achtung hier muss man immer aufpassen:es gibt 2 Höhen
 		//die vom Erdkern und die von der Erdoberfläche
@@ -493,41 +484,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			// mal ein par Punkte mehr, die nicht beitragen
 			Punkt_Hoehe = Punkt_Radius - (*aml_it).m_Erdradius;
 			//cerr<<"Punkt_Hoehe: "<<Punkt_Hoehe<<"\n";
-			/*      if(MessungNR==38)
-			      {
-			          if(Punkt_Hoehe<AM_L[38].m_Hoehe_TP)
-			          {
-			              cout<<"TOA_Start(0): "<<TOA_Start(0)<<"\t"
-			                <<"TOA_Start(1): "<<TOA_Start(1)<<"\t"
-			                <<"TOA_Start(2): "<<TOA_Start(2)<<"\n";
-			              cout<<"TOA_Schritt(0): "<<TOA_Schritt(0)<<"\t"
-			                <<"TOA_Schritt(1): "<<TOA_Schritt(1)<<"\t"
-			                <<"TOA_Schritt(2): "<<TOA_Schritt(2)<<"\n";
-			              cout<<"aktuelle_Schritt_Nr:  "<<aktuelle_Schritt_Nr<<"\n";
-			              cout<<"Sehnenlaenge_in_Atmosphaere:  "<<Sehnenlaenge_in_Atmosphaere<<"\n";
-			              cout<<"AM_L[38].m_Hoehe_TP:  "<<AM_L[38].m_Hoehe_TP<<"\n";
-			              cout<<"AM_L[38].m_Erdradius:  "<<AM_L[38].m_Erdradius<<"\n";
-			              cout<<"Punkt_Hoehe: "<<Punkt_Hoehe<<"\n";
-			              cout<<"\n\n";
-			              cout<<"AM_L[38].m_Hoehe_TP:  "<<AM_L[38].m_Hoehe_TP<<"\n";
-			              cout<<"AM_L[38].m_Erdradius:  " <<AM_L[38].m_Erdradius<<"\n";
-			              cout<<"AM_L[38].m_Latitude_TP:  "<<AM_L[38].m_Latitude_TP<<"\n";
-			              cout<<"AM_L[38].m_Longitude_TP:  "<<AM_L[38].m_Longitude_TP<<"\n";
-			              cout<<"AM_L[38].m_Hoehe_Sat:  "<<AM_L[38].m_Hoehe_Sat<<"\n";
-			              cout<<"AM_L[38].m_Latitude_Sat:  "<<AM_L[38].m_Latitude_Sat<<"\n";
-			              cout<<"AM_L[38].m_Longitude_Sat:  "<<AM_L[38].m_Longitude_Sat<<"\n";
 
-			             // usleep(1000000);
-			          }
-			          //cout<<"Punkt_Hoehe:  "<<Punkt_Hoehe<<"\n";
-			          //cout<<"Punkt_Laenge:  "<<Punkt_Laenge<<"\n";
-			          //cout<<"Punkt_Breite:  "<<Punkt_Breite<<"\n";
-
-			      }
-			      */
-
-
-			//cout<<"Punkthoehe2: "<<Punkt_Hoehe<<"\n";
 			//Testen ob Streuwinkel berechnet werden sollen
 			if (aktuelle_Schritt_Nr % Winkelberechnungsfrequenz == 0) {
 
@@ -801,36 +758,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 
 			// double Punkt_Hoehe=Start_Punkt.Betrag_ausgeben()-AM_L[MessungNR].m_Erdradius;
 			// ??? wofür stand das mal
-			//if(MessungNR==210)
-			//{cout<<"Punkt_Hoehe: "<<Punkt_Hoehe<<"\n";
-			//cout<<"GitterpunktNR: "<<GitterpunktNR<<"\n";
-			//cout<<"Start_Punkt.Betrag_ausgeben()"<<Start_Punkt.Betrag_ausgeben()<<"\n";
-			//cout<<"Grid.m_Gitter[GitterpunktNR].m_vorderer_Durchstosspunkt.Betrag_ausgeben():"
-			//      <<Grid.m_Gitter[GitterpunktNR].m_vorderer_Durchstosspunkt.Betrag_ausgeben()<<"\n";
-			//cout<<"Grid.m_Gitter[GitterpunktNR].m_hinterer_Durchstosspunkt.Betrag_ausgeben():"
-			//      <<Grid.m_Gitter[GitterpunktNR].m_hinterer_Durchstosspunkt.Betrag_ausgeben()<<"\n";
-			//MPL_Vektor VordererPunkt_Polar(3);
-			//MPL_Vektor HintererPunkt_Polar(3);
-			//Umwandlung_Karthesisch_in_Kugel(Grid.m_Gitter[GitterpunktNR].m_vorderer_Durchstosspunkt(0),
-			//     Grid.m_Gitter[GitterpunktNR].m_vorderer_Durchstosspunkt(1),
-			//     Grid.m_Gitter[GitterpunktNR].m_vorderer_Durchstosspunkt(2),
-			//     VordererPunkt_Polar(0),
-			//     VordererPunkt_Polar(1),
-			//     VordererPunkt_Polar(2));
-			//Umwandlung_Karthesisch_in_Kugel(Grid.m_Gitter[GitterpunktNR].m_hinterer_Durchstosspunkt(0),
-			//     Grid.m_Gitter[GitterpunktNR].m_hinterer_Durchstosspunkt(1),
-			//     Grid.m_Gitter[GitterpunktNR].m_hinterer_Durchstosspunkt(2),
-			//     HintererPunkt_Polar(0),
-			//     HintererPunkt_Polar(1),
-			//     HintererPunkt_Polar(2));
-			//cout<<"vordererPunkt:  Radius: "<<VordererPunkt_Polar(0)
-			//  <<"  Länge: "<<VordererPunkt_Polar(1)
-			//  <<"Breite: "<<VordererPunkt_Polar(2)<<"\n";
-			//cout<<"hintererPunkt:  Radius: "<<HintererPunkt_Polar(0)
-			//  <<"  Länge: "<<HintererPunkt_Polar(1)
-			//  <<"Breite: "<<HintererPunkt_Polar(2)<<"\n";
-			//sleep(5);
-			//}
+
 			//Abschätzung der Strecke zwischen Startpunkt und TOA_LFS in km
 			// hier kommt der Sonnenzenitwinkel ins Spiel
 			// mit Cosinussatz a^2=b^2+c^2-2bc cos(alpha)
@@ -916,20 +844,6 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 
 				Tau_LFS += Schrittlaenge * 100000.0
 					* (V_Atmo_Dichten * V_Atmo_Wirkungsquerschnitte);
-				//if(Punkt_Hoehe>99.0)
-				////if(Grid.m_Gitter[GitterpunktNR].m_Hoehe==80)
-				//{
-				//    cout<<"Grid.m_Gitter[GitterpunktNR].m_Hoehe: "
-				//      <<Grid.m_Gitter[GitterpunktNR].m_Hoehe<<"\n";;
-				//    cout<<"Grid.m_Gitter[GitterpunktNR].m_Breite: "
-				//      <<Grid.m_Gitter[GitterpunktNR].m_Breite<<"\n";;
-				//    cout<<"Punkt_Hoehe: "<<Punkt_Hoehe<<"\n";
-				//    //die echte Schrittrichtung ist andersherum,
-				//    // aber so wie addiert wird,
-				//    cout<<"Tau_LFS: "<<Tau_LFS<<"\n";
-				//    // ist das am Ende egal, da nur Tau_gesamt gesucht ist
-				//    usleep(700000);
-				//}
 			} // Ende for Schritt
 			// ENDE RAYTRACINGSCHLEIFE LIMB LFS /////////////////////////////
 			// Multipliziere AMF mit exp(-Tau)
@@ -1236,16 +1150,6 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 					HintererPunkt_Polar(2));
 			Start_Punkt_Polar
 				= (HintererPunkt_Polar + VordererPunkt_Polar) * 0.5;
-			/* if(MessungNR==260)
-			 {
-			     cout<<"GitterpunktNR: "<<GitterpunktNR<<"\n";
-			     cout<<"VordererPunkt_Polar(0):"<<VordererPunkt_Polar(0)<<"\n";
-			     cout<<"HintererPunkt_Polar(0):"<<HintererPunkt_Polar(0)<<"\n";
-			     cout<<"Start_Punkt_Polar(0): "<<Start_Punkt_Polar(0)<<"\n";
-			     cout<<"Start_Punkt_Hoehe: "
-				   <<Start_Punkt_Polar(0)-(*amn_it).m_Erdradius<<"\n";
-			     sleep(1);
-			 }*/
 			MPL_Vektor Start_Punkt(3);
 			Umwandlung_Kugel_in_Karthesisch(
 					Start_Punkt_Polar(0), Start_Punkt_Polar(1), Start_Punkt_Polar(2),
@@ -1333,7 +1237,6 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			// Multipliziere AMF mit exp(-Tau)
 			AMF(MessungNR, GitterpunktNR) *= exp(-Tau_LFS);
 			// ENDE RAYTRACINGSCHLEIFE NADIR LFS /////////////////////////////
-
 		}   // ende Schleife über alle Gitterpunkte
 			//für zusätzliche Abdämpfung LFS Nadir
 
@@ -1342,11 +1245,8 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 	////////////////////////////////////////////////////////////////////////////
 	// LIMB UND NADIR RAYTRACING ABGESCHLOSSEN AMF ZURÜCKGEBEN
 
-
-
 //    AMF.in_Datei_speichern("/tmp/mlangowski/0/AMF_fertig.txt");
 //    Tau_LOS_Matrix.in_Datei_speichern("/tmp/mlangowski/0/TAU_fertig.txt");
-
 
 	// char buf[256];
 	// string dum;
