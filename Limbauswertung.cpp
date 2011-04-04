@@ -147,9 +147,9 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 				//  <<Spezies_Fenster[j].m_Liniendaten[k].m_E1<<"\t"
 				//  <<Spezies_Fenster[j].m_Liniendaten[k].m_Gamma<<"\n";
 				(*mlit).Intensitaeten_durch_piF_Gamma_berechnen((*sfit), k);
-				(*mlit).Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen((*sfit), k);
 				// In der Formel ist piF in W/(m^2*Wellenlänge) verlangt..
 				// also muss noch mit der Kanalbreite multipliziert werden
+				(*mlit).Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen((*sfit), k);
 				//cout<<Messung.m_Intensitaeten_durch_piF_Gamma[1]<<"\n";
 				// ->hmm 4e7...keine Ahnung ob das Sinn macht
 
