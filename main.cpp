@@ -359,6 +359,16 @@ int main(int argc, char *argv[])
 	//**************************************************************************
 	Spezies_Fenster.push_back(Spez);
 	//weitere Spezies
+	// SpezVektoren wieder leeren
+	// hier könnte man in Spez auch eine Methode für schreiben
+	Spez.m_Wellenlaengen.resize(0);
+	Spez.m_Basisfenster_links_WLmin.resize(0);
+	Spez.m_Basisfenster_links_WLmax.resize(0);
+	Spez.m_Basisfenster_rechts_WLmin.resize(0);
+	Spez.m_Basisfenster_rechts_WLmax.resize(0);
+	Spez.m_Peakfenster_WLmin.resize(0);
+	Spez.m_Peakfenster_WLmax.resize(0);
+	Spez.m_Liniendaten.resize(0);
 	Spez.clear();  // Instanz leeren
 	// Unbekannte Spezies ******************************************************
 	Spez.m_Spezies_Name = "unknown"; //bitte zusammenhängend
@@ -389,6 +399,16 @@ int main(int argc, char *argv[])
 	//cout<<Spezies_Fenster.size();
 	// cout<<Spezies_Fenster[1].m_Liniendaten[0].m_E1<<"\t";
 	//weitere Spezies
+	// SpezVektoren wieder leeren
+	// hier könnte man in Spez auch eine Methode für schreiben
+	Spez.m_Wellenlaengen.resize(0);
+	Spez.m_Basisfenster_links_WLmin.resize(0);
+	Spez.m_Basisfenster_links_WLmax.resize(0);
+	Spez.m_Basisfenster_rechts_WLmin.resize(0);
+	Spez.m_Basisfenster_rechts_WLmax.resize(0);
+	Spez.m_Peakfenster_WLmin.resize(0);
+	Spez.m_Peakfenster_WLmax.resize(0);
+	Spez.m_Liniendaten.resize(0);
 	Spez.clear();  // Instanz leeren
 	// FeI ************************************************************
 	Spez.m_Spezies_Name = "FeI"; //bitte zusammenhängend
@@ -416,6 +436,16 @@ int main(int argc, char *argv[])
 	//**************************************************************************
 	Spezies_Fenster.push_back(Spez);
 	//weitere Spezies
+	// SpezVektoren wieder leeren
+	// hier könnte man in Spez auch eine Methode für schreiben
+	Spez.m_Wellenlaengen.resize(0);
+	Spez.m_Basisfenster_links_WLmin.resize(0);
+	Spez.m_Basisfenster_links_WLmax.resize(0);
+	Spez.m_Basisfenster_rechts_WLmin.resize(0);
+	Spez.m_Basisfenster_rechts_WLmax.resize(0);
+	Spez.m_Peakfenster_WLmin.resize(0);
+	Spez.m_Peakfenster_WLmax.resize(0);
+	Spez.m_Liniendaten.resize(0);
 	Spez.clear();  // Instanz leeren
 	//**************************************************************************
 
