@@ -594,13 +594,12 @@ int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
 
 	//Formatierte Ausgabe
 	FILE *outfile1;
-	ofstream outfile2, outfile3;
 	string Dateiname1, Dateiname2, Dateiname3;
 	Dateiname1 = Dateiname_out + "_Dichten.txt";
 	Dateiname2 = Dateiname_out + "_Sx.txt";
 	Dateiname3 = Dateiname_out + "_AKM.txt";
 	int Anzahl = Grid.m_Anzahl_Breiten * Grid.m_Anzahl_Hoehen;
-	int i, j;
+	int i;
 	double stabw = 0;
 	//Datei öffnen
 	outfile1 = fopen(Dateiname1.c_str(), "w");
@@ -642,35 +641,16 @@ int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
 	////////////////////////////////////////////////////////////////////////////
 	// Datei schließen
 	fclose(outfile1);
+
 	// Die anderen beiden kurz und schmerzlos
 	//S_x
 	// Zeilenweise ausgeben
-	outfile2.open(Dateiname2.c_str());
-	for (i = 0; i < Anzahl; i++) {
-		for (j = 0; j < Anzahl; j++) {
-			outfile2 << S_x(i, j);
-			if (j != Anzahl - 1)
-				outfile2 << "\t";
-		}// for j
-		if (i != Anzahl - 1)
-			outfile2 << "\n";
-	}//for i
-	outfile2.close();
-	outfile2.clear();
+	S_x.in_Datei_speichern(Dateiname2);
+
 	//AKM
 	// Zeilenweise ausgeben
-	outfile3.open(Dateiname3.c_str());
-	for (i = 0; i < Anzahl; i++) {
-		for (j = 0; j < Anzahl; j++) {
-			outfile3 << AKM(i, j);
-			if (j != Anzahl - 1)
-				outfile3 << "\t";
-		}// for j
-		if (i != Anzahl - 1)
-			outfile3 << "\n";
-	}//for i
-	outfile3.close();
-	outfile3.clear();
+	AKM.in_Datei_speichern(Dateiname3);
+
 	return 0;
 }
 ////////////////////////////////////////////////////////////////////////////////
