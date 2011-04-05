@@ -23,17 +23,6 @@ using namespace std;
 //Protos für Hilfsfunktionen
 template <class T> vector<T> string_to_vector(string zeile);
 
-//Destructor
-Konfiguration::~Konfiguration()
-{
-	if (m_Retrieval_Kovarianzen != NULL) {
-		delete[] m_Retrieval_Kovarianzen;
-		m_Retrieval_Kovarianzen = NULL;
-
-	}
-
-}
-
 // Konfiguration_einlesen /////////////////////////////////////////////
 int Konfiguration::Konfiguration_einlesen()
 {
@@ -238,15 +227,17 @@ int Konfiguration::Konfiguration_einlesen()
 		if (Zeile == "Retrieval covariances") {
 			//cout<<Zeile<<"\n";
 
-			this->m_Retrieval_Kovarianzen = new double[this->m_Anzahl_der_Emitter * 3];
+			this->m_Retrieval_Kovarianzen.resize(this->m_Anzahl_der_Emitter * 3);
 
 			for (int i = 0; i < 3; i++) {
 				getline(infile, Zeile);
 				//D in E umwandeln
-				for (uint j = 0; j < Zeile.size(); j++) {
-					if (Zeile[j] == 'D')
-						Zeile[j] = 'E';
+				string::size_type pos = 0;
+				while ((pos = Zeile.find("D", pos)) != string::npos) {
+					Zeile.replace(pos, 1, "E");
+					pos++;
 				}
+
 				//cout<<Zeile<<"\n";
 				vector<double> dummy = string_to_vector<double>(Zeile);
 				for (int j = 0; j < m_Anzahl_der_Emitter; j++) {

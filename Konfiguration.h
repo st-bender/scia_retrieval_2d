@@ -11,8 +11,6 @@ class Konfiguration
 {
 	//alles public machen
 public:
-	//Constructoren/Destructor
-	~Konfiguration();
 	// Methoden
 	int Konfiguration_einlesen();  // die ist in Scia.conf drin
 	int Konfiguration_anzeigen();  // gucken obs geklappt hat
@@ -53,7 +51,7 @@ public:
 	vector<double> m_Retrievalfenster_WL_high;
 	vector<int> m_Assignment_of_WL_Windows; /// zuordnung der linien zu den spezies
 	// Regularisierungswichtungsfaktoren /////////////////////////////
-	double *m_Retrieval_Kovarianzen;
+	vector<double> m_Retrieval_Kovarianzen;
 	// Sonstiges /////////////////////////////////////////////////////
 	vector<double> m_Fehlergrenzen;   //sollte man auch dynamisch machen nach anzahl der spezies
 	double m_FWHM;
