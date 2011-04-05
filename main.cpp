@@ -166,6 +166,17 @@ using namespace std;
 int Prioritylevel = 0;
 // ENDE globale Variablen
 ///////////////////////////////////////
+//
+// the SCIAMACHY slit function
+double slit_func(double fwhm, double x0, double x)
+{
+	const double fwhm2 = fwhm * fwhm;
+	const double cnorm = 4. * M_PI * M_SQRT2 / (fwhm2 * fwhm);
+	// (0.5 * FWHM)^4
+	const double fwhm2to4 = 0.0625 * fwhm2 * fwhm2;
+
+	return 1. / (cnorm * (fwhm2to4 + pow(x0 - x, 4)));
+}
 
 // argc ist Die Anzahl der Kommandozeilenparameter
 // argv[i] enthält den i-ten Kommandozeilenparameter argv[0] ist Programmname

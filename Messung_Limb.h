@@ -117,4 +117,6 @@ public:
 	vector<double> m_Intensitaeten_durch_piF_Gamma; // ein bisschen mehr Speicher...optimierbar
 	vector<double> m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand;
 };
+
+double slit_func(double fwhm, double x0, double x);
 #endif /* MESSUNG_LIMB_HH_ */

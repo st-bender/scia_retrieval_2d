@@ -95,4 +95,5 @@ public:
 	vector<double> m_Intensitaeten_durch_piF_Gamma;
 };
 
+double slit_func(double fwhm, double x0, double x);
 #endif /* MESSUNG_NADIR_HH_ */

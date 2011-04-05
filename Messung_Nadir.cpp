@@ -234,16 +234,12 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	if (mache_Fit_Plots == "ja") {
 		//TODO das als Funktion implementieren
 		vector<double> Funktion;
-		const double pi = M_PI;
-		double FWHM = Spezfenst.m_FWHM;
-		double cnorm = 4.0 * pi * M_SQRT2 / (FWHM * FWHM * FWHM);
 
 		for (int i = 0; i < N_Peak; i++) {
 			double Basis = a0 + a1 * Peakfenster_WL[i];
-			double Peak = m_Zeilendichte /
-				(cnorm * (pow(0.5 * FWHM, 4)
-						  + pow(Peakfenster_WL[i]
-							  - Spezfenst.m_Wellenlaengen[Index], 4)));
+			double Peak = m_Zeilendichte *
+				slit_func(Spezfenst.m_FWHM,
+						Spezfenst.m_Wellenlaengen[Index], Peakfenster_WL[i]);
 			//cout<<Peak<<"\n";
 			//cout<<m_Zeilendichte<<"\n";
 			Funktion.push_back(Peak + Basis);
@@ -556,20 +552,16 @@ void Messung_Nadir::Fit_Peak_hyperbolic(double *x, double *y, double x0,
 	// da die Funktionwerte y=I/(piFGamma) sind
 	// so ist A dann die Säulendichte
 
-	const double pi = M_PI;
 	// Zahl der Messwertpaare
 	// double, damit später keine Probleme beim weiterrechnen
 	double sum_gy = 0.;
 	double sum_gg = 0.;
 	double g;
-	double cnorm = 4.0 * pi * M_SQRT2 / (FWHM * FWHM * FWHM); //lambda m
-	// (0.5 * FWHM)^4
-	const double fwhm2to4 = 0.0625 * FWHM * FWHM * FWHM * FWHM;
 
 	for (int i = Anfangsindex; i <= Endindex; i++) {
 		//g berechnen
 		//eine Rechnung...nicht  Zeitkritisch
-		g = 1 / (cnorm * (fwhm2to4 + pow(x0 - x[i], 4)));
+		g = slit_func(FWHM, x0, x[i]);
 		// sum_gy erhöhen
 		sum_gy += g * y[i];
 		// sum_gg erhöhen
@@ -598,20 +590,16 @@ void Messung_Nadir::Fit_Peak_hyperbolic(vector<double> &x, vector<double> &y,
 	// da die Funktionwerte y=I/(piFGamma) sind
 	// so ist A dann die Säulendichte
 
-	const double pi = M_PI;
 	// Zahl der Messwertpaare
 	// double, damit später keine Probleme beim weiterrechnen
 	double sum_gy = 0.;
 	double sum_gg = 0.;
 	double g;
-	double cnorm = 4.0 * pi * M_SQRT2 / (FWHM * FWHM * FWHM); //lambda m
-	// (0.5 * FWHM)^4
-	const double fwhm2to4 = 0.0625 * FWHM * FWHM * FWHM * FWHM;
 
 	for (int i = Anfangsindex; i <= Endindex; i++) {
 		//g berechnen
 		//eine Rechnung...nicht  Zeitkritisch
-		g = 1. / (cnorm * (fwhm2to4 + pow(x0 - x[i], 4)));
+		g = slit_func(FWHM, x0, x[i]);
 		// sum_gy erhöhen
 		sum_gy += g * y[i];
 		// sum_gg erhöhen
@@ -634,17 +622,13 @@ double Messung_Nadir::Evaluate_Error_primitive(double *x, double *y, double a0,
 	Summe der Quadratischen Abweichungen-> Chi^2 hmm nicht gut...
 	aber als Wichtungsfaktor noch akzeptabel
 	***************************************************************************/
-	const double pi = M_PI;
 	double Error = 0.;
 	double N = Endindex - Anfangsindex + 1.;
-	double cnorm = 4.0 * pi * M_SQRT2 / (FWHM * FWHM * FWHM);
-	// (0.5 * FWHM)^4
-	const double fwhm2to4 = 0.0625 * FWHM * FWHM * FWHM * FWHM;
 
 	for (int i = Anfangsindex; i < Endindex + 1; i++) {
 		//Funktionswert Bestimmen
 		double Basis = a0 + a1 * x[i];
-		double Peak = A / (cnorm * (fwhm2to4 + pow(x0 - x[i], 4)));
+		double Peak = A * slit_func(FWHM, x0, x[i]);
 		double Funktionswert = Peak + Basis;
 		//cout<<"Basis\t"<<Basis<<"\tPeak\t"<<Peak<<"\tFunktionswert\t"
 		//  <<Funktionswert<<"\ty[i]\t"<<y[i]<<"\n";
@@ -666,17 +650,13 @@ double Messung_Nadir::Evaluate_Error_primitive(vector<double> &x, vector<double>
 	Summe der Quadratischen Abweichungen-> Chi^2 hmm nicht gut...
 	aber als Wichtungsfaktor noch akzeptabel
 	***************************************************************************/
-	const double pi = M_PI;
 	double Error = 0.;
 	double N = Endindex - Anfangsindex + 1.;
-	double cnorm = 4.0 * pi * M_SQRT2 / (FWHM * FWHM * FWHM);
-	// (0.5 * FWHM)^4
-	const double fwhm2to4 = 0.0625 * FWHM * FWHM * FWHM * FWHM;
 
 	for (int i = Anfangsindex; i <= Endindex; i++) {
 		//Funktionswert Bestimmen
 		double Basis = a0 + a1 * x[i];
-		double Peak = A / (cnorm * (fwhm2to4 + pow(x0 - x[i], 4)));
+		double Peak = A * slit_func(FWHM, x0, x[i]);
 		double Funktionswert = Peak + Basis;
 		//cout<<"Basis\t"<<Basis<<"\tPeak\t"<<Peak<<"\tFunktionswert\t"
 		//  <<Funktionswert<<"\ty[i]\t"<<y[i]<<"\n";
