@@ -184,10 +184,13 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 			Residual_1 = Residual;
 		}
 		if (Residual < Threshold * Residual_1) {
+			cerr << "Konvergenz bei Iterationsschritt: " << Iterationsschritt << endl;
 			break;
 		}
-		if (abs(residual_prev - Residual) / Residual < Threshold)
+		if (abs(residual_prev - Residual) / Residual < Threshold) {
+			cerr << "Konvergenz bei Iterationsschritt: " << Iterationsschritt << endl;
 			break;
+		}
 		residual_prev = Residual;
 		//RHS sollte ein Spaltenvektor sein
 		RHS = AMF_trans * (S_y * Saeulendichten_rest)
@@ -399,8 +402,10 @@ int Retrievaliteration_old(MPL_Matrix &Dichten,
 			// achtung mit break und continue in for-schleifen
 			// (vor allem mit continue->(i++; continue;)
 		}
-		if (abs(residual_prev - Residual) / Residual < Threshold)
+		if (abs(residual_prev - Residual) / Residual < Threshold) {
+			cerr << "Konvergenz bei Iterationsschritt: " << Iterationsschritt << endl;
 			break;
+		}
 		residual_prev = Residual;
 
 		Dichten_apriori = Dichten;
