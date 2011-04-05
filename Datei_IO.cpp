@@ -598,7 +598,6 @@ int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
 	Dateiname1 = Dateiname_out + "_Dichten.txt";
 	Dateiname2 = Dateiname_out + "_Sx.txt";
 	Dateiname3 = Dateiname_out + "_AKM.txt";
-	int Anzahl = Grid.m_Anzahl_Breiten * Grid.m_Anzahl_Hoehen;
 	int i;
 	double stabw = 0;
 	//Datei öffnen
@@ -614,7 +613,7 @@ int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
 			"Max_Breite[°]", "Breite[°]", "Min_Breite[°]",
 			"Dichte[cm^-3]", " Standardabweichung[cm^-3]");
 	// Alle Zeilen bis auf die letzte
-	for (i = 0; i < Grid.m_Anzahl_Punkte - 1; i++) {
+	for (i = 0; i < Grid.m_Anzahl_Punkte; i++) {
 		stabw = sqrt(S_x(i, i));
 		fprintf(outfile1, "%5i  "
 				"%+1.5E %+1.5E  %+1.5E "
@@ -624,20 +623,7 @@ int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
 				Grid.m_Gitter[i].m_Max_Hoehe, Grid.m_Gitter[i].m_Hoehe, Grid.m_Gitter[i].m_Min_Hoehe,
 				Grid.m_Gitter[i].m_Max_Breite, Grid.m_Gitter[i].m_Breite, Grid.m_Gitter[i].m_Min_Breite,
 				Dichten(i), stabw);
-
-
 	}
-	//letzte Zeile (ohne \n am Ende)
-	i = Anzahl - 1;
-	stabw = sqrt(S_x(i, i));
-	fprintf(outfile1, "%5i  "
-			"%+1.5E %+1.5E  %+1.5E "
-			" %+1.5E %+1.5E  %+1.5E "
-			" %+1.5E               %+1.5E\n",
-			i,
-			Grid.m_Gitter[i].m_Max_Hoehe, Grid.m_Gitter[i].m_Hoehe, Grid.m_Gitter[i].m_Min_Hoehe,
-			Grid.m_Gitter[i].m_Max_Breite, Grid.m_Gitter[i].m_Breite, Grid.m_Gitter[i].m_Min_Breite,
-			Dichten(i), stabw);
 	////////////////////////////////////////////////////////////////////////////
 	// Datei schließen
 	fclose(outfile1);
