@@ -314,7 +314,7 @@ int main(int argc, char *argv[])
 	Nachricht_Schreiben("Bestimme Speziesdaten...", 3, Prioritylevel);
 	//Füllen z.B. für Magnesium+ *******************************************
 	Spez.m_Spezies_Name = "MgII"; //bitte zusammenhängend
-	Spez.m_FWHM = 0.22;
+	Spez.m_FWHM = Konf.m_FWHM;
 	//Wellenlaenge 1
 	wl = 279.553;
 	Spez.m_Wellenlaengen.push_back(wl);
@@ -352,7 +352,7 @@ int main(int argc, char *argv[])
 	//weitere Spezies
 	// Magnesium ************************************************************
 	Spez.m_Spezies_Name = "MgI"; //bitte zusammenhängend
-	Spez.m_FWHM = 0.22;
+	Spez.m_FWHM = Konf.m_FWHM;
 	//Wellenlaenge 1
 	wl = 285.213;
 	Spez.m_Wellenlaengen.push_back(wl);
@@ -383,7 +383,7 @@ int main(int argc, char *argv[])
 	Spez.clear();  // Instanz leeren
 	// Unbekannte Spezies ******************************************************
 	Spez.m_Spezies_Name = "unknown"; //bitte zusammenhängend
-	Spez.m_FWHM = 0.22;
+	Spez.m_FWHM = Konf.m_FWHM;
 	//Wellenlaenge 1
 	wl = 288.2;
 	Spez.m_Wellenlaengen.push_back(wl);
@@ -423,7 +423,7 @@ int main(int argc, char *argv[])
 	Spez.clear();  // Instanz leeren
 	// FeI ************************************************************
 	Spez.m_Spezies_Name = "FeI"; //bitte zusammenhängend
-	Spez.m_FWHM = 0.22;
+	Spez.m_FWHM = Konf.m_FWHM;
 	//Wellenlaenge 1
 	wl = 248.32707;
 	Spez.m_Wellenlaengen.push_back(wl);
