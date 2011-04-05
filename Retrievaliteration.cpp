@@ -128,7 +128,7 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	//Anzahl sollte die Integer grenzen nicht überschreiten,
 	//aber danbn sollte der Aufbau von LHS schon stören
 	//int Anzahl=N*N;
-	char textflag[] = "No transpose"; //fürs Rückeinsetzen
+	char textflag = 'N'; // "No transpose"; //fürs Rückeinsetzen
 	// AUFRUF   A ist LHS.transponiert und B ist RHS
 	dgesv_(&N, &NRHS, A.m_Elemente, &LDA, IPIV, RHS.m_Elemente, &LDB, &INFO);
 	// TODO im Prinizp muss man RHS, falls es eine Matrix ist,
@@ -157,7 +157,7 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	//RHS sollte ein Spaltenvektor sein
 	RHS = AMF_trans * (S_y * Saeulendichten) + S_apriori * Dichten_apriori;
 	// Lösungen durch Rückeinsetzen finden
-	dgetrs_(textflag, &N, &NRHS, A.m_Elemente, &LDA, IPIV, RHS.m_Elemente,
+	dgetrs_(&textflag, &N, &NRHS, A.m_Elemente, &LDA, IPIV, RHS.m_Elemente,
 			&LDB, &INFO);
 	Dichten = RHS;
 	///////////////////////////////////////
@@ -196,7 +196,7 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 		RHS = AMF_trans * (S_y * Saeulendichten_rest)
 			  + S_apriori * Dichten_apriori_rest;
 		// Lösungen durch Rückeinsetzen finden
-		dgetrs_(textflag, &N, &NRHS, A.m_Elemente, &LDA, IPIV, RHS.m_Elemente,
+		dgetrs_(&textflag, &N, &NRHS, A.m_Elemente, &LDA, IPIV, RHS.m_Elemente,
 				&LDB, &INFO);
 		Dichten += RHS; // inkrementierung
 		/*if(Iterationsschritt==(Itmax-1))
@@ -320,7 +320,7 @@ int Retrievaliteration_old(MPL_Matrix &Dichten,
 	//Anzahl sollte die Integer grenzen nicht überschreiten,
 	//aber danbn sollte der Aufbau von LHS schon stören
 	//int Anzahl=N*N;
-	char textflag[] = "No transpose"; //fürs Rückeinsetzen
+	char textflag = 'N'; // "No transpose"; //fürs Rückeinsetzen
 	// AUFRUF   A ist LHS.transponiert und B ist RHS
 	dgesv_(&N, &NRHS, A.m_Elemente, &LDA, IPIV, RHS.m_Elemente, &LDB, &INFO);
 	// ENDE LU ZERLEGUNG
@@ -353,7 +353,7 @@ int Retrievaliteration_old(MPL_Matrix &Dichten,
 		//cout<<"RHS.m_Zeilenzahl: "<<RHS.m_Zeilenzahl<<"\n";
 		//cout<<"RHS.m_Spaltenzahl: "<<RHS.m_Spaltenzahl<<"\n";
 		// Lösungen durch Rückeinsetzen finden
-		dgetrs_(textflag, &N, &NRHS, A.m_Elemente, &LDA, IPIV, RHS.m_Elemente,
+		dgetrs_(&textflag, &N, &NRHS, A.m_Elemente, &LDA, IPIV, RHS.m_Elemente,
 				&LDB, &INFO);
 		// RHS enthält nun die Lösungen
 		Dichten_alt = Dichten;
