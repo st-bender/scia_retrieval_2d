@@ -356,7 +356,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 //        {    Hoehe_TOA=200.0+AM_L[MessungNR].m_Erdradius;}
 		// GENAUIGKEIT prüfen, ob 200 nicht sinnvoller ist...bzw das aus der
 		// Datei geschrieben wird...eventuell exponentialfunktion testen
-		double Max_Hoehe_Absorption = 100.0 + AM_L[MessungNR].m_Erdradius;
+		double Max_Hoehe_Absorption = Konf.m_TOA + AM_L[MessungNR].m_Erdradius;
 		// das ist was anderes als die maxhoehe...
 		// sonst leere(singuläre) Spalten in Matrix
 		//  genauer ist bis 200
@@ -1010,7 +1010,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 					 + AM_N[Nadir_MessungNR].m_Erdradius, 0.1);
 
 		//oder auch 200.0 bei Nadir wird nicht noch +Erdradius genommen
-		double Max_Hoehe_Absorption = 100.0;
+		double Max_Hoehe_Absorption = Konf.m_TOA;
 		// Endpunkt des Strahls finden
 		MPL_Vektor Endpunkt(3);
 		// der 0te Gitterpunkt hat die niedrigste Höhe
