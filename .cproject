@@ -25,12 +25,16 @@
 <option id="gnu.cpp.compiler.option.other.other.1439123815" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -m64" valueType="string"/>
 <option id="gnu.cpp.compiler.option.optimization.level.569744046" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.more" valueType="enumerated"/>
 <option id="gnu.cpp.compiler.option.optimization.flags.162964016" name="Other optimization flags" superClass="gnu.cpp.compiler.option.optimization.flags" value="-mtune=native" valueType="string"/>
+<option id="gnu.cpp.compiler.option.debugging.gprof.1466375041" name="Generate gprof information (-pg)" superClass="gnu.cpp.compiler.option.debugging.gprof" value="false" valueType="boolean"/>
+<option id="gnu.cpp.compiler.option.debugging.prof.418895878" name="Generate prof information (-p)" superClass="gnu.cpp.compiler.option.debugging.prof" value="false" valueType="boolean"/>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.82400017" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.solaris.c.compiler.base.863019344" name="Solaris C Compiler" superClass="cdt.managedbuild.tool.gnu.solaris.c.compiler.base">
 <option id="gnu.c.compiler.option.misc.other.1771861722" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 -m64" valueType="string"/>
 <option id="gnu.c.compiler.option.optimization.level.838202384" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" value="gnu.c.optimization.level.more" valueType="enumerated"/>
 <option id="gnu.c.compiler.option.optimization.flags.726963795" name="Other optimization flags" superClass="gnu.c.compiler.option.optimization.flags" value="-mtune=native" valueType="string"/>
+<option id="gnu.c.compiler.option.debugging.gprof.464711081" name="Generate gprof information (-pg)" superClass="gnu.c.compiler.option.debugging.gprof" value="false" valueType="boolean"/>
+<option id="gnu.c.compiler.option.debugging.prof.1773570198" name="Generate prof information (-p)" superClass="gnu.c.compiler.option.debugging.prof" value="false" valueType="boolean"/>
 <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1457218916" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.c.linker.base.46946176" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base"/>
@@ -46,12 +50,14 @@
 <option id="gnu.cpp.link.option.paths.1265356100" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/scia_retrieval_2d/lib}&quot;"/>
 </option>
+<option id="gnu.cpp.link.option.debugging.gprof.1512379842" name="Generate gprof information (-pg)" superClass="gnu.cpp.link.option.debugging.gprof" value="false" valueType="boolean"/>
+<option id="gnu.cpp.link.option.debugging.prof.1032280328" name="Generate prof information (-p)" superClass="gnu.cpp.link.option.debugging.prof" value="true" valueType="boolean"/>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1287033555" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 <additionalInput kind="additionalinput" paths="$(LIBS)"/>
 </inputType>
 </tool>
-<tool id="cdt.managedbuild.tool.gnu.assembler.base.1605887012" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.base">
+<tool command="gas" id="cdt.managedbuild.tool.gnu.assembler.base.1605887012" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.base">
 <inputType id="cdt.managedbuild.tool.gnu.assembler.input.2064547840" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 </tool>
 </toolChain>
