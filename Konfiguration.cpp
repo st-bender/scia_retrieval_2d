@@ -287,6 +287,8 @@ int Konfiguration::Konfiguration_einlesen()
 			vector<double> dummy = string_to_vector<double>(Zeile);
 			this->m_Max_Zahl_Iterationen = (int) dummy[0];
 			this->m_Convergence_Treshold = dummy[1];
+			cout << "max no. of iterations = " << m_Max_Zahl_Iterationen << endl;
+			cout << "convergence threshold = " << m_Convergence_Treshold << endl;
 			continue;
 		}
 	} //ende while !eof
