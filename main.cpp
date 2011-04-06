@@ -783,11 +783,23 @@ int main(int argc, char *argv[])
 //   double MgI_Lambda_apriori=5E-5;
 //   double MgI_Lambda_letzte_Hoehe=1E-32; //100 für ein
 
-	double MgI_Lambda_Hoehe = 1E-5;
-	double MgI_Lambda_Breite = 1E-5;
-	double MgI_Lambda_apriori = 5E-2;
+	// Spezies Index for MgI
+	int spez_index = 1;
+
 	double MgI_Lambda_letzte_Hoehe = 1E-32; //100 für ein
 
+	// take the lambdas from the config file, no need to re-compile
+	double MgI_Lambda_apriori
+		= Konf.m_Retrieval_Kovarianzen[spez_index + 0 * Konf.m_Anzahl_der_Emitter];
+	double MgI_Lambda_Breite
+		= Konf.m_Retrieval_Kovarianzen[spez_index + 1 * Konf.m_Anzahl_der_Emitter];
+	double MgI_Lambda_Hoehe
+		= Konf.m_Retrieval_Kovarianzen[spez_index + 2 * Konf.m_Anzahl_der_Emitter];
+
+	cout << "Retrieval Kovarianzen MgI:" << endl;
+	cout << "L_apriori = " << MgI_Lambda_apriori << ", "
+		 << "L_Breite = " << MgI_Lambda_Breite << ", "
+		 << "L_Höhe = " << MgI_Lambda_Hoehe << endl;
 
 	// Speziesunabhängige Matrizen, alle sind quadratisch
 	MPL_Matrix S_Breite(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
@@ -864,11 +876,23 @@ int main(int argc, char *argv[])
 	//double MgII_Lambda_Breite= 1E-6;//1E-6;//1E-7;//1E-7;
 	//double MgII_Lambda_apriori= 1E-3;//5E-6 oder -5;
 
-	double MgII_Lambda_Hoehe= 3E-7;  // für 3km
-	//double MgII_Lambda_Hoehe = 1E-5; // für 1km
-	double MgII_Lambda_Breite = 1E-5;
-	double MgII_Lambda_apriori = 3E-8;
+	// Spezies Index for MgII
+	spez_index = 0;
+
 	double MgII_Lambda_letzte_Hoehe = 1E-32; //100 für ein
+
+	// take the lambdas from the config file, no need to re-compile
+	double MgII_Lambda_apriori
+		= Konf.m_Retrieval_Kovarianzen[spez_index + 0 * Konf.m_Anzahl_der_Emitter];
+	double MgII_Lambda_Breite
+		= Konf.m_Retrieval_Kovarianzen[spez_index + 1 * Konf.m_Anzahl_der_Emitter];
+	double MgII_Lambda_Hoehe
+		= Konf.m_Retrieval_Kovarianzen[spez_index + 2 * Konf.m_Anzahl_der_Emitter];
+
+	cout << "Retrieval Kovarianzen MgII:" << endl;
+	cout << "L_apriori = " << MgII_Lambda_apriori << ", "
+		 << "L_Breite = " << MgII_Lambda_Breite << ", "
+		 << "L_Höhe = " << MgII_Lambda_Hoehe << endl;
 	// Messfehlermatrix S_y y*y
 	// quadratische matrix
 	MPL_Matrix S_y_MgII(Saeulendichten_MgII.m_Elementanzahl, Saeulendichten_MgII.m_Elementanzahl);
