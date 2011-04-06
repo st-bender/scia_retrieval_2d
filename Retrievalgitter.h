@@ -13,6 +13,7 @@ using namespace std;
 
 #include"Gitterpunkt.h"
 #include "Ausgewertete_Messung_Limb.h"
+#include "Konfiguration.h"
 
 #include <vector>
 
@@ -28,7 +29,7 @@ public:
 	~Retrievalgitter();
 	//Methoden
 	void Retrievalgitter_erzeugen(vector<Ausgewertete_Messung_Limb>& AM_Limb,
-			double Epsilon);
+			double Epsilon, Konfiguration &Konf);
 	void Alle_Durchstosspunkte_Null_setzen();
 	void In_Datei_Ausgeben(string Dateiname);
 

@@ -723,7 +723,8 @@ int main(int argc, char *argv[])
 	Retrievalgitter Grid;
 	//5.0 ist vernünftig; 2.0 ist gut für TAU_LOS_plot
 	double Mindestabstand_Lat_in_Grad = 5.0;
-	Grid.Retrievalgitter_erzeugen(Ausgewertete_Limbmessung_MgI, Mindestabstand_Lat_in_Grad);
+	Grid.Retrievalgitter_erzeugen(Ausgewertete_Limbmessung_MgI,
+			Mindestabstand_Lat_in_Grad, Konf);
 	//Folgende Ausgabe sieht ok aus 28.9.2010 (Durchstoßpunkte werden erst
 	//später ermittelt)
 	string Pfad_Grid = Arbeitsverzeichnis + "/" + "Gitter.txt";

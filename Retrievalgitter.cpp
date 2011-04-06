@@ -69,7 +69,8 @@ Retrievalgitter::~Retrievalgitter()
 //
 /////////////////////////////////////////////////////////
 void Retrievalgitter::Retrievalgitter_erzeugen(
-		vector<Ausgewertete_Messung_Limb>& AM_Limb, double Epsilon)
+		vector<Ausgewertete_Messung_Limb> &AM_Limb, double Epsilon,
+		Konfiguration &Konf)
 {
 	// Das Epsilon gibt den Mindestabstand zweier Gitterpunkte in Breitengrad an
 
@@ -159,18 +160,18 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	//  MgI 82 Gitterpunkte bis 150 km in 1km Schritten
 	//  MgII 132 Gitterpunkte bis 200 km in 1km Schritten
 	//  unbekannte Spezies bei niedrigen Hoehen......teste bis 110
-	int Anzahl_Hoehen = 27;   // 82  //42  //132
+	double h_start = Konf.m_MinAlt;
+	double h_end = Konf.m_MaxAlt;
+	double dh = 3., dhh = 0.5 * dh;
+	int Anzahl_Hoehen = int((h_end - h_start) / dh) + 1;   // 82  //42  //132
 	vector<double> untere_Hoehe(Anzahl_Hoehen);
 	vector<double> mittlere_Hoehe(Anzahl_Hoehen);
 	vector<double> obere_Hoehe(Anzahl_Hoehen);
 	for (int i = 0; i < Anzahl_Hoehen; i++) {
-		//   mittlere_Hoehe[i] =69.0+i;
-		//   obere_Hoehe[i]    =69.5+i;
-		//   untere_Hoehe[i]   =68.5+i;
-		// 3km Schritte
-		mittlere_Hoehe[i] = 70.0 + i * 3.; //30 Höhen
-		obere_Hoehe[i]    = 71.5 + i * 3.;
-		untere_Hoehe[i]   = 68.5 + i * 3.;
+		// dh km Schritte
+		untere_Hoehe[i]   = h_start - dhh + i * dh;
+		mittlere_Hoehe[i] = h_start + i * dh;
+		obere_Hoehe[i]    = h_start + dhh + i * dh;
 	}
 	/////////////////////////////
 
