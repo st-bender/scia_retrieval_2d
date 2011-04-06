@@ -324,7 +324,7 @@ int main(int argc, char *argv[])
 	Spez.m_Basisfenster_rechts_WLmax.push_back(wl + 3);
 	Spez.m_Peakfenster_WLmin.push_back(wl - 3);
 	Spez.m_Peakfenster_WLmax.push_back(wl + 3);
-	Lindat.Einlesen("DATA/LinePars.dat", wl);
+	Lindat.Einlesen(Konf.m_Pfad_Linienparameter_Metalle, wl);
 	Spez.m_Liniendaten.push_back(Lindat);
 	//Wellenlänge 2
 	wl = 280.270;
@@ -364,7 +364,7 @@ int main(int argc, char *argv[])
 	//Spez.m_Basisfenster_rechts_WLmax.push_back(Spez.m_Wellenlaengen[0]+4);
 	Spez.m_Peakfenster_WLmin.push_back(wl - 3);
 	Spez.m_Peakfenster_WLmax.push_back(wl + 3);
-	Lindat.Einlesen("DATA/LinePars.dat", wl);
+	Lindat.Einlesen(Konf.m_Pfad_Linienparameter_Metalle, wl);
 	Spez.m_Liniendaten.push_back(Lindat);
 	// weitere Wellenlängen
 	//**************************************************************************
