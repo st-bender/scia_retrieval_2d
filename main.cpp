@@ -10,7 +10,7 @@ das Layout des Programms soll etwas anders sein.
   längenänderung wird für die Schritte berücksichtigt
   usw.....am Ende kommt aber dasselbe raus, d.h. die kleinen Bugs, die vorher
   drin waren waren nicht sehr gravierend
-  Bei stärkerer Absorbtion wäre das aber schon der Fall)
+  Bei stärkerer Absorption wäre das aber schon der Fall)
 
 
 Ich benutzte hier als integrierte Entwicklungsumgebung eclipse (kostenlos
@@ -68,7 +68,7 @@ auf ein BINÄRDATEIENSYSTEM UMGESTIEGEN (einfache Umwandlungsfunktionen hab ich
 auch-> mail)
  - unglücklicherweise habe ich Schrägen Säulendichten anfangs Zeilendichten
    genannt...ist also hier dasselbe
- - Das Raytracing in Teil 3 dauert recht lange. Da die Absorbtion Quasi keine
+ - Das Raytracing in Teil 3 dauert recht lange. Da die Absorption Quasi keine
    Rolle spielt, könnte man auch nur die Lichtwege nehmen.  Die kann man
    ausrechnen und braucht kein Raytracing
  - Die Matrix selbst sollte auch nicht Luftmassenfaktoren Matrix oder Air
@@ -90,7 +90,7 @@ werden, was wichtiger ist
  //und nicht für jeden Messschritt Da die Winkel innerhalb eines Gitterpunktes
  //nahezu konstant sind und unterschiede bei der späteren verwendung in sin und
  //cos eher noch kontrahiert werden...also vernachlässigbar sind....das
- //betrifft Teil 3...wo die Absorbtion wie gesagt, eh fast zu vernachlässigen
+ //betrifft Teil 3...wo die Absorption wie gesagt, eh fast zu vernachlässigen
  //sit
 
 
@@ -710,7 +710,7 @@ int main(int argc, char *argv[])
 	// einen Vektor der Zeilendichten
 	// Die Gesamtwichtungsfaktoren Lambda_H und Lambda_PHI
 	// zwei Matrizen S_H und S_LAT mit den Unrterschieden der
-	// Nachbarpunkte(zur Glättung) die Matrix K, in der das Absorbtionsgesetz
+	// Nachbarpunkte(zur Glättung) die Matrix K, in der das Absorptionsgesetz
 	// für die Lichtwege drinsteckt
 	// Kovarianzmatrizen S_y und S_a...die man aber als Diagonalvektor benutzt
 	***************************************************************************/

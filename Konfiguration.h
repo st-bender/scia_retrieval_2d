@@ -22,7 +22,7 @@ public:
 	string m_Pfad_Linienparameter_Metalle;
 	string m_Pfad_Dichten_der_Atmosphaerengase;
 	string m_Pfad_Wirkungsquerschnitte_der_Atmosphaerengase;
-	vector<double> m_AbsorbtionsWL_der_Atmosphaerengase;
+	vector<double> m_AbsorptionsWL_der_Atmosphaerengase;
 	// Input_Data ////////////////////////////////////////////////////
 	string m_Pfad_Datei_mit_Dateinamen_fuer_Messungen_eines_Orbits;
 	string m_Pfad_Korrekturfaktoren;   // wird  nicht genutzt

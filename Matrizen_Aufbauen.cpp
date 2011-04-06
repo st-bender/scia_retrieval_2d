@@ -356,12 +356,12 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 //        {    Hoehe_TOA=200.0+AM_L[MessungNR].m_Erdradius;}
 		// GENAUIGKEIT prüfen, ob 200 nicht sinnvoller ist...bzw das aus der
 		// Datei geschrieben wird...eventuell exponentialfunktion testen
-		double Max_Hoehe_Absorbtion = 100.0 + AM_L[MessungNR].m_Erdradius;
+		double Max_Hoehe_Absorption = 100.0 + AM_L[MessungNR].m_Erdradius;
 		// das ist was anderes als die maxhoehe...
 		// sonst leere(singuläre) Spalten in Matrix
 		//  genauer ist bis 200
-		//cerr<<"Max_Hoehe_Absorbtion: "<<Max_Hoehe_Absorbtion<<"\n";
-		// cout<<"Max_Hoehe_Absorbtion:"<<Max_Hoehe_Absorbtion<<"\n";
+		//cerr<<"Max_Hoehe_Absorption: "<<Max_Hoehe_Absorption<<"\n";
+		// cout<<"Max_Hoehe_Absorption:"<<Max_Hoehe_Absorption<<"\n";
 		if (TP_Pos.Betrag_ausgeben() > Hoehe_TOA) {
 			// prevents inifite loops below
 			cout << "TP außerhalb des Grids, Anzahl_Hoehen ist zu erhöhen."
@@ -453,7 +453,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		// jede Messung ist das vermutlcih sogar Zeitkritisch
 		int Pixelnummer = -1; // nicht alle Pixel müssen definiert sein
 		//IST DAS WICHTIG? liegen alle Punkte,die in keinem Pixel liegen so
-		//hoch, das Absorbtion vernachlässigbar?  AN den POLEN macht das
+		//hoch, das Absorption vernachlässigbar?  AN den POLEN macht das
 		//Probleme ..deshalb besser gitter mit Orbitphase
 		// Vor dem Raytracing, sollten auch alle Durchstoßpunkte Null gesetzt
 		// werden
@@ -563,11 +563,11 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			V_Atmo_Dichten.Null_Initialisierung();
 			//time_t Zeit1,Zeit2,deltaZeit;
 			//time(&Zeit1);
-			if (Punkt_Radius <= Max_Hoehe_Absorbtion) {
-				//cout<<"Max_Hoehe_Absorbtion:"<<Max_Hoehe_Absorbtion<<"\n";
+			if (Punkt_Radius <= Max_Hoehe_Absorption) {
+				//cout<<"Max_Hoehe_Absorption:"<<Max_Hoehe_Absorption<<"\n";
 				//cout<<"Punkt_Radius:"<<Punkt_Radius<<"\n";
 				//verhindert dass interpolation fehler ausgibt...
-				//über 200km eh keine Absorbtion mehr
+				//über 200km eh keine Absorption mehr
 				time(&t_interpolieren_start);
 				// SPEEDUP!!!!
 				interpolieren(M_Atmo_Dichten, 0, 1, Punkt_Hoehe, V_Atmo_Dichten(0));
@@ -867,7 +867,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 				// Berechne Hoehe
 				Punkt_Hoehe = Punkt_Radius - AM_L[MessungNR].m_Erdradius;
 				if (Punkt_Hoehe > TOA_LFS) {
-					//keine zusätzliche Absorbtion von LFS für diese Punkte....
+					//keine zusätzliche Absorption von LFS für diese Punkte....
 					//(Nur Emission)
 					break;
 					//Da vom Punkt zur Sonne gelaufen wird, sond alle anderen
@@ -1010,7 +1010,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 					 + AM_N[Nadir_MessungNR].m_Erdradius, 0.1);
 
 		//oder auch 200.0 bei Nadir wird nicht noch +Erdradius genommen
-		double Max_Hoehe_Absorbtion = 100.0;
+		double Max_Hoehe_Absorption = 100.0;
 		// Endpunkt des Strahls finden
 		MPL_Vektor Endpunkt(3);
 		// der 0te Gitterpunkt hat die niedrigste Höhe
@@ -1075,7 +1075,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 				continue;
 			}
 
-			if (AP_Hoehe <= Max_Hoehe_Absorbtion) {
+			if (AP_Hoehe <= Max_Hoehe_Absorption) {
 				// Dichten der Atmosphärengase bestimmen
 				time(&t_interpolieren_start);
 				interpolieren(M_Atmo_Dichten, 0, 1, AP_Hoehe, V_Atmo_Dichten(0));
@@ -1290,7 +1290,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 				// Berechne Hoehe
 				Punkt_Hoehe = Punkt_Radius - AM_N[Nadir_MessungNR].m_Erdradius;
 				if (Punkt_Hoehe > TOA_LFS) {
-					//keine zusätzliche Absorbtion von LFS für diese Punkte...
+					//keine zusätzliche Absorption von LFS für diese Punkte...
 					//(Nur Emission)
 					break;
 					//Da vom Punkt zur Sonne gelaufen wird, sond alle anderen

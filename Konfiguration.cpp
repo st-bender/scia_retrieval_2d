@@ -90,7 +90,7 @@ int Konfiguration::Konfiguration_einlesen()
 			//cout<<"ABS WL\n";
 			getline(infile, Zeile);
 			// Zeile bei whitespace zeichen teilen
-			m_AbsorbtionsWL_der_Atmosphaerengase = string_to_vector<double>(Zeile);
+			m_AbsorptionsWL_der_Atmosphaerengase = string_to_vector<double>(Zeile);
 			continue;
 		}
 		// Input DATA /////
@@ -309,8 +309,8 @@ int Konfiguration::Konfiguration_anzeigen()
 	cout << "Pfad Linienparameter: " << this->m_Pfad_Linienparameter_Metalle << "\n";
 	cout << "Pfad Atmosphärendichten: " << this->m_Pfad_Dichten_der_Atmosphaerengase << "\n";
 	cout << "Pfad AtmosphärenWQ: " << this->m_Pfad_Wirkungsquerschnitte_der_Atmosphaerengase << "\n";
-	for (uint i = 0; i < this->m_AbsorbtionsWL_der_Atmosphaerengase.size(); i++) {
-		cout << "Absorptionswellenlänge " << i + 1 << ": " << this->m_AbsorbtionsWL_der_Atmosphaerengase[i] << "\n";
+	for (uint i = 0; i < this->m_AbsorptionsWL_der_Atmosphaerengase.size(); i++) {
+		cout << "Absorptionswellenlänge " << i + 1 << ": " << this->m_AbsorptionsWL_der_Atmosphaerengase[i] << "\n";
 	}
 	cout << "Pfad Orbitliste: " << this->m_Pfad_Datei_mit_Dateinamen_fuer_Messungen_eines_Orbits << "\n";
 	cout << "Pfad Korrekturfaktoren: " << this->m_Pfad_Korrekturfaktoren << "\n";
