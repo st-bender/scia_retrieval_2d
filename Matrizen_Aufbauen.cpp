@@ -1203,8 +1203,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			double Epsilon_double_precision = 1e-14; //etwa 100 mal größer
 			//AMF wird nun durch *=exp(-Tau_LFS) erhöht,
 			//falls AMF==0, muss AMF nicht betrachtet werden
-			if ((AMF(MessungNR, GitterpunktNR) + Epsilon_double_precision > 0) &&
-					(AMF(MessungNR, GitterpunktNR) - Epsilon_double_precision < 0)) {
+			if (abs(AMF(MessungNR, GitterpunktNR)) < 2. * Epsilon_double_precision) {
 				// == 0 bei double, prüfen, ob korrekt
 				continue;
 			}
