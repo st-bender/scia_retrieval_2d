@@ -163,7 +163,7 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	//  unbekannte Spezies bei niedrigen Hoehen......teste bis 110
 	double h_start = Konf.m_MinAlt;
 	double h_end = Konf.m_MaxAlt;
-	double dh = 3., dhh = 0.5 * dh;
+	double dh = 1., dhh = 0.5 * dh;
 	int Anzahl_Hoehen = int((h_end - h_start) / dh) + 1;   // 82  //42  //132
 	vector<double> untere_Hoehe(Anzahl_Hoehen);
 	vector<double> mittlere_Hoehe(Anzahl_Hoehen);
