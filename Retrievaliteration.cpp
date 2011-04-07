@@ -213,7 +213,7 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 		}*/
 	}//for Iterationsschritt
 	// keine Probleme während Iteration aufgetreten
-	Dichten.in_Datei_speichern("/tmp/mlangowski/0/Dichten_nach_Iteration.txt");
+	//Dichten.in_Datei_speichern("/tmp/mlangowski/0/Dichten_nach_Iteration.txt");
 	// dynamischen Kram löschen
 	delete[] IPIV;
 	return 0;
