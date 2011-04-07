@@ -15,6 +15,7 @@
 #include <iostream>
 #include <cstdio>
 #include <fstream>
+#include <algorithm>
 
 
 using namespace std;
@@ -601,24 +602,18 @@ void Retrievalgitter::In_Datei_Ausgeben(string Dateiname)
 // globale Hilfsfunktionen
 int Get_Index_of_Maximum(vector<double> A)
 {
-	int Max_Index = 0;
-	for (unsigned int i = 0; i < A.size(); i++) {
-		if (A[i] > A[Max_Index]) {
-			Max_Index = i;
-		}//if
-	}//for i
-	return Max_Index;
+	vector<double>::iterator it;
+	it = max_element(A.begin(), A.end());
+
+	return distance(A.begin(), it);
 }//Ende Get_Index_of_Maximum
 int Get_Index_of_Minimum(vector<double> A, int Startindex)
 {
 	//so kommt Minimum nach maximum...alles andere ist komisch...
 	//TODO so schreiben, das nachricht kommt, falls das absolute minimum einen
 	//kleineren index als das den Startindex hat
-	int Min_Index = Startindex;
-	for (unsigned int i = Startindex; i < A.size(); i++) {
-		if (A[i] < A[Min_Index]) {
-			Min_Index = i;
-		}//if
-	}//for i
-	return Min_Index;
+	vector<double>::iterator it;
+	it = min_element(A.begin() + Startindex, A.end());
+
+	return distance(A.begin(), it);
 }//Ende Get Index of Minimum
