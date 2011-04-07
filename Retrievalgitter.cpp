@@ -149,10 +149,10 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 
 	/////////////////////////////
 	// selbst gesetzt.....
-	MaxLat = 70;
-	MinLat = -70.0;
+	MaxLat = 84;
+	MinLat = -84.0;
 	//MinLat=0.0;
-	Breitenzahl = 21; //20
+	Breitenzahl = 25; //20
 	//Breitenzahl=10;
 	const double Gitterkonstante = (MaxLat - MinLat) / (double)(Breitenzahl - 1);
 	// Hoeheneinteilung
