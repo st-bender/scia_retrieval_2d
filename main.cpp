@@ -326,6 +326,7 @@ int main(int argc, char *argv[])
 	Spez.m_Peakfenster_WLmax.push_back(wl + 3);
 	Lindat.Einlesen(Konf.m_Pfad_Linienparameter_Metalle, wl);
 	Spez.m_Liniendaten.push_back(Lindat);
+	/*
 	//Wellenlänge 2
 	wl = 280.270;
 	Spez.m_Wellenlaengen.push_back(wl);
@@ -337,6 +338,7 @@ int main(int argc, char *argv[])
 	Spez.m_Peakfenster_WLmax.push_back(wl + 3);
 	Lindat.Einlesen(Konf.m_Pfad_Linienparameter_Metalle, wl);
 	Spez.m_Liniendaten.push_back(Lindat);
+	// */
 	// weitere Wellenlängen
 	Spezies_Fenster.push_back(Spez);
 	// SpezVektoren wieder leeren
