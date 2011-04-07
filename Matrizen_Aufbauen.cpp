@@ -264,13 +264,8 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 	vector<Ausgewertete_Messung_Limb>::iterator aml_it;
 
 	for (aml_it = AM_L.begin(); aml_it != AM_L.end(); ++aml_it) {
-		//cerr<<"MessungNR: "<<MessungNR<<"\n";
 		unsigned int MessungNR = distance(AM_L.begin(), aml_it);
 		time(&t_Limb_LOS_start);
-		//if(MessungNR>210)
-		//{cout<<"MessungNR: "<<MessungNR<<"\n";
-		//usleep(300000);
-		//}
 
 		// Für jede Teilchensorte können mehrere Linien ausgewertet werden.
 		// Welche gerade verwendet wird, wird ermittelt, Aus der Wellenlänge
