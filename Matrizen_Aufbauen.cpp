@@ -31,6 +31,12 @@
 
 using namespace std;
 
+MPL_Matrix grad_x();
+MPL_Matrix grad_y();
+MPL_Matrix diff_x();
+MPL_Matrix diff_y();
+MPL_Matrix convolve(MPL_Matrix &A, MPL_Matrix &K);
+
 void Matrizen_Aufbauen(MPL_Matrix &S_Breite, MPL_Matrix &S_Hoehe,
 						MPL_Matrix &S_letzte_Hoehe, double Lambda_letzte_Hoehe,
 						MPL_Matrix &S_apriori, MPL_Matrix &S_y, MPL_Matrix &AMF,
@@ -43,11 +49,20 @@ void Matrizen_Aufbauen(MPL_Matrix &S_Breite, MPL_Matrix &S_Hoehe,
 {
 	//Fehlermatrizen
 	//cerr<<"S_Breite\n";
-	S_Breite = Differenz_von_benachbarten_Zeilenelementen_Matrix_aufbauen(
-				Grid.m_Anzahl_Hoehen, Grid.m_Anzahl_Breiten);
+	//S_Breite = Differenz_von_benachbarten_Zeilenelementen_Matrix_aufbauen(
+	//			Grid.m_Anzahl_Hoehen, Grid.m_Anzahl_Breiten);
 	//cerr<<"S_Hoehe\n";
 	S_Hoehe = Differenz_von_benachbarten_Spaltenelementen_Matrix_aufbauen(
 				Grid.m_Anzahl_Hoehen, Grid.m_Anzahl_Breiten);
+	MPL_Matrix E = Einheitsmatrix_aufbauen(Grid.m_Anzahl_Hoehen * Grid.m_Anzahl_Breiten);
+	MPL_Matrix G_x = diff_x();
+	//MPL_Matrix G_y = diff_y();
+	S_Breite = convolve(E, G_x);
+	//S_Hoehe = convolve(E, G_y);
+	//G_x.in_Datei_speichern("/tmp/sb_diff_x.dat");
+	//G_y.in_Datei_speichern("/tmp/sb_diff_y.dat");
+	S_Breite.in_Datei_speichern("/tmp/sb_S_Breite.dat");
+	//S_Hoehe.in_Datei_speichern("/tmp/sb_S_Hoehe.dat");
 	//cerr<<"S_letzte_Hoehe\n";
 	S_letzte_Hoehe = Werte_bei_maximaler_Hoehe_Flagmatrix_Aufbauen(Grid);
 	//cerr<<"S_letzte_Hoehe_erhoehen\n";
@@ -153,8 +168,8 @@ MPL_Matrix Differenz_von_benachbarten_Zeilenelementen_Matrix_aufbauen(
 
 	for (int i = 0; i < Elementzahl; i++) {
 		//Prüfen, ob x nicht das Maximum der ursprünglichen Zeile war
+		Mat(i, i) = -1;
 		if (((i + 1) % Spaltenzahl) != 0) {
-			Mat(i, i) = -1;
 			Mat(i, i + 1) = 1;
 		}
 	}
@@ -1785,4 +1800,63 @@ MPL_Vektor Punkt_auf_Strecke_bei_Radius(MPL_Vektor &Streckenstartpunkt,
 ////////////////////////////////////////////////////////////////////////////////
 //ENDE  Punkt_auf_Strecke_bei_Radius
 ////////////////////////////////////////////////////////////////////////////////
+MPL_Matrix grad_x()
+{
+	MPL_Matrix G(3, 3);
+	G.Null_Initialisierung();
+	G(0, 0) = G(2, 0) = -1;
+	G(1, 0) = -2;
+	G(0, 2) = G(2, 2) = 1;
+	G(1, 2) = 2;
 
+	return G;
+}
+MPL_Matrix grad_y()
+{
+	return grad_x().transponiert();
+}
+MPL_Matrix diff_x()
+{
+	MPL_Matrix D(3, 3);
+	D.Null_Initialisierung();
+	D(1, 1) = -1;
+	D(1, 2) = 1;
+
+	return D;
+}
+MPL_Matrix diff_y()
+{
+	return diff_x().transponiert();
+}
+void block_offset_index(int Nx, int Ny, int a, int b, int &x, int &y)
+{
+	// Ny = hoehenanzahl, Nx = breitenanzahl
+	// a = hoehenindex, b = breitenindex
+	x = a / Nx;
+	y = a * Nx + b;
+}
+
+MPL_Matrix convolve(MPL_Matrix &A, MPL_Matrix &K)
+{
+	int K_M = K.m_Zeilenzahl, K_N = K.m_Spaltenzahl;
+	int M = A.m_Zeilenzahl, N = A.m_Spaltenzahl;
+	int i, j, x, y;
+	MPL_Matrix B(A.m_Zeilenzahl, A.m_Spaltenzahl);
+
+	for (x = 0; x < M; x++) {
+		for (y = 0; y < N; y++) {
+			B(x, y) = 0.;
+			for (i = -K_M / 2; i <= K_M / 2; i++) {
+				for (j = -K_N / 2; j <= K_N / 2; j++) {
+					// check bounds first
+					if ((x - i) >= 0 && (x - i) < M && (y - j) >= 0 && (y - j) < N) {
+						//cerr << "x = " << x << ", " << "y = " << y << endl;
+						//cerr << "i = " << i << ", " << "j = " << j << endl;
+						B(x, y) += K(i + K_M / 2, j + K_N / 2) * A(x - i, y - j);
+					}
+				}
+			}
+		}
+	}
+	return B;
+}
