@@ -78,13 +78,15 @@ int my_convolution_1d(vector<double> &y, vector<double> &weights)
 	for (y_it = y.begin(); y_it != y.end(); ++y_it) {
 		double avg = 0.;
 		double wnorm = 0.;
+		int start_shift = 0, end_shift = 0;
 
-		if (y_it < y.begin() + wsh || y_it >= y.end() - wsh) {
-			y_neu.push_back(*y_it);
-			continue;
-		}
+		if (y_it < y.begin() + wsh)
+			start_shift = distance(y_it, y.begin() + wsh);
 
-		for (i = 0; i < ws; i++) {
+		if (y_it >= y.end() - wsh)
+			end_shift = distance(y.end() - wsh, y_it);
+
+		for (i = start_shift; i < ws - end_shift; i++) {
 			avg += (*(y_it - wsh + i)) * weights.at(i);
 			wnorm += weights.at(i);
 		}
