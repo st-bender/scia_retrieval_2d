@@ -124,3 +124,12 @@ int my_savitzky_golay(vector<double> &y, int ws)
 
 	return 0;
 }
+
+int my_gauss_blur_1d(vector<double> &y)
+{
+	const double wgts[7] = { 0.0044, 0.054, 0.242, 0.399, 0.242, 0.054, 0.0044 };
+
+	vector<double> weights(wgts, wgts + 7);
+
+	return my_convolution_1d(y, weights);
+}

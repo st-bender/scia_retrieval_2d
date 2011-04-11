@@ -13,6 +13,7 @@ void smooth_data(int Datasize, double *Data, int Anzahl_Nachbarn_eine_Seite,
 
 int my_moving_average(vector<double> &y, int ws);
 int my_savitzky_golay(vector<double> &y, int ws);
+int my_gauss_blur_1d(vector<double> &y);
 
 
 #endif /* GLAETTEN_HH_ */
