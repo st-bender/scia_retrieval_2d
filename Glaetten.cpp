@@ -8,6 +8,7 @@
 #include <iostream>
 #include <vector>
 #include <iterator>
+#include <numeric>
 
 using namespace std;
 
@@ -45,21 +46,27 @@ int my_moving_average(vector<double> &y, int ws)
 {
 	vector<double> y_neu;
 	vector<double>::iterator y_it;
-	int i, wsh = ws / 2;
+	const int wsh = ws / 2;
+
+	double sum = accumulate(y.begin(), y.begin() + wsh, 0.);
+	int pts = wsh;
 
 	for (y_it = y.begin(); y_it != y.end(); ++y_it) {
-		double avg = 0.;
+		double a = 0., b = 0.;
 
-		if (y_it < y.begin() + wsh || y_it >= y.end() - wsh) {
-			y_neu.push_back(*y_it);
-			continue;
+		if (y_it <= y.begin() + wsh) {
+			a = *(y_it + wsh);
+			++pts;
+		} else if (y_it >= y.end() - wsh) {
+			b = *(y_it - wsh - 1);
+			--pts;
+		} else {
+			a = *(y_it + wsh);
+			b = *(y_it - wsh - 1);
 		}
 
-		for (i = 0; i < ws; i++)
-			avg += *(y_it - wsh + i);
-
-		avg /= ws;
-		y_neu.push_back(avg);
+		sum += a - b;
+		y_neu.push_back(sum / pts);
 	}
 
 	y = y_neu;
