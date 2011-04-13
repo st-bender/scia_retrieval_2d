@@ -83,10 +83,16 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 		int no_of_pix, int no_of_alt, float orbit_phase, int Datum[6],
 		int no_of_heights, int offset, int direction)
 {
+	bool has_straylight = false;
+	// normal average or median for the dark signal correction
 	double dark_sig = average_over_wl_range(Limbdaten[no_of_alt - 1].m_radiance,
 			Wellenlaengen, no_of_pix, 278.0, 282.0, false);
 	double dark_err = average_over_wl_range(Limbdaten[no_of_alt - 1].m_error,
 			Wellenlaengen, no_of_pix, 278.0, 282.0, false);
+
+	if (dark_sig > 6.e9)
+		has_straylight = true;
+
 	// 4. Erstellung des Übergabevektors
 	vector<Messung_Limb> Ergebnisvektor;
 
@@ -111,9 +117,11 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 
 		for (int j = 0; j < no_of_pix; j++) {
 			ml.m_Wellenlaengen.push_back(shift_wavelength(Wellenlaengen[j]));
-			// the old corrections
-			//dark_sig = Limbdaten[no_of_alt - 1].m_radiance[j];
-			//dark_err = Limbdaten[no_of_alt - 1].m_error[j];
+			if (has_straylight) {
+				// the old corrections
+				dark_sig = Limbdaten[no_of_alt - 1].m_radiance[j];
+				dark_err = Limbdaten[no_of_alt - 1].m_error[j];
+			}
 			ml.m_Intensitaeten.push_back(
 					Limbdaten[offset + direction * i].m_radiance[j]
 					- dark_sig);
