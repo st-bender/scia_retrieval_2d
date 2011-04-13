@@ -91,7 +91,7 @@ int Sonnenspektrum::Laden_SCIA(string Dateiname, string Fallback_Dateiname)
 	getline(infile, s_dummy); // Rest der Zeile
 	for (int i = 0; i < m_Anzahl_WL; i++) {
 		infile >> read_wl >> read_int >> dummy;
-		m_Wellenlaengen.push_back(read_wl);
+		m_Wellenlaengen.push_back(shift_wavelength(read_wl));
 		m_Intensitaeten.push_back(read_int);
 	}
 

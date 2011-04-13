@@ -21,6 +21,7 @@
 #include "LimbNadir_IO.h"
 #include "Datei_IO.h"
 #include "Retrievalgitter.h"
+#include "Glaetten.h"
 
 using namespace std;
 
@@ -109,7 +110,7 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 		ml.m_Number_of_Wavelength = no_of_pix;
 
 		for (int j = 0; j < no_of_pix; j++) {
-			ml.m_Wellenlaengen.push_back(Wellenlaengen[j]);
+			ml.m_Wellenlaengen.push_back(shift_wavelength(Wellenlaengen[j]));
 			// the old corrections
 			//dark_sig = Limbdaten[no_of_alt - 1].m_radiance[j];
 			//dark_err = Limbdaten[no_of_alt - 1].m_error[j];
@@ -362,7 +363,7 @@ vector<Messung_Nadir> make_messung_nadir_vector(string Dateiname,
 		//Felder allokieren
 		//Deep Copy der Wellenlängen und Intensitäten
 		for (int j = 0; j < No_of_Pix; j++) {
-			mn.m_Wellenlaengen.push_back(Wellenlaenge[j]);
+			mn.m_Wellenlaengen.push_back(shift_wavelength(Wellenlaenge[j]));
 			mn.m_Intensitaeten.push_back(Nadirdaten[i].m_radiance[j]);
 			mn.m_Intensitaeten_relativer_Fehler.push_back(Nadirdaten[i].m_error[j]);
 			mn.m_Intensitaeten_durch_piF.push_back(0.);

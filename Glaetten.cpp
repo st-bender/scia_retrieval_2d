@@ -140,3 +140,13 @@ int my_gauss_blur_1d(vector<double> &y)
 
 	return my_convolution_1d(y, weights);
 }
+
+/* not really a smoothing function but this file seems to be the best place for now */
+double shift_wavelength(double wl)
+{
+	double sigma = 1.e6 / (wl * wl);
+	double n_air = 1. + 0.000064328 + 0.0294981 / (146. - sigma)
+		+ 0.0002554 / (41. - sigma);
+
+	return wl / n_air;
+}
