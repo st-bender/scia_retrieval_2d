@@ -90,8 +90,13 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 	double dark_err = average_over_wl_range(Limbdaten[no_of_alt - 1].m_error,
 			Wellenlaengen, no_of_pix, 278.0, 282.0, false);
 
+	/*
 	if (dark_sig > 6.e9)
 		has_straylight = true;
+	// */
+
+	// constant dark signal
+	dark_sig = 2.731e9;
 
 	// 4. Erstellung des Übergabevektors
 	vector<Messung_Limb> Ergebnisvektor;
