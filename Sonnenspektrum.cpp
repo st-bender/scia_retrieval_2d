@@ -197,7 +197,7 @@ int Sonnenspektrum::Speichern(string Dateiname)  //zur Kontrolle
 		return 1;
 	}
 	outfile << "WL\t\t" << "I" << "\n";
-	for (int i = 0; i < 826; i++) {
+	for (int i = 0; i < m_WL_interpoliert.size(); i++) {
 		outfile << m_WL_interpoliert[i] << "\t" << m_Int_interpoliert[i] << "\n";
 	}
 	outfile.close();
