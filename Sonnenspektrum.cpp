@@ -110,6 +110,10 @@ int Sonnenspektrum::savitzky_golay(int window_size)
 {
 	return my_savitzky_golay(m_Intensitaeten, window_size);
 }
+int Sonnenspektrum::saoref_to_schiamachy()
+{
+	return my_sciamachy_blur(m_Intensitaeten);
+}
 
 int Sonnenspektrum::Interpolieren(Messung_Limb &Messung_Erdschein)
 {
