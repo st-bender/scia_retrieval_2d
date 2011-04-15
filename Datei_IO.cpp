@@ -240,7 +240,7 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
 // this is a superfluous function and should be deprecated
 // since it might be used (somewhere) we keep it for now
 vector<Messung_Limb> ReadL1C_Limb_meso_thermo_mpl_binary(string Dateiname,
-		Messung_Limb &niedrigste_Hoehe)
+		Messung_Limb &niedrigste_Hoehe, Messung_Limb &space)
 {
 	///////////////////////////////////////////////////////////
 	// ähnlich zur üblichen Limbroutine...nur andere TH Reihenfolge und alle
@@ -249,7 +249,7 @@ vector<Messung_Limb> ReadL1C_Limb_meso_thermo_mpl_binary(string Dateiname,
 	///////////////////////////////////////////////////////////
 
 	return ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(Dateiname,
-			niedrigste_Hoehe, 25);
+			niedrigste_Hoehe, space, 25);
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -264,7 +264,7 @@ vector<Messung_Limb> ReadL1C_Limb_meso_thermo_mpl_binary(string Dateiname,
 ////////////////////////////////////////////////////////////////////////////////
 vector<Messung_Limb>
 ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(string Dateiname,
-		Messung_Limb &niedrigste_Hoehe, int Anzahl_Hoehen)
+		Messung_Limb &niedrigste_Hoehe, Messung_Limb &space, int Anzahl_Hoehen)
 {
 	// Hier wieder nur Höhen von 70 bis 90 km....(einziger unterschied liegt in
 	// der for schleife die nur bis 7 geht)
@@ -317,8 +317,14 @@ ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(string Dateiname,
 	//Eigentlich reichen Intensitäten
 	for (int j = 0; j < no_of_pix; j++) {
 		niedrigste_Hoehe.m_Intensitaeten.push_back(Limbdaten[no_of_alt - 2].m_radiance[j]);
+		space.m_Wellenlaengen.push_back(shift_wavelength(Wellenlaengen[j]));
+		space.m_Intensitaeten.push_back(Limbdaten[no_of_alt - 1].m_radiance[j]);
 	}
 	niedrigste_Hoehe.m_TP_SZA = Limbdaten[no_of_alt - 2].m_TP_SZA;
+	space.m_TP_SZA = Limbdaten[no_of_alt - 1].m_TP_SZA;
+	space.m_Latitude_Sat = Limbdaten[no_of_alt - 1].m_Sub_Sat_Lat;
+	space.m_Longitude_Sat = Limbdaten[no_of_alt - 1].m_Sub_Sat_Lon;
+	space.m_Hoehe_Sat = Limbdaten[no_of_alt - 1].m_Sat_Hoehe;
 	// 5. Speicherfreigabe
 	delete[] Wellenlaengen;
 	for (int i = 0; i < no_of_alt; i++) {

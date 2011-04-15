@@ -56,6 +56,7 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 	Messung_Limb Tropo;  //Hier stecken NUR die Intensitäten der
 						 // troposphärischen Säule drin....
 						 // bzw der tiefsten bei Limb_meso_thermo
+	Messung_Limb space; // intensities at ~ 360 km
 	Messung_Limb mean_10_20;
 	//Hier stecken NUR die Intensitäten der Säulen 10 bis 20 (ca 30-60km) drin
 	//cerr<<"Rohdaten einlesen\n";
@@ -68,7 +69,7 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 		int Anzahl_Hoehen = 25;
 		Rohdaten =
 			ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(Orbitlist.m_Dateinamen[l],
-					Tropo, Anzahl_Hoehen);
+					Tropo, space, Anzahl_Hoehen);
 	}
 	//cerr<<Orbitlist.m_Dateinamen[l]<<" wird bearbeitet\n";
 	//if(l==0) // einmal das Sonnenspektrum anpassen/interpolieren
