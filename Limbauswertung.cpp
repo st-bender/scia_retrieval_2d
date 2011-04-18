@@ -72,17 +72,16 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 					Tropo, space, Anzahl_Hoehen);
 	}
 	//cerr<<Orbitlist.m_Dateinamen[l]<<" wird bearbeitet\n";
-	//if(l==0) // einmal das Sonnenspektrum anpassen/interpolieren
-	//{
 	//Testen, ob ReadL1C ordentlich gearbeitet hat
 	//Rohdaten[0].Ausgabe_in_Datei("CHECKDATA/Rohdaten_erste_Limb_Messung.txt");
 	//-> Das geht jetzt
+
 	Solspec.Interpolieren(Rohdaten[0]);
 	//Solspec.nicht_interpolieren();
 
 	// Testen, ob die Interpolation erfolgreich war
 	//Solspec.Speichern("CHECKDATA/Sonne_interpoliert_auf_826.txt"); ->ok
-	//}
+
 	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	// Hier wäre ein guter Ort, um zu prüfen, ob die Rohdaten weiter verwendet
 	// werden dürfen
@@ -95,9 +94,7 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 		ist_Nachtmessung = Test_auf_Nachtmessung_Limb_meso_thermo(Tropo, Konf);
 	}
 	if (ist_Nachtmessung == true) {
-		// cout<<"counter_Nachtmessungen vorher: "<<*counter_Nachtmessungen <<"\n";
 		counter_Nachtmessungen++;
-		// cout<<"counter_Nachtmessungen nacher: "<<*counter_Nachtmessungen <<"\n";
 		return 1;  //Nachtmessung 1
 	}
 	/*Test_auf_NLC_Limb(Rohdaten, NLC_detektiert);
@@ -129,7 +126,6 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 		(*mlit).Intensitaeten_normieren(Solspec.m_Int_interpoliert);
 		// m_Intensitaeten enthält nun nichtmehr I sondern I/(piF)
 		// Das könnte man auch nur für die Par Fenster durchführen
-		//cout<<Messung.m_Intensitaeten_durch_piF[0]<<"\n";
 		//Schleife über alle Spezies wie z.b. Mg oder Mg+
 		for (sfit = Spezies_Fenster.begin(); sfit != Spezies_Fenster.end(); ++sfit) {
 			//Schleife über alle Linien dieser Spezies
@@ -141,19 +137,11 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 				//Spezfenst.m_Liniendaten[k].m_theta=Messung.m_Streuwinkel;
 				//der Streuwinkel muss woanders berechnet werden
 				// Die Phasenfunktion, steckt so nun in den Slant Coloumns drin
-				//cout<<Spezfenst.m_Liniendaten[k].m_theta<<"\n";
 				(*ldit).Emissivitaet_ermitteln();
-				//cerr<<Spezies_Fenster[j].m_Basisfenster_rechts_WLmin[k]<<"\n";
-				//cerr<<"j:"<<j<<"\t"<<"k:"<<k<<"\t"
-				//  <<Spezies_Fenster[j].m_Wellenlaengen[k]<<"\t"
-				//  <<Spezies_Fenster[j].m_Liniendaten[k].m_E1<<"\t"
-				//  <<Spezies_Fenster[j].m_Liniendaten[k].m_Gamma<<"\n";
 				(*mlit).Intensitaeten_durch_piF_Gamma_berechnen((*sfit), (*ldit).m_Gamma);
 				// In der Formel ist piF in W/(m^2*Wellenlänge) verlangt..
 				// also muss noch mit der Kanalbreite multipliziert werden
 				(*mlit).Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen((*sfit));
-				//cout<<Messung.m_Intensitaeten_durch_piF_Gamma[1]<<"\n";
-				// ->hmm 4e7...keine Ahnung ob das Sinn macht
 
 				// Jetzt Zeilendichte und Fehler bestimmen
 				// Hmm hier gibts noch Diskussionsbedarf
