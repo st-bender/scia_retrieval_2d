@@ -42,7 +42,7 @@ public:
 			int Index);
 	// In der Formel ist piF in W/(m^2*Wellenlänge) verlangt..
 	// also muss noch mit der Kanalbreite multipliziert werden
-	int Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Speziesfenster Spezfenst, int Index);
+	int Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Speziesfenster Spezfenst);
 	int Deklinationswinkel_bestimmen();
 	int Sonnen_Longitude_bestimmen();
 

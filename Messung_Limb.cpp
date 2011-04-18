@@ -904,7 +904,7 @@ int Messung_Limb::Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfen
 	}
 	return 0;
 }
-int Messung_Limb::Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Speziesfenster Spezfenst, int Index)
+int Messung_Limb::Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Speziesfenster Spezfenst)
 {
 
 	//Auf dem ganzen Fenster...Verschwendung !!!!!
