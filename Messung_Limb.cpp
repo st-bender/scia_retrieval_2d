@@ -886,6 +886,9 @@ int Messung_Limb::Intensitaeten_normieren(vector<double> &Sonnen_Intensitaet)
 	for (int i = 0; i < m_Number_of_Wavelength; i++) {
 		this->m_Intensitaeten_durch_piF[i]
 			= this->m_Intensitaeten[i] / Sonnen_Intensitaet[i];
+		cerr << "i = " << i << ": I0 = " << m_Intensitaeten[i] << ", "
+			 << "IS = " << Sonnen_Intensitaet[i] << ", "
+			 << "I1 := I0 / IS = " << m_Intensitaeten_durch_piF[i] << endl;
 	}
 	m_Sonne = Sonnen_Intensitaet;
 
@@ -901,6 +904,9 @@ int Messung_Limb::Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfen
 		this->m_Intensitaeten_durch_piF_Gamma[i]
 			= this->m_Intensitaeten_durch_piF[i]
 			  / Spezfenst.m_Liniendaten[Index].m_Gamma;
+		cerr << "i = " << i << ": I1 = " << m_Intensitaeten_durch_piF[i] << ", "
+			 << "Gamma = " << Spezfenst.m_Liniendaten[Index].m_Gamma << ", "
+			 << "I2 := I1 / Gamma = " << m_Intensitaeten_durch_piF_Gamma[i] << endl;
 	}
 	return 0;
 }
@@ -925,6 +931,10 @@ int Messung_Limb::Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Spez
 		// wenn integriert wird
 		m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand[i]
 			= m_Intensitaeten_durch_piF_Gamma[i] / Delta_WL;
+
+		cerr << "i = " << i << ": I2 = " << m_Intensitaeten_durch_piF_Gamma[i] << ", "
+			 << "D_WL = " << Delta_WL << ", "
+			 << "I2 / D_WL = " << m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand[i] << endl;
 		// glaub man muss dividieren
 	}
 	return 0;
