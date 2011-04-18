@@ -170,8 +170,9 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	for (int Iterationsschritt = 0; Iterationsschritt < Itmax; Iterationsschritt++) {
 		Saeulendichten_neu = AMF * Dichten;
 		Saeulendichten_rest = Saeulendichten - Saeulendichten_neu;
-		Mat_Residual = (Saeulendichten_rest.transponiert() * Saeulendichten_rest);
 		MPL_Matrix Dichten_apriori_rest = Dichten_apriori - Dichten;
+		Mat_Residual = (Saeulendichten_rest.transponiert() * S_y * Saeulendichten_rest)
+			+ Dichten_apriori_rest.transponiert() * S_apriori * Dichten_apriori_rest;
 
 		// Anfangsresiduum bestimmen
 		Residual = sqrt(Mat_Residual(0));
