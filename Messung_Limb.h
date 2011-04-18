@@ -39,7 +39,7 @@ public:
 	//int        Intensitaeten_normieren(Sonnenspektrum Solspec, Fenster);
 	// hier müsste überlegt werden, wie man mehrfachkorrekturen umgeht
 	int Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfenst,
-			int Index);
+			double wl_gamma);
 	// In der Formel ist piF in W/(m^2*Wellenlänge) verlangt..
 	// also muss noch mit der Kanalbreite multipliziert werden
 	int Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Speziesfenster Spezfenst);

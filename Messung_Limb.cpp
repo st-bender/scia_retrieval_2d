@@ -893,14 +893,14 @@ int Messung_Limb::Intensitaeten_normieren(vector<double> &Sonnen_Intensitaet)
 }
 //========================================
 //========================================
-int Messung_Limb::Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfenst, int Index)
+int Messung_Limb::Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfenst, double wl_gamma)
 {
 
 	//Auf dem ganzen Fenster...Verschwendung !!!!!...
 	for (int i = 0; i < m_Number_of_Wavelength; i++) { //langsam, optimierbar
 		this->m_Intensitaeten_durch_piF_Gamma[i]
 			= this->m_Intensitaeten_durch_piF[i]
-			  / Spezfenst.m_Liniendaten[Index].m_Gamma;
+			  / wl_gamma;
 	}
 	return 0;
 }
