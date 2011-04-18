@@ -10,6 +10,7 @@
 #include"MPL_Matrix.h"
 #include "Konfiguration.h"
 #include <cmath>
+#include <sstream>
 
 using namespace std;
 
@@ -173,6 +174,11 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 		Mat_Residual = (Saeulendichten_rest.transponiert() * Saeulendichten_rest);
 		MPL_Matrix Dichten_apriori_rest = Dichten_apriori - Dichten;
 
+		stringstream s_schritt;
+		s_schritt << Iterationsschritt;
+		Saeulendichten.in_Datei_speichern("/tmp/sb_sc0_" + s_schritt.str() + ".dat");
+		Saeulendichten_neu.in_Datei_speichern("/tmp/sb_sc1_" + s_schritt.str() + ".dat");
+		Saeulendichten_rest.in_Datei_speichern("/tmp/sb_sc2_" + s_schritt.str() + ".dat");
 		// Anfangsresiduum bestimmen
 		Residual = sqrt(Mat_Residual(0));
 		if ((Iterationsschritt == 0) || (Iterationsschritt == Itmax - 1)) {
