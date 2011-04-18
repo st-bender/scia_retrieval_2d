@@ -913,8 +913,9 @@ int Messung_Limb::Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Spez
 	// Am besten gleich bei der Wellenlänge des Übergangs....
 	// eigentlich reicht 0,11nm, falls es mal schneller gehn soll
 	// die Gitterabstände sind aber über große Bereiche doch schon nicht linear
-	int Ind = sb_Get_Index(Spezfenst.m_Wellenlaengen[Index]);
-	double Delta_WL = (m_Wellenlaengen[Ind + 1] - m_Wellenlaengen[Ind]);
+
+	// rough default to prevent it from being uninitialised.
+	double Delta_WL = 0.11;
 	// Nun alles damit multiplizieren....wie gesagt..das ist etwas langsam,
 	// da es sich um nen konstanten Faktor handelt
 	for (int i = 0; i < m_Number_of_Wavelength; i++) { //langsam, optimierbar
@@ -923,6 +924,9 @@ int Messung_Limb::Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Spez
 		// Delta_Wl ist in nm gegeben...
 		// dann muss beim Peakfit nicht in nm umgerechnet werden
 		// wenn integriert wird
+		if (i + 1 < m_Number_of_Wavelength)
+			Delta_WL = m_Wellenlaengen[i + 1] - m_Wellenlaengen[i];
+
 		m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand[i]
 			= m_Intensitaeten_durch_piF_Gamma[i] / Delta_WL;
 		// glaub man muss dividieren
