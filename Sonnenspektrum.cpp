@@ -110,7 +110,7 @@ int Sonnenspektrum::savitzky_golay(int window_size)
 {
 	return my_savitzky_golay(m_Intensitaeten, window_size);
 }
-int Sonnenspektrum::saoref_to_schiamachy()
+int Sonnenspektrum::saoref_to_sciamachy()
 {
 	return my_sciamachy_blur(m_Intensitaeten);
 }
