@@ -107,6 +107,7 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 	    return 2;  //NLC 2
 	}*/
 	Test_auf_korrekte_geolocations_Limb(Rohdaten, counter_Richtungsvektor_nicht_ok);
+	if (test_auf_SAA_limb(space)) return 1;
 	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	//
 	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

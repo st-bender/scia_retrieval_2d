@@ -11,6 +11,8 @@
 #include<vector>
 #include"MPL_Vektor.h"
 #include"Koordinatentransformation.h"
+#include <algorithm>
+#include <numeric>
 
 using namespace std;
 
@@ -83,6 +85,43 @@ bool Test_auf_Nachtmessung_Limb_meso_thermo(Messung_Limb &niedrigste_hoehe,
 	return ist_Nachtmessung;
 }
 
+bool test_auf_SAA_limb(Messung_Limb &space)
+{
+	bool SAA = false;
+	double wl_start = 230., wl_end = 291.;
+	int i;
+	int i0 = distance(space.m_Wellenlaengen.begin(),
+			lower_bound(space.m_Wellenlaengen.begin(), space.m_Wellenlaengen.end(), wl_start));
+	int i1 = distance(space.m_Wellenlaengen.begin(),
+			upper_bound(space.m_Wellenlaengen.begin(), space.m_Wellenlaengen.end(), wl_end));
+	int Ni = i1 - i0;
+
+	double I_max = *max_element(space.m_Intensitaeten.begin() + i0,
+			space.m_Intensitaeten.begin() + i1);
+	double I_sum = accumulate(space.m_Intensitaeten.begin() + i0,
+			space.m_Intensitaeten.begin() + i1, 0.);
+	double I_avg = I_sum / Ni;
+	double I_rms_err_sq = 0.;
+	double I_i;
+
+	for (i = i0; i < i1; i++) {
+		I_i = space.m_Intensitaeten.at(i);
+		I_rms_err_sq += (I_i - I_avg) * (I_i - I_avg);
+	}
+	I_rms_err_sq /= Ni;
+
+	/* the threshold is a rule of thumb from one day (2010-02-18) */
+	/* TODO: replace by a more sophisticated/reliable approach */
+	if (I_max > 1.1e11) {
+		cerr << "SAA or peak detected:" << endl;
+		cerr << space.m_Longitude_Sat << "\t" << space.m_Latitude_Sat << "\t";
+		cerr << I_max << "\t" << I_avg << "\t";
+		cerr << sqrt(I_rms_err_sq) << endl;
+		SAA = true;
+	}
+
+	return SAA;
+}
 
 //////////////////////////////////////////////////////////////////////////
 // Funktionsstart Test_auf_NLC_Limb
