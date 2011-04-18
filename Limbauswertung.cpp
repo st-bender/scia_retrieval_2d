@@ -87,7 +87,6 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 	// werden dürfen
 	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	bool ist_Nachtmessung;
-	bool NLC_detektiert;
 	if (limb_meso_thermo != "ja") {
 		ist_Nachtmessung = Test_auf_Nachtmessung_Limb(Tropo, Konf);
 	} else {
@@ -97,12 +96,11 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 		counter_Nachtmessungen++;
 		return 1;  //Nachtmessung 1
 	}
-	/*Test_auf_NLC_Limb(Rohdaten, NLC_detektiert);
-	if(NLC_detektiert==true)
-	{
-	    (*counter_NLC_detektiert)++;
-	    return 2;  //NLC 2
-	}*/
+
+	if (Test_auf_NLC_Limb(Rohdaten, Konf) == true) {
+		counter_NLC_detektiert++;
+		return 2;  //NLC 2
+	}
 	Test_auf_korrekte_geolocations_Limb(Rohdaten, counter_Richtungsvektor_nicht_ok);
 	if (test_auf_SAA_limb(space)) return 1;
 	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

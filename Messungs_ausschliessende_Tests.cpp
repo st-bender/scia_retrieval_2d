@@ -126,7 +126,7 @@ bool test_auf_SAA_limb(Messung_Limb &space)
 //////////////////////////////////////////////////////////////////////////
 // Funktionsstart Test_auf_NLC_Limb
 /////////////////////////////////////////////////////////////////////////
-int Test_auf_NLC_Limb(vector<Messung_Limb> &Rohdaten, bool &ist_NLC_Messung)
+bool Test_auf_NLC_Limb(vector<Messung_Limb> &Rohdaten, Konfiguration &Konf)
 {
 	//Die Intensitäten in einem Breiten Bereich zwischen etwa 1/4 des Spektrums
 	//und 3/4 des Spektrums werden für die 7 Tangentenhöhen gemittelt. Das
@@ -140,10 +140,11 @@ int Test_auf_NLC_Limb(vector<Messung_Limb> &Rohdaten, bool &ist_NLC_Messung)
 	//eine gute Idee, da dort das Signal extrem verrauscht und stark ist.
 	// 71 ist in 0;  91 ist in 6
 
+	if (Konf.m_NLC == 0) return false;
 	int Index1 = 242;
 	//Die Indizes könnte man auch ermitteln, aber die sind ja immer gleich
 	int Index2 = 727;
-	ist_NLC_Messung = false;
+	bool ist_NLC_Messung = false;
 	double mittleres_Signal[7];
 	for (int Hoehenlevel = 0; Hoehenlevel < 7; Hoehenlevel++) {
 		mittleres_Signal[Hoehenlevel] = 0;
@@ -157,7 +158,7 @@ int Test_auf_NLC_Limb(vector<Messung_Limb> &Rohdaten, bool &ist_NLC_Messung)
 			ist_NLC_Messung = true;
 		}
 	}
-	return 0;
+	return ist_NLC_Messung;
 }
 //////////////////////////////////////////////////////////////////////////
 // ENDE Test_auf_NLC_Limb
