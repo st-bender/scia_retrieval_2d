@@ -161,7 +161,7 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 
 				// Die braucht man später für die Luftmassenmatrix
 				Ergebnis.m_Wellenlaenge
-					= (*sfit).m_Wellenlaengen[k];
+					= (*ldit).m_Wellenlaenge;
 				//Ergebnis.Ausgabe_auf_Bildschirm();
 				// Zusammenfassung der Zwischenresultate dem Vektor für die
 				// jeweilige Spezies zuordnen
