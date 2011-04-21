@@ -90,6 +90,8 @@ int NO_emiss::alloc_memory()
 	MPL_Matrix vfHL_j(12, NJ + 1);
 	MPL_Matrix vfHL_k(12, NJ + 1);
 
+	MPL_Matrix sol(12, NJ + 1);
+
 	// copy
 	F_l = Fl;
 	F_l_abs = Fl_abs;
@@ -103,6 +105,8 @@ int NO_emiss::alloc_memory()
 
 	vf_HL_J = vfHL_j;
 	vf_HL_K = vfHL_k;
+
+	solar = sol;
 
 	return 0;
 }
@@ -360,6 +364,36 @@ int NO_emiss::set_Hoenl_London()
 			vf_HL_K(11, i + 1) = ((2.*j + 1.) * (2.*j + 1.)
 					- (2.*j + 1.) * u * (4.*j*j + 4.*j - 7. + 2.*Y_l)) / d2;
 	}
+
+	return 0;
+}
+
+double interpolate(std::vector<double> &x, std::vector<double> &y, double x0)
+{
+	int i;
+	std::vector<double>::iterator x_it;
+	x_it = std::upper_bound(x.begin(), x.end(), x0);
+
+	if (x_it == x.begin()) return y.at(0);
+	if (x_it == x.end()) return *(y.end() - 1);
+
+	i = distance(x.begin(), x_it) - 1;
+
+	return y.at(i)
+		+ (x0 - x.at(i)) * (y.at(i) - y.at(i + 1)) / (x.at(i) - x.at(i + 1));
+}
+
+// Get solar spectral data
+int NO_emiss::get_solar_data(Sonnenspektrum &sol_spec)
+{
+	int i, j;
+
+	for (i = 0; i <= NJ; i++)
+		for (j = 0; j <= 11; j++)
+			if (lambda_K_abs(j, i) != 0.) {
+				solar(j, i) = interpolate(sol_spec.m_Wellenlaengen,
+						sol_spec.m_Intensitaeten, lambda_K_abs(j, i));
+			}
 
 	return 0;
 }

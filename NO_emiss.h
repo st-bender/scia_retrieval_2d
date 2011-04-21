@@ -10,6 +10,7 @@
 
 #include <vector>
 #include "MPL_Matrix.h"
+#include "Sonnenspektrum.h"
 
 namespace NO_const {
 	const double E_u = 43965.7;
@@ -68,6 +69,9 @@ class NO_emiss {
 	std::vector<double> quant_K_vec;
 	// space for the Hoenl-London factors
 	MPL_Matrix vf_HL_J, vf_HL_K;
+	// solar spectrum
+	Sonnenspektrum sol_spec;
+	MPL_Matrix solar;
 
 	public:
 	NO_emiss(int vu = 2, int vl = 4, int vl_abs = 0, double T = 200.);
@@ -76,6 +80,7 @@ class NO_emiss {
 	int populate_Fs();
 	int calc_lines_emiss_absorp();
 	int set_Hoenl_London();
+	int get_solar_data(Sonnenspektrum &sol_spec);
 };
 
 #endif /* NO_EMISS_H_ */
