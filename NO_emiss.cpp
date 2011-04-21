@@ -216,7 +216,7 @@ int NO_emiss::calc_lines_emiss_absorp()
 			else
 				k_u = j_u + 0.5;
 
-			if (k_u >=0 && j_u >= 0.5 && j_l >= 0.5) {
+			if (k_u >= 0 && j_u >= 0.5 && j_l >= 0.5) {
 				if (k_u - j_u + 0.5 == 0.) i_u = 0;
 				else i_u = 1;
 				if (k_l - j_l + 0.5 == 0.) i_l = 0;
