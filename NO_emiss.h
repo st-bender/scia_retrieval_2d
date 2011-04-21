@@ -77,12 +77,16 @@ class NO_emiss {
 	Sonnenspektrum sol_spec;
 	MPL_Matrix solar;
 	// coefficient matrices for data from Luque et al.
+	double f_FC_v;
 	MPL_Matrix f_osc; // band oscillator strength
 	MPL_Matrix f_FC;  // Franck-Condon factor
 	MPL_Matrix f_A;   // Einsteins spontaneous emission probability
 	MPL_Matrix f_lam; // band wavelength [nm]
 	// the excitation of J'
 	MPL_Matrix excit;
+	// line emissivities by upper state k
+	double emiss_tot;
+	MPL_Matrix gamma_j;
 
 	public:
 	NO_emiss(int vu = 2, int vl = 4, int vl_abs = 0, double T = 200.);
@@ -95,6 +99,7 @@ class NO_emiss {
 	int get_solar_data(Sonnenspektrum &sol_spec);
 	int read_luque_data_from_file(string filename);
 	int calc_excitation();
+	int calc_line_emissivities();
 };
 
 #endif /* NO_EMISS_H_ */

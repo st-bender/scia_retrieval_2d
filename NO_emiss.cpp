@@ -103,6 +103,8 @@ int NO_emiss::alloc_memory()
 	MPL_Matrix vfHL_emiss_K(12, NJ + 1);
 	MPL_Matrix quantjup(12, NJ + 1);
 
+	MPL_Matrix gam_j(12, NJ + 1);
+
 	// copy
 	F_l = Fl;
 	F_l_abs = Fl_abs;
@@ -129,6 +131,8 @@ int NO_emiss::alloc_memory()
 	vf_HL_emiss = vfHL_emiss;
 	vf_HL_emiss_K = vfHL_emiss_K;
 	quant_j_up = quantjup;
+
+	gamma_j = gam_j;
 
 	return 0;
 }
@@ -585,6 +589,7 @@ int NO_emiss::calc_excitation()
 {
 	int i, l, k_l, k_u;
 	double j, j_l, j_u, nj_frac, sum1, sum2;
+	double f_FC_tot;
 
 	excit.Null_Initialisierung();
 
@@ -627,6 +632,58 @@ int NO_emiss::calc_excitation()
 		sum2 *= phys::flux * f_osc(v_u, v_l);
 		excit(0, i) = sum1;
 		if (i < NJ) excit(1, i + 1) = sum2;
+	}
+
+	f_FC_tot = 0.;
+	for (i = 0; i <= NO_const::l_vl; i++) {
+		double l_vib = 1.e8 / f_lam(v_u, i);
+		f_FC_tot += f_FC(v_u, i) * l_vib*l_vib*l_vib*l_vib*l_vib;
+	}
+	W_vib = 1.e8 / f_lam(v_u, v_l);
+	f_FC_v = f_FC(v_u, v_l) * W_vib*W_vib*W_vib*W_vib*W_vib / f_FC_tot;
+
+	return 0;
+}
+
+int NO_emiss::calc_line_emissivities()
+{
+	int i, l, k_l, k_u;
+	double j_l, j_u;
+
+	gamma_j.Null_Initialisierung();
+
+	emiss_tot = 0.;
+	for (i = 0; i <= NJ - 2; i++) {
+		k_u = i;
+		for (l = 0; l <= 11; l++) {
+			if (l == 0 || l == 1 || l == 2 || l == 7 || l == 9 || l == 11)
+				j_u = k_u + 0.5;
+			else
+				j_u = k_u - 0.5;
+
+			if (l == 0 || l == 3 || l == 6 || l == 9) j_l = j_u + 1.;
+			if (l == 1 || l == 4 || l == 7 || l == 10) j_l = j_u;
+			if (l == 2 || l == 5 || l == 8 || l == 11) j_l = j_u - 1.;
+
+			if (l == 0 || l == 1 || l == 2 || l == 6 || l == 8 || l == 10)
+				k_l = j_l - 0.5;
+			else
+				k_l = j_l + 0.5;
+
+			if ((k_l == 0) || (k_l == 1 && j_l == 1.5) || (k_l > 1)) {
+				if (j_l >= 0.5 && j_u >= 0.5) {
+					if (l == 0 || l == 1 || l == 2 || l == 7 || l == 9 || l == 11)
+						gamma_j(l, k_u) =
+							f_FC_v * vf_HL_emiss_K(l, k_u) / (2.*j_u + 1.)
+							* excit(0, j_u - 0.5);
+					else
+						gamma_j(l, k_u) =
+							f_FC_v * vf_HL_emiss_K(l, k_u) / (2.*j_u + 1.)
+							* excit(1, j_u + 0.5);
+				}
+				emiss_tot += gamma_j(l, k_u);
+			}
+		}
 	}
 
 	return 0;
