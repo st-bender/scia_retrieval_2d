@@ -70,8 +70,7 @@ class NO_emiss {
 	MPL_Matrix vf_HL_J, vf_HL_K;
 
 	public:
-	NO_emiss();
-	NO_emiss(int vu, int vl, int vl_abs, double T);
+	NO_emiss(int vu = 2, int vl = 4, int vl_abs = 0, double T = 200.);
 	int alloc_memory();
 	int set_constants();
 	int populate_Fs();

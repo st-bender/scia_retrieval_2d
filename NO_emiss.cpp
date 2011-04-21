@@ -62,18 +62,6 @@ double F1(double B, double D, double Y, double lam, double j)
 }
 
 // default constructor
-NO_emiss::NO_emiss()
-{
-	v_u = 2;
-	v_l = 4;
-	v_l_abs = 0;
-	Temp = 200.;
-	NJ = 37;
-
-	alloc_memory();
-	set_constants();
-}
-
 NO_emiss::NO_emiss(int vu, int vl, int vl_abs, double T)
 {
 	v_u = vu;
