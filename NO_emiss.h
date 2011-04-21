@@ -66,6 +66,8 @@ class NO_emiss {
 	// axis (case a), for high quantum numbers, it is not (case b).
 	MPL_Matrix quant_K;
 	std::vector<double> quant_K_vec;
+	// space for the Hoenl-London factors
+	MPL_Matrix vf_HL_J, vf_HL_K;
 
 	public:
 	NO_emiss();
@@ -74,6 +76,7 @@ class NO_emiss {
 	int set_constants();
 	int populate_Fs();
 	int calc_lines_emiss_absorp();
+	int set_Hoenl_London();
 };
 
 #endif /* NO_EMISS_H_ */

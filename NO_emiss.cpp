@@ -99,6 +99,9 @@ int NO_emiss::alloc_memory()
 	MPL_Matrix lam_K(12, NJ + 1);
 	MPL_Matrix lam_K_abs(12, NJ + 1);
 
+	MPL_Matrix vfHL_j(12, NJ + 1);
+	MPL_Matrix vfHL_k(12, NJ + 1);
+
 	// copy
 	F_l = Fl;
 	F_l_abs = Fl_abs;
@@ -109,6 +112,9 @@ int NO_emiss::alloc_memory()
 	xlines_K_abs = xl_K_abs;
 	lambda_K = lam_K;
 	lambda_K_abs = lam_K_abs;
+
+	vf_HL_J = vfHL_j;
+	vf_HL_K = vfHL_k;
 
 	return 0;
 }
@@ -252,6 +258,119 @@ int NO_emiss::calc_lines_emiss_absorp()
 		if (i == 0) quant_K_vec.push_back(0.5);
 		else if (i == 1) quant_K_vec.push_back(1.5);
 		else quant_K_vec.push_back(k_l);
+	}
+
+	return 0;
+}
+
+// Absorption Hoenl-London factors from ground state
+// from Earls, 1935, normalised to 4*(2J+1)
+int NO_emiss::set_Hoenl_London()
+{
+	int i;
+	double j, u, d1, d2, d3;
+
+	// j = 0.5
+	// P1
+	vf_HL_J(0, 0) = vf_HL_K(0, 0) = 0.;
+	// Q1
+	vf_HL_J(1, 0) = vf_HL_K(1, 0) = 4. / 3.;
+	// R1
+	vf_HL_J(2, 0) = vf_HL_K(2, 0) = 4. / 6.;
+	// P2
+	vf_HL_J(3, 0) = vf_HL_K(3, 0) = 0.;
+	// Q2
+	vf_HL_J(4, 0) = vf_HL_K(4, 0) = 0.;
+	// R2
+	vf_HL_J(5, 0) = vf_HL_K(5, 0) = 0.;
+	// qP21
+	vf_HL_J(6, 0) = vf_HL_K(6, 0) = 0.;
+	// pQ12
+	vf_HL_J(7, 0) = vf_HL_K(7, 0) = 0.;
+	// sR21
+	vf_HL_J(8, 0) = vf_HL_K(8, 0) = 4. / 6.;
+	// oP12
+	vf_HL_J(9, 0) = vf_HL_K(9, 0) = 0.;
+	// rQ21
+	vf_HL_J(10, 0) = vf_HL_K(10, 0) = 4. / 3.;
+	// qR12
+	vf_HL_J(11, 0) = vf_HL_K(11, 0) = 0.;
+
+	// j > 0.5
+	for (i = 0; i <= NJ; i++) {
+		j = i + 0.5;
+		u = 1. / std::sqrt(Y_l * Y_l - 4. * Y_l
+				+ (2. * j + 1.) * (2. * j + 1.));
+		d1 = 8. * j; // 32 * j / 4
+		d2 = 8. * (j + 1.); // 32 * (j + 1) / 4
+		d3 = 8. * j * (j + 1.); // 32 * j * (j + 1) / 4
+
+		// P1
+		vf_HL_J(0, i) = ((2.*j + 1.) * (2.*j + 1.)
+				+ (2.*j + 1.) * u * (4.*j*j + 4.*j + 1. - 2.*Y_l)) / d1;
+		vf_HL_K(0, i) = ((2.*j + 1.) * (2.*j + 1.)
+				+ (2.*j + 1.) * u * (4.*j*j + 4.*j + 1. - 2.*Y_l)) / d1;
+		// Q1
+		vf_HL_J(1, i) = (2.*j + 1.) * ((4.*j*j + 4.*j - 1.)
+				+ u * (8.*j*j*j + 12.*j*j - 2.*j - 7. + 2.*Y_l)) / d3;
+		vf_HL_K(1, i) = (2.*j + 1.) * ((4.*j*j + 4.*j - 1.)
+				+ u * (8.*j*j*j + 12.*j*j - 2.*j - 7. + 2.*Y_l)) / d3;
+		// R1
+		vf_HL_J(2, i) = ((2.*j + 1.) * (2.*j + 1.)
+				+ (2.*j + 1.) * u * (4.*j*j + 4.*j - 7. + 2.*Y_l)) / d2;
+		vf_HL_K(2, i) = ((2.*j + 1.) * (2.*j + 1.)
+				+ (2.*j + 1.) * u * (4.*j*j + 4.*j - 7. + 2.*Y_l)) / d2;
+		// P2
+		vf_HL_J(3, i) = ((2.*j + 1.) * (2.*j + 1.)
+				+ (2.*j + 1.) * u * (4.*j*j + 4.*j - 7. + 2.*Y_l)) / d1;
+		if (i != NJ)
+			vf_HL_K(3, i + 1) = ((2.*j + 1.) * (2.*j + 1.)
+					+ (2.*j + 1.) * u * (4.*j*j + 4.*j - 7 + 2.*Y_l)) / d1;
+		// Q2
+		vf_HL_J(4, i) = (2.*j + 1.) * ((4.*j*j + 4.*j - 1.)
+				+ u * (8.*j*j*j + 12.*j*j - 2.*j + 1. - 2.*Y_l)) / d3;
+		if (i != NJ)
+			vf_HL_K(4, i + 1) = (2.*j + 1.) * ((4.*j*j + 4.*j - 1.)
+					+ u * (8.*j*j*j + 12.*j*j - 2.*j + 1. - 2.*Y_l)) / d3;
+		// R2
+		vf_HL_J(5, i) = ((2.*j + 1.) * (2.*j + 1.)
+				+ (2.*j + 1.) * u * (4.*j*j + 4.*j + 1 - 2.*Y_l)) / d2;
+		if (i != NJ)
+			vf_HL_K(5, i + 1) = ((2.*j + 1.) * (2.*j + 1.)
+					+ (2.*j + 1.) * u * (4.*j*j + 4.*j + 1 - 2.*Y_l)) / d2;
+		// qP21
+		vf_HL_J(6, i) = ((2.*j + 1.) * (2.*j + 1.)
+				- (2.*j + 1.) * u * (4.*j*j + 4.*j - 7. + 2.*Y_l)) / d1;
+		vf_HL_K(6, i) = ((2.*j + 1.) * (2.*j + 1.)
+				- (2.*j + 1.) * u * (4.*j*j + 4.*j - 7. + 2.*Y_l)) / d1;
+		// pQ12
+		vf_HL_J(7, i) = (2.*j + 1.) * ((4.*j*j + 4.*j - 1.)
+				- u * (8.*j*j*j + 12.*j*j - 2.*j - 7. + 2*Y_l)) / d3;
+		if (i != NJ)
+			vf_HL_K(7, i + 1) = (2.*j + 1.) * ((4.*j*j + 4.*j - 1.)
+					- u * (8.*j*j*j + 12.*j*j - 2.*j - 7. + 2.*Y_l)) / d3;
+		// sR21
+		vf_HL_J(8, i) = ((2.*j + 1.) * (2.*j + 1.)
+				- (2.*j + 1.) * u * (4.*j*j + 4.*j + 1. - 2.*Y_l)) / d2;
+		vf_HL_K(8, i) = ((2.*j + 1.) * (2.*j + 1.)
+				- (2.*j + 1.) * u * (4.*j*j + 4.*j + 1. - 2.*Y_l)) / d2;
+		// oP12
+		vf_HL_J(9, i) = ((2.*j + 1.) * (2.*j + 1.)
+				- (2.*j + 1.) * u * (4.*j*j + 4.*j + 1. - 2.*Y_l)) / d1;
+		if (i != NJ)
+			vf_HL_K(9, i + 1) = ((2.*j + 1.) * (2.*j + 1.)
+					- (2.*j + 1.) * u * (4.*j*j + 4.*j + 1. - 2.*Y_l)) / d1;
+		// rQ21
+		vf_HL_J(10, i) = (2.*j + 1.) * ((4.*j*j + 4.*j - 1.)
+				- u * (8.*j*j*j + 12.*j*j - 2.*j + 1 - 2.*Y_l)) / d3;
+		vf_HL_K(10, i) = (2.*j + 1.) * ((4.*j*j + 4.*j - 1.)
+				- u * (8.*j*j*j + 12.*j*j - 2.*j + 1 - 2.*Y_l)) / d3;
+		// qR12
+		vf_HL_J(11, i) = ((2.*j + 1.) * (2.*j + 1.)
+				- (2.*j + 1.) * u * (4.*j*j + 4.*j - 7. + 2.*Y_l)) / d2;
+		if (i != NJ)
+			vf_HL_K(11, i + 1) = ((2.*j + 1.) * (2.*j + 1.)
+					- (2.*j + 1.) * u * (4.*j*j + 4.*j - 7. + 2.*Y_l)) / d2;
 	}
 
 	return 0;
