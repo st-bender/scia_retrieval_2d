@@ -70,6 +70,7 @@ NO_emiss::NO_emiss()
 	Temp = 200.;
 	NJ = 37;
 
+	alloc_memory();
 	set_constants();
 }
 
@@ -81,7 +82,35 @@ NO_emiss::NO_emiss(int vu, int vl, int vl_abs, double T)
 	Temp = T;
 	NJ = 37;
 
+	alloc_memory();
 	set_constants();
+}
+
+int NO_emiss::alloc_memory()
+{
+	// allocate
+	MPL_Matrix Fl(2, NJ + 3);
+	MPL_Matrix Fl_abs(2, NJ + 3);
+	MPL_Matrix Fu(2, NJ + 3);
+	MPL_Matrix NjtoN(2, NJ + 1);
+
+	MPL_Matrix xl_K(12, NJ + 1);
+	MPL_Matrix xl_K_abs(12, NJ + 1);
+	MPL_Matrix lam_K(12, NJ + 1);
+	MPL_Matrix lam_K_abs(12, NJ + 1);
+
+	// copy
+	F_l = Fl;
+	F_l_abs = Fl_abs;
+	F_u = Fu;
+	NJ_to_N = NjtoN;
+
+	xlines_K = xl_K;
+	xlines_K_abs = xl_K_abs;
+	lambda_K = lam_K;
+	lambda_K_abs = lam_K_abs;
+
+	return 0;
 }
 
 int NO_emiss::set_constants()
@@ -142,39 +171,29 @@ int NO_emiss::set_constants()
 }
 int NO_emiss::populate_Fs()
 {
-	MPL_Matrix Fl(2, NJ + 3);
-	MPL_Matrix Fl_abs(2, NJ + 3);
-	MPL_Matrix Fu(2, NJ + 3);
-	MPL_Matrix NjtoN(2, NJ + 1);
-
 	for (int i = 0; i < NJ + 2; i++) {
 		double j = i + 0.5;
 		double flow = B_Vl_abs * j * (j + 0.5);
-		Fl(0, i) = F0(B_Vl, D_Vl, Y_l, lambda_l, j);
-		Fl(1, i) = F1(B_Vl, D_Vl, Y_l, lambda_l, j);
-		Fl_abs(0, i) = F0(B_Vl_abs, D_Vl_abs, Y_l_abs, lambda_l, j);
-		Fl_abs(1, i) = F1(B_Vl_abs, D_Vl_abs, Y_l_abs, lambda_l, j);
+		F_l(0, i) = F0(B_Vl, D_Vl, Y_l, lambda_l, j);
+		F_l(1, i) = F1(B_Vl, D_Vl, Y_l, lambda_l, j);
+		F_l_abs(0, i) = F0(B_Vl_abs, D_Vl_abs, Y_l_abs, lambda_l, j);
+		F_l_abs(1, i) = F1(B_Vl_abs, D_Vl_abs, Y_l_abs, lambda_l, j);
 		
-		Fu(0, i) = B_Vu * i * (i + 1)
+		F_u(0, i) = B_Vu * i * (i + 1)
 			- D_Vu * i * i * (i + 1.) * (i + 1)
 			+ 0.5 * gam_u * i;
-		Fu(1, i) = B_Vu * i * (i + 1)
+		F_u(1, i) = B_Vu * i * (i + 1)
 			- D_Vu * i * i * (i + 1.) * (i + 1)
 			- 0.5 * gam_u * (i + 1.);
 
 		if (i <= NJ) {
-			NjtoN(0, i) = phi * (2. * j + 1.) / sum_j
+			NJ_to_N(0, i) = phi * (2. * j + 1.) / sum_j
 				* std::exp(-f_boltz * (flow - E_l_abs));
 			if (i > 0 && i < NJ)
-				NjtoN(1, i) = phi * (2. * j + 1.) / sum_j
+				NJ_to_N(1, i) = phi * (2. * j + 1.) / sum_j
 					* std::exp(-f_boltz * (flow + E_l_abs));
 		}
 	}
-
-	F_l = Fl;
-	F_l_abs = Fl_abs;
-	F_u = Fu;
-	NJ_to_N = NjtoN;
 
 	return 0;
 }
@@ -183,11 +202,6 @@ int NO_emiss::calc_lines_emiss_absorp()
 {
 	int i, l;
 	double E_rot, E_rot_abs;
-
-	MPL_Matrix xl_K(12, NJ + 1);
-	MPL_Matrix xl_K_abs(12, NJ + 1);
-	MPL_Matrix lam_K(12, NJ + 1);
-	MPL_Matrix lam_K_abs(12, NJ + 1);
 
 	for (i = 0; i <= NJ; i++) {
 		double k_l = i;
@@ -222,15 +236,15 @@ int NO_emiss::calc_lines_emiss_absorp()
 
 				if (E_rot_abs != 0.) {
 					if (k_l > 1 || (k_l == 1 && j_l == 1.5) || (k_l == 0)) {
-						xl_K_abs(l, k_l) = E_tot_abs + E_vib_abs + E_rot_abs;
-						lam_K_abs(l, k_l) = 1.e8 / xl_K_abs(l, k_l);
+						xlines_K_abs(l, k_l) = E_tot_abs + E_vib_abs + E_rot_abs;
+						lambda_K_abs(l, k_l) = 1.e8 / xlines_K_abs(l, k_l);
 					}
 				}
 				if (E_rot != 0.) {
 					if ((k_l > 1 || (k_l == 1 && j_l == 1.5)
 							|| k_l == 0) && k_u <= NJ) {
-						xl_K(l, k_u) = E_tot + E_vib + E_rot;
-						lam_K(l, k_u) = 1.e8 / xl_K(l, k_u);
+						xlines_K(l, k_u) = E_tot + E_vib + E_rot;
+						lambda_K(l, k_u) = 1.e8 / xlines_K(l, k_u);
 					}
 				}
 			}
@@ -240,11 +254,5 @@ int NO_emiss::calc_lines_emiss_absorp()
 		else quant_K_vec.push_back(k_l);
 	}
 
-	xlines_K = xl_K;
-	xlines_K_abs = xl_K_abs;
-	lambda_K = lam_K;
-	lambda_K_abs = lam_K_abs;
-
 	return 0;
 }
-

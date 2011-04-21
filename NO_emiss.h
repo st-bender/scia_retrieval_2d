@@ -70,6 +70,7 @@ class NO_emiss {
 	public:
 	NO_emiss();
 	NO_emiss(int vu, int vl, int vl_abs, double T);
+	int alloc_memory();
 	int set_constants();
 	int populate_Fs();
 	int calc_lines_emiss_absorp();
