@@ -165,7 +165,7 @@ int NO_emiss::set_constants()
 }
 int NO_emiss::populate_Fs()
 {
-	for (int i = 0; i < NJ + 2; i++) {
+	for (int i = 0; i <= NJ + 2; i++) {
 		double j = i + 0.5;
 		double flow = B_Vl_abs * j * (j + 0.5);
 		F_l(0, i) = F0(B_Vl, D_Vl, Y_l, lambda_l, j);
