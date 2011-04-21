@@ -23,6 +23,9 @@ namespace NO_const {
 	const double w_u = 2374.31;
 	const double w_Xu = 16.106;
 	const double w_Yu = -0.0465;
+	// for data from Luque et al.
+	const int l_vu = 3;
+	const int l_vl = 10;
 }
 
 class NO_emiss {
@@ -72,6 +75,11 @@ class NO_emiss {
 	// solar spectrum
 	Sonnenspektrum sol_spec;
 	MPL_Matrix solar;
+	// coefficient matrices for data from Luque et al.
+	MPL_Matrix f_osc; // band oscillator strength
+	MPL_Matrix f_FC;  // Franck-Condon factor
+	MPL_Matrix f_A;   // Einsteins spontaneous emission probability
+	MPL_Matrix f_lam; // band wavelength [nm]
 
 	public:
 	NO_emiss(int vu = 2, int vl = 4, int vl_abs = 0, double T = 200.);
@@ -81,6 +89,7 @@ class NO_emiss {
 	int calc_lines_emiss_absorp();
 	int set_Hoenl_London();
 	int get_solar_data(Sonnenspektrum &sol_spec);
+	int read_luque_data_from_file(string filename);
 };
 
 #endif /* NO_EMISS_H_ */

@@ -92,6 +92,11 @@ int NO_emiss::alloc_memory()
 
 	MPL_Matrix sol(12, NJ + 1);
 
+	MPL_Matrix fos(NO_const::l_vu, NO_const::l_vl);
+	MPL_Matrix ffc(NO_const::l_vu, NO_const::l_vl);
+	MPL_Matrix fa(NO_const::l_vu, NO_const::l_vl);
+	MPL_Matrix flam(NO_const::l_vu, NO_const::l_vl);
+
 	// copy
 	F_l = Fl;
 	F_l_abs = Fl_abs;
@@ -107,6 +112,11 @@ int NO_emiss::alloc_memory()
 	vf_HL_K = vfHL_k;
 
 	solar = sol;
+
+	f_osc = fos;
+	f_FC = ffc;
+	f_A = fa;
+	f_lam = flam;
 
 	return 0;
 }
@@ -394,6 +404,36 @@ int NO_emiss::get_solar_data(Sonnenspektrum &sol_spec)
 				solar(j, i) = interpolate(sol_spec.m_Wellenlaengen,
 						sol_spec.m_Intensitaeten, lambda_K_abs(j, i));
 			}
+
+	return 0;
+}
+
+// Get data from Luque et al.
+int NO_emiss::read_luque_data_from_file(string filename)
+{
+	int i, j;
+	int vu, vl;
+	double d_dum;
+	string s_dum;
+	ifstream lfile;
+
+	lfile.open(filename.c_str());
+
+	if (!(lfile.is_open())) {
+		cerr << "Failed to open Luque et al. data from `"
+			 << filename.c_str() << "'." << endl;
+		return 1;
+	}
+
+	// skip the first three lines
+	for (i = 0; i < 3; i++) getline(lfile, s_dum);
+
+	for (i = 0; i <= NO_const::l_vu; i++)
+		for (j = 0; j <= NO_const::l_vl; j++)
+			lfile >> vu >> vl >> f_FC(i, j) >> d_dum
+				  >> f_lam(i, j) >> f_osc(i, j) >> f_A(i, j);
+
+	lfile.close();
 
 	return 0;
 }
