@@ -97,6 +97,8 @@ int NO_emiss::alloc_memory()
 	MPL_Matrix fa(NO_const::l_vu, NO_const::l_vl);
 	MPL_Matrix flam(NO_const::l_vu, NO_const::l_vl);
 
+	MPL_Matrix exc(2, NJ + 1);
+
 	// copy
 	F_l = Fl;
 	F_l_abs = Fl_abs;
@@ -117,6 +119,8 @@ int NO_emiss::alloc_memory()
 	f_FC = ffc;
 	f_A = fa;
 	f_lam = flam;
+
+	excit = exc;
 
 	return 0;
 }
@@ -434,6 +438,58 @@ int NO_emiss::read_luque_data_from_file(string filename)
 				  >> f_lam(i, j) >> f_osc(i, j) >> f_A(i, j);
 
 	lfile.close();
+
+	return 0;
+}
+
+// the excitation of J': sum over all J
+int NO_emiss::calc_excitation()
+{
+	int i, l, k_l, k_u;
+	double j, j_l, j_u, nj_frac, sum1, sum2;
+
+	excit.Null_Initialisierung();
+
+	for (i = 0; i <= NJ; i++) {
+		j = j_u = i + 0.5;
+		sum1 = sum2 = 0.0;
+		for (l = 0; l <= 11; l++) {
+			if (l == 0 || l == 3 || l == 6 || l == 9) j_l = j_u + 1.;
+			if (l == 1 || l == 4 || l == 7 || l == 10) j_l = j_u;
+			if (l == 2 || l == 5 || l == 8 || l == 11) j_l = j_u - 1.;
+
+			if (l == 0 || l == 1 || l == 2 || l == 6 || l == 8 || l == 10)
+				k_l = j_l - 0.5;
+			else
+				k_l = j_l + 0.5;
+			if (l == 0 || l == 1 || l == 2 || l == 7 || l == 9 || l == 11)
+				k_u = j_u - 0.5;
+			else
+				k_u = j_u + 0.5;
+
+			if ((k_l >= 0) && (k_u >= 0) && (j_l >= 0.5) && (k_l <= NJ)) {
+				if (l == 0 || l == 1 || l == 2 || l == 6 || l == 8 || l == 10)
+					nj_frac = NJ_to_N(0, j_l - 0.5);
+				else
+					nj_frac = NJ_to_N(1, j_l + 0.5);
+
+				if ((k_l >= 1) || (k_l == 1 && j_l == 1.5) || (k_l == 0)) {
+					if (l == 0 || l == 1 || l == 2 || l == 7 || l == 9 || l == 11)
+						sum1 += lambda_K_abs(l, k_l) * lambda_K_abs(l, k_l)
+							* solar(l, k_l) * vf_HL_K(l, k_l) / (2. * j_l + 1.)
+							* nj_frac;
+					else
+						sum2 += lambda_K_abs(l, k_l) * lambda_K_abs(l, k_l)
+							* solar(l, k_l) * vf_HL_K(l, k_l) / (2. * j_l + 1.)
+							* nj_frac;
+					}
+			}
+		}
+		sum1 *= phys::flux * f_osc(v_u, v_l);
+		sum2 *= phys::flux * f_osc(v_u, v_l);
+		excit(0, i) = sum1;
+		if (i < NJ) excit(1, i + 1) = sum2;
+	}
 
 	return 0;
 }

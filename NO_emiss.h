@@ -80,6 +80,8 @@ class NO_emiss {
 	MPL_Matrix f_FC;  // Franck-Condon factor
 	MPL_Matrix f_A;   // Einsteins spontaneous emission probability
 	MPL_Matrix f_lam; // band wavelength [nm]
+	// the excitation of J'
+	MPL_Matrix excit;
 
 	public:
 	NO_emiss(int vu = 2, int vl = 4, int vl_abs = 0, double T = 200.);
@@ -90,6 +92,7 @@ class NO_emiss {
 	int set_Hoenl_London();
 	int get_solar_data(Sonnenspektrum &sol_spec);
 	int read_luque_data_from_file(string filename);
+	int calc_excitation();
 };
 
 #endif /* NO_EMISS_H_ */
