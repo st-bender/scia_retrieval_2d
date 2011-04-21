@@ -99,6 +99,10 @@ int NO_emiss::alloc_memory()
 
 	MPL_Matrix exc(2, NJ + 1);
 
+	MPL_Matrix vfHL_emiss(12, NJ + 1);
+	MPL_Matrix vfHL_emiss_K(12, NJ + 1);
+	MPL_Matrix quantjup(12, NJ + 1);
+
 	// copy
 	F_l = Fl;
 	F_l_abs = Fl_abs;
@@ -121,6 +125,10 @@ int NO_emiss::alloc_memory()
 	f_lam = flam;
 
 	excit = exc;
+
+	vf_HL_emiss = vfHL_emiss;
+	vf_HL_emiss_K = vfHL_emiss_K;
+	quant_j_up = quantjup;
 
 	return 0;
 }
@@ -271,7 +279,7 @@ int NO_emiss::calc_lines_emiss_absorp()
 
 // Absorption Hoenl-London factors from ground state
 // from Earls, 1935, normalised to 4*(2J+1)
-int NO_emiss::set_Hoenl_London()
+int NO_emiss::set_Hoenl_London_abs()
 {
 	int i;
 	double j, u, d1, d2, d3;
@@ -381,6 +389,135 @@ int NO_emiss::set_Hoenl_London()
 
 	return 0;
 }
+// Hoenl-London factors of emission, relative to upper state K
+// and upper state J ? anyways, these are normalised to 2*(2J+1)
+int NO_emiss::set_Hoenl_London_emiss()
+{
+	int i;
+	double j, u, d1, d2, d3;
+
+	vf_HL_emiss.Null_Initialisierung();
+	vf_HL_emiss_K.Null_Initialisierung();
+
+	// j' = 0.5
+	// Q11
+	vf_HL_emiss(1, 0) = 2. / 3.;
+	vf_HL_emiss_K(1, 0) = 2. / 3.;
+	quant_j_up(1, 0) = 0.5;
+	// R11
+	vf_HL_emiss(2, 0) = 2. / 6.;
+	vf_HL_emiss_K(2, 1) = 2. / 6.;
+	quant_j_up(2, 1) = 0.5;
+	// sR21
+	vf_HL_emiss(8, 0) = 2. / 6.;
+	vf_HL_emiss_K(8, 2) = 2. / 6.;
+	quant_j_up(8, 2) = 0.5;
+	// rQ21
+	vf_HL_emiss(10, 0) = 2. / 3.;
+	vf_HL_emiss_K(10, 1) = 2. / 3.;
+	quant_j_up(10, 1) = 0.5;
+
+	// j' > 0.5
+	for (i = 0; i <= NJ; i++) {
+		j = i + 0.5;
+		u = 1. / std::sqrt(Y_l * Y_l - 4. * Y_l
+				+ (2. * j + 1.) * (2. * j + 1.));
+		d1 = 16. * j; // 32 * j / 2
+		d2 = 16. * (j + 1.); // 32 * (j + 1) / 2
+		d3 = 16. * j * (j + 1.); // 32 * j * (j + 1) / 2
+
+		// P1
+		vf_HL_emiss(0, i) = ((2.*j + 1.)*(2.*j + 1.)
+				+ (2.*j + 1.)*u*(4.*j*j + 4.*j + 1. - 2.*Y_l))/d1;
+		if (i > 0) {
+			vf_HL_emiss_K(0, i - 1) = ((2.*j + 1.)*(2.*j + 1.)
+					+ (2.*j + 1.)*u*(4.*j*j + 4.*j + 1. - 2.*Y_l))/d1;
+			quant_j_up(0, i - 1) = j;
+		}
+		// Q1
+		vf_HL_emiss(1, i) = (2.*j + 1.)*((4.*j*j + 4.*j - 1.)
+				+ u*(8.*j*j*j + 12.*j*j - 2.*j - 7. + 2.*Y_l))/d3;
+		vf_HL_emiss_K(1, i) = (2.*j + 1.)*((4.*j*j + 4.*j - 1.)
+				+ u*(8.*j*j*j + 12.*j*j - 2.*j - 7. + 2.*Y_l))/d3;
+		quant_j_up(1, i) = j;
+		// R1
+		vf_HL_emiss(2, i) = ((2.*j + 1.)*(2.*j + 1.)
+				+ (2.*j + 1.)*u*(4.*j*j + 4.*j - 7. + 2.*Y_l))/d2;
+		if (i != NJ) {
+			vf_HL_emiss_K(2, i + 1) = ((2.*j + 1.)*(2.*j + 1.)
+					+ (2.*j + 1.)*u*(4.*j*j + 4.*j - 7. + 2.*Y_l))/d2;
+			quant_j_up(2, i + 1) = j;
+		}
+		// P2
+		vf_HL_emiss(3, i) = ((2.*j + 1.)*(2.*j + 1.)
+				+ (2.*j + 1.)*u*(4.*j*j + 4.*j - 7. + 2.*Y_l))/d1;
+		vf_HL_emiss_K(3, i) = ((2.*j + 1.)*(2.*j + 1.)
+				+ (2.*j + 1.)*u*(4.*j*j + 4.*j - 7 + 2.*Y_l))/d1;
+		quant_j_up(3, i) = j;
+		// Q2
+		vf_HL_emiss(4, i) = (2.*j + 1.)*((4.*j*j + 4.*j - 1.)
+				+ u*(8.*j*j*j + 12.*j*j - 2.*j + 1. - 2.*Y_l))/d3;
+		if (i != NJ) {
+			vf_HL_emiss_K(4, i + 1) = (2.*j + 1.)*((4.*j*j + 4.*j - 1.)
+					+ u*(8.*j*j*j + 12.*j*j - 2.*j + 1. - 2.*Y_l))/d3;
+			quant_j_up(4, i + 1) = j;
+		}
+		// R2
+		vf_HL_emiss(5, i) = ((2.*j + 1.)*(2.*j + 1.)
+				+ (2.*j + 1.)*u*(4.*j*j + 4.*j + 1 - 2.*Y_l))/d2;
+		if (i < NJ - 1) {
+			vf_HL_emiss_K(5, i + 2) = ((2.*j + 1.)*(2.*j + 1.)
+					+ (2.*j + 1.)*u*(4.*j*j + 4.*j + 1 - 2.*Y_l))/d2;
+			quant_j_up(5, i + 2) = j;
+		}
+		// qP21
+		vf_HL_emiss(6, i) = ((2.*j + 1.)*(2.*j + 1.)
+				- (2.*j + 1.)*u*(4.*j*j + 4.*j - 7. + 2.*Y_l))/d1;
+		vf_HL_emiss_K(6, i) = ((2.*j + 1.)*(2.*j + 1.)
+				- (2.*j + 1.)*u*(4.*j*j + 4.*j - 7. + 2.*Y_l))/d1;
+		quant_j_up(6, i) = j;
+		// pQ12
+		vf_HL_emiss(7, i) = (2.*j + 1.)*((4.*j*j + 4.*j - 1.)
+				- u*(8.*j*j*j + 12.*j*j - 2.*j - 7. + 2*Y_l))/d3;
+		vf_HL_emiss_K(7, i) = (2.*j + 1.)*((4.*j*j + 4.*j - 1.)
+				- u*(8.*j*j*j + 12.*j*j - 2.*j - 7. + 2.*Y_l))/d3;
+		quant_j_up(7, i) = j;
+		// sR21
+		vf_HL_emiss(8, i) = ((2.*j + 1.)*(2.*j + 1.)
+				- (2.*j + 1.)*u*(4.*j*j + 4.*j + 1. - 2.*Y_l))/d2;
+		if (i < NJ - 1) {
+			vf_HL_emiss_K(8, i + 2) = ((2.*j + 1.)*(2.*j + 1.)
+					- (2.*j + 1.)*u*(4.*j*j + 4.*j + 1. - 2.*Y_l))/d2;
+			quant_j_up(8, i + 2) = j;
+		}
+		// oP12
+		vf_HL_emiss(9, i) = ((2.*j + 1.)*(2.*j + 1.)
+				- (2.*j + 1.)*u*(4.*j*j + 4.*j + 1. - 2.*Y_l))/d1;
+		if (i > 0) {
+			vf_HL_emiss_K(9, i - 1) = ((2.*j + 1.)*(2.*j + 1.)
+					- (2.*j + 1.)*u*(4.*j*j + 4.*j + 1. - 2.*Y_l))/d1;
+			quant_j_up(8, i - 1) = j;
+		}
+		// rQ21
+		vf_HL_emiss(10, i) = (2.*j + 1.)*((4.*j*j + 4.*j - 1.)
+				- u*(8.*j*j*j + 12.*j*j - 2.*j + 1 - 2.*Y_l))/d3;
+		if (i != NJ) {
+			vf_HL_emiss_K(10, i + 1) = (2.*j + 1.)*((4.*j*j + 4.*j - 1.)
+					- u*(8.*j*j*j + 12.*j*j - 2.*j + 1 - 2.*Y_l))/d3;
+			quant_j_up(10, i + 1) = j;
+		}
+		// qR12
+		vf_HL_emiss(11, i) = ((2.*j + 1.)*(2.*j + 1.)
+				- (2.*j + 1.)*u*(4.*j*j + 4.*j - 7. + 2.*Y_l))/d2;
+		if (i != NJ) {
+			vf_HL_emiss_K(11, i + 1) = ((2.*j + 1.)*(2.*j + 1.)
+					- (2.*j + 1.)*u*(4.*j*j + 4.*j - 7. + 2.*Y_l))/d2;
+			quant_j_up(11, i + 1) = j;
+		}
+	}
+
+	return 0;
+}
 
 double interpolate(std::vector<double> &x, std::vector<double> &y, double x0)
 {
@@ -443,6 +580,7 @@ int NO_emiss::read_luque_data_from_file(string filename)
 }
 
 // the excitation of J': sum over all J
+// Excitation of upper state J-levels: k_u = j_u - 0.5, k_u = j_u + 0.5
 int NO_emiss::calc_excitation()
 {
 	int i, l, k_l, k_u;

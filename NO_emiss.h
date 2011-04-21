@@ -72,6 +72,7 @@ class NO_emiss {
 	std::vector<double> quant_K_vec;
 	// space for the Hoenl-London factors
 	MPL_Matrix vf_HL_J, vf_HL_K;
+	MPL_Matrix vf_HL_emiss, vf_HL_emiss_K, quant_j_up;
 	// solar spectrum
 	Sonnenspektrum sol_spec;
 	MPL_Matrix solar;
@@ -89,7 +90,8 @@ class NO_emiss {
 	int set_constants();
 	int populate_Fs();
 	int calc_lines_emiss_absorp();
-	int set_Hoenl_London();
+	int set_Hoenl_London_abs();
+	int set_Hoenl_London_emiss();
 	int get_solar_data(Sonnenspektrum &sol_spec);
 	int read_luque_data_from_file(string filename);
 	int calc_excitation();
