@@ -229,7 +229,7 @@ int NO_emiss::populate_Fs()
 
 int NO_emiss::calc_lines_emiss_absorp()
 {
-	int i, l;
+	int i, j, l;
 	double E_rot, E_rot_abs;
 
 	xlines_K.Null_Initialisierung();
@@ -287,6 +287,12 @@ int NO_emiss::calc_lines_emiss_absorp()
 		else if (i == 1) quant_K_vec.push_back(1.5);
 		else quant_K_vec.push_back(k_l);
 	}
+
+	// fix up the rest
+	for (i = 0; i <= NJ; i++)
+		for (j = 0; j <= 11; j++)
+			if (xlines_K(j, i) != 0.)
+				lambda_K(j, i) = 1.e8 / xlines_K(j, i);
 
 	return 0;
 }
