@@ -177,14 +177,14 @@ int NO_emiss::set_constants()
 	W_vib_abs = E_tot_abs + E_vib_abs;
 
 	phi = 0.5; // degeneracy of rotational states
-	f_boltz = 1.0 / (phys::k2 * Temp);
+	f_boltz = 100. / (phys::k2 * Temp);
 	part_el = 1.0 + std::exp(-f_boltz * NO_const::E_u);
 
 	// Rotational and total partitioning sum
-	sum_j = 0;
+	sum_j = 0.;
 	for (int i = 0; i <= NJ + 2; i++) {
 		double j = i + 0.5;
-		sum_j += (2. * j + 1.) * std::exp(-f_boltz * B_Vl_abs * j * (j + 1.));
+		sum_j += (2. * j + 1.) * std::exp(-f_boltz * B_Vl_abs * j * (j + 0.5));
 	}
 	// total partitioning sum considering vibrational ground state
 	// and Lambda splitting (Hund's case a)
@@ -219,7 +219,7 @@ int NO_emiss::populate_Fs()
 			NJ_to_N(0, i) = phi * (2. * j + 1.) / sum_j
 				* std::exp(-f_boltz * (flow - E_l_abs));
 			if (i > 0 && i < NJ)
-				NJ_to_N(1, i) = phi * (2. * j + 1.) / sum_j
+				NJ_to_N(1, i + 1) = phi * (2. * j + 1.) / sum_j
 					* std::exp(-f_boltz * (flow + E_l_abs));
 		}
 	}
