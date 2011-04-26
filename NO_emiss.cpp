@@ -546,8 +546,9 @@ int NO_emiss::get_solar_data(Sonnenspektrum &sol_spec)
 	for (i = 0; i <= NJ; i++)
 		for (j = 0; j <= 11; j++)
 			if (lambda_K_abs(j, i) != 0.) {
+				// translate from Å to nm
 				solar(j, i) = interpolate(sol_spec.m_Wellenlaengen,
-						sol_spec.m_Intensitaeten, lambda_K_abs(j, i));
+						sol_spec.m_Intensitaeten, 0.1 * lambda_K_abs(j, i));
 			}
 
 	return 0;
