@@ -576,19 +576,19 @@ int NO_emiss::get_solar_data(Sonnenspektrum &sol_spec)
 }
 
 // Get data from Luque et al.
-int NO_emiss::read_luque_data_from_file(string filename)
+int NO_emiss::read_luque_data_from_file(std::string filename)
 {
 	int i, j;
 	int vu, vl;
 	double d_dum;
-	string s_dum;
-	ifstream lfile;
+	std::string s_dum;
+	std::ifstream lfile;
 
 	lfile.open(filename.c_str());
 
 	if (!(lfile.is_open())) {
-		cerr << "Failed to open Luque et al. data from `"
-			 << filename.c_str() << "'." << endl;
+		std::cerr << "Failed to open Luque et al. data from `"
+			 << filename.c_str() << "'." << std::endl;
 		return 1;
 	}
 
