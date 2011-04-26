@@ -92,10 +92,10 @@ int NO_emiss::alloc_memory()
 
 	MPL_Matrix sol(12, NJ + 1);
 
-	MPL_Matrix fos(NO_const::l_vu, NO_const::l_vl);
-	MPL_Matrix ffc(NO_const::l_vu, NO_const::l_vl);
-	MPL_Matrix fa(NO_const::l_vu, NO_const::l_vl);
-	MPL_Matrix flam(NO_const::l_vu, NO_const::l_vl);
+	MPL_Matrix fos(NO_const::l_vu + 1, NO_const::l_vl + 1);
+	MPL_Matrix ffc(NO_const::l_vu + 1, NO_const::l_vl + 1);
+	MPL_Matrix fa(NO_const::l_vu + 1, NO_const::l_vl + 1);
+	MPL_Matrix flam(NO_const::l_vu + 1, NO_const::l_vl + 1);
 
 	MPL_Matrix exc(2, NJ + 1);
 
