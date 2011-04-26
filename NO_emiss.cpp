@@ -8,6 +8,7 @@
 #include <cmath>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <algorithm>
 
 #include "constants.h"
@@ -593,12 +594,16 @@ int NO_emiss::read_luque_data_from_file(std::string filename)
 	}
 
 	// skip the first three lines
-	for (i = 0; i < 3; i++) getline(lfile, s_dum);
+	for (i = 0; i < 3; i++) std::getline(lfile, s_dum);
 
 	for (i = 0; i <= NO_const::l_vu; i++)
-		for (j = 0; j <= NO_const::l_vl; j++)
-			lfile >> vu >> vl >> f_FC(i, j) >> d_dum
+		for (j = 0; j <= NO_const::l_vl; j++) {
+			std::stringstream ss;
+			std::getline(lfile, s_dum);
+			ss << s_dum;
+			ss >> vu >> vl >> f_FC(i, j) >> d_dum
 				  >> f_lam(i, j) >> f_osc(i, j) >> f_A(i, j);
+		}
 
 	lfile.close();
 
