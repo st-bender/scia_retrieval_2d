@@ -334,7 +334,7 @@ int NO_emiss::set_Hoenl_London_abs()
 	vf_HL_J(11, 0) = vf_HL_K(11, 1) = 0.;
 
 	// j > 0.5
-	for (i = 0; i <= NJ; i++) {
+	for (i = 1; i <= NJ; i++) {
 		j = i + 0.5;
 		u = 1. / std::sqrt(Y_l * Y_l - 4. * Y_l
 				+ (2. * j + 1.) * (2. * j + 1.));
@@ -441,7 +441,7 @@ int NO_emiss::set_Hoenl_London_emiss()
 	quant_j_up(10, 1) = 0.5;
 
 	// j' > 0.5
-	for (i = 0; i <= NJ; i++) {
+	for (i = 1; i <= NJ; i++) {
 		j = i + 0.5;
 		u = 1. / std::sqrt(Y_l * Y_l - 4. * Y_l
 				+ (2. * j + 1.) * (2. * j + 1.));
