@@ -296,23 +296,23 @@ int NO_emiss::set_Hoenl_London_abs()
 	// R1
 	vf_HL_J(2, 0) = vf_HL_K(2, 0) = 4. / 6.;
 	// P2
-	vf_HL_J(3, 0) = vf_HL_K(3, 0) = 0.;
+	vf_HL_J(3, 0) = vf_HL_K(3, 1) = 0.;
 	// Q2
-	vf_HL_J(4, 0) = vf_HL_K(4, 0) = 0.;
+	vf_HL_J(4, 0) = vf_HL_K(4, 1) = 0.;
 	// R2
-	vf_HL_J(5, 0) = vf_HL_K(5, 0) = 0.;
+	vf_HL_J(5, 0) = vf_HL_K(5, 1) = 0.;
 	// qP21
 	vf_HL_J(6, 0) = vf_HL_K(6, 0) = 0.;
 	// pQ12
-	vf_HL_J(7, 0) = vf_HL_K(7, 0) = 0.;
+	vf_HL_J(7, 0) = vf_HL_K(7, 1) = 0.;
 	// sR21
 	vf_HL_J(8, 0) = vf_HL_K(8, 0) = 4. / 6.;
 	// oP12
-	vf_HL_J(9, 0) = vf_HL_K(9, 0) = 0.;
+	vf_HL_J(9, 0) = vf_HL_K(9, 1) = 0.;
 	// rQ21
 	vf_HL_J(10, 0) = vf_HL_K(10, 0) = 4. / 3.;
 	// qR12
-	vf_HL_J(11, 0) = vf_HL_K(11, 0) = 0.;
+	vf_HL_J(11, 0) = vf_HL_K(11, 1) = 0.;
 
 	// j > 0.5
 	for (i = 0; i <= NJ; i++) {
