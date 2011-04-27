@@ -73,6 +73,10 @@ NO_emiss::NO_emiss(int vu, int vl, int vl_abs, double T)
 
 	alloc_memory();
 	set_constants();
+	populate_Fs();
+	calc_lines_emiss_absorp();
+	set_Hoenl_London_abs();
+	set_Hoenl_London_emiss();
 }
 
 int NO_emiss::alloc_memory()
