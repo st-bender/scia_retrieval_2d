@@ -8,7 +8,7 @@
 #ifndef NACHRICHT_SCHREIBEN_HH_
 #define NACHRICHT_SCHREIBEN_HH_
 
-inline void Nachricht_Schreiben(string Nachricht, int Priority, int Prioritylevel)
+inline void Nachricht_Schreiben(std::string Nachricht, int Priority, int Prioritylevel)
 {
 	/*
 	 * Diese Funktion soll das implementieren von Nachrichten in einem Programm
@@ -32,7 +32,7 @@ inline void Nachricht_Schreiben(string Nachricht, int Priority, int Priorityleve
 	 * Lange Rede, kurzer Sinn los gehts....
 	  */
 	if (Priority >= Prioritylevel)
-		cerr << Nachricht << "\n";
+		std::cerr << Nachricht << std::endl;
 	// Ja das wars schon....Extrem lange Funktion, nicht?
 	// Jetzt kann man noch eine Richtlinie festlegen Welcher Nachricht,
 	// welche Priorität haben soll
