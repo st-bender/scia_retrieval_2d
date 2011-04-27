@@ -211,7 +211,33 @@ int Test_auf_korrekte_geolocations_Limb(vector<Messung_Limb> &Rohdaten,
 		double SIN_Winkel = Verbindung * TP_normiert;
 		double Winkel = 180.0 / pi * asin(SIN_Winkel);
 		//aussortieren und counter setzen
-		if (Winkel > 0.02) {
+		if (abs(Winkel) > 0.02) {
+			// Mehr Fehleroutput schreiben
+			cerr << "Fehler bei der Winkelberechnung: Gebe_Daten der Datei an:"
+				 << endl;
+			cerr << "Dateiname: " << Rohdaten[i].m_Dateiname_L1C << endl;
+			cerr << "Erdradius: " << Rohdaten[i].m_Erdradius << endl;
+			cerr << "Hoehe_Sat: " << Rohdaten[i].m_Hoehe_Sat << endl;
+			cerr << "Lon_Sat_Ground: " << Rohdaten[i].m_Longitude_Sat   << endl;
+			cerr << "Lat_Sat_Ground: " << Rohdaten[i].m_Latitude_Sat << endl;
+			cerr << "Hoehe_TP: " << Rohdaten[i].m_Hoehe_TP << endl;
+			cerr << "Lon_TP_Ground: " << Rohdaten[i].m_Longitude_TP << endl;
+			cerr << "Lat_TP_Ground: " << Rohdaten[i].m_Latitude_TP << endl;
+			cerr << "x_sat: " << Ort_Sat(0) << endl;
+			cerr << "y_sat: " << Ort_Sat(1) << endl;
+			cerr << "z_sat: " << Ort_Sat(2) << endl;
+			cerr << "x_TP: " << Ort_TP(0) << endl;
+			cerr << "y_TP: " << Ort_TP(1) << endl;
+			cerr << "z_TP: " << Ort_TP(2) << endl;
+			cerr << "x_TP-Sat-normiert: " << Verbindung(0) << endl;
+			cerr << "y_TP-Sat-normiert: " << Verbindung(1) << endl;
+			cerr << "z_TP-Sat-normiert: " << Verbindung(2) << endl;
+			cerr << "x_TP_normiert: " << TP_normiert(0) << endl;
+			cerr << "y_TP_normiert: " << TP_normiert(1) << endl;
+			cerr << "z_TP_normiert: " << TP_normiert(2) << endl;
+			cerr << "Sin_Winkelabweichung: " << SIN_Winkel << endl;
+			cerr << "Winkelabweichung_in_Grad: " << Winkel << endl;
+			// aussortieren und counter setzen
 			counter_Winkel_nicht_ok++;
 			Rohdaten.erase(Rohdaten.begin() + i);
 		} else {
