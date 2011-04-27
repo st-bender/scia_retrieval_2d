@@ -732,7 +732,7 @@ int NO_emiss::print_lines_emiss_absorp()
 		for (j = 0; j <= 11; j++) {
 			std::cout << "\t" << lambda_K_abs(j, i);
 		}
-		std::cout << endl;
+		std::cout << std::endl;
 	}
 
 	std::cout << "Wavelength of emission transition, by lower-state K"
@@ -743,7 +743,7 @@ int NO_emiss::print_lines_emiss_absorp()
 		for (j = 0; j <= 11; j++) {
 			std::cout << "\t" << lambda_K(j, i);
 		}
-		std::cout << endl;
+		std::cout << std::endl;
 	}
 
 	return 0;
@@ -783,7 +783,7 @@ int NO_emiss::print_Hoenl_London_emiss()
 
 	for (i = 0; i <= NJ; i++) {
 		sum = 0.;
-		cout << i << "\t" << quant_K_vec.at(i);
+		std::cout << i << "\t" << quant_K_vec.at(i);
 		for (j = 0; j <= 11; j++) {
 			sum += vf_HL_emiss_K(j, i);
 			std::cout << "\t" << vf_HL_emiss_K(j, i);

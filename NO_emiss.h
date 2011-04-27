@@ -97,7 +97,7 @@ class NO_emiss {
 	int set_Hoenl_London_abs();
 	int set_Hoenl_London_emiss();
 	int get_solar_data(Sonnenspektrum &sol_spec);
-	int read_luque_data_from_file(string filename);
+	int read_luque_data_from_file(std::string filename);
 	int calc_excitation();
 	int calc_line_emissivities();
 	int print_lines_emiss_absorp();
