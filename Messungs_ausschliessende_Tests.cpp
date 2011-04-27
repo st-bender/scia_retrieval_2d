@@ -187,17 +187,17 @@ int Test_auf_korrekte_geolocations_Limb(vector<Messung_Limb> &Rohdaten,
 	//Fehlermeldung)
 	//Die meisten Messwerte liegen zwischen 0.01 und 0.02
 	const double pi = M_PI;
-	unsigned int i = 0; //i wie INDEX
-	while (i < Rohdaten.size()) {
+	vector<Messung_Limb>::iterator rd_it = Rohdaten.begin();
+	while (rd_it != Rohdaten.end()) {
 		//Ortsvektoren bestimmen
 		MPL_Vektor Ort_Sat(3), Ort_TP(3);
-		Umwandlung_Kugel_in_Karthesisch(Rohdaten[i].m_Erdradius + Rohdaten[i].m_Hoehe_Sat,
-										Rohdaten[i].m_Longitude_Sat,
-										Rohdaten[i].m_Latitude_Sat,
+		Umwandlung_Kugel_in_Karthesisch(rd_it->m_Erdradius + rd_it->m_Hoehe_Sat,
+										rd_it->m_Longitude_Sat,
+										rd_it->m_Latitude_Sat,
 										Ort_Sat(0), Ort_Sat(1), Ort_Sat(2));
-		Umwandlung_Kugel_in_Karthesisch(Rohdaten[i].m_Erdradius + Rohdaten[i].m_Hoehe_TP,
-										Rohdaten[i].m_Longitude_TP,
-										Rohdaten[i].m_Latitude_TP,
+		Umwandlung_Kugel_in_Karthesisch(rd_it->m_Erdradius + rd_it->m_Hoehe_TP,
+										rd_it->m_Longitude_TP,
+										rd_it->m_Latitude_TP,
 										Ort_TP(0), Ort_TP(1), Ort_TP(2));
 
 		//Verbindungsvektor
@@ -215,14 +215,14 @@ int Test_auf_korrekte_geolocations_Limb(vector<Messung_Limb> &Rohdaten,
 			// Mehr Fehleroutput schreiben
 			cerr << "Fehler bei der Winkelberechnung: Gebe_Daten der Datei an:"
 				 << endl;
-			cerr << "Dateiname: " << Rohdaten[i].m_Dateiname_L1C << endl;
-			cerr << "Erdradius: " << Rohdaten[i].m_Erdradius << endl;
-			cerr << "Hoehe_Sat: " << Rohdaten[i].m_Hoehe_Sat << endl;
-			cerr << "Lon_Sat_Ground: " << Rohdaten[i].m_Longitude_Sat   << endl;
-			cerr << "Lat_Sat_Ground: " << Rohdaten[i].m_Latitude_Sat << endl;
-			cerr << "Hoehe_TP: " << Rohdaten[i].m_Hoehe_TP << endl;
-			cerr << "Lon_TP_Ground: " << Rohdaten[i].m_Longitude_TP << endl;
-			cerr << "Lat_TP_Ground: " << Rohdaten[i].m_Latitude_TP << endl;
+			cerr << "Dateiname: " << rd_it->m_Dateiname_L1C << endl;
+			cerr << "Erdradius: " << rd_it->m_Erdradius << endl;
+			cerr << "Hoehe_Sat: " << rd_it->m_Hoehe_Sat << endl;
+			cerr << "Lon_Sat_Ground: " << rd_it->m_Longitude_Sat   << endl;
+			cerr << "Lat_Sat_Ground: " << rd_it->m_Latitude_Sat << endl;
+			cerr << "Hoehe_TP: " << rd_it->m_Hoehe_TP << endl;
+			cerr << "Lon_TP_Ground: " << rd_it->m_Longitude_TP << endl;
+			cerr << "Lat_TP_Ground: " << rd_it->m_Latitude_TP << endl;
 			cerr << "x_sat: " << Ort_Sat(0) << endl;
 			cerr << "y_sat: " << Ort_Sat(1) << endl;
 			cerr << "z_sat: " << Ort_Sat(2) << endl;
@@ -239,9 +239,9 @@ int Test_auf_korrekte_geolocations_Limb(vector<Messung_Limb> &Rohdaten,
 			cerr << "Winkelabweichung_in_Grad: " << Winkel << endl;
 			// aussortieren und counter setzen
 			counter_Winkel_nicht_ok++;
-			Rohdaten.erase(Rohdaten.begin() + i);
+			rd_it = Rohdaten.erase(rd_it);
 		} else {
-			i++;
+			++rd_it;
 		}
 	} //ende while
 	return 0;
