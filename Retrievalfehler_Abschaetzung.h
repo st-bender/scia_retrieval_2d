@@ -12,9 +12,6 @@
 #include "MPL_Matrix.h"
 #include "Konfiguration.h"
 
-using namespace std;
-
-
 int Retrievalfehler_Abschaetzung(MPL_Matrix &S_x,
 								 MPL_Matrix &Averaging_Kernel_Matrix,
 								 const MPL_Matrix &S_apriori,

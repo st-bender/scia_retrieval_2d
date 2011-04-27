@@ -281,9 +281,9 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		//int interpolieren(MPL_Matrix M,int x_Spalte,int y_Spalte,
 		//   double //x_Wert_des_gesuchten_Wertes, double& gesuchter_Wert);
 		interpolieren(M_Atmo_Wirkungsquerschnitte, 0, 1,
-				(*aml_it).m_Wellenlaenge, V_Atmo_Wirkungsquerschnitte(0));
+				aml_it->m_Wellenlaenge, V_Atmo_Wirkungsquerschnitte(0));
 		interpolieren(M_Atmo_Wirkungsquerschnitte, 0, 2,
-				(*aml_it).m_Wellenlaenge, V_Atmo_Wirkungsquerschnitte(1));
+				aml_it->m_Wellenlaenge, V_Atmo_Wirkungsquerschnitte(1));
 		//cout<<"V_Atmo_Wirkungsquerschnitte(0):"<<V_Atmo_Wirkungsquerschnitte(0)<<"\n";
 		//cout<<"V_Atmo_Wirkungsquerschnitte(1):"<<V_Atmo_Wirkungsquerschnitte(1)<<"\n";
 		//sleep(1);
@@ -306,17 +306,17 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		//     double& r,double& phi,double& theta);
 		// Position des Satelliten in kartesischen Koordinaten
 		MPL_Vektor Sat_Pos(3);
-		Umwandlung_Kugel_in_Karthesisch((*aml_it).m_Erdradius
-											+ (*aml_it).m_Hoehe_Sat,
-										(*aml_it).m_Longitude_Sat,
-										(*aml_it).m_Latitude_Sat,
+		Umwandlung_Kugel_in_Karthesisch(aml_it->m_Erdradius
+											+ aml_it->m_Hoehe_Sat,
+										aml_it->m_Longitude_Sat,
+										aml_it->m_Latitude_Sat,
 										Sat_Pos(0), Sat_Pos(1), Sat_Pos(2));
 		// Position des Tangentenpunkts in kartesischen Koordinaten
 		MPL_Vektor TP_Pos(3);
-		Umwandlung_Kugel_in_Karthesisch((*aml_it).m_Erdradius
-											+ (*aml_it).m_Hoehe_TP,
-										(*aml_it).m_Longitude_TP,
-										(*aml_it).m_Latitude_TP,
+		Umwandlung_Kugel_in_Karthesisch(aml_it->m_Erdradius
+											+ aml_it->m_Hoehe_TP,
+										aml_it->m_Longitude_TP,
+										aml_it->m_Latitude_TP,
 										TP_Pos(0), TP_Pos(1), TP_Pos(2));
 		// Verbindungsvektor Sat-TP startend vom Satelliten
 		MPL_Vektor Verbindungsvektor(3);
@@ -339,15 +339,15 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		//Die Höchste Höhe steckt in der letzten Zeile, also im Zweifel im
 		//letzten Element Achtung hier muss man immer aufpassen:es gibt 2 Höhen
 		//die vom Erdkern und die von der Erdoberfläche
-		double Hoehe_TOA = (*aml_it).m_Erdradius
+		double Hoehe_TOA = aml_it->m_Erdradius
 			+ Grid.m_Gitter[Grid.m_Anzahl_Punkte - 1].m_Max_Hoehe;
 		//cerr<<"Hoehe_TOA: "<<Hoehe_TOA<<"\n";
 		//cout<<"Maxhoehe: "<<Grid.m_Gitter[Grid.m_Anzahl_Punkte-1].m_Max_Hoehe<<"\n";
-//        if (Hoehe_TOA>(200.0+(*aml_it).m_Erdradius))
-//        {    Hoehe_TOA=200.0+(*aml_it).m_Erdradius;}
+//        if (Hoehe_TOA>(200.0+aml_it->m_Erdradius))
+//        {    Hoehe_TOA=200.0+aml_it->m_Erdradius;}
 		// GENAUIGKEIT prüfen, ob 200 nicht sinnvoller ist...bzw das aus der
 		// Datei geschrieben wird...eventuell exponentialfunktion testen
-		double Max_Hoehe_Absorption = Konf.m_TOA + (*aml_it).m_Erdradius;
+		double Max_Hoehe_Absorption = Konf.m_TOA + aml_it->m_Erdradius;
 		// das ist was anderes als die maxhoehe...
 		// sonst leere(singuläre) Spalten in Matrix
 		//  genauer ist bis 200
@@ -477,7 +477,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			}
 			// Am Ende gibts aufgrund der Toleranz in der Sehnenlängenbestimmung
 			// mal ein par Punkte mehr, die nicht beitragen
-			Punkt_Hoehe = Punkt_Radius - (*aml_it).m_Erdradius;
+			Punkt_Hoehe = Punkt_Radius - aml_it->m_Erdradius;
 			//cerr<<"Punkt_Hoehe: "<<Punkt_Hoehe<<"\n";
 
 			//Testen ob Streuwinkel berechnet werden sollen
@@ -492,8 +492,8 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 				// Position des Tangentenpunkts in kartesischen Koordinaten
 				MPL_Vektor Sonne_Pos(3);
 				Umwandlung_Kugel_in_Karthesisch(149.6E6,
-												(*aml_it).m_Sonnen_Longitude,
-												(*aml_it).m_Deklination,
+												aml_it->m_Sonnen_Longitude,
+												aml_it->m_Deklination,
 												Sonne_Pos(0), Sonne_Pos(1), Sonne_Pos(2));
 				// Das normerte Skalarprodukt der Sonnenposition und des Line
 				// of Sight-Vektors liefert gerade den cosinus des Winkels, der
@@ -559,16 +559,16 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			// (Nord ist +pi/2 süd -pi/2)
 			// (90.0 ist standardmäßig double literal)
 			//cerr<<"Punkt_Breite: "<<Punkt_Breite<<"\n";
-			//cerr<<"(*aml_it).m_Deklination: "<<(*aml_it).m_Deklination<<"\n";
-			if ((Punkt_Breite > 90.0 + (*aml_it).m_Deklination)
-					|| (Punkt_Breite < -90.0 + (*aml_it).m_Deklination)) {
+			//cerr<<"aml_it->m_Deklination: "<<aml_it->m_Deklination<<"\n";
+			if ((Punkt_Breite > 90.0 + aml_it->m_Deklination)
+					|| (Punkt_Breite < -90.0 + aml_it->m_Deklination)) {
 				if (aktuelle_Schritt_Nr == Schrittzahl - 1) {
 					//cout<<"letzter Punkt und im dunkeln\n";
 					if (Pixelnummer != -1) {
 						if (Grid.m_Gitter[Pixelnummer].m_hinterer_Durchstosspunkt.Betrag_ausgeben() == 0) {
 							cout << "MessungNR: " << MessungNR << "\n";
 							cout << "fehlenden hinteren Durchstoßpunkt setzen\n";
-							Umwandlung_Kugel_in_Karthesisch(Punkt_Hoehe + (*aml_it).m_Erdradius,
+							Umwandlung_Kugel_in_Karthesisch(Punkt_Hoehe + aml_it->m_Erdradius,
 									Punkt_Laenge,
 									Punkt_Breite,
 									Grid.m_Gitter[Pixelnummer].m_hinterer_Durchstosspunkt(0),
@@ -590,11 +590,11 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 				//cerr<<"Spezies_Fenster.m_Wellenlaengen.size(): "
 				//  <<Spezies_Fenster.m_Wellenlaengen.size()<<"\n";
 				//cerr<<"PeakNr: "<<PeakNr<<"\n";
-				//cerr<<"(*aml_it).m_Wellenlaenge: "
-				//  <<(*aml_it).m_Wellenlaenge<<"\n";
+				//cerr<<"aml_it->m_Wellenlaenge: "
+				//  <<aml_it->m_Wellenlaenge<<"\n";
 				//cerr<<"Spezies_Fenster.m_Wellenlaengen[PeakNr]: "
 				//  <<Spezies_Fenster.m_Wellenlaengen[PeakNr]<<"\n";
-				if ((*aml_it).m_Wellenlaenge == Spezies_Fenster.m_Wellenlaengen[PeakNr]) {
+				if (aml_it->m_Wellenlaenge == Spezies_Fenster.m_Wellenlaengen[PeakNr]) {
 					E1 = Spezies_Fenster.m_Liniendaten[PeakNr].m_E1;
 					E2 = Spezies_Fenster.m_Liniendaten[PeakNr].m_E2;
 					//cerr<<"E1: "<<E1<<"\n";
@@ -628,7 +628,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			myerr = Pixel_finden_und_AMF_erhoehen_LOS(AMF, Grid, MessungNR,
 					Pixelnummer,
 					Schrittlaenge, Tau_LOS,
-					Punkt_Hoehe, (*aml_it).m_Erdradius,
+					Punkt_Hoehe, aml_it->m_Erdradius,
 					Punkt_Laenge, Punkt_Breite,
 					Phasenfunktion, Tau_LOS_Matrix);
 			//letzten Punkt als hinteren Durchstoßpunkt nutzen, des letzen
@@ -641,7 +641,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 					if (Grid.m_Gitter[Pixelnummer].m_hinterer_Durchstosspunkt.Betrag_ausgeben() == 0) {
 						//cout<<"MessungNR: "<<MessungNR<<"\n";
 						//cout<<"fehlenden hinteren Durchstoßpunkt setzen\n";
-						Umwandlung_Kugel_in_Karthesisch(Punkt_Hoehe + (*aml_it).m_Erdradius,
+						Umwandlung_Kugel_in_Karthesisch(Punkt_Hoehe + aml_it->m_Erdradius,
 								Punkt_Laenge,
 								Punkt_Breite,
 								Grid.m_Gitter[Pixelnummer].m_hinterer_Durchstosspunkt(0),
@@ -881,10 +881,10 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		//int interpolieren(MPL_Matrix M,int x_Spalte,int y_Spalte,
 		//  double x_Wert_des_gesuchten_Wertes, double& gesuchter_Wert);
 		interpolieren(M_Atmo_Wirkungsquerschnitte, 0, 1,
-				(*amn_it).m_Wellenlaenge,
+				amn_it->m_Wellenlaenge,
 				V_Atmo_Wirkungsquerschnitte(0));
 		interpolieren(M_Atmo_Wirkungsquerschnitte, 0, 2,
-				(*amn_it).m_Wellenlaenge,
+				amn_it->m_Wellenlaenge,
 				V_Atmo_Wirkungsquerschnitte(1));
 		//ENDE DAS STAMMT HIER AUS DER FUNKTION FÜR LIMB ///////////////////////
 
@@ -896,17 +896,17 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		MPL_Vektor Sonne_POS(3);
 		//  ermitteln der 3 characteristischen Punkte
 		Umwandlung_Kugel_in_Karthesisch(
-				(*amn_it).m_Hoehe_Sat + (*amn_it).m_Erdradius,
-				(*amn_it).m_Longitude_Sat,
-				(*amn_it).m_Latitude_Sat,
+				amn_it->m_Hoehe_Sat + amn_it->m_Erdradius,
+				amn_it->m_Longitude_Sat,
+				amn_it->m_Latitude_Sat,
 				Sat_POS(0), Sat_POS(1), Sat_POS(2));
-		Umwandlung_Kugel_in_Karthesisch((*amn_it).m_Erdradius,
-				(*amn_it).m_Longitude_Ground,
-				(*amn_it).m_Latitude_Ground,
+		Umwandlung_Kugel_in_Karthesisch(amn_it->m_Erdradius,
+				amn_it->m_Longitude_Ground,
+				amn_it->m_Latitude_Ground,
 				GP_POS(0), GP_POS(1), GP_POS(2));
 		Umwandlung_Kugel_in_Karthesisch(149.6E6,
-				(*amn_it).m_Sonnen_Longitude,
-				(*amn_it).m_Deklination,
+				amn_it->m_Sonnen_Longitude,
+				amn_it->m_Deklination,
 				Sonne_POS(0), Sonne_POS(1), Sonne_POS(2));
 
 		//////////////////////////
@@ -923,7 +923,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		MPL_Vektor Startpunkt(3);
 		Startpunkt = Punkt_auf_Strecke_bei_Radius(Sat_POS, Nadir_LOS,
 					 Grid.m_Gitter[Grid.m_Anzahl_Punkte - 1].m_Max_Hoehe
-					 + (*amn_it).m_Erdradius, 0.1);
+					 + amn_it->m_Erdradius, 0.1);
 
 		//oder auch 200.0 bei Nadir wird nicht noch +Erdradius genommen
 		double Max_Hoehe_Absorption = Konf.m_TOA;
@@ -931,7 +931,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		MPL_Vektor Endpunkt(3);
 		// der 0te Gitterpunkt hat die niedrigste Höhe
 		double R_Min
-			= Grid.m_Gitter[0].m_Min_Hoehe + (*amn_it).m_Erdradius;
+			= Grid.m_Gitter[0].m_Min_Hoehe + amn_it->m_Erdradius;
 
 		Endpunkt = Punkt_auf_Strecke_bei_Radius(Sat_POS, Nadir_LOS, R_Min, 0.1);
 		//LOS anpassen auf relevantes Höhenintervall
@@ -985,7 +985,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 											aktueller_Punkt(1),
 											aktueller_Punkt(2),
 											AP_R, AP_Laenge, AP_Breite);
-			AP_Hoehe = AP_R - (*amn_it).m_Erdradius;
+			AP_Hoehe = AP_R - amn_it->m_Erdradius;
 			if (AP_Hoehe >= Grid.m_Gitter[Grid.m_Anzahl_Punkte - 1].m_Max_Hoehe) {
 				//Punkt ausserhalb der Maximalen Gitterhoehe
 				continue;
@@ -1006,8 +1006,8 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 
 			// Check, ob Punkt in Dunkelheit(extrem unwahrscheinlich bei Nadir,
 			// aber sicher ist sicher)
-			if ((AP_Breite > 90.0 + (*amn_it).m_Deklination)
-					|| (AP_Breite < -90.0 + (*amn_it).m_Deklination)) {
+			if ((AP_Breite > 90.0 + amn_it->m_Deklination)
+					|| (AP_Breite < -90.0 + amn_it->m_Deklination)) {
 				if (aktueller_Schritt == Schrittzahl - 1) {
 					//cout<<"MessungNR: "<<MessungNR<<"\n";
 					//cout<<"letzter Punkt und im dunkeln(Nadir)\n";
@@ -1016,7 +1016,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 							cout << "MessungNR: " << MessungNR << "\n";
 							cout << "fehlenden hinteren Durchstoßpunkt setzen\n";
 							Umwandlung_Kugel_in_Karthesisch(
-									AP_Hoehe + (*amn_it).m_Erdradius,
+									AP_Hoehe + amn_it->m_Erdradius,
 									AP_Laenge,
 									AP_Breite,
 									Grid.m_Gitter[Pixelnummer].m_hinterer_Durchstosspunkt(0),
@@ -1032,7 +1032,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			double E1 = 0., E2 = 1.;
 			unsigned int PeakNr;
 			for (PeakNr = 0; PeakNr < Spezies_Fenster.m_Wellenlaengen.size(); PeakNr++) {
-				if ((*amn_it).m_Wellenlaenge == Spezies_Fenster.m_Wellenlaengen[PeakNr]) {
+				if (amn_it->m_Wellenlaenge == Spezies_Fenster.m_Wellenlaengen[PeakNr]) {
 					E1 = Spezies_Fenster.m_Liniendaten[PeakNr].m_E1;
 					E2 = Spezies_Fenster.m_Liniendaten[PeakNr].m_E2;
 					break;
@@ -1056,7 +1056,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			myerr = Pixel_finden_und_AMF_erhoehen_LOS(AMF, Grid, MessungNR,
 					Pixelnummer,
 					Schrittweite, Tau_Nadir_LOS,
-					AP_Hoehe, (*amn_it).m_Erdradius,
+					AP_Hoehe, amn_it->m_Erdradius,
 					AP_Laenge, AP_Breite,
 					Phasenfunktion, Tau_LOS_Matrix);
 
@@ -1068,7 +1068,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 						cout << "MessungNR: " << MessungNR << "\n";
 						cout << "fehlenden hinteren Durchstoßpunkt setzen\n";
 						Umwandlung_Kugel_in_Karthesisch(
-								AP_Hoehe + (*amn_it).m_Erdradius,
+								AP_Hoehe + amn_it->m_Erdradius,
 								AP_Laenge,
 								AP_Breite,
 								Grid.m_Gitter[Pixelnummer].m_hinterer_Durchstosspunkt(0),
@@ -1169,7 +1169,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			// a ist gesucht
 			// alpha=SZA, b=r_E+H, c=r_E+TOA
 			double b = Start_Punkt.Betrag_ausgeben();
-			double c = TOA_LFS + (*amn_it).m_Erdradius;
+			double c = TOA_LFS + amn_it->m_Erdradius;
 			double Sehnenlaenge_LFS = sqrt(b * b + c * c + 2.0 * b * c * Cos_SZA_LFS);
 			////////////////////////////////////////////////////////////////////
 			// GESCHWINDIGKEITS/GENAUIGKEITSBESTIMMENDER PARAMETER
@@ -1193,7 +1193,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 						Punkt_Radius, Punkt_Laenge, Punkt_Breite);
 
 				// Berechne Hoehe
-				Punkt_Hoehe = Punkt_Radius - (*amn_it).m_Erdradius;
+				Punkt_Hoehe = Punkt_Radius - amn_it->m_Erdradius;
 				if (Punkt_Hoehe > TOA_LFS) {
 					//keine zusätzliche Absorption von LFS für diese Punkte...
 					//(Nur Emission)
@@ -1202,8 +1202,8 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 					//Punkte ab hier auch höher, deshalb break
 				}
 				// Testen auf Sonnenzenizenitwinkel unter 90 grad
-				if ((Punkt_Breite > 90.0 + (*amn_it).m_Deklination) ||
-						(Punkt_Breite < -90.0 + (*amn_it).m_Deklination)) {
+				if ((Punkt_Breite > 90.0 + amn_it->m_Deklination) ||
+						(Punkt_Breite < -90.0 + amn_it->m_Deklination)) {
 					continue;
 				}
 				double BOA_LFS = 50.0; //bottom of atmosphere

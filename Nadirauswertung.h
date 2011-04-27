@@ -18,20 +18,17 @@
 #include "Speziesfenster.h"
 #include "Ausgewertete_Messung_Nadir.h"
 
-
-using namespace std;
-
 //Argumente von vorne nach hinten nach erster Nutzung sortiert
 int Nadir_Auswertung(Orbitliste Orbitlist,
 					 int l,
 					 Sonnenspektrum &Solspec,
-					 vector<Speziesfenster>& Spezies_Fenster,
+					 std::vector<Speziesfenster>& Spezies_Fenster,
 					 int &counter_Nachtmessungen_Nadir,
 					 int &counter_Nadir_Nacht_Dateien,
-					 string Arbeitsverzeichnis, string mache_Fit_Plots,
-					 vector<Ausgewertete_Messung_Nadir>& Ausgewertete_Nadirmessung_MgI,
-					 vector<Ausgewertete_Messung_Nadir>& Ausgewertete_Nadirmessung_MgII,
-					 vector<Ausgewertete_Messung_Nadir>& Ausgewertete_Nadirmessung_unknown,
-					 vector<Ausgewertete_Messung_Nadir>& Ausgewertete_Nadirmessung_FeI);
+					 std::string Arbeitsverzeichnis, std::string mache_Fit_Plots,
+					 std::vector<Ausgewertete_Messung_Nadir> &Ausgewertete_Nadirmessung_MgI,
+					 std::vector<Ausgewertete_Messung_Nadir> &Ausgewertete_Nadirmessung_MgII,
+					 std::vector<Ausgewertete_Messung_Nadir> &Ausgewertete_Nadirmessung_unknown,
+					 std::vector<Ausgewertete_Messung_Nadir> &Ausgewertete_Nadirmessung_FeI);
 
 #endif /* NADIRAUSWERTUNG_HH_ */

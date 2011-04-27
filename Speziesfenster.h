@@ -19,8 +19,6 @@ sowie die Emissivitäten für jede Messung neu bestimmt werden müssen.
 #include<vector>
 #include<string>
 
-using namespace std;
-
 class Speziesfenster
 {
 public:
@@ -28,19 +26,19 @@ public:
 	void clear();
 
 	//Membervariablen *********************************************************/
-	string m_Spezies_Name;                        // z.B. Eisen I oder Eisen II
+	std::string m_Spezies_Name;                        // z.B. Eisen I oder Eisen II
 	// Teile für Zeilendichte Berechnung
-	vector<double> m_Wellenlaengen;  // Vektor mit allen zugehörigen Linien
-	vector<Liniendaten> m_Liniendaten;
-	vector<double> m_Basisfenster_links_WLmin;
-	vector<double> m_Basisfenster_links_WLmax;
-	vector<double> m_Basisfenster_rechts_WLmin;
-	vector<double> m_Basisfenster_rechts_WLmax;
-	vector<double> m_Peakfenster_WLmin;
-	vector<double> m_Peakfenster_WLmax;
+	std::vector<double> m_Wellenlaengen;  // Vektor mit allen zugehörigen Linien
+	std::vector<Liniendaten> m_Liniendaten;
+	std::vector<double> m_Basisfenster_links_WLmin;
+	std::vector<double> m_Basisfenster_links_WLmax;
+	std::vector<double> m_Basisfenster_rechts_WLmin;
+	std::vector<double> m_Basisfenster_rechts_WLmax;
+	std::vector<double> m_Peakfenster_WLmin;
+	std::vector<double> m_Peakfenster_WLmax;
 	double m_FWHM;  // FWHM der Peaks, oder zumindest Startwert
 	//Für alle Linien erstmal ein Vektor
-	vector<string>  m_Liste_der_Plot_Dateinamen;
+	std::vector<std::string>  m_Liste_der_Plot_Dateinamen;
 	//Membervariablen ende ****************************************************/
 };
 
