@@ -100,6 +100,15 @@ class NO_emiss {
 	int read_luque_data_from_file(string filename);
 	int calc_excitation();
 	int calc_line_emissivities();
+	int print_lines_emiss_absorp();
+	int print_Hoenl_London_abs();
+	int print_Hoenl_London_emiss();
+	int print_excitation();
+	int print_line_emissivities();
+	int print_solar_data();
+	int get_NJ();
+	double get_lambda_K(int i, int j);
+	double get_gamma_j(int i, int j);
 };
 
 #endif /* NO_EMISS_H_ */

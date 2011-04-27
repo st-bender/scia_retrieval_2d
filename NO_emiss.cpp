@@ -719,3 +719,148 @@ int NO_emiss::calc_line_emissivities()
 
 	return 0;
 }
+
+int NO_emiss::print_lines_emiss_absorp()
+{
+	int i, j;
+
+	std::cout << "Wavelength of absorption transition, by lower-state K"
+			  << std::endl;
+
+	for (i = 0; i <= NJ; i++) {
+		std::cout << quant_K_vec.at(i);
+		for (j = 0; j <= 11; j++) {
+			std::cout << "\t" << lambda_K_abs(j, i);
+		}
+		std::cout << endl;
+	}
+
+	std::cout << "Wavelength of emission transition, by lower-state K"
+			  << std::endl;
+
+	for (i = 0; i <= NJ; i++) {
+		std::cout << quant_K_vec.at(i);
+		for (j = 0; j <= 11; j++) {
+			std::cout << "\t" << lambda_K(j, i);
+		}
+		std::cout << endl;
+	}
+
+	return 0;
+}
+
+int NO_emiss::print_Hoenl_London_abs()
+{
+	int i, j;
+	double sum;
+
+	std::cout << "Absorption Hoenl-London factor, by ground-state K"
+			  << std::endl;
+	std::cout << " P1, Q1, R1, P2, Q2, R2, qP21, pQ12, sR21, oP12, rQ21, qR12"
+			  << std::endl;
+
+	for (i = 0; i <= NJ; i++) {
+		sum = 0.;
+		std::cout << i << "\t" << quant_K_vec.at(i);
+		for (j = 0; j <= 11; j++) {
+			sum += vf_HL_K(j, i);
+			std::cout << "\t" << vf_HL_K(j, i);
+		}
+		std::cout << "\t" << sum << std::endl;
+	}
+
+	return 0;
+}
+int NO_emiss::print_Hoenl_London_emiss()
+{
+	int i, j;
+	double sum;
+
+	std::cout << "Emission Hoenl-London factor, by upper-state K"
+			  << std::endl;
+	std::cout << " P1, Q1, R1, P2, Q2, R2, qP21, pQ12, sR21, oP12, rQ21, qR12"
+			  << std::endl;
+
+	for (i = 0; i <= NJ; i++) {
+		sum = 0.;
+		cout << i << "\t" << quant_K_vec.at(i);
+		for (j = 0; j <= 11; j++) {
+			sum += vf_HL_emiss_K(j, i);
+			std::cout << "\t" << vf_HL_emiss_K(j, i);
+		}
+		std::cout << "\t" << sum << std::endl;
+	}
+
+	return 0;
+}
+int NO_emiss::print_solar_data()
+{
+	int i, j;
+
+	std::cout << "K_l, Solar radiation at absorption lines, "
+			  << "NJ/N: K_l = J_l - 0.5, K_l = J_l + 0.5"
+			  << std::endl;
+
+	for (i = 0; i <= NJ; i++) {
+		std::cout << quant_K_vec.at(i);
+		for (j = 0; j <= 11; j++) {
+			std::cout << "\t" << solar(j, i);
+		}
+		std::cout << "\t" << NJ_to_N(0, i);
+		std::cout << "\t" << NJ_to_N(1, i);
+		std::cout << std::endl;
+	}
+
+	return 0;
+}
+
+int NO_emiss::print_excitation()
+{
+	int i;
+	double j_u;
+
+	std::cout << "Excitation of upper state J-levels, K_u = J_u - 0.5, K_u = J_u + 0.5"
+			  << std::endl;
+
+	for (i = 0; i <= NJ; i++) {
+		j_u = i + 0.5;
+		std::cout << j_u;
+		std::cout << "\t" << excit(0, j_u - 0.5);
+		if (i < NJ) std::cout << "\t" << excit(1, j_u + 0.5);
+		std::cout << std::endl;
+	}
+
+	return 0;
+}
+
+int NO_emiss::print_line_emissivities()
+{
+	int i, j;
+
+	std::cout << "Gamma-factor at " << Temp << " K, by lower state K"
+			  << std::endl;
+
+	for (i = 0; i < NJ - 1; i++) {
+		std::cout << i;
+		for (j = 0; j < 12; j++) {
+			std::cout << "\t" << gamma_j(j, i);
+		}
+		std::cout << std::endl;
+	}
+
+	return 0;
+}
+
+int NO_emiss::get_NJ()
+{
+	return NJ;
+}
+double NO_emiss::get_lambda_K(int i, int j)
+{
+	// translate from Å to nm
+	return 0.1 * lambda_K(i, j);
+}
+double NO_emiss::get_gamma_j(int i, int j)
+{
+	return gamma_j(i, j);
+}
