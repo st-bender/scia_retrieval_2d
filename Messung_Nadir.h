@@ -13,8 +13,6 @@
 #include"Speziesfenster.h"
 #include"Ausgewertete_Messung_Nadir.h"
 
-
-
 class Messung_Nadir
 {
 	/****************************************************
@@ -30,10 +28,10 @@ public:
 	Messung_Nadir &operator =(const Messung_Nadir &rhs);
 	//Methoden
 	int Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
-			string Arbeitsverzeichnis, string mache_Fit_Plots, int MessungsNr);
+			std::string Arbeitsverzeichnis, std::string mache_Fit_Plots, int MessungsNr);
 	//int Sauelendichte_Bestimmen_MgI(Speziesfenster& Spezfenst, int Index,
 	//  string Arbeitsverzeichnis, string mache_Fit_Plots, int MessungsNr);
-	int Intensitaeten_normieren(vector<double> &Sonnen_Intensitaet);
+	int Intensitaeten_normieren(std::vector<double> &Sonnen_Intensitaet);
 	int Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfenst, int Index);
 	int Deklinationswinkel_bestimmen();
 	int Sonnen_Longitude_bestimmen();
@@ -45,21 +43,21 @@ public:
 	int Get_Index(double WL);
 	void Fit_Linear(double *x, double *y, double &a0, double &a1,
 			int Anfangsindex, int Endindex);
-	void Fit_Linear(vector<double> &x, vector<double> &y, double &a0, double &a1,
+	void Fit_Linear(std::vector<double> &x, std::vector<double> &y, double &a0, double &a1,
 			int Anfangsindex, int Endindex);
 	void Fit_Peak_hyperbolic(double *x, double *y, double x0, double FWHM,
 			double &A, int Anfangsindex, int Endindex);
-	void Fit_Peak_hyperbolic(vector<double> &x, vector<double> &y, double x0, double FWHM,
+	void Fit_Peak_hyperbolic(std::vector<double> &x, std::vector<double> &y, double x0, double FWHM,
 			double &A, int Anfangsindex, int Endindex);
 	double Evaluate_Error_primitive(double *x, double *y, double a0, double a1,
 			double A, double FWHM, double x0, int Anfangsindex, int Endindex);
-	double Evaluate_Error_primitive(vector<double> &x, vector<double> &y,
+	double Evaluate_Error_primitive(std::vector<double> &x, std::vector<double> &y,
 			double a0, double a1,
 			double A, double FWHM, double x0, int Anfangsindex, int Endindex);
 
 	//Wartungsfunktionen
 	//zum Testen und debuggen und überprüfen, ob der fit halbwegs passt
-	int Ausgabe_in_Datei(string Dateiname);
+	int Ausgabe_in_Datei(std::string Dateiname);
 
 	//Membervariablen
 
@@ -70,7 +68,7 @@ public:
 	double m_Deklinationswinkel;
 	double m_Sonnen_Longitude;
 	// Herkunftsmerkmale
-	string m_Dateiname_L1C;
+	std::string m_Dateiname_L1C;
 	int m_Messung_ID;
 	//Datum
 	int m_Jahr;
@@ -88,11 +86,11 @@ public:
 	double m_orbit_phase;
 	//Füllbare Felder
 	int m_Number_of_Wavelength;
-	vector<double> m_Wellenlaengen;
-	vector<double> m_Intensitaeten;
-	vector<double> m_Intensitaeten_relativer_Fehler;
-	vector<double> m_Intensitaeten_durch_piF;
-	vector<double> m_Intensitaeten_durch_piF_Gamma;
+	std::vector<double> m_Wellenlaengen;
+	std::vector<double> m_Intensitaeten;
+	std::vector<double> m_Intensitaeten_relativer_Fehler;
+	std::vector<double> m_Intensitaeten_durch_piF;
+	std::vector<double> m_Intensitaeten_durch_piF_Gamma;
 };
 
 double slit_func(double fwhm, double x0, double x);
