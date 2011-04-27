@@ -119,53 +119,53 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 		// wegen Parallelisierung
 		// sin und cos sind langsame Funktionen...
 		// werden aber hierbei auch nicht oft eingesetzt
-		(*mlit).Deklinationswinkel_bestimmen(); //Sonnenlatitude
-		(*mlit).Sonnen_Longitude_bestimmen();
-		(*mlit).Intensitaeten_normieren(Solspec.m_Int_interpoliert);
+		mlit->Deklinationswinkel_bestimmen(); //Sonnenlatitude
+		mlit->Sonnen_Longitude_bestimmen();
+		mlit->Intensitaeten_normieren(Solspec.m_Int_interpoliert);
 		// m_Intensitaeten enthält nun nichtmehr I sondern I/(piF)
 		// Das könnte man auch nur für die Par Fenster durchführen
 		//Schleife über alle Spezies wie z.b. Mg oder Mg+
 		for (sfit = Spezies_Fenster.begin(); sfit != Spezies_Fenster.end(); ++sfit) {
 			//Schleife über alle Linien dieser Spezies
-			for (k = 0, ldit = (*sfit).m_Liniendaten.begin();
-					ldit != (*sfit).m_Liniendaten.end(); k++, ++ldit) {
+			for (k = 0, ldit = sfit->m_Liniendaten.begin();
+					ldit != sfit->m_Liniendaten.end(); k++, ++ldit) {
 				// Aus SZA_TP und SAA_TP lässt sich die Polararisation in den
 				// Liniendaten des Speziesfensters ermitteln, und damit die
 				// Emissivität berechnen
 				//Spezfenst.m_Liniendaten[k].m_theta=Messung.m_Streuwinkel;
 				//der Streuwinkel muss woanders berechnet werden
 				// Die Phasenfunktion, steckt so nun in den Slant Coloumns drin
-				(*ldit).Emissivitaet_ermitteln();
-				(*mlit).Intensitaeten_durch_piF_Gamma_berechnen((*sfit), (*ldit).m_Gamma);
+				ldit->Emissivitaet_ermitteln();
+				mlit->Intensitaeten_durch_piF_Gamma_berechnen((*sfit), ldit->m_Gamma);
 				// In der Formel ist piF in W/(m^2*Wellenlänge) verlangt..
 				// also muss noch mit der Kanalbreite multipliziert werden
-				(*mlit).Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen((*sfit));
+				mlit->Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen((*sfit));
 
 				// Jetzt Zeilendichte und Fehler bestimmen
 				// Hmm hier gibts noch Diskussionsbedarf
-				(*mlit).Zeilendichte_Bestimmen((*sfit), k,
+				mlit->Zeilendichte_Bestimmen((*sfit), k,
 						Arbeitsverzeichnis, mache_Fit_Plots);
 
 				// Ergebnis zusammenfassen
 				Ausgewertete_Messung_Limb Ergebnis
-					= (*mlit).Ergebnis_Zusammenfassen();
+					= mlit->Ergebnis_Zusammenfassen();
 
 				// adjust after-pole point geo locations
-				if ((*mlit).m_Latitude_TP < 0. &&
-						(*mlit).m_Latitude_TP > (*(mlit - 1)).m_Latitude_TP) {
-					double lat_neu = -180. - (*mlit).m_Latitude_TP;
-					double lon_neu = (*mlit).m_Longitude_TP - 180.;
+				if (mlit->m_Latitude_TP < 0. &&
+						mlit->m_Latitude_TP > (mlit - 1)->m_Latitude_TP) {
+					double lat_neu = -180. - mlit->m_Latitude_TP;
+					double lon_neu = mlit->m_Longitude_TP - 180.;
 					Ergebnis.m_Latitude_TP = lat_neu;
 					Ergebnis.m_Longitude_TP = lon_neu;
 				}
 
 				// Die braucht man später für die Luftmassenmatrix
 				Ergebnis.m_Wellenlaenge
-					= (*ldit).m_Wellenlaenge;
+					= ldit->m_Wellenlaenge;
 				//Ergebnis.Ausgabe_auf_Bildschirm();
 				// Zusammenfassung der Zwischenresultate dem Vektor für die
 				// jeweilige Spezies zuordnen
-				if ((*sfit).m_Spezies_Name == "MgI") {
+				if (sfit->m_Spezies_Name == "MgI") {
 					//TODO negative Werte zulassen
 					if (Ergebnis.m_Zeilendichte > 0) {
 						Ausgewertete_Limbmessung_MgI.push_back(Ergebnis);
@@ -176,13 +176,13 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 						Ausgewertete_Limbmessung_MgI.push_back(Ergebnis);
 					}
 				}
-				if ((*sfit).m_Spezies_Name == "MgII") {
+				if (sfit->m_Spezies_Name == "MgII") {
 					Ausgewertete_Limbmessung_MgII.push_back(Ergebnis);
 				}
-				if ((*sfit).m_Spezies_Name == "unknown") {
+				if (sfit->m_Spezies_Name == "unknown") {
 					Ausgewertete_Limbmessung_unknown.push_back(Ergebnis);
 				}
-				if ((*sfit).m_Spezies_Name == "FeI") {
+				if (sfit->m_Spezies_Name == "FeI") {
 					Ausgewertete_Limbmessung_FeI.push_back(Ergebnis);
 				}
 
