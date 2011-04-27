@@ -21,8 +21,6 @@
 
 #include <string>
 
-using namespace std;
-
 #ifndef NADIR_DATENSATZ_HH_
 #define NADIR_DATENSATZ_HH_
 //struktur zur Speicherung von Daten aus Nadirdatei
@@ -206,52 +204,52 @@ inline Limb_Datensatz &Limb_Datensatz::operator=(const Limb_Datensatz &RHS)
 #endif /* NADIR_DATENSATZ_HH_ */
 
 // Laden
-int Load_Limb_Ascii(string Datei_in,
-					string textheader[31], int &no_of_alt, int &no_of_pix,
+int Load_Limb_Ascii(std::string Datei_in,
+					std::string textheader[31], int &no_of_alt, int &no_of_pix,
 					int Orbitstate[5], int Datum[6], float Center_Lat_Lon[10],
 					float &orbit_phase, float*& Wellenlaengen,
 					Limb_Datensatz*& Limbdaten);
 
-int Load_Limb_l_mpl_binary(string Datei_in,
-						   string textheader[31], int &no_of_alt,
+int Load_Limb_l_mpl_binary(std::string Datei_in,
+						   std::string textheader[31], int &no_of_alt,
 						   int &no_of_pix, int Orbitstate[5], int Datum[6],
 						   float Center_Lat_Lon[10], float &orbit_phase,
 						   float*& Wellenlaengen, Limb_Datensatz*& Limbdaten);
 
-int Load_Nadir_Ascii(string Datei_in,
-					 string textheader[7], int &No_of_Messungen, int &No_of_Pix,
+int Load_Nadir_Ascii(std::string Datei_in,
+					 std::string textheader[7], int &No_of_Messungen, int &No_of_Pix,
 					 int*& Kanal_Nr, float &orbit_phase,
 					 float*& Wellenlaenge, Nadir_Datensatz*& Nadirdaten);
-int Load_Nadir_n_mpl_binary(string Datei_in,
-							string textheader[7], int &No_of_Messungen,
+int Load_Nadir_n_mpl_binary(std::string Datei_in,
+							std::string textheader[7], int &No_of_Messungen,
 							int &No_of_Pix, int*& Kanal_Nr,
 							float*& Wellenlaenge, Nadir_Datensatz*& Nadirdaten);
 //Speichern
-int Save_Limb_Ascii(string Datei_out,
-					string textheader[31], int &no_of_alt, int &no_of_pix,
+int Save_Limb_Ascii(std::string Datei_out,
+					std::string textheader[31], int &no_of_alt, int &no_of_pix,
 					int Orbitstate[5], int Datum[6], float Center_Lat_Lon[10],
 					float &orbit_phase, float*& Wellenlaengen,
 					Limb_Datensatz*& Limbdaten);
 
-int Save_Limb_l_mpl_binary(string Datei_out,
-						   string textheader[31], int &no_of_alt,
+int Save_Limb_l_mpl_binary(std::string Datei_out,
+						   std::string textheader[31], int &no_of_alt,
 						   int &no_of_pix, int Orbitstate[5], int Datum[6],
 						   float Center_Lat_Lon[10], float &orbit_phase,
 						   float*& Wellenlaengen, Limb_Datensatz*& Limbdaten);
 
-int Save_Nadir_Ascii(string Datei_out,
-					 string textheader[7], int No_of_Messungen, int No_of_Pix,
+int Save_Nadir_Ascii(std::string Datei_out,
+					 std::string textheader[7], int No_of_Messungen, int No_of_Pix,
 					 int *Kanal_Nr, float &orbit_phase, float *Wellenlaenge,
 					 Nadir_Datensatz *Nadirdaten);
 
-int Save_Nadir_n_mpl_binary(string Datei_out,
-							string textheader[7], int No_of_Messungen,
+int Save_Nadir_n_mpl_binary(std::string Datei_out,
+							std::string textheader[7], int No_of_Messungen,
 							int No_of_Pix, int *Kanal_Nr, float *Wellenlaenge,
 							Nadir_Datensatz *Nadirdaten);
 // Konvertieren
-int Limb_Ascii_2_l_mpl_binary(string Datei_in, string Datei_out);
-int Nadir_Ascii_2_n_mpl_binary(string Datei_in, string Datei_out);
-int Limb_l_mpl_binary_2_Ascii(string Datei_in, string Datei_out);
-int Nadir_n_mpl_binary_2_Ascii(string Datei_in, string Datei_out);
+int Limb_Ascii_2_l_mpl_binary(std::string Datei_in, std::string Datei_out);
+int Nadir_Ascii_2_n_mpl_binary(std::string Datei_in, std::string Datei_out);
+int Limb_l_mpl_binary_2_Ascii(std::string Datei_in, std::string Datei_out);
+int Nadir_n_mpl_binary_2_Ascii(std::string Datei_in, std::string Datei_out);
 
 #endif /* LIMBNADIR_IO_HH_ */
