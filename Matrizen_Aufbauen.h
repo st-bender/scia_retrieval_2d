@@ -28,8 +28,8 @@ void Matrizen_Aufbauen(MPL_Matrix &S_Breite, MPL_Matrix &S_Hoehe,
 						double Lambda_apriori, MPL_Matrix &Saeulendichten_Fehler,
 						Speziesfenster &Spezies_Fenster,
 						Retrievalgitter &Grid,
-						vector<Ausgewertete_Messung_Limb> &AM_L,
-						vector<Ausgewertete_Messung_Nadir> &AM_N,
+						std::vector<Ausgewertete_Messung_Limb> &AM_L,
+						std::vector<Ausgewertete_Messung_Nadir> &AM_N,
 						Konfiguration &Konf, int &IERR);
 MPL_Matrix Einheitsmatrix_aufbauen(int Dimension);
 MPL_Matrix Werte_bei_maximaler_Hoehe_Flagmatrix_Aufbauen(Retrievalgitter &Grid);
@@ -37,8 +37,8 @@ MPL_Matrix Differenz_von_benachbarten_Zeilenelementen_Matrix_aufbauen(int Zeilen
 MPL_Matrix Differenz_von_benachbarten_Spaltenelementen_Matrix_aufbauen(int Zeilen, int Spalten);
 MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 	Retrievalgitter &Grid,
-	vector<Ausgewertete_Messung_Limb> &AM_L,
-	vector<Ausgewertete_Messung_Nadir> &AM_N,
+	std::vector<Ausgewertete_Messung_Limb> &AM_L,
+	std::vector<Ausgewertete_Messung_Nadir> &AM_N,
 	Konfiguration &Konf, Speziesfenster &Spezies_Fenster, int &IERR);
 //Hilfsfunktionen
 
