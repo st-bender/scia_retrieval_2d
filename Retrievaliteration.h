@@ -11,8 +11,6 @@
 #include "MPL_Matrix.h"
 #include "Konfiguration.h"
 
-using namespace std;
-
 int Retrievaliteration(MPL_Matrix &Dichten,
 					   MPL_Matrix &Dichten_apriori,
 					   MPL_Matrix &Saeulendichten,
