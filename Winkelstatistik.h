@@ -18,8 +18,6 @@
 #include"MPL_Vektor.h"
 #include<string>
 
-using namespace std;
-
 class Winkelstatistik
 {
 public:
@@ -30,7 +28,7 @@ public:
 									   MPL_Vektor Tangentenpunkt,
 									   int &Winkel_OK);
 	void Statistik_auf_Bildschirm_ausgeben();
-	int Statistik_in_Datei_ausgeben(string Dateiname);
+	int Statistik_in_Datei_ausgeben(std::string Dateiname);
 
 	int m_counter_0_001;  //winkel zwischen 0 und 0,001Grad
 	int m_counter_0_002;

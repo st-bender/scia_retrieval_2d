@@ -14,13 +14,10 @@
 // xxxxx Orbit_ID
 // yyyymmdd_hhmm Das Datum der ersten Limbdatei im Orbit
 
-
 #include<string>
 
-using namespace std;
-
-string xxxxx_Bestimmen(string Orbitlistenpfad);
-string yyyymmdd_hhmm_Bestimmen(string Name_erste_Limbdatei);
+std::string xxxxx_Bestimmen(std::string Orbitlistenpfad);
+std::string yyyymmdd_hhmm_Bestimmen(std::string Name_erste_Limbdatei);
 
 
 #endif /* DATEINAMENSTEILE_BESTIMMEN_H_ */
