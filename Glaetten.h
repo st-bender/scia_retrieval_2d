@@ -11,10 +11,10 @@
 void smooth_data(int Datasize, double *Data, int Anzahl_Nachbarn_eine_Seite,
 		int Zahl_der_Iterationen);
 
-int my_moving_average(vector<double> &y, int ws);
-int my_savitzky_golay(vector<double> &y, int ws);
-int my_gauss_blur_1d(vector<double> &y);
-int my_sciamachy_blur(vector<double> &y);
+int my_moving_average(std::vector<double> &y, int ws);
+int my_savitzky_golay(std::vector<double> &y, int ws);
+int my_gauss_blur_1d(std::vector<double> &y);
+int my_sciamachy_blur(std::vector<double> &y);
 
 double shift_wavelength(double wl);
 

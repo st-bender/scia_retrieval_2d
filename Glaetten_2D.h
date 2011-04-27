@@ -12,10 +12,9 @@
 #include <vector>
 #include "Ausgewertete_Messung_Limb.h"
 
-using namespace std;
-
-int SCD_Glaettung(vector<Ausgewertete_Messung_Limb>& AML, int Anzahl_Linien,
-		string limbmesothermo);
+int SCD_Glaettung(std::vector<Ausgewertete_Messung_Limb> &AML,
+		int Anzahl_Linien,
+		std::string limbmesothermo);
 
 
 #endif /* GLAETTEN_2D_HH_ */
