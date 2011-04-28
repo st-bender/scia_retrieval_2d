@@ -8,22 +8,21 @@
 #ifndef MESSUNGS_AUSSCHLIESSENDE_TESTS_HH_
 #define MESSUNGS_AUSSCHLIESSENDE_TESTS_HH_
 
-#include"Messung_Limb.h"
-#include"Messung_Nadir.h"
-#include<vector>
+#include <vector>
 
 //Falls Test_auf_Nachtmessung oder Test_auf_NLC positiv sind,
 //so werden ganze Dateien aussortiert
 //Bei den selten vorkommenden Geolocations ist zumeist nur eine Messung falsch
 //(die einzige, die je aufgefallen ist)
-bool Test_auf_Nachtmessung_Limb(Messung_Limb &Tropo, Konfiguration &Konf);
-bool Test_auf_Nachtmessung_Limb_meso_thermo(Messung_Limb &niedrigste_hoehe,
-		Konfiguration &Konf);
-bool test_auf_SAA_limb(Messung_Limb &space);
-bool Test_auf_NLC_Limb(std::vector<Messung_Limb> &Rohdaten, Konfiguration &Konf);
-int Test_auf_korrekte_geolocations_Limb(std::vector<Messung_Limb> &Rohdaten,
+bool Test_auf_Nachtmessung_Limb(class Messung_Limb &Tropo, class Konfiguration &Konf);
+bool Test_auf_Nachtmessung_Limb_meso_thermo(class Messung_Limb &niedrigste_hoehe,
+		class Konfiguration &Konf);
+bool test_auf_SAA_limb(class Messung_Limb &space);
+bool Test_auf_NLC_Limb(std::vector<class Messung_Limb> &Rohdaten,
+		class Konfiguration &Konf);
+int Test_auf_korrekte_geolocations_Limb(std::vector<class Messung_Limb> &Rohdaten,
 		int &counter_Winkel_nicht_ok);
-bool Test_auf_Nachtmessung_Nadir(std::vector<Messung_Nadir> &Rohdaten,
+bool Test_auf_Nachtmessung_Nadir(std::vector<class Messung_Nadir> &Rohdaten,
 		int Anzahl_Datensaetze);
 
 

@@ -11,6 +11,7 @@
 #include<vector>
 #include"MPL_Vektor.h"
 #include"Koordinatentransformation.h"
+#include "Konfiguration.h"
 #include <algorithm>
 #include <numeric>
 
