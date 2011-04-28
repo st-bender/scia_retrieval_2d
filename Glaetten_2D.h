@@ -10,9 +10,8 @@
 
 #include <string>
 #include <vector>
-#include "Ausgewertete_Messung_Limb.h"
 
-int SCD_Glaettung(std::vector<Ausgewertete_Messung_Limb> &AML,
+int SCD_Glaettung(std::vector<class Ausgewertete_Messung_Limb> &AML,
 		int Anzahl_Linien,
 		std::string limbmesothermo);
 
