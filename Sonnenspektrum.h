@@ -9,7 +9,7 @@
 #define SONNENSPEKTRUM_HH_
 
 #include <string>
-#include "Messung_Limb.h"
+#include <vector>
 
 class Sonnenspektrum
 {
@@ -23,7 +23,7 @@ public:
 	int moving_average(int window_size);
 	int savitzky_golay(int window_size);
 	int saoref_to_sciamachy();
-	int Interpolieren(Messung_Limb &Messung_Erdschein);
+	int Interpolieren(class Messung_Limb &Messung_Erdschein);
 	int nicht_interpolieren();
 	std::vector<double> m_Wellenlaengen; // wie lang sind die eigentlich
 	std::vector<double> m_Intensitaeten;
