@@ -14,6 +14,7 @@
 #include"Ausgewertete_Messung_Limb.h"  // Luftmassenfaktoren_Matrix_aufbauen
 #include"Ausgewertete_Messung_Nadir.h" // Luftmassenfaktoren_Matrix_aufbauen
 #include"Winkelstatistik.h"
+#include"Speziesfenster.h"             // Luftmassenfaktoren_Matrix_aufbauen
 
 // Luftmassenfaktoren_Matrix_aufbauen(einlesen von Atmosphärendaten)
 #include"Datei_IO.h"
