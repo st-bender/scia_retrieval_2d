@@ -146,7 +146,9 @@ irgendetwas nicht funktioniert, mich kontaktieren
 #include "Ausdrucke.h"                              // Plots_Zusammenfassen
 #include "Glaetten_2D.h"
 
-#include"Dateinamensteile_Bestimmen.h"
+#include "Dateinamensteile_Bestimmen.h"
+#include "Ausgewertete_Messung_Limb.h"
+#include "Ausgewertete_Messung_Nadir.h"
 //===========================================================
 // eigene externe Bibliotheken-> Müssen mitgeliefert werden,
 // falls nicht dabei, mail an martin
