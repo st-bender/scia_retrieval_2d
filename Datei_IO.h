@@ -4,18 +4,13 @@
  *  Created on: 19.04.2010
  *      Author: martin
  */
-
-#include<string>
-#include<vector>
-#include"Messung_Limb.h"
-#include"Messung_Nadir.h"
-#include"Ausgewertete_Messung_Limb.h"
-#include"Ausgewertete_Messung_Nadir.h"
-#include"MPL_Matrix.h"
-#include"Retrievalgitter.h"
-
 #ifndef DATEI_IO_HH_
 #define DATEI_IO_HH_
+
+#include <string>
+#include <vector>
+#include "MPL_Matrix.h"
+
 // Einlesen
 // Alte Ascii einlesefunktionen......
 // später löschen... sind im Feuerballprojekt viel besser
@@ -26,25 +21,25 @@
 // Beide Funktionen sehen aus entwicklungsgeschichtlichen Gründen
 // unterschiedlich aus (vektor vs array) zeittechnisch ist die nadirvariante
 // günstiger...kann später mal gefixt werden...erstmal programm fertig kriegen
-std::vector<Messung_Limb> ReadL1C_Limb_mpl_binary(std::string Dateiname,
-		Messung_Limb &Troposphaerische_Saeule, Messung_Limb &mean_10_20);
+std::vector<class Messung_Limb> ReadL1C_Limb_mpl_binary(std::string Dateiname,
+		class Messung_Limb &Troposphaerische_Saeule, class Messung_Limb &mean_10_20);
 std::vector<Messung_Limb> ReadL1C_Limb_meso_thermo_mpl_binary(std::string Dateiname,
-		Messung_Limb &niedrigste_Hoehe, Messung_Limb &space);
-std::vector<Messung_Limb>
+		class Messung_Limb &niedrigste_Hoehe, class Messung_Limb &space);
+std::vector<class Messung_Limb>
 ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(std::string Dateiname,
-		Messung_Limb &niedrigste_Hoehe, Messung_Limb &space, int Anzahl_Hoehen);
-std::vector<Messung_Nadir> ReadL1C_Nadir_mpl_binary(std::string Dateiname, int &Anzahl_Messungen);
+		class Messung_Limb &niedrigste_Hoehe, class Messung_Limb &space, int Anzahl_Hoehen);
+std::vector<class Messung_Nadir> ReadL1C_Nadir_mpl_binary(std::string Dateiname, int &Anzahl_Messungen);
 //Besser ein dynamisches Array einlesen, schneller als Vektor
 ////////////////////////////////////////////////////////////////////////////////
 int Ausgabe_Saeulendichten(std::string Dateiname,
-		std::vector<Ausgewertete_Messung_Limb> &A_Messung_L);
+		std::vector<class Ausgewertete_Messung_Limb> &A_Messung_L);
 int Ausgabe_Saeulendichten(std::string Dateiname,
-		std::vector<Ausgewertete_Messung_Nadir> &A_Messung_N);
+		std::vector<class Ausgewertete_Messung_Nadir> &A_Messung_N);
 //funktion ist ja überladbar
 
 MPL_Matrix Read_Atmodatei(std::string Dateiname);
 //Ausgeben
-int Ausgabe_Dichten(std::string Dateiname_out, Retrievalgitter &Grid,
+int Ausgabe_Dichten(std::string Dateiname_out, class Retrievalgitter &Grid,
 		MPL_Matrix &Dichten, MPL_Matrix &S_x, MPL_Matrix &AKM);
 
 #endif /* DATEI_IO_HH_ */
