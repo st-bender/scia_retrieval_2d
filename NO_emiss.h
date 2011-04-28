@@ -10,7 +10,6 @@
 
 #include <vector>
 #include "MPL_Matrix.h"
-#include "Sonnenspektrum.h"
 
 namespace NO_const {
 	const double E_u = 43965.7;
@@ -74,7 +73,6 @@ class NO_emiss {
 	MPL_Matrix vf_HL_J, vf_HL_K;
 	MPL_Matrix vf_HL_emiss, vf_HL_emiss_K, quant_j_up;
 	// solar spectrum
-	Sonnenspektrum sol_spec;
 	MPL_Matrix solar;
 	// coefficient matrices for data from Luque et al.
 	double f_FC_v;
@@ -96,7 +94,7 @@ class NO_emiss {
 	int calc_lines_emiss_absorp();
 	int set_Hoenl_London_abs();
 	int set_Hoenl_London_emiss();
-	int get_solar_data(Sonnenspektrum &sol_spec);
+	int get_solar_data(class Sonnenspektrum &sol_spec);
 	int read_luque_data_from_file(std::string filename);
 	int calc_excitation();
 	int calc_line_emissivities();

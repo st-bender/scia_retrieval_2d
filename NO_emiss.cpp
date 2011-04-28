@@ -13,6 +13,7 @@
 
 #include "constants.h"
 #include "NO_emiss.h"
+#include "Sonnenspektrum.h"
 
 int line_count(std::string filename)
 {
