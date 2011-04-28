@@ -10,8 +10,7 @@
 
 #include <vector>
 #include <string>
-#include"Speziesfenster.h"
-#include"Ausgewertete_Messung_Nadir.h"
+#include "Ausgewertete_Messung_Nadir.h"
 
 class Messung_Nadir
 {
@@ -27,12 +26,12 @@ public:
 	// Assignmentoperator Overload
 	Messung_Nadir &operator =(const Messung_Nadir &rhs);
 	//Methoden
-	int Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
+	int Zeilendichte_Bestimmen(class Speziesfenster &Spezfenst, int Index,
 			std::string Arbeitsverzeichnis, std::string mache_Fit_Plots, int MessungsNr);
 	//int Sauelendichte_Bestimmen_MgI(Speziesfenster& Spezfenst, int Index,
 	//  string Arbeitsverzeichnis, string mache_Fit_Plots, int MessungsNr);
 	int Intensitaeten_normieren(std::vector<double> &Sonnen_Intensitaet);
-	int Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfenst, int Index);
+	int Intensitaeten_durch_piF_Gamma_berechnen(class Speziesfenster Spezfenst, int Index);
 	int Deklinationswinkel_bestimmen();
 	int Sonnen_Longitude_bestimmen();
 	Ausgewertete_Messung_Nadir Ergebnis_Zusammenfassen();

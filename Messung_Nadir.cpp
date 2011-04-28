@@ -21,6 +21,7 @@ if(array!=0)                                 \
 #include <cstdio>
 #include <iostream>
 #include "Ausdrucke.h"
+#include "Speziesfenster.h"
 
 using namespace std;
 //////////////////////////////////////////////////
