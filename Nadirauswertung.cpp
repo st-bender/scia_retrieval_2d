@@ -18,7 +18,7 @@
 
 using namespace std;
 
-int Nadir_Auswertung(Orbitliste Orbitlist,
+int Nadir_Auswertung(Orbitliste &Orbitlist,
 					 int l,
 					 Sonnenspektrum &Solspec,
 					 vector<Speziesfenster>& Spezies_Fenster,

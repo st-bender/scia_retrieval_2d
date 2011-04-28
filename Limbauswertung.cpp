@@ -33,7 +33,7 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 // Funktionsstart Limb_Auswertung
 ////////////////////////////////////////////////////////////////////////////////
-int Limb_Auswertung(Orbitliste Orbitlist,
+int Limb_Auswertung(Orbitliste &Orbitlist,
 					int l,
 					Sonnenspektrum &Solspec,
 					vector<Speziesfenster>& Spezies_Fenster,
