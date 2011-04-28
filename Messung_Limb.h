@@ -9,9 +9,7 @@
 
 #include <vector>
 #include <string>
-#include "Speziesfenster.h"
 #include "Ausgewertete_Messung_Limb.h"
-#include "Konfiguration.h"
 
 class Messung_Limb
 {
@@ -22,12 +20,13 @@ public:
 	// Assignmentoperator Overload
 	Messung_Limb &operator =(const Messung_Limb &rhs);
 	//Methoden
-	int Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
+	int Zeilendichte_Bestimmen(class Speziesfenster &Spezfenst, int Index,
 			std::string Arbeitsverzeichnis, std::string mache_Fit_Plots);
-	int Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst, int Index,
+	int Saeulendichte_Bestimmen_MgI285nm(class Speziesfenster &Spezfenst,
+			int Index,
 			std::string Arbeitsverzeichnis, std::string mache_Fit_Plots,
 			double *mean_10_20);
-	int Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst, int Index,
+	int Plots_der_Spektren_erzeugen(class Speziesfenster &Spezfenst, int Index,
 			std::string Arbeitsverzeichnis, std::string mache_Fit_Plots,
 			double *mean_10_20);
 	int moving_average(int window_size);
@@ -35,11 +34,11 @@ public:
 	int Intensitaeten_normieren(std::vector<double> &Sonnen_Intensitaet);
 	//int        Intensitaeten_normieren(Sonnenspektrum Solspec, Fenster);
 	// hier müsste überlegt werden, wie man mehrfachkorrekturen umgeht
-	int Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfenst,
+	int Intensitaeten_durch_piF_Gamma_berechnen(class Speziesfenster Spezfenst,
 			double wl_gamma);
 	// In der Formel ist piF in W/(m^2*Wellenlänge) verlangt..
 	// also muss noch mit der Kanalbreite multipliziert werden
-	int Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Speziesfenster Spezfenst);
+	int Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(class Speziesfenster Spezfenst);
 	int Deklinationswinkel_bestimmen();
 	int Sonnen_Longitude_bestimmen();
 

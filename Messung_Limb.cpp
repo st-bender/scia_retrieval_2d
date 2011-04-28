@@ -28,6 +28,7 @@ if(array!=0)                                 \
 #include "Ausdrucke.h"
 #include "Fit_Polynom.h"
 #include "Glaetten.h"
+#include "Speziesfenster.h"
 
 extern "C" {
 	void dgesv_(int *N, int *NRHS, double *A, int *LDA, int *IPIV, double *B, int *LDB, int *INFO);
