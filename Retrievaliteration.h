@@ -9,7 +9,6 @@
 #define RETRIEVALITERATION_HH_
 
 #include "MPL_Matrix.h"
-#include "Konfiguration.h"
 
 int Retrievaliteration(MPL_Matrix &Dichten,
 					   MPL_Matrix &Dichten_apriori,
@@ -21,7 +20,7 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 					   const double &Lambda_Breite,
 					   const double &Lambda_Hoehe,
 					   MPL_Matrix &AMF,
-					   Konfiguration &Konf);
+					   class Konfiguration &Konf);
 int Retrievaliteration_old(MPL_Matrix &Dichten,  // Zur Sicherheit behalten
 						   // Iteration über anpassen des apriori
 						   MPL_Matrix &Dichten_apriori,
@@ -34,6 +33,6 @@ int Retrievaliteration_old(MPL_Matrix &Dichten,  // Zur Sicherheit behalten
 						   const double &Lambda_Breite,
 						   const double &Lambda_Hoehe,
 						   MPL_Matrix &AMF,
-						   Konfiguration &Konf);
+						   class Konfiguration &Konf);
 
 #endif /* RETRIEVALITERATION_HH_ */

@@ -8,6 +8,7 @@
 #include "Retrievalgitter.h"
 
 #include "Ausgewertete_Messung_Limb.h"
+#include "Konfiguration.h"
 
 #include <vector>
 #include <cmath>

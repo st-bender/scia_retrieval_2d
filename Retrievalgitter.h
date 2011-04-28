@@ -8,11 +8,8 @@
 #ifndef RETRIEVALGITTER_HH_
 #define RETRIEVALGITTER_HH_
 
-#include"Gitterpunkt.h"
-#include "Ausgewertete_Messung_Limb.h"
-#include "Konfiguration.h"
-
 #include <vector>
+#include "Gitterpunkt.h"
 
 class Retrievalgitter
 {
@@ -25,8 +22,8 @@ public:
 	//Destruktor
 	~Retrievalgitter();
 	//Methoden
-	void Retrievalgitter_erzeugen(std::vector<Ausgewertete_Messung_Limb> &AM_Limb,
-			double Epsilon, Konfiguration &Konf);
+	void Retrievalgitter_erzeugen(std::vector<class Ausgewertete_Messung_Limb> &AM_Limb,
+			double Epsilon, class Konfiguration &Konf);
 	void Alle_Durchstosspunkte_Null_setzen();
 	void In_Datei_Ausgeben(std::string Dateiname);
 
