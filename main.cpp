@@ -145,6 +145,7 @@ irgendetwas nicht funktioniert, mich kontaktieren
 #include "Retrievalfehler_Abschaetzung.h"
 #include "Ausdrucke.h"                              // Plots_Zusammenfassen
 #include "Glaetten_2D.h"
+#include "NO_emiss.h"
 
 #include "Dateinamensteile_Bestimmen.h"
 #include "Ausgewertete_Messung_Limb.h"
@@ -532,6 +533,35 @@ int main(int argc, char *argv[])
 	// Sonnenspektrum ist bestimmt
 	//
 	////////////////////////////////////////////////////////////////////////////
+
+	// NO stuff
+	// 1 - 0
+	NO_emiss NO_10(1, 0);
+	NO_10.get_solar_data(Solspec);
+	NO_10.read_luque_data_from_file("Luqueetal.dat");
+	NO_10.calc_excitation();
+	NO_10.calc_line_emissivities();
+	// 2 - 4
+	NO_emiss NO_24(2, 4);
+	NO_24.get_solar_data(Solspec);
+	NO_24.read_luque_data_from_file("Luqueetal.dat");
+	NO_24.calc_excitation();
+	NO_24.calc_line_emissivities();
+	// 2 - 5
+	NO_emiss NO_25(2, 5);
+	NO_25.get_solar_data(Solspec);
+	NO_25.read_luque_data_from_file("Luqueetal.dat");
+	NO_25.calc_excitation();
+	NO_25.calc_line_emissivities();
+	// 2 - 5
+	NO_emiss NO_26(2, 6);
+	NO_26.get_solar_data(Solspec);
+	NO_26.read_luque_data_from_file("Luqueetal.dat");
+	NO_26.calc_excitation();
+	NO_26.calc_line_emissivities();
+	//
+
+
 	time(&Teil1_End);
 	T1_Dauer = Teil1_End - Teil1_Start;
 	/***************************************************************************
@@ -577,7 +607,7 @@ int main(int argc, char *argv[])
 			//cerr<<"limbauswertung start\n";
 			//NotTODO Die Säulendichtebestimmung kann deutlich schneller
 			//geschehen, Verbesserungen hier sind aber irrelevant
-			Limb_Auswertung(Orbitlist, l, Solspec, Spezies_Fenster,
+			Limb_Auswertung(Orbitlist, l, Solspec, Spezies_Fenster, NO_24,
 							counter_Nachtmessungen, counter_NLC_detektiert,
 							counter_Richtungsvektor_nicht_ok,
 							Arbeitsverzeichnis, mache_Fit_Plots_limb,

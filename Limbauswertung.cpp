@@ -27,6 +27,7 @@
 #include "Messung_Limb.h"
 #include "Datei_IO.h"  //ReadL1C_Limb
 #include "Messungs_ausschliessende_Tests.h"
+#include "NO_emiss.h"
 
 using namespace std;
 
@@ -37,6 +38,7 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 					int l,
 					Sonnenspektrum &Solspec,
 					vector<Speziesfenster>& Spezies_Fenster,
+					NO_emiss &NO,
 					int &counter_Nachtmessungen,
 					int &counter_NLC_detektiert,
 					int &counter_Richtungsvektor_nicht_ok,
@@ -121,6 +123,7 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 		// werden aber hierbei auch nicht oft eingesetzt
 		mlit->Deklinationswinkel_bestimmen(); //Sonnenlatitude
 		mlit->Sonnen_Longitude_bestimmen();
+		mlit->slant_column_NO(NO);
 		mlit->Intensitaeten_normieren(Solspec.m_Int_interpoliert);
 		// m_Intensitaeten enthält nun nichtmehr I sondern I/(piF)
 		// Das könnte man auch nur für die Par Fenster durchführen
