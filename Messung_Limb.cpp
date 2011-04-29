@@ -29,6 +29,7 @@ if(array!=0)                                 \
 #include "Fit_Polynom.h"
 #include "Glaetten.h"
 #include "Speziesfenster.h"
+#include "NO_emiss.h"
 
 extern "C" {
 	void dgesv_(int *N, int *NRHS, double *A, int *LDA, int *IPIV, double *B, int *LDB, int *INFO);
@@ -303,6 +304,123 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 }//int Zeilendichte_Bestimmen() ende
 //========================================
 //========================================
+int Messung_Limb::slant_column_NO(NO_emiss &NO)
+{
+	// I/(piFGamma)=integral(AMF n ds) mit AMF = s exp(-tau) ...aber zu der
+	// Formel später nochmal zurück Das spätere Retrieval ermittelt dann die
+	// Dichte n aus der rechten Seite
+
+	//Zunächst Indizes der Wellenlaengen der Basisfenster bestimmen
+	int i, j;
+	int NO_NJ = NO.get_NJ();
+	double wl;
+	double min_lambda_NO = 1000., max_lambda_NO = 0.;
+	for (i = 0; i < NO_NJ; i++) {
+		for (j = 0; j < 12; j++) {
+			wl = NO.get_lambda_K(j, i);
+			if (wl > 0. && wl < min_lambda_NO) min_lambda_NO = wl;
+			if (wl > max_lambda_NO) max_lambda_NO = wl;
+		}
+	}
+	std::cout << "# min_lambda_NO = " << min_lambda_NO << ", ";
+	std::cout << "# max_lambda_NO = " << max_lambda_NO << std::endl;
+	int i_basewin_l_min = sb_Get_closest_index(min_lambda_NO - 3.);
+	int i_basewin_l_max = sb_Get_closest_index(min_lambda_NO - 1.);
+	int i_basewin_r_min = sb_Get_closest_index(max_lambda_NO + 1.);
+	int i_basewin_r_max = sb_Get_closest_index(max_lambda_NO + 3.);
+	int i_peakwin_min = sb_Get_closest_index(min_lambda_NO - 1.);
+	int i_peakwin_max = sb_Get_closest_index(max_lambda_NO + 1.);
+	// Speicherplatzbedarf für die Fenster ermitteln
+	int base_l = (i_basewin_l_max - i_basewin_l_min + 1);
+	int base_r = (i_basewin_r_max - i_basewin_r_min + 1);
+	int N_base = base_l + base_r;
+	int N_peak = i_peakwin_max - i_peakwin_min + 1;
+	// Speicher anfordern
+	std::vector<double> basewin_wl(N_base);
+	std::vector<double> basewin_rad(N_base);
+	std::vector<double> peakwin_wl(N_peak);
+	std::vector<double> peakwin_rad(N_peak);
+	// Basisfenster WL und I auffüllen
+	for (int i = 0; i < base_l; i++) {
+		basewin_wl.at(i) = m_Wellenlaengen.at(i_basewin_l_min + i);
+		basewin_rad.at(i) = m_Intensitaeten.at(i_basewin_l_min + i);
+	}
+	for (int i = 0; i < base_r; i++) {
+		basewin_wl.at(base_l + i) = m_Wellenlaengen.at(i_basewin_r_min + i);
+		basewin_rad.at(base_l + i) = m_Intensitaeten.at(i_basewin_r_min + i);
+	}
+	//Peakfenster WL und I auffüllen
+	for (int i = 0; i < N_peak; i++) {
+		peakwin_wl.at(i) = m_Wellenlaengen.at(i_peakwin_min + i);
+		peakwin_rad.at(i) = m_Intensitaeten.at(i_peakwin_min + i);
+	}
+	std::cout << "# NO window(s):" << std::endl;
+	std::cout << "# base left: i(lambda_min) = " << i_basewin_l_min;
+	std::cout << ", i(lambda_max) = " << i_basewin_l_max << std::endl;
+	std::cout << "# base right: i(lambda min) = " << i_basewin_r_min;
+	std::cout << ", i(lambda_max) = " << i_basewin_r_max << std::endl;
+	std::cout << "# peak window indices: " << i_peakwin_min << ", ";
+	std::cout << i_peakwin_max << std::endl;
+
+	std::cout << "# TP: lat = " << m_Latitude_TP;
+	std::cout << ", lon = " << m_Longitude_TP;
+	std::cout << ", height = " << m_Hoehe_TP << std::endl;
+	// linearen Fit des Basisfensters durchführen
+	// Proto: Fit_Linear(double* x,double* y, double& a0, double& a1,int
+	// Anfangsindex, int Endindex)
+	double a0, a1;
+	Fit_Linear(basewin_wl, basewin_rad, a0, a1, 0, N_base - 1);
+	// lineare Funktion von Intensitäten des Peakfenster abziehen
+	for (int i = 0; i < N_peak; i++) {
+		peakwin_rad[i] -= a0 + a1 * peakwin_wl[i];
+	}
+	m_Zeilendichte = fit_NO_spec(NO, peakwin_wl, peakwin_rad);
+	std::cout << "# slant column = " << m_Zeilendichte << std::endl;
+
+	return 0;
+}
+
+double Messung_Limb::fit_NO_spec(NO_emiss &NO,
+		std::vector<double> &x, std::vector<double> &y)
+{
+	int NO_NJ = NO.get_NJ();
+	int i, j;
+	double A;
+
+	std::vector<double> NO_spec(x.size());
+	std::vector<double>::iterator x_it;
+
+	for (i = 0; i <= NO_NJ; i++) {
+		for (j = 0; j < 12; j++) {
+			double NO_wl = NO.get_lambda_K(j, i);
+			double NO_rad = NO.get_gamma_j(j, i);
+			for (x_it = x.begin(); x_it != x.end(); ++x_it) {
+				int l = std::distance(x.begin(), x_it);
+				double w = slit_func(0.22, NO_wl, *x_it);
+				NO_spec.at(l) += w * NO_rad;
+			}
+		}
+	}
+
+	double sum_gg = 0., sum_gy = 0.;
+	for (x_it = x.begin(); x_it != x.end(); ++x_it) {
+		int l = std::distance(x.begin(), x_it);
+		double g = NO_spec.at(l);
+		double yl = y.at(l);
+		sum_gy += g * yl;
+		sum_gg += g * g;
+	}
+	A = sum_gy / sum_gg;
+
+	for (x_it = x.begin(); x_it != x.end(); ++x_it) {
+		int l = std::distance(x.begin(), x_it);
+		std::cout << *x_it;
+		std::cout << "\t" << y.at(l);
+		std::cout << "\t" << A * NO_spec.at(l) << std::endl;
+	}
+
+	return A;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Funktionsstart Saeulendichte_Bestimmen_MgI285nm

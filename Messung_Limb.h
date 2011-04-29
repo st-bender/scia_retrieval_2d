@@ -29,6 +29,8 @@ public:
 	int Plots_der_Spektren_erzeugen(class Speziesfenster &Spezfenst, int Index,
 			std::string Arbeitsverzeichnis, std::string mache_Fit_Plots,
 			double *mean_10_20);
+	int slant_column_NO(class NO_emiss &NO);
+	double fit_NO_spec(class NO_emiss &NO, std::vector<double> &x, std::vector<double> &y);
 	int moving_average(int window_size);
 	int savitzky_golay(int window_size);
 	int Intensitaeten_normieren(std::vector<double> &Sonnen_Intensitaet);
