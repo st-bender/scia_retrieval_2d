@@ -50,7 +50,7 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 					vector<Ausgewertete_Messung_Limb>& Ausgewertete_Limbmessung_FeI,
 					Konfiguration &Konf)
 {
-	unsigned int i, j, k;
+	unsigned int k;
 	//Einmalig die Rohdaten aus der Datei Laden
 	vector<Messung_Limb> Rohdaten;
 	// Achtung das ist noch nicht der entgültige Vektor, weil dieser noch um die
