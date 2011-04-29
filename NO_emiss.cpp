@@ -245,7 +245,7 @@ int NO_emiss::calc_lines_emiss_absorp()
 
 	for (i = 0; i <= NJ; i++) {
 		double k_l = i;
-		double j_l, j_u, k_u;
+		double j_l = 0., j_u = 0., k_u = 0.;
 		int i_l, i_u;
 		for (l = 0; l <= 11; l++) {
 			if (l == 0 || l == 1 || l == 2 || l == 6 || l == 8 || l == 10)
@@ -620,7 +620,7 @@ int NO_emiss::read_luque_data_from_file(std::string filename)
 int NO_emiss::calc_excitation()
 {
 	int i, l, k_l, k_u;
-	double j, j_l, j_u, nj_frac, sum1, sum2;
+	double j, j_l = 0., j_u = 0., nj_frac, sum1, sum2;
 	double f_FC_tot;
 
 	excit.Null_Initialisierung();
@@ -680,7 +680,7 @@ int NO_emiss::calc_excitation()
 int NO_emiss::calc_line_emissivities()
 {
 	int i, l, k_l, k_u;
-	double j_l, j_u;
+	double j_l = 0., j_u = 0.;
 
 	gamma_j.Null_Initialisierung();
 
