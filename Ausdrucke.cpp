@@ -536,11 +536,11 @@ int Plots_Zusammenfassen(string Pfad_multips2pdf, string Pfad_multips2ps,
 	// Kommandozeilenparameter übergeben werden...also probieren wir mal 512=2^8
 	// Da noch noch die exe und der aufruf als parameter da sind muss weniger
 	// als 2^8 genommen werden
-	int M = 200;
+	unsigned int M = 200;
 	vector<string> Liste_der_grossen_ps;
 	vector<string>::iterator sit;
 	string Befehlszeile;
-	int Max_Zahl_grosse_ps = Liste_der_ps_Dateinamen.size() / M;
+	unsigned int Max_Zahl_grosse_ps = Liste_der_ps_Dateinamen.size() / M;
 	//Achtung integerdivision ist absicht
 	if ((Liste_der_ps_Dateinamen.size() % M) != 0) {
 		Max_Zahl_grosse_ps++;
@@ -550,7 +550,7 @@ int Plots_Zusammenfassen(string Pfad_multips2pdf, string Pfad_multips2ps,
 		 << Liste_der_ps_Dateinamen.size() << "\n";
 	cout << "Max_Zahl_grosse_ps: " << Max_Zahl_grosse_ps << "\n";
 	cout << "Erzeuge_große_PS\n";
-	for (int k = 0; k < Max_Zahl_grosse_ps; k++) {
+	for (unsigned int k = 0; k < Max_Zahl_grosse_ps; k++) {
 		cout << k << "te große ps Datei\n";
 		char buf[256];
 		sprintf(buf, "%s%i.ps", Name_pdf_Datei.c_str(), k);
