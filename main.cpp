@@ -561,6 +561,10 @@ int main(int argc, char *argv[])
 	NO_26.calc_line_emissivities();
 	//
 
+	// convolve high resolution solar spectra with the sciamachy resolution function
+	// TODO: replace the detection by a more sophisticated method.
+	if (Solspec.m_Anzahl_WL > 4000)
+		Solspec.saoref_to_sciamachy();
 
 	time(&Teil1_End);
 	T1_Dauer = Teil1_End - Teil1_Start;
