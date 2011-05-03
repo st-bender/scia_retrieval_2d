@@ -535,6 +535,12 @@ int main(int argc, char *argv[])
 	////////////////////////////////////////////////////////////////////////////
 
 	// NO stuff
+	// 0 - 2
+	NO_emiss NO_02(0, 2);
+	NO_02.get_solar_data(Solspec);
+	NO_02.read_luque_data_from_file("Luqueetal.dat");
+	NO_02.calc_excitation();
+	NO_02.calc_line_emissivities();
 	// 1 - 0
 	NO_emiss NO_10(1, 0);
 	NO_10.get_solar_data(Solspec);
@@ -611,7 +617,7 @@ int main(int argc, char *argv[])
 			//cerr<<"limbauswertung start\n";
 			//NotTODO Die Säulendichtebestimmung kann deutlich schneller
 			//geschehen, Verbesserungen hier sind aber irrelevant
-			Limb_Auswertung(Orbitlist, l, Solspec, Spezies_Fenster, NO_24,
+			Limb_Auswertung(Orbitlist, l, Solspec, Spezies_Fenster, NO_02,
 							counter_Nachtmessungen, counter_NLC_detektiert,
 							counter_Richtungsvektor_nicht_ok,
 							Arbeitsverzeichnis, mache_Fit_Plots_limb,
