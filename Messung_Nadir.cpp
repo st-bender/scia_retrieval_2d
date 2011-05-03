@@ -4,14 +4,6 @@
  *  Created on: 30.04.2010
  *      Author: martin
  */
-//Macro SAVEDELETE
-#define SAVEDELETE(array)     \
-if(array!=0)                                 \
-{                                                \
-    delete[] array;                        \
-    array=0;                                 \
-}                                                \
-//Das Makro ist nur Save, falls die arrays alle mit 0 initialisiert werden
 
 #include <cstdio>
 #include "Messung_Nadir.h"

@@ -5,16 +5,6 @@
  *      Author: martin
  *****************************************/
 
-
-//Macro SAVEDELETE
-#define SAVEDELETE(array)     \
-if(array!=0)                                 \
-{                                                \
-    delete[] array;                        \
-    array=0;                                 \
-}                                                \
- 
-
 #include "Messung_Limb.h"
 #include <cmath>
 #include <cstdlib>
