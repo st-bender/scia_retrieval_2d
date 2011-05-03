@@ -6,16 +6,14 @@
  */
 // In dieser Liste stehen alle Dateinamen, die zu einem Orbit gehören
 // Diese wird aus einer Datei geladen -> Die Orbitliste wird dort erzeugt
-
+#ifndef ORBITLISTE_HH_
+#define ORBITLISTE_HH_
 
 #include<fstream>
 #include<string>
 #include<iostream>
 #include <cstdlib>
 #include<vector>
-
-#ifndef ORBITLISTE_HH_
-#define ORBITLISTE_HH_
 
 class Orbitliste
 {
