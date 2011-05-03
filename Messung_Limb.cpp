@@ -330,19 +330,20 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO)
 	std::vector<double> basewin_rad(N_base);
 	std::vector<double> peakwin_wl(N_peak);
 	std::vector<double> peakwin_rad(N_peak);
+	std::vector<double> rad = m_Intensitaeten;
 	// Basisfenster WL und I auffüllen
 	for (int i = 0; i < base_l; i++) {
 		basewin_wl.at(i) = m_Wellenlaengen.at(i_basewin_l_min + i);
-		basewin_rad.at(i) = m_Intensitaeten.at(i_basewin_l_min + i);
+		basewin_rad.at(i) = rad.at(i_basewin_l_min + i);
 	}
 	for (int i = 0; i < base_r; i++) {
 		basewin_wl.at(base_l + i) = m_Wellenlaengen.at(i_basewin_r_min + i);
-		basewin_rad.at(base_l + i) = m_Intensitaeten.at(i_basewin_r_min + i);
+		basewin_rad.at(base_l + i) = rad.at(i_basewin_r_min + i);
 	}
 	//Peakfenster WL und I auffüllen
 	for (int i = 0; i < N_peak; i++) {
 		peakwin_wl.at(i) = m_Wellenlaengen.at(i_peakwin_min + i);
-		peakwin_rad.at(i) = m_Intensitaeten.at(i_peakwin_min + i);
+		peakwin_rad.at(i) = rad.at(i_peakwin_min + i);
 	}
 	std::cout << "# NO window(s):" << std::endl;
 	std::cout << "# base left: i(lambda_min) = " << i_basewin_l_min;
