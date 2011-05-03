@@ -362,7 +362,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO)
 	Fit_Linear(basewin_wl, basewin_rad, a0, a1, 0, N_base - 1);
 	// lineare Funktion von Intensitäten des Peakfenster abziehen
 	for (int i = 0; i < N_peak; i++) {
-		peakwin_rad[i] -= a0 + a1 * peakwin_wl[i];
+		peakwin_rad.at(i) -= a0 + a1 * peakwin_wl.at(i);
 	}
 	m_Zeilendichte = fit_NO_spec(NO, peakwin_wl, peakwin_rad);
 	std::cout << "# slant column = " << m_Zeilendichte << std::endl;
