@@ -10,6 +10,7 @@
 #include<iostream>
 #include <cstdlib>
 #include<vector>
+#include <stdexcept>
 
 #include"Orbitliste.h"
 
@@ -33,39 +34,45 @@ int Orbitliste::Liste_Laden(string Dateiname)
 } //ende Orbitliste::Liste_Laden
 //*****************************************************************
 //*****************************************************************
-int Orbitliste::Ist_Messung_Limbmessung(uint Index)    //0 ja alles andere nein
+bool Orbitliste::Ist_Messung_Limbmessung(uint Index)
 {
 	//zuerstmal prüfen ob m_Dateinamen[Index] überhaupt existiert
-	if (Index >= m_Dateinamen.size()) {
-		cout << "Achtung Zugriff auf nicht vorhandenes Listenelement in "
+	try {
+		string tmp = m_Dateinamen.at(Index);
+	} catch(std::out_of_range &err) {
+		cerr << "Achtung Zugriff auf nicht vorhandenes Listenelement in "
 			 << "Funktion Orbitliste::Ist_Messung_Limbmessung\n";
-		return 1;
+		cerr << "Exception: " << err.what() << endl;
+		return false;
 	}
 	// charakteristische Zeichenkette suchen
 	int Stringindex = m_Dateinamen[Index].find("SCIA_limb");
 	// Überprüfen, ob Zeichenkette überhaupt vorhanden
 	if (Stringindex == -1) {
-		return 2; //nichtr gefunden
+		return false; //nicht gefunden
 	}
-	return 0; //gefunden
+	return true; //gefunden
 }//ende Ist_Messung_Limbmessung
 //*****************************************************************
 //*****************************************************************
-int Orbitliste::Ist_Messung_Nadirmessung(uint Index)   //0 ja alles andere nein
+bool Orbitliste::Ist_Messung_Nadirmessung(uint Index)
 {
 	//zuerstmal prüfen ob m_Dateinamen[Index] überhaupt existiert
-	if (Index >= m_Dateinamen.size()) {
-		cout << "Achtung Zugriff auf nicht vorhandenes Listenelement in "
+	try {
+		string tmp = m_Dateinamen.at(Index);
+	} catch(std::out_of_range &err) {
+		cerr << "Achtung Zugriff auf nicht vorhandenes Listenelement in "
 			 << "Funktion Orbitliste::Ist_Messung_Nadirmessung\n";
-		return 1;
+		cerr << "Exception: " << err.what() << endl;
+		return false;
 	}
 	// charakteristische Zeichenkette suchen
 	int Stringindex = m_Dateinamen[Index].find("SCIA_nadir");
 	// Überprüfen, ob Zeichenkette überhaupt vorhanden
 	if (Stringindex == -1) {
-		return 2;//nicht gefunden
+		return false;//nicht gefunden
 	}
-	return 0;  //gefunden
+	return true;  //gefunden
 }//ende Ist_Messung_Nadirmessung
 //*****************************************************************
 

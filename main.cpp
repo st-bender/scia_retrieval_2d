@@ -601,7 +601,7 @@ int main(int argc, char *argv[])
 		//cout<<L1CDatei<<"\n";
 
 		//Falls Limb-> Limbauslesung
-		if (Orbitlist.Ist_Messung_Limbmessung(l) == 0) {
+		if (Orbitlist.Ist_Messung_Limbmessung(l) == true) {
 			/////////////////////////////////////
 			//Limbauswertung
 			////////////////////////////////////
@@ -630,7 +630,7 @@ int main(int argc, char *argv[])
 		}//ende if (Orbitlist.Ist_Messung_Limbmessung(i)==0)
 		//Falls Nadir-> Nadirauslesung
 		//TODO Ladeunterroutine überprüfen
-		if (Orbitlist.Ist_Messung_Nadirmessung(l) == 0) {
+		if (Orbitlist.Ist_Messung_Nadirmessung(l) == true) {
 			/////////////////////////////////////
 			//Nadirauswertung
 			/////////////////////////////////////

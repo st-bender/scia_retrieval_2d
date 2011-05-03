@@ -19,8 +19,8 @@ class Orbitliste
 {
 public:
 	int Liste_Laden(std::string Dateiname);
-	int Ist_Messung_Limbmessung(uint Index);   //0 ja alles andere nein
-	int Ist_Messung_Nadirmessung(uint Index);  //0 ja alles andere nein
+	bool Ist_Messung_Limbmessung(uint Index);
+	bool Ist_Messung_Nadirmessung(uint Index);
 	std::vector<std::string> m_Dateinamen;
 
 	//Wartungsfunktion
