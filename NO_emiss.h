@@ -85,6 +85,7 @@ class NO_emiss {
 	// line emissivities by upper state k
 	double emiss_tot;
 	MPL_Matrix gamma_j;
+	std::vector<double> spec_scia_res;
 
 	public:
 	NO_emiss(int vu = 2, int vl = 4, int vl_abs = 0, double T = 200.);
@@ -98,6 +99,7 @@ class NO_emiss {
 	int read_luque_data_from_file(std::string filename);
 	int calc_excitation();
 	int calc_line_emissivities();
+	int scia_convolve(class Messung_Limb &ml);
 	int print_lines_emiss_absorp();
 	int print_Hoenl_London_abs();
 	int print_Hoenl_London_emiss();

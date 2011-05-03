@@ -14,6 +14,7 @@
 #include "constants.h"
 #include "NO_emiss.h"
 #include "Sonnenspektrum.h"
+#include "Messung_Limb.h"
 
 int line_count(std::string filename)
 {
@@ -714,6 +715,30 @@ int NO_emiss::calc_line_emissivities()
 							* excit(1, j_u + 0.5);
 				}
 				emiss_tot += gamma_j(l, k_u);
+			}
+		}
+	}
+
+	return 0;
+}
+
+int NO_emiss::scia_convolve(Messung_Limb &ml)
+{
+	int NO_NJ = get_NJ();
+	int i, j;
+
+	std::vector<double> x = ml.m_Wellenlaengen;
+	std::vector<double>::iterator x_it;
+	spec_scia_res.resize(x.size());
+
+	for (i = 0; i <= NO_NJ; i++) {
+		for (j = 0; j < 12; j++) {
+			double NO_wl = get_lambda_K(j, i);
+			double NO_rad = get_gamma_j(j, i);
+			for (x_it = x.begin(); x_it != x.end(); ++x_it) {
+				int l = std::distance(x.begin(), x_it);
+				double w = slit_func(0.22, NO_wl, *x_it);
+				spec_scia_res.at(l) += w * NO_rad;
 			}
 		}
 	}
