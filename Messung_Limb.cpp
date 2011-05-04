@@ -365,8 +365,10 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO)
 	for (int i = 0; i < N_peak; i++) {
 		peakwin_rad.at(i) -= a0 + a1 * peakwin_wl.at(i);
 	}
-	m_Zeilendichte = fit_NO_spec(NO, peakwin_wl, peakwin_rad);
-	std::cout << "# slant column = " << m_Zeilendichte << std::endl;
+	m_Zeilendichte = fit_NO_spec(NO, peakwin_wl, peakwin_rad,
+			m_Fehler_Zeilendichten);
+	std::cout << "# slant column = " << m_Zeilendichte;
+	std::cout << ", error = " << m_Fehler_Zeilendichten << std::endl;
 
 	return 0;
 }
