@@ -300,6 +300,26 @@ int main(int argc, char *argv[])
 	Konf.m_Pfad_Datei_mit_Dateinamen_fuer_Messungen_eines_Orbits = Orbitlistenpfad;
 	Konf.m_Pfad_Solar_Spektrum = Solarpfad;
 
+	////////////////////////////////////////////////////////////////////////////
+	//
+	// Sonnenspektrum bestimmen
+	//
+	////////////////////////////////////////////////////////////////////////////
+	Nachricht_Schreiben("Lade Sonnenspektrum...", 3, Prioritylevel);
+	Sonnenspektrum Solspec;
+	if (Solspec.Laden_SCIA(Konf.m_Pfad_Solar_Spektrum, Konf.m_Pfad_Solar_Fallback_Spektrum) != 0) {
+		cout << "Programmabbruch\n";
+		return -1;
+	}
+	//Überprüfen, ob einlesen erfolgreich war
+	//Solspec.Speichern_was_geladen_wurde("CHECKDATA/Sonne_so_wie_geladen.txt");
+	//ok -> funktioniert
+	////////////////////////////////////////////////////////////////////////////
+	//
+	// Sonnenspektrum ist bestimmt
+	//
+	////////////////////////////////////////////////////////////////////////////
+
 	// Fitparameter für alle Spezies vorbeiten
 	Speziesfenster Spez;
 	Liniendaten Lindat;
@@ -511,26 +531,6 @@ int main(int argc, char *argv[])
 	////////////////////////////////////////////////////////////////////////////
 	//
 	// Orbitliste Ist geladen
-	//
-	////////////////////////////////////////////////////////////////////////////
-
-	////////////////////////////////////////////////////////////////////////////
-	//
-	// Sonnenspektrum bestimmen
-	//
-	////////////////////////////////////////////////////////////////////////////
-	Nachricht_Schreiben("Lade Sonnenspektrum...", 3, Prioritylevel);
-	Sonnenspektrum Solspec;
-	if (Solspec.Laden_SCIA(Konf.m_Pfad_Solar_Spektrum, Konf.m_Pfad_Solar_Fallback_Spektrum) != 0) {
-		cout << "Programmabbruch\n";
-		return -1;
-	}
-	//Überprüfen, ob einlesen erfolgreich war
-	//Solspec.Speichern_was_geladen_wurde("CHECKDATA/Sonne_so_wie_geladen.txt");
-	//ok -> funktioniert
-	////////////////////////////////////////////////////////////////////////////
-	//
-	// Sonnenspektrum ist bestimmt
 	//
 	////////////////////////////////////////////////////////////////////////////
 
