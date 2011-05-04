@@ -499,6 +499,8 @@ int main(int argc, char *argv[])
 	vector<Ausgewertete_Messung_Nadir> Ausgewertete_Nadirmessung_unknown;
 	vector<Ausgewertete_Messung_Limb> Ausgewertete_Limbmessung_FeI;
 	vector<Ausgewertete_Messung_Nadir> Ausgewertete_Nadirmessung_FeI;
+	vector<Ausgewertete_Messung_Limb> Ausgewertete_Limbmessung_NO;
+	vector<Ausgewertete_Messung_Nadir> Ausgewertete_Nadirmessung_NO;
 	////////////////////////////////////////////////////////////////////////////
 	// Orbitliste Laden
 	//
@@ -626,6 +628,7 @@ int main(int argc, char *argv[])
 							Ausgewertete_Limbmessung_MgII,
 							Ausgewertete_Limbmessung_unknown,
 							Ausgewertete_Limbmessung_FeI,
+							Ausgewertete_Limbmessung_NO,
 							Konf);
 			//cerr<<"limbauswertung Ende\n";
 			// Die Zwischenergebnisse stehen nun in
@@ -651,7 +654,8 @@ int main(int argc, char *argv[])
 							 Ausgewertete_Nadirmessung_MgI,
 							 Ausgewertete_Nadirmessung_MgII,
 							 Ausgewertete_Nadirmessung_unknown,
-							 Ausgewertete_Nadirmessung_FeI);
+							 Ausgewertete_Nadirmessung_FeI,
+							 Ausgewertete_Nadirmessung_NO);
 			/////////////////////////////////////
 			//Nadirauswertung Ende
 			////////////////////////////////////

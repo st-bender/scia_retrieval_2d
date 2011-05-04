@@ -29,6 +29,7 @@ int Limb_Auswertung(class Orbitliste &Orbitlist,
 					std::vector<class Ausgewertete_Messung_Limb> &Ausgewertete_Limbmessung_MgII,
 					std::vector<class Ausgewertete_Messung_Limb> &Ausgewertete_Limbmessung_unknown,
 					std::vector<class Ausgewertete_Messung_Limb> &Ausgewertete_Limbmessung_FeI,
+					std::vector<class Ausgewertete_Messung_Limb> &Ausgewertete_Limbmessung_NO,
 					Konfiguration &Konf);
 
 

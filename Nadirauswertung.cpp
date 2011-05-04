@@ -28,7 +28,8 @@ int Nadir_Auswertung(Orbitliste &Orbitlist,
 					 vector<Ausgewertete_Messung_Nadir>& Ausgewertete_Nadirmessung_MgI,
 					 vector<Ausgewertete_Messung_Nadir>& Ausgewertete_Nadirmessung_MgII,
 					 vector<Ausgewertete_Messung_Nadir>& Ausgewertete_Nadirmessung_unknown,
-					 vector<Ausgewertete_Messung_Nadir>& Ausgewertete_Nadirmessung_FeI)
+					 vector<Ausgewertete_Messung_Nadir>& Ausgewertete_Nadirmessung_FeI,
+					 vector<Ausgewertete_Messung_Nadir>& Ausgewertete_Nadirmessung_NO)
 {
 	//cout<<"Start_Nadirauswertung\n";
 	unsigned int i, j, k;
