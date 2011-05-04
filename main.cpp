@@ -253,6 +253,7 @@ int main(int argc, char *argv[])
 	string mache_volles_Retrieval_MgII = "ja";
 	string mache_volles_Retrieval_unknown = "nein";
 	string mache_volles_Retrieval_FeI = "nein";
+	string mache_volles_Retrieval_NO = "ja";
 
 
 	// Zu Arbeitsverzeichnis /////// für jede Spezies sollen 5 Dateien entstehen
@@ -695,6 +696,7 @@ int main(int argc, char *argv[])
 	string sssss_MgII = "0MgII";
 	string sssss_unknown = "unkno";
 	string sssss_FeI = "00FeI";
+	string sssss_NO = "000NO";
 	string Endung_Limb = "_0limb_Saeulen.txt";
 	string Endung_Nadir = "_nadir_Saeulen.txt";
 	string Dateiout_Mittelteil = "_orbit_" + xxxxx + "_" + yyyymmdd_hhmm;
@@ -703,19 +705,23 @@ int main(int argc, char *argv[])
 	string Pfad_Saeulen_Limb_MgII = Arbeitsverzeichnis + "/" + sssss_MgII + Dateiout_Mittelteil + Endung_Limb;
 	string Pfad_Saeulen_Limb_unknown = Arbeitsverzeichnis + "/" + sssss_unknown + Dateiout_Mittelteil + Endung_Limb;
 	string Pfad_Saeulen_Limb_FeI = Arbeitsverzeichnis + "/" + sssss_FeI + Dateiout_Mittelteil + Endung_Limb;
+	string Pfad_Saeulen_Limb_NO = Arbeitsverzeichnis + "/" + sssss_NO + Dateiout_Mittelteil + Endung_Limb;
 	string Pfad_Saeulen_Nadir_MgI = Arbeitsverzeichnis + "/" + sssss_MgI + Dateiout_Mittelteil + Endung_Nadir;
 	string Pfad_Saeulen_Nadir_MgII = Arbeitsverzeichnis + "/" + sssss_MgII + Dateiout_Mittelteil + Endung_Nadir;
 	string Pfad_Saeulen_Nadir_unknown = Arbeitsverzeichnis + "/" + sssss_unknown + Dateiout_Mittelteil + Endung_Nadir;
 	string Pfad_Saeulen_Nadir_FeI = Arbeitsverzeichnis + "/" + sssss_FeI + Dateiout_Mittelteil + Endung_Nadir;
+	string Pfad_Saeulen_Nadir_NO = Arbeitsverzeichnis + "/" + sssss_NO + Dateiout_Mittelteil + Endung_Nadir;
 	//cerr<<"Ausgabe_Saeulendichten\n";
 	Ausgabe_Saeulendichten(Pfad_Saeulen_Limb_MgI.c_str(), Ausgewertete_Limbmessung_MgI);
 	Ausgabe_Saeulendichten(Pfad_Saeulen_Limb_MgII.c_str(), Ausgewertete_Limbmessung_MgII);
 	Ausgabe_Saeulendichten(Pfad_Saeulen_Limb_unknown.c_str(), Ausgewertete_Limbmessung_unknown);
 	Ausgabe_Saeulendichten(Pfad_Saeulen_Limb_FeI.c_str(), Ausgewertete_Limbmessung_FeI);
+	Ausgabe_Saeulendichten(Pfad_Saeulen_Limb_NO.c_str(), Ausgewertete_Limbmessung_NO);
 	Ausgabe_Saeulendichten(Pfad_Saeulen_Nadir_MgI.c_str(), Ausgewertete_Nadirmessung_MgI);
 	Ausgabe_Saeulendichten(Pfad_Saeulen_Nadir_MgII.c_str(), Ausgewertete_Nadirmessung_MgII);
 	Ausgabe_Saeulendichten(Pfad_Saeulen_Nadir_unknown.c_str(), Ausgewertete_Nadirmessung_unknown);
 	Ausgabe_Saeulendichten(Pfad_Saeulen_Nadir_FeI.c_str(), Ausgewertete_Nadirmessung_FeI);
+	Ausgabe_Saeulendichten(Pfad_Saeulen_Nadir_NO.c_str(), Ausgewertete_Nadirmessung_NO);
 	//cerr<<"Plotdateien zusammenfassen\n";
 	//Plotdateien zusammenfassen
 	if ((mache_Fit_Plots_limb == "ja") || (mache_Fit_Plots_nadir == "ja")) {
@@ -1111,6 +1117,93 @@ int main(int argc, char *argv[])
 	////////////////////////////////////////////////////////////////////////////
 
 	////////////////////////////////////////////////////////////////////////////
+	// Spezies NO //
+	////////////////////////////////////////////////////////////////////////////
+	// einen Vektor der Dichte_n
+	MPL_Matrix Dichte_n_NO(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
+	Dichte_n_NO.Null_Initialisierung();
+
+	// einen Vektor x_a für die a-priori-Lösung der Dichte (oder Startwert usw)
+	MPL_Matrix Dichte_apriori_NO(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
+	Dichte_apriori_NO.Null_Initialisierung();  // Null als Startwert
+
+	// Vektor mit Zeilendichten für alle Messungen einer Spezies
+	//quadratische matrix
+	MPL_Matrix S_letzte_Hoehe_NO(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
+	MPL_Matrix Saeulendichten_NO(Ausgewertete_Limbmessung_NO.size()
+			+ Ausgewertete_Nadirmessung_NO.size(), 1); //Spaltenvektor
+	MPL_Matrix Saeulendichten_Fehler_NO(Ausgewertete_Limbmessung_NO.size()
+			+ Ausgewertete_Nadirmessung_NO.size(), 1); //Spaltenvektor
+
+	// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
+	for (unsigned int i = 0; i < Ausgewertete_Limbmessung_NO.size(); i++) {
+		Saeulendichten_NO(i) = Ausgewertete_Limbmessung_NO[i].m_Zeilendichte;
+		Saeulendichten_Fehler_NO(i)
+			= Ausgewertete_Limbmessung_NO[i].m_Fehler_Zeilendichten;
+	}
+	// Nadir NO
+	for (unsigned int i = Ausgewertete_Limbmessung_NO.size();
+			i < Ausgewertete_Limbmessung_NO.size()
+				+ Ausgewertete_Nadirmessung_NO.size(); i++) {
+		int Nadir_i = i - Ausgewertete_Limbmessung_NO.size();
+		Saeulendichten_NO(i)
+			= Ausgewertete_Nadirmessung_NO[Nadir_i].m_Zeilendichte;
+		Saeulendichten_Fehler_NO(i)
+			= Ausgewertete_Nadirmessung_NO[Nadir_i].m_Fehler_Zeilendichten;
+	}
+
+	// Spezies Index for NO
+	// TODO: fix index since 0 ~ MgII
+	// but leave for now for the lambdas
+	spez_index = 0;
+
+	double NO_Lambda_letzte_Hoehe = 1E-32; //100 für ein
+
+	// take the lambdas from the config file, no need to re-compile
+	double NO_Lambda_apriori
+		= Konf.m_Retrieval_Kovarianzen[spez_index + 0 * Konf.m_Anzahl_der_Emitter];
+	double NO_Lambda_Breite
+		= Konf.m_Retrieval_Kovarianzen[spez_index + 1 * Konf.m_Anzahl_der_Emitter];
+	double NO_Lambda_Hoehe
+		= Konf.m_Retrieval_Kovarianzen[spez_index + 2 * Konf.m_Anzahl_der_Emitter];
+
+	cout << "Retrieval Kovarianzen NO:" << endl;
+	cout << "L_apriori = " << NO_Lambda_apriori << ", "
+		 << "L_Breite = " << NO_Lambda_Breite << ", "
+		 << "L_Höhe = " << NO_Lambda_Hoehe << endl;
+
+	// Messfehlermatrix S_y y*y
+	// quadratische matrix
+	MPL_Matrix S_y_NO(Saeulendichten_NO.m_Elementanzahl, Saeulendichten_NO.m_Elementanzahl);
+	MPL_Matrix S_apriori_NO(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
+
+	// AMF_Matrix erstellen
+	// Zeilen wie y spalten wie x
+	MPL_Matrix AMF_NO(Saeulendichten_NO.m_Elementanzahl, Grid.m_Anzahl_Punkte);
+	// S_Breite, S_Hoehe, S_Apriori, S_y, AMF aufbauen
+	IERR = 0;
+	// cerr << "NO Matrizen aufbauen" << endl;
+	if (mache_volles_Retrieval_NO == "ja") {
+		Matrizen_Aufbauen(S_Breite, S_Hoehe, S_letzte_Hoehe_NO,
+						   NO_Lambda_letzte_Hoehe,
+						   S_apriori_NO, S_y_NO,
+						   AMF_NO, NO_Lambda_apriori,
+						   Saeulendichten_Fehler_NO,
+						   Spezies_Fenster[4],
+						   Grid,
+						   Ausgewertete_Limbmessung_NO,
+						   Ausgewertete_Nadirmessung_NO,
+						   Konf, IERR);
+		if (IERR != 0) {
+			cerr << "Fehler bei Matrizen_Aufbauen\n";
+			return -1; //Hauptprogramm beenden
+		}
+	}
+	////////////////////////////////////////////////////////////////////////////
+	// ENDE Spezies NO
+	////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////
 	// Matrizen sind aufgebaut  // Schön wärs 7.7.2010...erstmal weiter, weil
 	// es beim Raytracing noch probleme gibt
 	////////////////////////////////////////////////////////////////////////////
@@ -1189,6 +1282,16 @@ int main(int argc, char *argv[])
 							   S_letzte_Hoehe_FeI, FeI_Lambda_Breite,
 							   FeI_Lambda_Hoehe, AMF_FeI, Konf);
 	}
+	/////////////////////////
+	// Spezies NO
+	/////////////////////////
+	if (mache_volles_Retrieval_NO == "ja") {
+		Retrievaliteration(Dichte_n_NO, Dichte_apriori_NO,
+						   Saeulendichten_NO,
+						   S_apriori_NO, S_y_NO, S_Breite, S_Hoehe,
+						   NO_Lambda_Breite,
+						   NO_Lambda_Hoehe, AMF_NO, Konf);
+	}
 
 
 	time(&Teil4_End);
@@ -1256,6 +1359,18 @@ int main(int argc, char *argv[])
 									 S_letzte_Hoehe_FeI, FeI_Lambda_Breite,
 									 FeI_Lambda_Hoehe, AMF_FeI, Konf);
 	}
+	/////////////////////////
+	// Spezies NO //
+	/////////////////////////
+	MPL_Matrix S_x_NO(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
+	//Averaging Kernel Matrix
+	MPL_Matrix AKM_NO(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
+	if (mache_volles_Retrieval_NO == "ja") {
+		Retrievalfehler_Abschaetzung(S_x_NO, AKM_NO,
+									 S_apriori_NO, S_y_NO, S_Breite, S_Hoehe,
+									 S_letzte_Hoehe_NO, NO_Lambda_Breite,
+									 NO_Lambda_Hoehe, AMF_NO, Konf);
+	}
 	time(&Teil5_End);
 	T5_Dauer = Teil5_End - Teil5_Start;
 	/***************************************************************************
@@ -1297,6 +1412,12 @@ int main(int argc, char *argv[])
 	//cout<<"Dateiname_out: "<<Dateiname_out<<"\n";
 	if (mache_volles_Retrieval_FeI == "ja") {
 		Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_FeI, S_x_FeI, AKM_FeI);
+	}
+	//////////////////////////////
+	// NO ////////////////////
+	Dateiname_out = Arbeitsverzeichnis + "/" + sssss_NO + Dateiout_Mittelteil;
+	if (mache_volles_Retrieval_NO == "ja") {
+		Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_NO, S_x_NO, AKM_NO);
 	}
 
 	time(&Teil6_End);
