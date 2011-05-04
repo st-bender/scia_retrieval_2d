@@ -85,6 +85,8 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 	// Testen, ob die Interpolation erfolgreich war
 	//Solspec.Speichern("CHECKDATA/Sonne_interpoliert_auf_826.txt"); ->ok
 
+	NO.scia_convolve(Rohdaten.at(0));
+
 	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	// Hier wäre ein guter Ort, um zu prüfen, ob die Rohdaten weiter verwendet
 	// werden dürfen
@@ -188,6 +190,10 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 				}
 				if (sfit->m_Spezies_Name == "FeI") {
 					Ausgewertete_Limbmessung_FeI.push_back(Ergebnis);
+				}
+				if (sfit->m_Spezies_Name == "NO") {
+					Ergebnis.m_Wellenlaenge = NO.get_scia_wl_at_max();
+					Ausgewertete_Limbmessung_NO.push_back(Ergebnis);
 				}
 
 			}//ende k Linie
