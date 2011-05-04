@@ -86,6 +86,7 @@ class NO_emiss {
 	double emiss_tot;
 	MPL_Matrix gamma_j;
 	std::vector<double> spec_scia_res;
+	double scia_wl_at_max;
 
 	public:
 	NO_emiss(int vu = 2, int vl = 4, int vl_abs = 0, double T = 200.);

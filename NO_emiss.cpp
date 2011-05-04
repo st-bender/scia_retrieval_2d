@@ -729,6 +729,7 @@ int NO_emiss::scia_convolve(Messung_Limb &ml)
 
 	std::vector<double> x = ml.m_Wellenlaengen;
 	std::vector<double>::iterator x_it;
+	std::vector<double>::iterator spec_max;
 	spec_scia_res.resize(x.size());
 
 	for (i = 0; i <= NO_NJ; i++) {
@@ -742,6 +743,9 @@ int NO_emiss::scia_convolve(Messung_Limb &ml)
 			}
 		}
 	}
+	spec_max = std::max_element(spec_scia_res.begin(), spec_scia_res.end());
+	i = std::distance(spec_scia_res.begin(), spec_max);
+	scia_wl_at_max = ml.m_Wellenlaengen.at(i);
 
 	return 0;
 }
