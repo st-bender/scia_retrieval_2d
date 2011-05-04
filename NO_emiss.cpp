@@ -894,3 +894,7 @@ double NO_emiss::get_gamma_j(int i, int j)
 {
 	return gamma_j(i, j);
 }
+double NO_emiss::get_scia_wl_at_max()
+{
+	return scia_wl_at_max;
+}
