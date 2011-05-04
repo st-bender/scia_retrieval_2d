@@ -472,6 +472,43 @@ int main(int argc, char *argv[])
 	//**************************************************************************
 	Spezies_Fenster.push_back(Spez);
 	//weitere Spezies
+
+	// NO stuff
+	// 0 - 2
+	NO_emiss NO_02(0, 2);
+	NO_02.get_solar_data(Solspec);
+	NO_02.read_luque_data_from_file("Luqueetal.dat");
+	NO_02.calc_excitation();
+	NO_02.calc_line_emissivities();
+	// 1 - 0
+	NO_emiss NO_10(1, 0);
+	NO_10.get_solar_data(Solspec);
+	NO_10.read_luque_data_from_file("Luqueetal.dat");
+	NO_10.calc_excitation();
+	NO_10.calc_line_emissivities();
+	// 2 - 4
+	NO_emiss NO_24(2, 4);
+	NO_24.get_solar_data(Solspec);
+	NO_24.read_luque_data_from_file("Luqueetal.dat");
+	NO_24.calc_excitation();
+	NO_24.calc_line_emissivities();
+	// 2 - 5
+	NO_emiss NO_25(2, 5);
+	NO_25.get_solar_data(Solspec);
+	NO_25.read_luque_data_from_file("Luqueetal.dat");
+	NO_25.calc_excitation();
+	NO_25.calc_line_emissivities();
+	// 2 - 5
+	NO_emiss NO_26(2, 6);
+	NO_26.get_solar_data(Solspec);
+	NO_26.read_luque_data_from_file("Luqueetal.dat");
+	NO_26.calc_excitation();
+	NO_26.calc_line_emissivities();
+	//
+	Spez.m_Spezies_Name = "NO";
+	Spez.m_FWHM = Konf.m_FWHM;
+	Spezies_Fenster.push_back(Spez);
+
 	// SpezVektoren wieder leeren
 	// hier könnte man in Spez auch eine Methode für schreiben
 	Spez.m_Wellenlaengen.resize(0);
@@ -535,39 +572,6 @@ int main(int argc, char *argv[])
 	// Orbitliste Ist geladen
 	//
 	////////////////////////////////////////////////////////////////////////////
-
-	// NO stuff
-	// 0 - 2
-	NO_emiss NO_02(0, 2);
-	NO_02.get_solar_data(Solspec);
-	NO_02.read_luque_data_from_file("Luqueetal.dat");
-	NO_02.calc_excitation();
-	NO_02.calc_line_emissivities();
-	// 1 - 0
-	NO_emiss NO_10(1, 0);
-	NO_10.get_solar_data(Solspec);
-	NO_10.read_luque_data_from_file("Luqueetal.dat");
-	NO_10.calc_excitation();
-	NO_10.calc_line_emissivities();
-	// 2 - 4
-	NO_emiss NO_24(2, 4);
-	NO_24.get_solar_data(Solspec);
-	NO_24.read_luque_data_from_file("Luqueetal.dat");
-	NO_24.calc_excitation();
-	NO_24.calc_line_emissivities();
-	// 2 - 5
-	NO_emiss NO_25(2, 5);
-	NO_25.get_solar_data(Solspec);
-	NO_25.read_luque_data_from_file("Luqueetal.dat");
-	NO_25.calc_excitation();
-	NO_25.calc_line_emissivities();
-	// 2 - 5
-	NO_emiss NO_26(2, 6);
-	NO_26.get_solar_data(Solspec);
-	NO_26.read_luque_data_from_file("Luqueetal.dat");
-	NO_26.calc_excitation();
-	NO_26.calc_line_emissivities();
-	//
 
 	// convolve high resolution solar spectra with the sciamachy resolution function
 	// TODO: replace the detection by a more sophisticated method.
