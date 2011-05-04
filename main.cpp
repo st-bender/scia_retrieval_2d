@@ -250,7 +250,7 @@ int main(int argc, char *argv[])
 //    string mache_Fit_Plots_unknown="nein";
 	string mache_volles_Retrieval = "ja"; // Falls nicht, nach Teil 2 abbrechen
 	string mache_volles_Retrieval_MgI = "nein"; // switches für einzelne Spezies
-	string mache_volles_Retrieval_MgII = "ja";
+	string mache_volles_Retrieval_MgII = "nein";
 	string mache_volles_Retrieval_unknown = "nein";
 	string mache_volles_Retrieval_FeI = "nein";
 	string mache_volles_Retrieval_NO = "ja";
