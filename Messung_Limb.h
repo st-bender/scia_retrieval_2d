@@ -30,7 +30,8 @@ public:
 			std::string Arbeitsverzeichnis, std::string mache_Fit_Plots,
 			double *mean_10_20);
 	int slant_column_NO(class NO_emiss &NO);
-	double fit_NO_spec(class NO_emiss &NO, std::vector<double> &x, std::vector<double> &y);
+	double fit_NO_spec(class NO_emiss &NO, std::vector<double> &x,
+			std::vector<double> &y, double &rms_err);
 	int moving_average(int window_size);
 	int savitzky_golay(int window_size);
 	int Intensitaeten_normieren(std::vector<double> &Sonnen_Intensitaet);

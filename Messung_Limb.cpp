@@ -372,7 +372,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO)
 }
 
 double Messung_Limb::fit_NO_spec(NO_emiss &NO,
-		std::vector<double> &x, std::vector<double> &y)
+		std::vector<double> &x, std::vector<double> &y, double &rms_err)
 {
 	int NO_NJ = NO.get_NJ();
 	int i, j;
@@ -403,12 +403,16 @@ double Messung_Limb::fit_NO_spec(NO_emiss &NO,
 	}
 	A = sum_gy / sum_gg;
 
+	double err = 0.;
 	for (x_it = x.begin(); x_it != x.end(); ++x_it) {
 		int l = std::distance(x.begin(), x_it);
+		err += (y.at(l) - A * NO_spec.at(l)) * (y.at(l) - A * NO_spec.at(l));
 		std::cout << *x_it;
 		std::cout << "\t" << y.at(l);
 		std::cout << "\t" << A * NO_spec.at(l) << std::endl;
 	}
+	err /= x.size();
+	rms_err = std::sqrt(err);
 
 	return A;
 }
