@@ -285,9 +285,6 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 				aml_it->m_Wellenlaenge, V_Atmo_Wirkungsquerschnitte(0));
 		interpolieren(M_Atmo_Wirkungsquerschnitte, 0, 2,
 				aml_it->m_Wellenlaenge, V_Atmo_Wirkungsquerschnitte(1));
-		//cout<<"V_Atmo_Wirkungsquerschnitte(0):"<<V_Atmo_Wirkungsquerschnitte(0)<<"\n";
-		//cout<<"V_Atmo_Wirkungsquerschnitte(1):"<<V_Atmo_Wirkungsquerschnitte(1)<<"\n";
-		//sleep(1);
 		//zwei Wege müssen betrachtet werden:
 		//Satellit-Punkt
 		//Punkt-Sonne
