@@ -127,7 +127,6 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 		mlit->Deklinationswinkel_bestimmen(); //Sonnenlatitude
 		mlit->Sonnen_Longitude_bestimmen();
 		mlit->Intensitaeten_normieren(Solspec.m_Int_interpoliert);
-		mlit->slant_column_NO(NO);
 		// m_Intensitaeten enthält nun nichtmehr I sondern I/(piF)
 		// Das könnte man auch nur für die Par Fenster durchführen
 		//Schleife über alle Spezies wie z.b. Mg oder Mg+
@@ -192,6 +191,8 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 					Ausgewertete_Limbmessung_FeI.push_back(Ergebnis);
 				}
 				if (sfit->m_Spezies_Name == "NO") {
+					mlit->slant_column_NO(NO);
+					Ergebnis = mlit->Ergebnis_Zusammenfassen();
 					Ergebnis.m_Wellenlaenge = NO.get_scia_wl_at_max();
 					Ausgewertete_Limbmessung_NO.push_back(Ergebnis);
 				}
