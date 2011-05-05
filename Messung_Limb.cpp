@@ -376,29 +376,15 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO)
 double Messung_Limb::fit_NO_spec(NO_emiss &NO,
 		std::vector<double> &x, std::vector<double> &y, double &rms_err)
 {
-	int NO_NJ = NO.get_NJ();
-	int i, j;
 	double A;
+	int l0 = sb_Get_Index(x.at(0)) + 1;
 
-	std::vector<double> NO_spec(x.size());
 	std::vector<double>::iterator x_it;
-
-	for (i = 0; i <= NO_NJ; i++) {
-		for (j = 0; j < 12; j++) {
-			double NO_wl = NO.get_lambda_K(j, i);
-			double NO_rad = NO.get_gamma_j(j, i);
-			for (x_it = x.begin(); x_it != x.end(); ++x_it) {
-				int l = std::distance(x.begin(), x_it);
-				double w = slit_func(0.22, NO_wl, *x_it);
-				NO_spec.at(l) += w * NO_rad;
-			}
-		}
-	}
 
 	double sum_gg = 0., sum_gy = 0.;
 	for (x_it = x.begin(); x_it != x.end(); ++x_it) {
 		int l = std::distance(x.begin(), x_it);
-		double g = NO_spec.at(l);
+		double g = NO.get_spec_scia_res(l0 + l);
 		double yl = y.at(l);
 		sum_gy += g * yl;
 		sum_gg += g * g;
@@ -408,10 +394,12 @@ double Messung_Limb::fit_NO_spec(NO_emiss &NO,
 	double err = 0.;
 	for (x_it = x.begin(); x_it != x.end(); ++x_it) {
 		int l = std::distance(x.begin(), x_it);
-		err += (y.at(l) - A * NO_spec.at(l)) * (y.at(l) - A * NO_spec.at(l));
+		double diff = (y.at(l) - A * NO.get_spec_scia_res(l0 + l));
+		err += diff * diff;
 		std::cout << *x_it;
 		std::cout << "\t" << y.at(l);
-		std::cout << "\t" << A * NO_spec.at(l) << std::endl;
+		std::cout << "\t" << A * NO.get_spec_scia_res(l0 + l);
+		std::cout << std::endl;
 	}
 	err /= x.size();
 	rms_err = std::sqrt(err);
