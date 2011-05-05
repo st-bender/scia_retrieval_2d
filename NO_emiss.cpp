@@ -730,6 +730,7 @@ int NO_emiss::scia_convolve(Messung_Limb &ml)
 	std::vector<double> x = ml.m_Wellenlaengen;
 	std::vector<double>::iterator x_it;
 	std::vector<double>::iterator spec_max;
+	spec_scia_res.resize(0);
 	spec_scia_res.resize(x.size());
 
 	for (i = 0; i <= NO_NJ; i++) {
