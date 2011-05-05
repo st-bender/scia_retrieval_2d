@@ -93,4 +93,5 @@ public:
 };
 
 double slit_func(double fwhm, double x0, double x);
+double slit_func_gauss(double fwhm, double x0, double x);
 #endif /* MESSUNG_NADIR_HH_ */

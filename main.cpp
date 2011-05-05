@@ -180,6 +180,13 @@ double slit_func(double fwhm, double x0, double x)
 
 	return 1. / (cnorm * (fwhm2to4 + pow(x0 - x, 4)));
 }
+double slit_func_gauss(double fwhm, double x0, double x)
+{
+	double s = fwhm / (2. * std::sqrt(2. * std::log(2.)));
+	double n = 1. / (std::sqrt(2. * M_PI) * s);
+	double dxs = (x - x0) / s;
+	return n * std::exp(-0.5 * dxs * dxs);
+}
 
 // argc ist Die Anzahl der Kommandozeilenparameter
 // argv[i] enthält den i-ten Kommandozeilenparameter argv[0] ist Programmname
