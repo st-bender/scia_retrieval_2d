@@ -1016,11 +1016,25 @@ int main(int argc, char *argv[])
 		Saeulendichten_Fehler_unknown(i)
 			= Ausgewertete_Nadirmessung_unknown[Nadir_i].m_Fehler_Zeilendichten;
 	}
-	//Ende Säulendichten und Fehler auffüllen
-	double unknown_Lambda_Hoehe = 5E-6; //5E-6;//5E-6;//5E-6;
-	double unknown_Lambda_Breite = 1E-6; //1E-6;//1E-7;//1E-7;
-	double unknown_Lambda_apriori = 1E-14; //1E-3;//5E-6 oder -5;
+
+	// Spezies Index for unknown
+	spez_index = 2;
+
 	double unknown_Lambda_letzte_Hoehe = 1E-32; //100 für ein
+
+	// take the lambdas from the config file, no need to re-compile
+	double unknown_Lambda_apriori
+		= Konf.m_Retrieval_Kovarianzen[spez_index + 0 * Konf.m_Anzahl_der_Emitter];
+	double unknown_Lambda_Breite
+		= Konf.m_Retrieval_Kovarianzen[spez_index + 1 * Konf.m_Anzahl_der_Emitter];
+	double unknown_Lambda_Hoehe
+		= Konf.m_Retrieval_Kovarianzen[spez_index + 2 * Konf.m_Anzahl_der_Emitter];
+
+	cout << "Retrieval Kovarianzen unknown:" << endl;
+	cout << "L_apriori = " << unknown_Lambda_apriori << ", "
+		 << "L_Breite = " << unknown_Lambda_Breite << ", "
+		 << "L_Höhe = " << unknown_Lambda_Hoehe << endl;
+
 	// Messfehlermatrix S_y y*y
 	MPL_Matrix S_y_unknown(Saeulendichten_unknown.m_Elementanzahl,
 			Saeulendichten_unknown.m_Elementanzahl); // quadratische matrix
@@ -1037,7 +1051,7 @@ int main(int argc, char *argv[])
 						   AMF_unknown, unknown_Lambda_apriori,
 						   Saeulendichten_Fehler_unknown,
 						   // TODO 1 ist MgI, 0 ist MgII hier wieder korrigieren
-						   Spezies_Fenster[2],
+						   Spezies_Fenster[spez_index],
 						   Grid,
 						   Ausgewertete_Limbmessung_unknown,
 						   Ausgewertete_Nadirmessung_unknown,
@@ -1082,11 +1096,25 @@ int main(int argc, char *argv[])
 		Saeulendichten_Fehler_FeI(i)
 			= Ausgewertete_Nadirmessung_FeI[Nadir_i].m_Fehler_Zeilendichten;
 	}
-	//Ende Säulendichten und Fehler auffüllen
-	double FeI_Lambda_Hoehe = 1E-8; // 1E-5;
-	double FeI_Lambda_Breite = 1E-8; // 1E-5;
-	double FeI_Lambda_apriori = 1E-10; // 5E-5;
+
+	// Spezies Index for FeI
+	spez_index = 3;
+
 	double FeI_Lambda_letzte_Hoehe = 1E-32; //100 für ein
+
+	// take the lambdas from the config file, no need to re-compile
+	double FeI_Lambda_apriori
+		= Konf.m_Retrieval_Kovarianzen[spez_index + 0 * Konf.m_Anzahl_der_Emitter];
+	double FeI_Lambda_Breite
+		= Konf.m_Retrieval_Kovarianzen[spez_index + 1 * Konf.m_Anzahl_der_Emitter];
+	double FeI_Lambda_Hoehe
+		= Konf.m_Retrieval_Kovarianzen[spez_index + 2 * Konf.m_Anzahl_der_Emitter];
+
+	cout << "Retrieval Kovarianzen FeI:" << endl;
+	cout << "L_apriori = " << FeI_Lambda_apriori << ", "
+		 << "L_Breite = " << FeI_Lambda_Breite << ", "
+		 << "L_Höhe = " << FeI_Lambda_Hoehe << endl;
+
 	// Messfehlermatrix S_y y*y
 	MPL_Matrix S_y_FeI(Saeulendichten_FeI.m_Elementanzahl,
 			Saeulendichten_FeI.m_Elementanzahl); // quadratische matrix
@@ -1102,7 +1130,7 @@ int main(int argc, char *argv[])
 						   S_apriori_FeI, S_y_FeI,
 						   AMF_FeI, FeI_Lambda_apriori,
 						   Saeulendichten_Fehler_FeI,
-						   Spezies_Fenster[3], // TODO Index setzten
+						   Spezies_Fenster[spez_index], // TODO Index setzten
 						   Grid,
 						   Ausgewertete_Limbmessung_FeI,
 						   Ausgewertete_Nadirmessung_FeI,
@@ -1155,7 +1183,7 @@ int main(int argc, char *argv[])
 	// Spezies Index for NO
 	// TODO: fix index since 0 ~ MgII
 	// but leave for now for the lambdas
-	spez_index = 0;
+	spez_index = 4;
 
 	double NO_Lambda_letzte_Hoehe = 1E-32; //100 für ein
 
@@ -1189,7 +1217,7 @@ int main(int argc, char *argv[])
 						   S_apriori_NO, S_y_NO,
 						   AMF_NO, NO_Lambda_apriori,
 						   Saeulendichten_Fehler_NO,
-						   Spezies_Fenster[4],
+						   Spezies_Fenster[spez_index],
 						   Grid,
 						   Ausgewertete_Limbmessung_NO,
 						   Ausgewertete_Nadirmessung_NO,
