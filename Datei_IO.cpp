@@ -96,7 +96,8 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 	// */
 
 	// constant dark signal
-	dark_sig = 2.731e9;
+	//dark_sig = 2.731e9;
+	dark_sig = 3.9e9;
 
 	// 4. Erstellung des Übergabevektors
 	vector<Messung_Limb> Ergebnisvektor;
