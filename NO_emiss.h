@@ -110,6 +110,7 @@ class NO_emiss {
 	int get_NJ();
 	double get_lambda_K(int i, int j);
 	double get_gamma_j(int i, int j);
+	double get_spec_scia_res(int i);
 	double get_scia_wl_at_max();
 };
 
