@@ -191,9 +191,13 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 					Ausgewertete_Limbmessung_FeI.push_back(Ergebnis);
 				}
 				if (sfit->m_Spezies_Name == "NO") {
+					double wl = NO.get_scia_wl_at_max();
 					mlit->slant_column_NO(NO);
 					Ergebnis = mlit->Ergebnis_Zusammenfassen();
-					Ergebnis.m_Wellenlaenge = NO.get_scia_wl_at_max();
+					Ergebnis.m_Wellenlaenge
+						= ldit->m_Wellenlaenge
+						= sfit->m_Wellenlaengen.at(0)
+						= wl;
 					Ausgewertete_Limbmessung_NO.push_back(Ergebnis);
 				}
 

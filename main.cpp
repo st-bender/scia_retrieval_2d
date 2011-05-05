@@ -472,6 +472,17 @@ int main(int argc, char *argv[])
 	// weitere Wellenlängen
 	//**************************************************************************
 	Spezies_Fenster.push_back(Spez);
+	// SpezVektoren wieder leeren
+	// hier könnte man in Spez auch eine Methode für schreiben
+	Spez.m_Wellenlaengen.resize(0);
+	Spez.m_Basisfenster_links_WLmin.resize(0);
+	Spez.m_Basisfenster_links_WLmax.resize(0);
+	Spez.m_Basisfenster_rechts_WLmin.resize(0);
+	Spez.m_Basisfenster_rechts_WLmax.resize(0);
+	Spez.m_Peakfenster_WLmin.resize(0);
+	Spez.m_Peakfenster_WLmax.resize(0);
+	Spez.m_Liniendaten.resize(0);
+	Spez.clear();  // Instanz leeren
 	//weitere Spezies
 
 	// NO stuff
@@ -507,7 +518,22 @@ int main(int argc, char *argv[])
 	NO_26.calc_line_emissivities();
 	//
 	Spez.m_Spezies_Name = "NO";
+	wl = 246.9; // dummy, will be set later more accurately
+	Spez.m_Wellenlaengen.push_back(wl);
+	Spez.m_Basisfenster_links_WLmin.push_back(wl - 1);
+	Spez.m_Basisfenster_links_WLmax.push_back(wl - 0.5);
+	Spez.m_Basisfenster_rechts_WLmin.push_back(wl + 0.5);
+	Spez.m_Basisfenster_rechts_WLmax.push_back(wl + 1);
+	Spez.m_Peakfenster_WLmin.push_back(wl - 1);
+	Spez.m_Peakfenster_WLmax.push_back(wl + 1);
 	Spez.m_FWHM = Konf.m_FWHM;
+	// Liniendaten
+	Lindat.m_Wellenlaenge = wl;
+	Lindat.m_rel_Einstein = 1;
+	Lindat.m_f_Wert = 0.162;
+	Lindat.m_E1 = 0;
+	Lindat.m_E2 = 1;
+	Spez.m_Liniendaten.push_back(Lindat);
 	Spezies_Fenster.push_back(Spez);
 
 	// SpezVektoren wieder leeren
