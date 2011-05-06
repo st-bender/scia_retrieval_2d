@@ -312,8 +312,6 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO)
 			if (wl > max_lambda_NO) max_lambda_NO = wl;
 		}
 	}
-	std::cout << "# min_lambda_NO = " << min_lambda_NO << ", ";
-	std::cout << "# max_lambda_NO = " << max_lambda_NO << std::endl;
 	int i_basewin_l_min = sb_Get_closest_index(min_lambda_NO - 3.);
 	int i_basewin_l_max = sb_Get_closest_index(min_lambda_NO - 1.);
 	int i_basewin_r_min = sb_Get_closest_index(max_lambda_NO + 1.);
@@ -345,13 +343,6 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO)
 		peakwin_wl.at(i) = m_Wellenlaengen.at(i_peakwin_min + i);
 		peakwin_rad.at(i) = rad.at(i_peakwin_min + i);
 	}
-	std::cout << "# NO window(s):" << std::endl;
-	std::cout << "# base left: i(lambda_min) = " << i_basewin_l_min;
-	std::cout << ", i(lambda_max) = " << i_basewin_l_max << std::endl;
-	std::cout << "# base right: i(lambda min) = " << i_basewin_r_min;
-	std::cout << ", i(lambda_max) = " << i_basewin_r_max << std::endl;
-	std::cout << "# peak window indices: " << i_peakwin_min << ", ";
-	std::cout << i_peakwin_max << std::endl;
 
 	std::cout << "# TP: lat = " << m_Latitude_TP;
 	std::cout << ", lon = " << m_Longitude_TP;
