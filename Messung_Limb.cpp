@@ -294,7 +294,7 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 }//int Zeilendichte_Bestimmen() ende
 //========================================
 //========================================
-int Messung_Limb::slant_column_NO(NO_emiss &NO)
+int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots)
 {
 	// I/(piFGamma)=integral(AMF n ds) mit AMF = s exp(-tau) ...aber zu der
 	// Formel später nochmal zurück Das spätere Retrieval ermittelt dann die
@@ -357,6 +357,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO)
 		peakwin_rad.at(i) -= a0 + a1 * peakwin_wl.at(i);
 	}
 	m_Zeilendichte = fit_NO_spec(NO, peakwin_wl, peakwin_rad,
+			mache_Fit_Plots == "ja" ? true : false,
 			m_Fehler_Zeilendichten);
 	std::cout << "# slant column = " << m_Zeilendichte;
 	std::cout << ", error = " << m_Fehler_Zeilendichten << std::endl;
@@ -365,7 +366,8 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO)
 }
 
 double Messung_Limb::fit_NO_spec(NO_emiss &NO,
-		std::vector<double> &x, std::vector<double> &y, double &rms_err)
+		std::vector<double> &x, std::vector<double> &y,
+		bool plot_fit, double &rms_err)
 {
 	double A;
 	int l0 = sb_Get_Index(x.at(0)) + 1;
@@ -387,10 +389,12 @@ double Messung_Limb::fit_NO_spec(NO_emiss &NO,
 		int l = std::distance(x.begin(), x_it);
 		double diff = (y.at(l) - A * NO.get_spec_scia_res(l0 + l));
 		err += diff * diff;
-		std::cout << *x_it;
-		std::cout << "\t" << y.at(l);
-		std::cout << "\t" << A * NO.get_spec_scia_res(l0 + l);
-		std::cout << std::endl;
+		if (plot_fit) {
+			std::cout << *x_it;
+			std::cout << "\t" << y.at(l);
+			std::cout << "\t" << A * NO.get_spec_scia_res(l0 + l);
+			std::cout << std::endl;
+		}
 	}
 	err /= x.size();
 	rms_err = std::sqrt(err);

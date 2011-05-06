@@ -192,7 +192,7 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 				}
 				if (sfit->m_Spezies_Name == "NO") {
 					double wl = NO.get_scia_wl_at_max();
-					mlit->slant_column_NO(NO);
+					mlit->slant_column_NO(NO, mache_Fit_Plots);
 					Ergebnis = mlit->Ergebnis_Zusammenfassen();
 					Ergebnis.m_Wellenlaenge
 						= ldit->m_Wellenlaenge
