@@ -699,7 +699,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			// Alle hier noch übrigen Gitterelemente werden
 			// von der LOS geschnitten
 			//km  soviel, wie gerade Werte in Tabelle da sind.....
-			double TOA_LFS = 100.0;
+			double TOA_LFS = Konf.m_TOA;
 			//Werte, die drüber liegen werden ignoriert
 			// hier geht wohl auch 100.....
 			// werte zwischen 50 und 200 sind vorhanden
@@ -1117,7 +1117,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 
 			// Alle hier noch übrigen Gitterelemente werden von der LOS
 			// geschnitten
-			double TOA_LFS = 100.0;
+			double TOA_LFS = Konf.m_TOA;
 			//km  soviel, wie gerade Werte in Tabelle da sind
 			//Der Startpunkt liegt zwischen den beiden Durchstoßpunkten
 			MPL_Vektor Start_Punkt_Polar(3);
