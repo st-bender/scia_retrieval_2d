@@ -1214,8 +1214,6 @@ int main(int argc, char *argv[])
 	}
 
 	// Spezies Index for NO
-	// TODO: fix index since 0 ~ MgII
-	// but leave for now for the lambdas
 	spez_index = 4;
 
 	double NO_Lambda_letzte_Hoehe = 1E-32; //100 für ein
