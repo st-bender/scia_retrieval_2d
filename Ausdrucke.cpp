@@ -10,6 +10,7 @@
 #include<fstream>
 #include<iostream>
 #include <cstdlib>
+#include <sstream>
 
 using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
@@ -75,11 +76,13 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 			y_max = y_max_test;
 		}
 	}
-	char buf[256];
-	sprintf(buf, " Saeulendichte (ohne Phase): %1.3E cm^{-2}", Mittelwert);
-	string text_messwert = buf;
-	sprintf(buf, " Residuum: %1.3E cm^{-2}", Fehler);
-	string text_Fehler = buf;
+	stringstream buf;
+	buf.precision(4);
+	buf << "Saeulendichte (ohne Phase): " << Mittelwert << " cm^{-2}";
+	string text_messwert(buf.str());
+	buf.str(string()); // clear the stream
+	buf << "Residuum: " << Fehler << " cm^{-2}";
+	string text_Fehler(buf.str());
 	////////////////////////////////////////////////////////////////////////////
 	// Gnuplotscript schreiben
 	////////////////////////////////////////////////////////////////////////////
@@ -552,9 +555,9 @@ int Plots_Zusammenfassen(string Pfad_multips2pdf, string Pfad_multips2ps,
 	cout << "Erzeuge_große_PS\n";
 	for (unsigned int k = 0; k < Max_Zahl_grosse_ps; k++) {
 		cout << k << "te große ps Datei\n";
-		char buf[256];
-		sprintf(buf, "%s%i.ps", Name_pdf_Datei.c_str(), k);
-		string Name_grosse_ps = buf;
+		stringstream buf;
+		buf << Name_pdf_Datei << k << ".ps";
+		string Name_grosse_ps(buf.str());
 		Liste_der_grossen_ps.push_back(Name_grosse_ps);
 		Befehlszeile = Pfad_multips2ps + " " + Name_grosse_ps;
 		for (unsigned int i = 0;

@@ -125,6 +125,7 @@ irgendetwas nicht funktioniert, mich kontaktieren
 #include <cstdio>         // cout
 #include <iostream>      // cout
 #include <cstdlib>        // für atoi
+#include <sstream>
 //eigene
 #include "Konfiguration.h"
 #include "Liniendaten.h"
@@ -1497,31 +1498,31 @@ int main(int argc, char *argv[])
 	////////////////////////////////////////////////////////////////////////////
 	// Zeitmessung
 	time(&timer1);
-	char buf[256];
 	deltaT = timer1 - start_zeit;
-	sprintf(buf, "Gesamtlaufzeit des Programms in Sekunden:\t %ld", deltaT);
-	string dum = buf;
-	Nachricht_Schreiben(dum, 10, Prioritylevel);
-	sprintf(buf, "Dauer Teilprozess 1 Vorbereitung:\t\t %ld", T1_Dauer);
-	dum = buf;
-	Nachricht_Schreiben(dum, 10, Prioritylevel);
-	sprintf(buf, "Dauer Teilprozess 2 Säulendichtenbestimmung:\t %ld", T2_Dauer);
-	dum = buf;
-	Nachricht_Schreiben(dum, 10, Prioritylevel);
-	sprintf(buf, "Dauer Teilprozess 3 Aufbau des Gitters:\t\t %ld", T3_Dauer);
-	dum = buf;
-	Nachricht_Schreiben(dum, 10, Prioritylevel);
-	dum = "Zeit steckt in Teil 3 im wesentlichen in den Raytracing-Schleifen.";
-	Nachricht_Schreiben(dum, 10, Prioritylevel);
-	sprintf(buf, "Dauer Teilprozess 4 Dichte-Retrieval:\t\t %ld", T4_Dauer);
-	dum = buf;
-	Nachricht_Schreiben(dum, 10, Prioritylevel);
-	sprintf(buf, "Dauer Teilprozess 5 Fehlerabschätzung:\t\t %ld", T5_Dauer);
-	dum = buf;
-	Nachricht_Schreiben(dum, 10, Prioritylevel);
-	sprintf(buf, "Dauer Teilprozess 6 Ausgabe:\t\t\t %ld", T6_Dauer);
-	dum = buf;
-	Nachricht_Schreiben(dum, 10, Prioritylevel);
+	stringstream buf;
+	buf << "Gesamtlaufzeit des Programms in Sekunden:\t " << deltaT;
+	Nachricht_Schreiben(buf.str(), 10, Prioritylevel);
+	buf.str(string());
+	buf << "Dauer Teilprozess 1 Vorbereitung:\t\t " << T1_Dauer;
+	Nachricht_Schreiben(buf.str(), 10, Prioritylevel);
+	buf.str(string());
+	buf << "Dauer Teilprozess 2 Säulendichtenbestimmung:\t " << T2_Dauer;
+	Nachricht_Schreiben(buf.str(), 10, Prioritylevel);
+	buf.str(string());
+	buf << "Dauer Teilprozess 3 Aufbau des Gitters:\t\t " << T3_Dauer;
+	Nachricht_Schreiben(buf.str(), 10, Prioritylevel);
+	buf.str(string());
+	buf << "Zeit steckt in Teil 3 im wesentlichen in den Raytracing-Schleifen.";
+	Nachricht_Schreiben(buf.str(), 10, Prioritylevel);
+	buf.str(string());
+	buf << "Dauer Teilprozess 4 Dichte-Retrieval:\t\t " << T4_Dauer;
+	Nachricht_Schreiben(buf.str(), 10, Prioritylevel);
+	buf.str(string());
+	buf << "Dauer Teilprozess 5 Fehlerabschätzung:\t\t " << T5_Dauer;
+	Nachricht_Schreiben(buf.str(), 10, Prioritylevel);
+	buf.str(string());
+	buf << "Dauer Teilprozess 6 Ausgabe:\t\t\t " << T6_Dauer;
+	Nachricht_Schreiben(buf.str(), 10, Prioritylevel);
 	////////////////////////////////////////////////////////////////////////////
 	Nachricht_Schreiben("Beende Programm regulär...", 3, Prioritylevel);
 	return 0;
