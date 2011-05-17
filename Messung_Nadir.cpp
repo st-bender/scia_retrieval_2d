@@ -12,6 +12,7 @@
 #include "Ausgewertete_Messung_Nadir.h"
 #include <cstdio>
 #include <iostream>
+#include <sstream>
 #include "Ausdrucke.h"
 #include "Speziesfenster.h"
 
@@ -238,22 +239,22 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 			Funktion.push_back(Peak + Basis);
 		}
 
-		string s1, s_OrbNum, s2;
-		char buf[256];
+		string s_OrbNum;
+		stringstream buf;
 		//TODO immer prüfen, ob Dateienamenlänge noch stimmt...
 		// falls / im Namen ist das schlecht
 		string Datnam = m_Dateiname_L1C.substr(m_Dateiname_L1C.size() - 39, 39);
 
 		//TODO Pfad anpassen
-		sprintf(buf, "mkdir %s/Plots 2>/dev/null", Arbeitsverzeichnis.c_str());
-		string Befehl = buf;
-		system(Befehl.c_str());
-		sprintf(buf, "%s_%s_%i_%i.ps",
-				Datnam.c_str(), Spezfenst.m_Spezies_Name.c_str(), MessungsNr, Index);
-		string new_datnam = buf;
-		sprintf(buf, "%s/Plots/%s",
-				Arbeitsverzeichnis.c_str(), new_datnam.c_str());
-		s1 = buf;
+		buf << "mkdir " << Arbeitsverzeichnis.c_str() << "/Plots 2>/dev/null";
+		system(buf.str().c_str());
+		buf.str(string());
+		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
+			<< "_" << MessungsNr << "_" << Index << ".ps";
+		string new_datnam(buf.str());
+		buf.str(string());
+		buf << Arbeitsverzeichnis.c_str() << "/Plots/" << new_datnam.c_str();
+		string s1(buf.str());
 		//s1 ist der Volle Pfad der Datei...
 		//diesen kann man wegspeichern,
 		//um später die .ps files in ein großes pdf zu packen
@@ -270,10 +271,13 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 			s_OrbNum = Datnam.substr(pos_suffix - 5, 5);
 		}
 		//Orbitnummer ermittelt///////
-		sprintf(buf, "Orbit %5s Nadir GP: Lat: %G G(rad)  Lon: %G G Sat: Lat: %G G Lon: %G",
-				s_OrbNum.c_str(), m_Latitude_Ground, m_Longitude_Ground,
-				m_Latitude_Sat, m_Longitude_Sat);
-		s2 = buf;
+		buf.str(string());
+		buf << "Orbit " << s_OrbNum.c_str() << ", Nadir GP:"
+			<< " Lat: " << m_Latitude_Ground << " deg,"
+			<< " Lon: " << m_Longitude_Ground << " deg; Sat:"
+			<< " Lat: " << m_Latitude_Sat << " deg,"
+			<< " Lon: " << m_Longitude_Sat << " deg.";
+		string s2(buf.str());
 		//cout<<s1<<"\n";
 		//int Plot_2xy(string Dateiname,string title, string xlabel,
 		//  string ylabel,double* x1,double*y1, double* x2,double* y2,
