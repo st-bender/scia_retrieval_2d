@@ -13,6 +13,7 @@
 
 #include <fstream>  //für Ausgabe
 #include <iostream>//für Ausgabe
+#include <sstream>
 #include <cstdlib>  //für Ausgabe
 #include <cstdio>   //Filekram
 #include "Ausdrucke.h"
@@ -238,24 +239,22 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 			Funktion[i] = Peak + Basis;
 		}
 
-		string s1, s_OrbNum, s2;
-		int h = this->m_Hoehe_TP;
-		char buf[256];
+		string s_OrbNum;
+		stringstream buf;
 		//TODO immer prüfen, ob Dateienamenlänge noch stimmt...
 		// falls / im Namen ist das schlecht
 		string Datnam = m_Dateiname_L1C.substr(m_Dateiname_L1C.size() - 39, 39);
 
 		//TODO Pfad anpassen
-		sprintf(buf, "mkdir %s/Plots 2>/dev/null", Arbeitsverzeichnis.c_str());
-
-		string Befehl = buf;
-		system(Befehl.c_str());
-		sprintf(buf, "%s_%s_%i_%ikm.ps", Datnam.c_str(),
-				Spezfenst.m_Spezies_Name.c_str(), Index, h);
-		string new_datnam = buf;
-		sprintf(buf, "%s/Plots/%s", Arbeitsverzeichnis.c_str(),
-				new_datnam.c_str());
-		s1 = buf;
+		buf << "mkdir " << Arbeitsverzeichnis.c_str() << "/Plots 2>/dev/null";
+		system(buf.str().c_str());
+		buf.str(string());
+		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
+			<< "_" << Index << "_" << m_Hoehe_TP << "km.ps";
+		string new_datnam(buf.str());
+		buf.str(string());
+		buf << Arbeitsverzeichnis.c_str() << "/Plots/" << new_datnam.c_str();
+		string s1(buf.str());
 		//s1 ist der Volle Pfad der Datei...diesen kann man wegspeichern, um
 		//später die .ps files in ein großes pdf zu packen
 		Spezfenst.m_Liste_der_Plot_Dateinamen.push_back(s1);
@@ -270,9 +269,12 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 			s_OrbNum = Datnam.substr(pos_suffix - 5, 5);
 		}
 		//Orbitnummer ermittelt///////
-		sprintf(buf, "Orbit %5s Limb TP: Lat: %G Grad  Lon: %G Grad Hoehe: %G km",
-				s_OrbNum.c_str(), m_Latitude_TP, m_Longitude_TP, m_Hoehe_TP);
-		s2 = buf;
+		buf.str(string());
+		buf << "Orbit " << s_OrbNum.c_str() << ", Limb TP:"
+			<< " Lat: " << m_Latitude_TP << " deg,"
+			<< " Lon: " << m_Longitude_TP << " deg,"
+			<< " Hoehe: " << m_Hoehe_TP << " km.";
+		string s2(buf.str());
 		//cout<<s1<<"\n";
 		//int Plot_2xy(string Dateiname,string title, string xlabel,
 		//string ylabel,double* x1,double*y1, double* x2,double* y2,
@@ -685,22 +687,21 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 	//Plotroutine aufrufen
 	if (mache_Fit_Plots == "ja") {
 		// Dateinamenschnickschnack
-		string s1, s_OrbNum, s2;
-		int h = this->m_Hoehe_TP;
-		char buf[256];
+		string s_OrbNum;
+		stringstream buf;
 		//TODO immer prüfen, ob Dateienamenlänge noch stimmt...
 		//falls / im Namen ist das schlecht
 		string Datnam = m_Dateiname_L1C.substr(m_Dateiname_L1C.size() - 39, 39);
 		//TODO Pfad anpassen
-		sprintf(buf, "mkdir %s/Plots 2>/dev/null", Arbeitsverzeichnis.c_str());
-		string Befehl = buf;
-		system(Befehl.c_str());
-		sprintf(buf, "%s_%s_%i_%ikm.ps",
-				Datnam.c_str(), Spezfenst.m_Spezies_Name.c_str(), Index, h);
-		string new_datnam = buf;
-		sprintf(buf, "%s/Plots/%s",
-				Arbeitsverzeichnis.c_str(), new_datnam.c_str());
-		s1 = buf;
+		buf << "mkdir " << Arbeitsverzeichnis.c_str() << "/Plots 2>/dev/null";
+		system(buf.str().c_str());
+		buf.str(string());
+		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
+			<< "_" << Index << "_" << m_Hoehe_TP << "km.ps";
+		string new_datnam(buf.str());
+		buf.str(string());
+		buf << Arbeitsverzeichnis.c_str() << "/Plots/" << new_datnam.c_str();
+		string s1(buf.str());
 		//s1 ist der Volle Pfad der Datei...diesen kann man wegspeichern, um
 		//später die .ps files in ein großes pdf zu packen
 		Spezfenst.m_Liste_der_Plot_Dateinamen.push_back(s1);
@@ -715,9 +716,12 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 			s_OrbNum = Datnam.substr(pos_suffix - 5, 5);
 		}
 		//Orbitnummer ermittelt///////
-		sprintf(buf, "Orbit %5s Limb TP: Lat: %G {/Symbol \\260}  Lon: %G {/Symbol \\260} Hoehe: %G km",
-				s_OrbNum.c_str(), m_Latitude_TP, m_Longitude_TP, m_Hoehe_TP);
-		s2 = buf;
+		buf.str(string());
+		buf << "Orbit " << s_OrbNum.c_str() << ", Limb TP:"
+			<< " Lat: " << m_Latitude_TP << " deg,"
+			<< " Lon: " << m_Longitude_TP << " deg,"
+			<< " Hoehe: " << m_Hoehe_TP << " km.";
+		string s2(buf.str());
 		//cout<<s1<<"\n";
 		Plot_Slantcoloumns_polyfit_MgI(Arbeitsverzeichnis.c_str(), s1.c_str(),
 									   s2.c_str(),
@@ -884,22 +888,21 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 	//Plotroutine aufrufen
 	if (mache_Fit_Plots == "ja") {
 		// Dateinamenschnickschnack
-		string s1, s_OrbNum, s2;
-		int h = this->m_Hoehe_TP;
-		char buf[256];
+		string s_OrbNum;
+		stringstream buf;
 		//TODO immer prüfen, ob Dateienamenlänge noch stimmt
 		// ...falls / im Namen ist das schlecht
 		string Datnam = m_Dateiname_L1C.substr(m_Dateiname_L1C.size() - 39, 39);
 		//TODO Pfad anpassen
-		sprintf(buf, "mkdir %s/Plots 2>/dev/null", Arbeitsverzeichnis.c_str());
-		string Befehl = buf;
-		system(Befehl.c_str());
-		sprintf(buf, "%s_%s_%i_%ikm.ps",
-				Datnam.c_str(), Spezfenst.m_Spezies_Name.c_str(), Index, h);
-		string new_datnam = buf;
-		sprintf(buf, "%s/Plots/%s",
-				Arbeitsverzeichnis.c_str(), new_datnam.c_str());
-		s1 = buf;
+		buf << "mkdir " << Arbeitsverzeichnis.c_str() << "/Plots 2>/dev/null";
+		system(buf.str().c_str());
+		buf.str(string());
+		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
+			<< "_" << Index << "_" << m_Hoehe_TP << "km.ps";
+		string new_datnam(buf.str());
+		buf.str(string());
+		buf << Arbeitsverzeichnis.c_str() << "/Plots/" << new_datnam.c_str();
+		string s1(buf.str());
 		//s1 ist der Volle Pfad der Datei...diesen kann man wegspeichern,
 		//um später die .ps files in ein großes pdf zu packen
 		Spezfenst.m_Liste_der_Plot_Dateinamen.push_back(s1);
@@ -914,9 +917,12 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 			s_OrbNum = Datnam.substr(pos_suffix - 5, 5);
 		}
 		//Orbitnummer ermittelt///////
-		sprintf(buf, "Orbit %5s Limb TP: Lat: %G {/Symbol \\260}  Lon: %G {/Symbol \\260} Hoehe: %G km",
-				s_OrbNum.c_str(), m_Latitude_TP, m_Longitude_TP, m_Hoehe_TP);
-		s2 = buf;
+		buf.str(string());
+		buf << "Orbit " << s_OrbNum.c_str() << ", Limb TP:"
+			<< " Lat: " << m_Latitude_TP << " deg,"
+			<< " Lon: " << m_Longitude_TP << " deg,"
+			<< " Hoehe: " << m_Hoehe_TP << " km.";
+		string s2(buf.str());
 		//cout<<s1<<"\n";
 		Plot_Spektren_und_Quotient(Arbeitsverzeichnis.c_str(),
 								   s1.c_str(), s2.c_str(),
