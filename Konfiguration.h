@@ -58,6 +58,7 @@ public:
 	double m_Levenberg_Schrittweite;
 	int m_Max_Zahl_Iterationen;
 	double m_Convergence_Treshold;
+	double atmo_Temp;
 };
 
 

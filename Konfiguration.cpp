@@ -31,6 +31,7 @@ int Konfiguration::Konfiguration_einlesen()
 	eingelesen.
 	***************************************************/
 
+	atmo_Temp = 200.; // default value
 	//Datei Öffnen
 	ifstream infile;
 	//cout<<"Datei einlesen\n";
@@ -291,6 +292,12 @@ int Konfiguration::Konfiguration_einlesen()
 			cout << "convergence threshold = " << m_Convergence_Treshold << endl;
 			continue;
 		}
+		if (Zeile == "atmosphere temperature") {
+			getline(infile, Zeile);
+			ss << Zeile;
+			ss >> atmo_Temp;
+			continue;
+		}
 	} //ende while !eof
 
 	//Datei Schließen
@@ -381,6 +388,7 @@ int Konfiguration::Konfiguration_anzeigen()
 	cout << "LM Schrittweite: " << this->m_Levenberg_Schrittweite << "\n";
 	cout << "Max Iterations: " << this->m_Max_Zahl_Iterationen << "\n";
 	cout << "Convergence treshold: " << this->m_Convergence_Treshold << "\n";
+	cout << "atmosphere temperature: " << this->atmo_Temp << "\n";
 	cout << "\n";
 	return 0;
 }//ende Konfiguration_anzeigen
