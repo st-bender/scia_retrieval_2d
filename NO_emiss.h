@@ -90,6 +90,8 @@ class NO_emiss {
 
 	public:
 	NO_emiss(int vu = 2, int vl = 4, int vl_abs = 0, double T = 200.);
+	NO_emiss(class Messung_Limb &ml, int vu = 2, int vl = 4, int vl_abs = 0);
+	double temperature_from_limb(class Messung_Limb &ml);
 	int alloc_memory();
 	int set_constants();
 	int populate_Fs();
