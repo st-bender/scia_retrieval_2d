@@ -191,8 +191,15 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 					Ausgewertete_Limbmessung_FeI.push_back(Ergebnis);
 				}
 				if (sfit->m_Spezies_Name == "NO") {
-					double wl = NO.get_scia_wl_at_max();
-					mlit->slant_column_NO(NO, mache_Fit_Plots);
+					// create new object, same transition but modelled temperature
+					NO_emiss NO_new(*mlit, NO.get_vu(), NO.get_vl(), NO.get_vl_abs());
+					NO_new.get_solar_data(Solspec);
+					NO_new.read_luque_data_from_file("Luqueetal.dat");
+					NO_new.calc_excitation();
+					NO_new.calc_line_emissivities();
+					NO_new.scia_convolve(Rohdaten.at(0));
+					double wl = NO_new.get_scia_wl_at_max();
+					mlit->slant_column_NO(NO_new, mache_Fit_Plots);
 					Ergebnis = mlit->Ergebnis_Zusammenfassen();
 					Ergebnis.m_Wellenlaenge
 						= ldit->m_Wellenlaenge
