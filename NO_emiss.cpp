@@ -736,7 +736,8 @@ int NO_emiss::scia_convolve(Messung_Limb &ml)
 	for (i = 0; i <= NO_NJ; i++) {
 		for (j = 0; j < 12; j++) {
 			double NO_wl = get_lambda_K(j, i);
-			double NO_rad = get_gamma_j(j, i);
+			// divide by 4*pi to get [gamma]/sr = ph/s/sr
+			double NO_rad = get_gamma_j(j, i) * 0.25 * M_1_PI;
 			for (x_it = x.begin(); x_it != x.end(); ++x_it) {
 				int l = std::distance(x.begin(), x_it);
 				double w = slit_func(0.22, NO_wl, *x_it);
