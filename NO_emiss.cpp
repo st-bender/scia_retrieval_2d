@@ -950,6 +950,18 @@ int NO_emiss::get_NJ()
 {
 	return NJ;
 }
+int NO_emiss::get_vu()
+{
+	return v_u;
+}
+int NO_emiss::get_vl()
+{
+	return v_l;
+}
+int NO_emiss::get_vl_abs()
+{
+	return v_l_abs;
+}
 double NO_emiss::get_lambda_K(int i, int j)
 {
 	// translate from Å to nm

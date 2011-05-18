@@ -110,6 +110,9 @@ class NO_emiss {
 	int print_line_emissivities();
 	int print_solar_data();
 	int get_NJ();
+	int get_vu();
+	int get_vl();
+	int get_vl_abs();
 	double get_lambda_K(int i, int j);
 	double get_gamma_j(int i, int j);
 	double get_spec_scia_res(int i);
