@@ -123,7 +123,7 @@ double NO_emiss::temperature_from_limb(Messung_Limb &ml)
 	input.doy += ml.m_Tag;
 
 	// ut seconds in day
-	input.sec = ml.m_Stunde * 3600. + ml.m_Minute * 60.;
+	input.sec = ml.m_Stunde * 3600. + ml.m_Minute * 60. + ml.m_Sekunde;
 
 	// geo data
 	input.alt = ml.m_Hoehe_TP;
