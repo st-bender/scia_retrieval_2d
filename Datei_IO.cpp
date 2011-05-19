@@ -110,6 +110,7 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 		ml.m_Tag = Datum[2];
 		ml.m_Stunde = Datum[3];
 		ml.m_Minute = Datum[4];
+		ml.m_Sekunde = Datum[5];
 		ml.m_orbit_phase = orbit_phase;
 		ml.m_Latitude_Sat = Limbdaten[offset + direction * i].m_Sub_Sat_Lat; //achtung geodätische Koordinaten
 		ml.m_Longitude_Sat = Limbdaten[offset + direction * i].m_Sub_Sat_Lon;
@@ -369,6 +370,7 @@ vector<Messung_Nadir> make_messung_nadir_vector(string Dateiname,
 		mn.m_Tag = Nadirdaten[i].m_Tag;
 		mn.m_Stunde = Nadirdaten[i].m_Stunde;
 		mn.m_Minute = Nadirdaten[i].m_Minute;
+		mn.m_Sekunde = Nadirdaten[i].m_Sekunde;
 		//Geolokationen
 		mn.m_Latitude_Sat = Nadirdaten[i].m_Sat_Lat;
 		mn.m_Longitude_Sat = Nadirdaten[i].m_Sat_Lon;
