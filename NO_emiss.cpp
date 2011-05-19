@@ -113,9 +113,13 @@ double NO_emiss::temperature_from_limb(Messung_Limb &ml)
 		flags.switches[i] = 1;
 
 	// construct the input for the temperature calculation
-	input.year = 0; // ignored
+	input.year = ml.m_Jahr; // year, but ignored
+
 	// get the day of the year
-	int days[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	int days[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+	if (ml.m_Jahr % 4 == 0 && !(ml.m_Jahr % 100 == 0 && ml.m_Jahr % 400 != 0))
+		days[1] = 29;
+
 	input.doy = 0;
 	for (int i = 0; i < (ml.m_Monat - 1); i++) {
 		input.doy += days[i];
