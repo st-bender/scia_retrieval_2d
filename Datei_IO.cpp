@@ -533,12 +533,12 @@ int Ausgabe_Saeulendichten(string Dateiname,
 	//Datei öffnen
 	outfile = fopen(Dateiname.c_str(), "w");
 	//Überschrift
-	fprintf(outfile, "%4s %3s %5s "
+	fprintf(outfile, "%4s %5s %3s "
 			"%11s %11s "
 			"%11s %11s "
 			"%11s %11s %11s"
 			"%11s %11s \n",
-			"Jahr", "Tag", "Monat",
+			"Jahr", "Monat", "Tag",
 			"Lat_Sat", "Lon_Sat",
 			"Lat_Ground", "Long_Ground",
 			"Erdradius", "Deklination[°]", "Sonne_Lon[°]",
