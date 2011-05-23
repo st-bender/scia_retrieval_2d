@@ -1046,7 +1046,7 @@ int Messung_Limb::Deklinationswinkel_bestimmen()
 	// Formel nach der englischen Wikipedia
 	//theta=-23,45*cos(360° *(N+10)/365);
 	// dieser Winkel ändert sich nicht sehr stark von Tag zu Tag
-	int Monatstage[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	int Monatstage[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 	// reicht auch auf Tagesgenauigkeit
 	double Tage = 0;
 	for (int i = 0; i < (this->m_Monat - 1); i++) {

@@ -343,7 +343,7 @@ int Messung_Nadir::Deklinationswinkel_bestimmen() // auch gleich wie bei Limb
 	//theta=-23,45*cos(360° *(N+10)/365);
 	// dieser Winkel ändert sich nicht sehr stark von Tag zu Tag
 	// reicht auch auf Tagesgenauigkeit
-	int Monatstage[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	int Monatstage[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 	double Tage = 0;
 	for (int i = 0; i < (this->m_Monat - 1); i++) {
 		Tage += Monatstage[i];
