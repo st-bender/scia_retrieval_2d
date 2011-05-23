@@ -310,8 +310,10 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots)
 	for (i = 0; i < NO_NJ; i++) {
 		for (j = 0; j < 12; j++) {
 			wl = NO.get_lambda_K(j, i);
-			if (wl > 0. && wl < min_lambda_NO) min_lambda_NO = wl;
-			if (wl > max_lambda_NO) max_lambda_NO = wl;
+			if (NO.get_gamma_j(j, i) > 1.e-07) {
+				if (wl > 0. && wl < min_lambda_NO) min_lambda_NO = wl;
+				if (wl > max_lambda_NO) max_lambda_NO = wl;
+			}
 		}
 	}
 	int i_basewin_l_min = sb_Get_closest_index(min_lambda_NO - 3.);
