@@ -15,6 +15,7 @@ int my_moving_average(std::vector<double> &y, int ws);
 int my_savitzky_golay(std::vector<double> &y, int ws);
 int my_gauss_blur_1d(std::vector<double> &y);
 int my_sciamachy_blur(std::vector<double> &y);
+int my_lowess(std::vector<double> &x, std::vector<double> &y, double f);
 
 double shift_wavelength(double wl);
 

@@ -9,6 +9,8 @@
 #include <vector>
 #include <iterator>
 #include <numeric>
+#include <algorithm>
+#include <cmath>
 
 using namespace std;
 
@@ -183,6 +185,72 @@ int my_sciamachy_blur(vector<double> &y)
 	vector<double> weights(wgts, wgts + 99);
 
 	return my_convolution_1d(y, weights);
+}
+
+/* lowess smoothing, code inspired by the biopython module found in
+ * <biopython>/Bio/Statistics/lowess.py
+ *
+ * For more information, see
+ *
+ * William S. Cleveland: "Robust locally weighted regression and smoothing
+ * scatterplots", Journal of the American Statistical Association, Dec 1979,
+ * volume 74, number 368, pp. 829-836.
+
+ * William S. Cleveland and Susan J. Devlin: "Locally weighted regression: An
+ * approach to regression analysis by local fitting", Journal of the American
+ * Statistical Association, Sep 1988, volume 83, number 403, pp. 596-610.
+ */
+int my_lowess(vector<double> &x, vector<double> &y, double f)
+{
+	int n = x.size();
+	int r = ceil(f * n);
+	vector<double> y_neu;
+
+	for (int i = 0; i < n; i++) {
+		vector<double> dist, dist_sort, wgts;
+		// calculate the distances
+		for (int j = 0; j < n; j++) {
+			double d = abs(x.at(i) - x.at(j));
+			dist.push_back(d);
+			dist_sort.push_back(d);
+		}
+		// sort the distances
+		sort(dist_sort.begin(), dist_sort.end());
+
+		// calculate the weights
+		for (int j = 0; j < n; j++) {
+			double w = dist.at(j) / dist_sort.at(r);
+			if (w >= 0. && w < 1.) {
+				w = 1. - w * w * w;
+				w = w * w * w;
+			} else w = 0.;
+			wgts.push_back(w);
+		}
+
+		// sums for the weighted linear regression
+		double w_x_sum = 0., w_y_sum = 0.;
+		double w_xx_sum = 0., w_xy_sum = 0.;
+		double w_sum = 0.;
+
+		for (int j = 0; j < n; j++) {
+			double w = wgts.at(j), a = x.at(j), b = y.at(j);
+			w_sum += w;
+			w_x_sum += w * a;
+			w_y_sum += w * b;
+			w_xx_sum += w * a * a;
+			w_xy_sum += w * a * b;
+		}
+
+		double det = w_sum * w_xx_sum - w_x_sum * w_x_sum;
+		double beta1 = (w_xx_sum * w_y_sum - w_x_sum * w_xy_sum) / det;
+		double beta2 = (w_sum * w_xy_sum - w_x_sum * w_y_sum) / det;
+		double yval = beta1 + beta2 * x.at(i);
+
+		y_neu.push_back(yval);
+	}
+	y = y_neu;
+
+	return 0;
 }
 
 /* not really a smoothing function but this file seems to be the best place for now */
