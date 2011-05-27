@@ -342,11 +342,6 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots)
 		basewin_wl.at(base_l + i) = m_Wellenlaengen.at(i_basewin_r_min + i);
 		basewin_rad.at(base_l + i) = rad.at(i_basewin_r_min + i);
 	}
-	//Peakfenster WL und I auffüllen
-	for (int i = 0; i < N_peak; i++) {
-		peakwin_wl.at(i) = m_Wellenlaengen.at(i_peakwin_min + i);
-		peakwin_rad.at(i) = rad.at(i_peakwin_min + i);
-	}
 
 	std::cout << "# TP: lat = " << m_Latitude_TP;
 	std::cout << ", lon = " << m_Longitude_TP;
@@ -356,9 +351,12 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots)
 	// Anfangsindex, int Endindex)
 	double a0, a1;
 	Fit_Linear(basewin_wl, basewin_rad, a0, a1, 0, N_base - 1);
+	//Peakfenster WL und I auffüllen
 	// lineare Funktion von Intensitäten des Peakfenster abziehen
 	for (int i = 0; i < N_peak; i++) {
-		peakwin_rad.at(i) -= a0 + a1 * peakwin_wl.at(i);
+		peakwin_wl.at(i) = m_Wellenlaengen.at(i_peakwin_min + i);
+		peakwin_rad.at(i) = rad.at(i_peakwin_min + i)
+			- a0 - a1 * peakwin_wl.at(i);
 	}
 	m_Zeilendichte = fit_NO_spec(NO, peakwin_wl, peakwin_rad,
 			mache_Fit_Plots == "ja" ? true : false,
