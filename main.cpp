@@ -196,14 +196,16 @@ int main(int argc, char *argv[])
 	//////////////////////////////////////////////////////////////////////////
 	// Übernahme der Kommandozeilenargumente
 
-	if (argc != 6) {
+	if (argc != 7) {
 		cout << "Falscher Programmaufruf von SCIA_RETRIEVAL_2D\n";
 		cout << "Aufruf: SCIA_RETRIEVAL_2D Orbitlistenpfad "
 			 << "Pfad_temporäres_Arbeitsverzeichnis "
+			 << "Pfad_SCIA_Sonnenspektrum "
 			 << "Pfad_Sonnenrefenzspektrum "
 			 << "Pfad_multips2pdf Pfad_multips2ps\n";
 		cout << "Bsp: SCIA_RETRIEVAL_2D /tmp/orbit.list /tmp "
 			 << "/home/meso/SCIA-DATA/SOLAR "
+			 << "/home/meso/SCIA-DATA/sao_solar_ref.dat "
 			 << "/home/martin/Skripts/multips2pdf "
 			 << "/home/martin/Skripts/multips2ps\n";
 		cout << "Programm wird abgebrochen\n";
@@ -214,13 +216,15 @@ int main(int argc, char *argv[])
 	string Orbitlistenpfad = argv[1];     // um Konf zu überschreiben
 	string Arbeitsverzeichnis = argv[2]; // für Ausgaben in Datei(5 mal pro Spezies)
 	string Solarpfad = argv[3];            // um Konf zu überschreiben
-	string Pfad_multips2pdf = argv[4];
-	string Pfad_multips2ps = argv[5];
+	string sol_refname = argv[4];    // solar ref for NO emission calculation
+	string Pfad_multips2pdf = argv[5];
+	string Pfad_multips2ps = argv[6];
 
 
 	cerr << "Orbitlistenpfad: " << Orbitlistenpfad << "\n";
 	cerr << "Arbeitsverzeichnis: " << Arbeitsverzeichnis << "\n";
 	cerr << "Solarpfad: " << Solarpfad << "\n";
+	cerr << "Solarreferenzpfad: " << sol_refname << "\n";
 	cerr << "Pfad_multips2pdf: " << Pfad_multips2pdf << "\n";
 	cerr << "Pfad_multips2ps: " << Pfad_multips2ps << "\n";
 
@@ -307,6 +311,12 @@ int main(int argc, char *argv[])
 	//Überprüfen, ob einlesen erfolgreich war
 	//Solspec.Speichern_was_geladen_wurde("CHECKDATA/Sonne_so_wie_geladen.txt");
 	//ok -> funktioniert
+	Nachricht_Schreiben("Lade Referenzsonnenspektrum...", 3, Prioritylevel);
+	Sonnenspektrum sol_ref;
+	if (sol_ref.Laden_SCIA(sol_refname, Konf.m_Pfad_Solar_Fallback_Spektrum) != 0) {
+		cout << "Programmabbruch\n";
+		return -1;
+	}
 	////////////////////////////////////////////////////////////////////////////
 	//
 	// Sonnenspektrum ist bestimmt
