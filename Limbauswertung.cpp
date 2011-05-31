@@ -193,7 +193,7 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 				if (sfit->m_Spezies_Name == "NO") {
 					// create new object, same transition but modelled temperature
 					NO_emiss NO_new(*mlit, NO.get_vu(), NO.get_vl(), NO.get_vl_abs());
-					NO_new.get_solar_data(Solspec);
+					NO_new.solar = NO.solar;
 					NO_new.read_luque_data_from_file("Luqueetal.dat");
 					NO_new.calc_excitation();
 					NO_new.calc_line_emissivities();

@@ -72,8 +72,6 @@ class NO_emiss {
 	// space for the Hoenl-London factors
 	MPL_Matrix vf_HL_J, vf_HL_K;
 	MPL_Matrix vf_HL_emiss, vf_HL_emiss_K, quant_j_up;
-	// solar spectrum
-	MPL_Matrix solar;
 	// coefficient matrices for data from Luque et al.
 	double f_FC_v;
 	MPL_Matrix f_osc; // band oscillator strength
@@ -89,6 +87,8 @@ class NO_emiss {
 	double scia_wl_at_max;
 
 	public:
+	// solar spectrum
+	MPL_Matrix solar;
 	NO_emiss(int vu = 2, int vl = 4, int vl_abs = 0, double T = 200.);
 	NO_emiss(class Messung_Limb &ml, int vu = 2, int vl = 4, int vl_abs = 0);
 	double temperature_from_limb(class Messung_Limb &ml);
