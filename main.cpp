@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
 	if (argc != 6) {
 		cout << "Falscher Programmaufruf von SCIA_RETRIEVAL_2D\n";
 		cout << "Aufruf: SCIA_RETRIEVAL_2D Orbitlistenpfad Pfad_temporäres_Arbeitsverzeichnis"\
-			 " Pfad_Sonnenrefenzspektrum Pfad_multips2pdf\n";
+			 " Pfad_Sonnenrefenzspektrum Pfad_multips2pdf Pfad_multips2ps\n";
 		cout << "Bsp: SCIA_RETRIEVAL_2D /tmp/orbit.list /tmp /home/meso/SCIA-DATA/SOLAR /home/martin/Skripts/multips2pdf\n";
 		cout << "Programm wird abgebrochen\n";
 		return 1;
