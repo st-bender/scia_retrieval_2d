@@ -254,11 +254,13 @@ int my_lowess(vector<double> &x, vector<double> &y, double f)
 }
 
 /* not really a smoothing function but this file seems to be the best place for now */
-double shift_wavelength(double wl)
+double n_air(double wl)
 {
 	double sigma = 1.e6 / (wl * wl);
-	double n_air = 1. + 0.000064328 + 0.0294981 / (146. - sigma)
+	return 1. + 0.000064328 + 0.0294981 / (146. - sigma)
 		+ 0.0002554 / (41. - sigma);
-
-	return wl / n_air;
+}
+double shift_wavelength(double wl)
+{
+	return wl / n_air(wl);
 }

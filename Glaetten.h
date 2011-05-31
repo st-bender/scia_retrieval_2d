@@ -17,6 +17,7 @@ int my_gauss_blur_1d(std::vector<double> &y);
 int my_sciamachy_blur(std::vector<double> &y);
 int my_lowess(std::vector<double> &x, std::vector<double> &y, double f);
 
+double n_air(double wl);
 double shift_wavelength(double wl);
 
 #endif /* GLAETTEN_HH_ */
