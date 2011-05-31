@@ -195,27 +195,6 @@ int main(int argc, char *argv[])
 {
 	//////////////////////////////////////////////////////////////////////////
 	// Übernahme der Kommandozeilenargumente
-	/*    if(argc<7)
-	    {
-	        cout<<"Falscher Programmaufruf von SCIA_RETRIEVAL_2D\n";
-	        cout<<"Aufruf: SCIA_RETRIEVAL_2D Orbitlistenpfad Pfad_temporäres_Arbeitsverzeichnis"\
-	                  " Pfad_Sonnenrefenzspektrum Pfad_multips2pdf  Anzahl_zusaetzlicher_Orbits zusätzliche_Orbitpfade\n";
-	        cout<<"Bsp: SCIA_RETRIEVAL_2D /tmp/orbit.list /tmp /home/meso/SCIA-DATA/SOLAR /home/martin/Skripts/multips2pdf"
-	               <<" 2 /tmp/orbit2.list /tmp/orbit3.list   \n";
-	        cout<<"Programm wird abgebrochen\n";
-	        return 1;
-	    }
-	    int Anzahl_zusaetzlicher_Orbits=atoi(argv[6]);
-	    if(argc!=(7+Anzahl_zusaetzlicher_Orbits))
-	    {
-	        cout<<"Falscher Programmaufruf von SCIA_RETRIEVAL_2D\n";
-	        cout<<"Aufruf: SCIA_RETRIEVAL_2D Orbitlistenpfad Pfad_temporäres_Arbeitsverzeichnis"\
-	                  " Pfad_Sonnenrefenzspektrum Pfad_multips2pdf  Anzahl_zusaetzlicher_Orbits zusätzliche_Orbitpfade\n";
-	        cout<<"Bsp: SCIA_RETRIEVAL_2D /tmp/orbit.list /tmp /home/meso/SCIA-DATA/SOLAR /home/martin/Skripts/multips2pdf"
-	               <<" 2 /tmp/orbit2.list /tmp/orbit3.list   \n";
-	        cout<<"Programm wird abgebrochen\n";
-	        return 1;
-	    }*/
 
 	if (argc != 6) {
 		cout << "Falscher Programmaufruf von SCIA_RETRIEVAL_2D\n";
