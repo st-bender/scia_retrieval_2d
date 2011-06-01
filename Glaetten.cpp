@@ -253,7 +253,22 @@ int my_lowess(vector<double> &x, vector<double> &y, double f)
 	return 0;
 }
 
-/* not really a smoothing function but this file seems to be the best place for now */
+/* not really smoothing functions but this file seems to be the best place for now */
+double interpolate(std::vector<double> &x, std::vector<double> &y, double x0)
+{
+	int i;
+	std::vector<double>::iterator x_it;
+	x_it = std::upper_bound(x.begin(), x.end(), x0);
+
+	if (x_it == x.begin()) return y.at(0);
+	if (x_it == x.end()) return *(y.end() - 1);
+
+	i = distance(x.begin(), x_it) - 1;
+
+	return y.at(i)
+		+ (x0 - x.at(i)) * (y.at(i) - y.at(i + 1)) / (x.at(i) - x.at(i + 1));
+}
+
 double n_air(double wl)
 {
 	double sigma = 1.e6 / (wl * wl);

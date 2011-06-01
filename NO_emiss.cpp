@@ -15,6 +15,7 @@
 #include "NO_emiss.h"
 #include "Sonnenspektrum.h"
 #include "Messung_Limb.h"
+#include "Glaetten.h"
 
 extern "C" {
 #include "nrlmsise-00.h"
@@ -612,21 +613,6 @@ int NO_emiss::set_Hoenl_London_emiss()
 	}
 
 	return 0;
-}
-
-double interpolate(std::vector<double> &x, std::vector<double> &y, double x0)
-{
-	int i;
-	std::vector<double>::iterator x_it;
-	x_it = std::upper_bound(x.begin(), x.end(), x0);
-
-	if (x_it == x.begin()) return y.at(0);
-	if (x_it == x.end()) return *(y.end() - 1);
-
-	i = distance(x.begin(), x_it) - 1;
-
-	return y.at(i)
-		+ (x0 - x.at(i)) * (y.at(i) - y.at(i + 1)) / (x.at(i) - x.at(i + 1));
 }
 
 // Get solar spectral data
