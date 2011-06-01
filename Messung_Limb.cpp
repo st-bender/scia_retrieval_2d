@@ -295,6 +295,38 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	return 0;
 }//int Zeilendichte_Bestimmen() ende
 //========================================
+/* the rough rayleigh cross section for wl in [nm] in [cm^2] */
+double sigma_rayleigh(double wl)
+{
+	/* ref.: planet. space sci., vol. 32, no. 6, pp 785-790, 1984 */
+	double wls_Fk[35] = { 200, 205, 210, 215, 220, 225, 230, 240, 250, 260,
+		270, 280, 290, 300, 310, 320, 330, 340, 350, 360, 370, 380, 390, 400,
+		450, 500, 550, 600, 650, 750, 800, 850, 900, 950, 1000 };
+	double Fks[35] = { 1.080, 1.077, 1.074, 1.072, 1.070, 1.068, 1.066, 1.064,
+		1.062, 1.060, 1.059, 1.057, 1.056, 1.055, 1.055, 1.054, 1.053, 1.052,
+		1.052, 1.052, 1.051, 1.051, 1.051, 1.050, 1.049, 1.049, 1.048, 1.048,
+		1.048, 1.048, 1.047, 1.047, 1.047, 1.047, 1.047 };
+	double F_k, n = n_air(wl);
+	double nm1_div_NA = (n - 1.) / 2.687e-2;
+
+	std::vector<double> wl_Fk(wls_Fk, wls_Fk + 35);
+	std::vector<double> F_ks(Fks, Fks + 35);
+
+	F_k = interpolate(wl_Fk, F_ks, wl);
+
+	return 32. * M_PI*M_PI*M_PI / 3. * nm1_div_NA*nm1_div_NA
+		* F_k / (wl*wl*wl*wl) * 1.e-14;
+}
+double fit_spectra(std::vector<double> &x, std::vector<double> &y)
+{
+	double sum_gy = 0., sum_gg = 0.;
+	for (int i = 0; i < x.size(); i++) {
+		double g = x.at(i);
+		sum_gy += g * y.at(i);
+		sum_gg += g * g;
+	}
+	return sum_gy / sum_gg;
+}
 //========================================
 int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots)
 {
