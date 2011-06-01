@@ -29,7 +29,8 @@ public:
 	int Plots_der_Spektren_erzeugen(class Speziesfenster &Spezfenst, int Index,
 			std::string Arbeitsverzeichnis, std::string mache_Fit_Plots,
 			double *mean_10_20);
-	int slant_column_NO(class NO_emiss &NO, std::string mache_Fit_Plots);
+	int slant_column_NO(class NO_emiss &NO, std::string mache_Fit_Plots,
+			class Sonnenspektrum &sol_spec);
 	double fit_NO_spec(class NO_emiss &NO, std::vector<double> &x,
 			std::vector<double> &y, bool plot_fit, double &rms_err);
 	int moving_average(int window_size);

@@ -199,7 +199,7 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 					NO_new.calc_line_emissivities();
 					NO_new.scia_convolve(Rohdaten.at(0));
 					double wl = NO_new.get_scia_wl_at_max();
-					mlit->slant_column_NO(NO_new, mache_Fit_Plots);
+					mlit->slant_column_NO(NO_new, mache_Fit_Plots, Solspec);
 					Ergebnis = mlit->Ergebnis_Zusammenfassen();
 					Ergebnis.m_Wellenlaenge
 						= ldit->m_Wellenlaenge

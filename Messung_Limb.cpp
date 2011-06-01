@@ -21,6 +21,7 @@
 #include "Glaetten.h"
 #include "Speziesfenster.h"
 #include "NO_emiss.h"
+#include "Sonnenspektrum.h"
 
 extern "C" {
 	void dgesv_(int *N, int *NRHS, double *A, int *LDA, int *IPIV, double *B, int *LDB, int *INFO);
@@ -328,7 +329,8 @@ double fit_spectra(std::vector<double> &x, std::vector<double> &y)
 	return sum_gy / sum_gg;
 }
 //========================================
-int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots)
+int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
+		Sonnenspektrum &sol_spec)
 {
 	// I/(piFGamma)=integral(AMF n ds) mit AMF = s exp(-tau) ...aber zu der
 	// Formel später nochmal zurück Das spätere Retrieval ermittelt dann die
@@ -338,6 +340,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots)
 	int i, j;
 	int NO_NJ = NO.get_NJ();
 	double wl;
+	double f_sol_fit;
 	double min_lambda_NO = 1000., max_lambda_NO = 0.;
 	for (i = 0; i < NO_NJ; i++) {
 		for (j = 0; j < 12; j++) {
@@ -365,14 +368,30 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots)
 	std::vector<double> peakwin_wl(N_peak);
 	std::vector<double> peakwin_rad(N_peak);
 	std::vector<double> rad = m_Intensitaeten;
+	std::vector<double> fit_spec, ones;
+
+	for (i = 0; i < N_base + N_peak; i++) {
+		double wl = m_Wellenlaengen.at(i_basewin_l_min + i);
+		double sol_i = sol_spec.m_Intensitaeten.at(i_basewin_l_min + i);
+		double rad_i = rad.at(i_basewin_l_min + i);
+		fit_spec.push_back(rad_i / (sigma_rayleigh(wl) * sol_i));
+		ones.push_back(1.);
+	}
+	f_sol_fit = fit_spectra(ones, fit_spec);
+	std::cout << "# solar fit factor = " << f_sol_fit << std::endl;
+	if (f_sol_fit < 0.) f_sol_fit = 0.;
 	// Basisfenster WL und I auffüllen
 	for (int i = 0; i < base_l; i++) {
+		wl = m_Wellenlaengen.at(i_basewin_l_min + i);
 		basewin_wl.at(i) = m_Wellenlaengen.at(i_basewin_l_min + i);
-		basewin_rad.at(i) = rad.at(i_basewin_l_min + i);
+		basewin_rad.at(i) = rad.at(i_basewin_l_min + i)
+			- f_sol_fit * sigma_rayleigh(wl) * sol_spec.m_Intensitaeten.at(i_basewin_l_min + i);
 	}
 	for (int i = 0; i < base_r; i++) {
+		wl = m_Wellenlaengen.at(i_basewin_r_min + i);
 		basewin_wl.at(base_l + i) = m_Wellenlaengen.at(i_basewin_r_min + i);
-		basewin_rad.at(base_l + i) = rad.at(i_basewin_r_min + i);
+		basewin_rad.at(base_l + i) = rad.at(i_basewin_r_min + i)
+			- f_sol_fit * sigma_rayleigh(wl) * sol_spec.m_Intensitaeten.at(i_basewin_r_min + i);
 	}
 
 	std::cout << "# TP: lat = " << m_Latitude_TP;
@@ -386,8 +405,10 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots)
 	//Peakfenster WL und I auffüllen
 	// lineare Funktion von Intensitäten des Peakfenster abziehen
 	for (int i = 0; i < N_peak; i++) {
+		wl = m_Wellenlaengen.at(i_peakwin_min + i);
 		peakwin_wl.at(i) = m_Wellenlaengen.at(i_peakwin_min + i);
 		peakwin_rad.at(i) = rad.at(i_peakwin_min + i)
+			- f_sol_fit * sigma_rayleigh(wl) * sol_spec.m_Intensitaeten.at(i_peakwin_min + i)
 			- a0 - a1 * peakwin_wl.at(i);
 	}
 	m_Zeilendichte = fit_NO_spec(NO, peakwin_wl, peakwin_rad,
