@@ -783,6 +783,7 @@ int NO_emiss::scia_convolve(Messung_Limb &ml)
 	std::vector<double>::iterator spec_max;
 	spec_scia_res.resize(0);
 	spec_scia_res.resize(x.size());
+	double xdiff = x.at(1) - x.at(0);
 
 	for (i = 0; i <= NO_NJ; i++) {
 		for (j = 0; j < 12; j++) {
@@ -792,9 +793,11 @@ int NO_emiss::scia_convolve(Messung_Limb &ml)
 			for (x_it = x.begin(); x_it != x.end(); ++x_it) {
 				int l = std::distance(x.begin(), x_it);
 				double w = slit_func(0.22, NO_wl, *x_it);
+				if (x_it + 1 != x.end())
+					xdiff = *(x_it + 1) - *x_it;
 				// the weight cut-off is arbitrary but sensible
 				if (w > 0.001)
-					spec_scia_res.at(l) += w * NO_rad;
+					spec_scia_res.at(l) += w * NO_rad * xdiff;
 			}
 		}
 	}
