@@ -540,26 +540,26 @@ int Plots_Zusammenfassen(string Pfad_multips2pdf, string Pfad_multips2ps,
 	// Da noch noch die exe und der aufruf als parameter da sind muss weniger
 	// als 2^8 genommen werden
 	unsigned int M = 200;
-	vector<string> Liste_der_grossen_ps;
+	vector<string> Liste_der_grossen_pdf;
 	vector<string>::iterator sit;
 	string Befehlszeile;
-	unsigned int Max_Zahl_grosse_ps = Liste_der_ps_Dateinamen.size() / M;
+	unsigned int Max_Zahl_grosse_pdf = Liste_der_ps_Dateinamen.size() / M;
 	//Achtung integerdivision ist absicht
 	if ((Liste_der_ps_Dateinamen.size() % M) != 0) {
-		Max_Zahl_grosse_ps++;
+		Max_Zahl_grosse_pdf++;
 	}
-	// Zuerst viele ps in wenigen grossen ps zusammenfassen
+	// Zuerst viele ps in wenigen grossen pdf zusammenfassen
 	cout << "Liste_der_ps_Dateinamen.size(): "
 		 << Liste_der_ps_Dateinamen.size() << "\n";
-	cout << "Max_Zahl_grosse_ps: " << Max_Zahl_grosse_ps << "\n";
-	cout << "Erzeuge_große_PS\n";
-	for (unsigned int k = 0; k < Max_Zahl_grosse_ps; k++) {
+	cout << "Max_Zahl_grosse_pdf: " << Max_Zahl_grosse_pdf << "\n";
+	cout << "Erzeuge_große_PDF\n";
+	for (unsigned int k = 0; k < Max_Zahl_grosse_pdf; k++) {
 		cout << k << "te große ps Datei\n";
 		stringstream buf;
-		buf << Name_pdf_Datei << k << ".ps";
-		string Name_grosse_ps(buf.str());
-		Liste_der_grossen_ps.push_back(Name_grosse_ps);
-		Befehlszeile = Pfad_multips2ps + " " + Name_grosse_ps;
+		buf << Name_pdf_Datei << k << ".pdf";
+		string Name_grosse_pdf(buf.str());
+		Liste_der_grossen_pdf.push_back(Name_grosse_pdf);
+		Befehlszeile = Pfad_multips2pdf + " " + Name_grosse_pdf;
 		for (unsigned int i = 0;
 			  (i < M) && ((i + k * M) < Liste_der_ps_Dateinamen.size()); i++) {
 			//statt size mal potenzen von 2 Probieren
@@ -568,10 +568,10 @@ int Plots_Zusammenfassen(string Pfad_multips2pdf, string Pfad_multips2ps,
 		system(Befehlszeile.c_str());
 	}
 	cout << "Erzeuge große pdf\n";
-	// die großen ps zu einer pdf zusammenfassen
+	// die großen pdf zu einer pdf zusammenfassen
 	Befehlszeile = Pfad_multips2pdf + " " + Name_pdf_Datei;
-	for (sit = Liste_der_grossen_ps.begin();
-			sit != Liste_der_grossen_ps.end(); ++sit ) {
+	for (sit = Liste_der_grossen_pdf.begin();
+			sit != Liste_der_grossen_pdf.end(); ++sit ) {
 		Befehlszeile += " " + *sit;
 	}
 	//cout<<Liste_der_ps_Dateinamen.size()<<"\n";
@@ -583,8 +583,8 @@ int Plots_Zusammenfassen(string Pfad_multips2pdf, string Pfad_multips2ps,
 		Befehlszeile = "rm " + *sit;
 		//system(Befehlszeile.c_str());
 	}
-	for (sit = Liste_der_grossen_ps.begin();
-			sit != Liste_der_grossen_ps.end(); ++sit ) {
+	for (sit = Liste_der_grossen_pdf.begin();
+			sit != Liste_der_grossen_pdf.end(); ++sit ) {
 		Befehlszeile = "rm " + *sit;
 		//system(Befehlszeile.c_str());
 	}
