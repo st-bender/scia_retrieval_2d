@@ -413,7 +413,6 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 			- a0 - a1 * peakwin_wl.at(i);
 	}
 	m_Zeilendichte = fit_NO_spec(NO, peakwin_wl, peakwin_rad,
-			mache_Fit_Plots == "ja" ? true : false,
 			m_Fehler_Zeilendichten);
 
 	if (mache_Fit_Plots == "ja") {
@@ -501,7 +500,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 
 double Messung_Limb::fit_NO_spec(NO_emiss &NO,
 		std::vector<double> &x, std::vector<double> &y,
-		bool plot_fit, double &rms_err)
+		double &rms_err)
 {
 	double A;
 	int l0 = sb_Get_Index(x.at(0)) + 1;
@@ -523,12 +522,6 @@ double Messung_Limb::fit_NO_spec(NO_emiss &NO,
 		int l = std::distance(x.begin(), x_it);
 		double diff = (y.at(l) - A * NO.get_spec_scia_res(l0 + l));
 		err += diff * diff;
-		if (plot_fit) {
-			std::cout << *x_it;
-			std::cout << "\t" << y.at(l);
-			std::cout << "\t" << A * NO.get_spec_scia_res(l0 + l);
-			std::cout << std::endl;
-		}
 	}
 	err /= x.size();
 	rms_err = std::sqrt(err);
