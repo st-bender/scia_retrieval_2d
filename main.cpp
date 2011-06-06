@@ -500,6 +500,12 @@ int main(int argc, char *argv[])
 	NO_10.read_luque_data_from_file("Luqueetal.dat");
 	NO_10.calc_excitation();
 	NO_10.calc_line_emissivities();
+	// 1 - 4
+	NO_emiss NO_14(1, 4, 0, Konf.atmo_Temp);
+	NO_14.get_solar_data(sol_ref);
+	NO_14.read_luque_data_from_file("Luqueetal.dat");
+	NO_14.calc_excitation();
+	NO_14.calc_line_emissivities();
 	// 2 - 4
 	NO_emiss NO_24(2, 4, 0, Konf.atmo_Temp);
 	NO_24.get_solar_data(sol_ref);
