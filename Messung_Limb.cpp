@@ -330,7 +330,8 @@ double fit_spectra(std::vector<double> &x, std::vector<double> &y)
 }
 //========================================
 int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
-		Sonnenspektrum &sol_spec)
+		Sonnenspektrum &sol_spec,
+		Speziesfenster &Spezfenst, std::string Arbeitsverzeichnis)
 {
 	// I/(piFGamma)=integral(AMF n ds) mit AMF = s exp(-tau) ...aber zu der
 	// Formel später nochmal zurück Das spätere Retrieval ermittelt dann die
@@ -414,6 +415,84 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	m_Zeilendichte = fit_NO_spec(NO, peakwin_wl, peakwin_rad,
 			mache_Fit_Plots == "ja" ? true : false,
 			m_Fehler_Zeilendichten);
+
+	if (mache_Fit_Plots == "ja") {
+		// prepare data to plot
+		std::vector<double> wavelengths, spec_wo_rayleigh, NO_fit;
+		for (i = 0; i < base_l; i++) {
+			wavelengths.push_back(m_Wellenlaengen.at(i_basewin_l_min + i));
+			spec_wo_rayleigh.push_back(rad.at(i_basewin_l_min + i)
+					- f_sol_fit * sigma_rayleigh(basewin_wl.at(i))
+					  * sol_spec.m_Intensitaeten.at(i_basewin_l_min + i));
+			NO_fit.push_back(m_Zeilendichte *
+					NO.get_spec_scia_res(i_basewin_l_min + i)
+					+ a0 + a1 * basewin_wl.at(i));
+		}
+		for (i = 0; i < peakwin_wl.size(); i++) {
+			wavelengths.push_back(m_Wellenlaengen.at(i_peakwin_min + i));
+			spec_wo_rayleigh.push_back(rad.at(i_peakwin_min + i)
+					- f_sol_fit * sigma_rayleigh(peakwin_wl.at(i))
+					  * sol_spec.m_Intensitaeten.at(i_peakwin_min + i));
+			NO_fit.push_back(m_Zeilendichte *
+					NO.get_spec_scia_res(i_peakwin_min + i)
+					+ a0 + a1 * peakwin_wl.at(i));
+		}
+		for (i = 0; i < base_r; i++) {
+			wavelengths.push_back(m_Wellenlaengen.at(i_basewin_r_min + i));
+			spec_wo_rayleigh.push_back(rad.at(i_basewin_r_min + i)
+					- f_sol_fit * sigma_rayleigh(basewin_wl.at(base_l + i))
+					  * sol_spec.m_Intensitaeten.at(i_basewin_r_min + i));
+			NO_fit.push_back(m_Zeilendichte *
+					NO.get_spec_scia_res(i_basewin_r_min + i)
+					+ a0 + a1 * basewin_wl.at(base_l + i));
+		}
+
+		// plot the data to postscript files
+		std::string s_OrbNum;
+		std::stringstream buf;
+		//TODO immer prüfen, ob Dateienamenlänge noch stimmt...
+		// falls / im Namen ist das schlecht
+		std::string Datnam = m_Dateiname_L1C.substr(m_Dateiname_L1C.size() - 42, 42);
+
+		//TODO Pfad anpassen
+		buf << "mkdir " << Arbeitsverzeichnis.c_str() << "/Plots 2>/dev/null";
+		system(buf.str().c_str());
+		buf.str(std::string());
+		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
+			<< "_" << m_Hoehe_TP << "km.ps";
+		std::string new_datnam(buf.str());
+		buf.str(std::string());
+		buf << Arbeitsverzeichnis.c_str() << "/Plots/" << new_datnam.c_str();
+		std::string s1(buf.str());
+		// s1 ist der Volle Pfad der Datei... diesen wegspeichern,
+		// um später die .ps files in ein großes pdf zu packen
+		Spezfenst.m_Liste_der_Plot_Dateinamen.push_back(s1);
+		// Orbitnummer ermitteln
+		// die Orbitnummer sind die 5 Zeichen vor .dat
+		size_t pos_suffix = 0;
+		pos_suffix = Datnam.find(".dat");
+		if (pos_suffix == string::npos) {
+			std::cerr << " kein .dat in Limbdateiname... "
+					  << "Orbitnummer nicht findbar" << std::endl;
+			s_OrbNum = "xxxxx";
+		} else {
+			s_OrbNum = Datnam.substr(pos_suffix - 5, 5);
+		}
+		buf.str(std::string());
+		buf << "Orbit " << s_OrbNum.c_str() << ", Limb TP:"
+			<< " Lat: " << m_Latitude_TP << " deg,"
+			<< " Lon: " << m_Longitude_TP << " deg,"
+			<< " Hoehe: " << m_Hoehe_TP << " km.";
+		std::string s2(buf.str());
+
+		Plot_2xy(Arbeitsverzeichnis.c_str(), s1.c_str(), s2.c_str(),
+				 "Wellenlaenge in nm",
+				 "Schraege Saeule bei Peakposition in cm^{-2}/nm",
+				 wavelengths, spec_wo_rayleigh, wavelengths, NO_fit,
+				 0, wavelengths.size() - 1,
+				 m_Zeilendichte, m_Fehler_Zeilendichten);
+	}
+
 	std::cout << "# slant column = " << m_Zeilendichte;
 	std::cout << ", error = " << m_Fehler_Zeilendichten << std::endl;
 

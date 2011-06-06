@@ -30,7 +30,8 @@ public:
 			std::string Arbeitsverzeichnis, std::string mache_Fit_Plots,
 			double *mean_10_20);
 	int slant_column_NO(class NO_emiss &NO, std::string mache_Fit_Plots,
-			class Sonnenspektrum &sol_spec);
+			class Sonnenspektrum &sol_spec,
+			class Speziesfenster &Spezfenst, std::string Arbeitsverzeichnis);
 	double fit_NO_spec(class NO_emiss &NO, std::vector<double> &x,
 			std::vector<double> &y, bool plot_fit, double &rms_err);
 	int moving_average(int window_size);
