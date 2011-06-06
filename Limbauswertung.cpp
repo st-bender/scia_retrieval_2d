@@ -148,8 +148,9 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 
 				// Jetzt Zeilendichte und Fehler bestimmen
 				// Hmm hier gibts noch Diskussionsbedarf
-				mlit->Zeilendichte_Bestimmen((*sfit), k,
-						Arbeitsverzeichnis, mache_Fit_Plots);
+				if (sfit->m_Spezies_Name != "NO")
+					mlit->Zeilendichte_Bestimmen((*sfit), k,
+							Arbeitsverzeichnis, mache_Fit_Plots);
 
 				// Ergebnis zusammenfassen
 				Ausgewertete_Messung_Limb Ergebnis
