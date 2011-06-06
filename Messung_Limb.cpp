@@ -321,7 +321,7 @@ double sigma_rayleigh(double wl)
 double fit_spectra(std::vector<double> &x, std::vector<double> &y)
 {
 	double sum_gy = 0., sum_gg = 0.;
-	for (int i = 0; i < x.size(); i++) {
+	for (size_t i = 0; i < x.size(); i++) {
 		double g = x.at(i);
 		sum_gy += g * y.at(i);
 		sum_gg += g * g;
@@ -427,14 +427,14 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 					NO.get_spec_scia_res(i_basewin_l_min + i)
 					+ a0 + a1 * basewin_wl.at(i));
 		}
-		for (i = 0; i < peakwin_wl.size(); i++) {
-			wavelengths.push_back(m_Wellenlaengen.at(i_peakwin_min + i));
-			spec_wo_rayleigh.push_back(rad.at(i_peakwin_min + i)
-					- f_sol_fit * sigma_rayleigh(peakwin_wl.at(i))
-					  * sol_spec.m_Intensitaeten.at(i_peakwin_min + i));
+		for (size_t k = 0; k < peakwin_wl.size(); k++) {
+			wavelengths.push_back(m_Wellenlaengen.at(i_peakwin_min + k));
+			spec_wo_rayleigh.push_back(rad.at(i_peakwin_min + k)
+					- f_sol_fit * sigma_rayleigh(peakwin_wl.at(k))
+					  * sol_spec.m_Intensitaeten.at(i_peakwin_min + k));
 			NO_fit.push_back(m_Zeilendichte *
-					NO.get_spec_scia_res(i_peakwin_min + i)
-					+ a0 + a1 * peakwin_wl.at(i));
+					NO.get_spec_scia_res(i_peakwin_min + k)
+					+ a0 + a1 * peakwin_wl.at(k));
 		}
 		for (i = 0; i < base_r; i++) {
 			wavelengths.push_back(m_Wellenlaengen.at(i_basewin_r_min + i));
