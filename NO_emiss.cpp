@@ -968,6 +968,10 @@ double NO_emiss::get_spec_scia_res(int i)
 {
 	return spec_scia_res.at(i);
 }
+double NO_emiss::get_spec_scia_max()
+{
+	return *std::max_element(spec_scia_res.begin(), spec_scia_res.end());
+}
 double NO_emiss::get_scia_wl_at_max()
 {
 	return scia_wl_at_max;
