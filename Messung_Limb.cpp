@@ -104,6 +104,7 @@ Messung_Limb &Messung_Limb::operator =(const Messung_Limb &rhs)
 	// copy vectors
 	m_Wellenlaengen = rhs.m_Wellenlaengen;
 	m_Intensitaeten = rhs.m_Intensitaeten;
+	m_Intensitaeten_relativer_Fehler = rhs.m_Intensitaeten_relativer_Fehler;
 	m_Sonne = rhs.m_Sonne;
 	m_Intensitaeten_durch_piF = rhs.m_Intensitaeten_durch_piF;
 	m_Intensitaeten_durch_piF_Gamma = rhs.m_Intensitaeten_durch_piF_Gamma;
