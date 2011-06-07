@@ -413,8 +413,10 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 			- f_sol_fit * sigma_rayleigh(wl) * sol_spec.m_Intensitaeten.at(i_peakwin_min + i)
 			- a0 - a1 * peakwin_wl.at(i);
 	}
+	double rms_err_peak;
 	m_Zeilendichte = fit_NO_spec(NO, peakwin_wl, peakwin_rad,
-			m_Fehler_Zeilendichten);
+			rms_err_peak);
+	m_Fehler_Zeilendichten = rms_err_peak / NO.get_spec_scia_max();
 
 	if (mache_Fit_Plots == "ja") {
 		// prepare data to plot
