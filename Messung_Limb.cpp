@@ -194,9 +194,9 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	// linearen Fit des Basisfensters durchführen
 	// Proto: Fit_Linear(double* x,double* y, double& a0, double& a1,int
 	// Anfangsindex, int Endindex)
-	double a0, a1;
-	Fit_Linear(Basisfenster_WL, Basisfenster_Intensitaet, a0, a1, 0,
-			N_Basis - 1);
+	double a0, a1, rms_err_base;
+	Fit_Linear(Basisfenster_WL, Basisfenster_Intensitaet, a0, a1, rms_err_base,
+			0, N_Basis - 1);
 	// lineare Funktion von Intensitäten des Peakfenster abziehen
 	for (int i = 0; i < N_Peak; i++) {
 		Peakfenster_Intensitaet[i] -= a0 + a1 * Peakfenster_WL[i];
@@ -402,8 +402,8 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	// linearen Fit des Basisfensters durchführen
 	// Proto: Fit_Linear(double* x,double* y, double& a0, double& a1,int
 	// Anfangsindex, int Endindex)
-	double a0, a1;
-	Fit_Linear(basewin_wl, basewin_rad, a0, a1, 0, N_base - 1);
+	double a0, a1, rms_err_base;
+	Fit_Linear(basewin_wl, basewin_rad, a0, a1, rms_err_base, 0, N_base - 1);
 	//Peakfenster WL und I auffüllen
 	// lineare Funktion von Intensitäten des Peakfenster abziehen
 	for (int i = 0; i < N_peak; i++) {
@@ -662,8 +662,8 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 	// Proto:
 	// Fit_Linear(double* x,double* y, double& a0, double& a1,
 	//   int Anfangsindex, int Endindex)
-	double a0, a1;
-	Fit_Linear(Basisfenster_WL, Basisfenster_Intensitaet, a0, a1, 0,
+	double a0, a1, rms_err_base;
+	Fit_Linear(Basisfenster_WL, Basisfenster_Intensitaet, a0, a1, rms_err_base, 0,
 			N_Basis - 1);
 
 	int Polynomgrad = 4;
@@ -961,8 +961,8 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 	// Proto:
 	// Fit_Linear(double* x,double* y, double& a0, double& a1,int Anfangsindex,
 	// int Endindex)
-	double a0, a1;
-	Fit_Linear(Basisfenster_WL, Basisfenster_Intensitaet, a0, a1, 0,
+	double a0, a1, rms_err_base;
+	Fit_Linear(Basisfenster_WL, Basisfenster_Intensitaet, a0, a1, rms_err_base, 0,
 			N_Basis - 1);
 	//Die beiden gefitteten Spektren dividieren Limb/Sonne
 	double *Messwerte_Quotient;
@@ -1302,7 +1302,7 @@ int Messung_Limb::sb_Get_closest_index(double WL)
 }
 
 void Messung_Limb::Fit_Linear(double *x, double *y, double &a0, double &a1,
-		int Anfangsindex, int Endindex)
+		double &rms_err, int Anfangsindex, int Endindex)
 {
 	//fit der Funktion y=a0+a1x;
 	//Bestimmung von a und b im Intervall zwischen Anfangs und endindex
@@ -1331,8 +1331,17 @@ void Messung_Limb::Fit_Linear(double *x, double *y, double &a0, double &a1,
 	a1 = (xy_m - y_m * x_m) / (xx_m - x_m * x_m);
 	//Parameter a
 	a0 = y_m - a1 * x_m;
+
+	double err = 0.;
+	for (i = Anfangsindex; i <= Endindex; i++) {
+		double diff = y[i] - a0 - a1 * x[i];
+		err += diff * diff;
+	}
+	err /= N;
+	rms_err = std::sqrt(err);
 }
-void Messung_Limb::Fit_Linear(vector<double> &x, vector<double> &y, double &a0, double &a1,
+void Messung_Limb::Fit_Linear(vector<double> &x, vector<double> &y,
+		double &a0, double &a1, double &rms_err,
 		int Anfangsindex, int Endindex)
 {
 	//fit der Funktion y=a0+a1x;
@@ -1362,6 +1371,14 @@ void Messung_Limb::Fit_Linear(vector<double> &x, vector<double> &y, double &a0, 
 	a1 = (xy_m - y_m * x_m) / (xx_m - x_m * x_m);
 	//Parameter a
 	a0 = y_m - a1 * x_m;
+
+	double err = 0.;
+	for (i = Anfangsindex; i <= Endindex; i++) {
+		double diff = y[i] - a0 - a1 * x[i];
+		err += diff * diff;
+	}
+	err /= N;
+	rms_err = std::sqrt(err);
 }//Ende Fit_linear
 
 void Messung_Limb::Fit_Polynom_4ten_Grades(double *x, double *y, double x0,

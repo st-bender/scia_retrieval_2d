@@ -54,7 +54,7 @@ public:
 	int sb_Get_Index(double WL);
 	int sb_Get_closest_index(double WL);
 	void Fit_Linear(double *x, double *y, double &a0, double &a1,
-			int Anfangsindex, int Endindex);
+			double &rms_err, int Anfangsindex, int Endindex);
 	void Fit_Polynom_4ten_Grades(double *x, double *y, double x0,
 			double *Par_a0, double *Par_a1, double *Par_a2, double *Par_a3,
 			double *Par_a4, int Anfangsindex, int Endindex);
@@ -63,7 +63,8 @@ public:
 	double Evaluate_Error_primitive(double *x, double *y, double a0, double a1,
 			double A, double FWHM, double x0, int Anfangsindex, int Endindex);
 	// vectorised prototypes
-	void Fit_Linear(std::vector<double> &x, std::vector<double> &y, double &a0, double &a1,
+	void Fit_Linear(std::vector<double> &x, std::vector<double> &y,
+			double &a0, double &a1, double &rms_err,
 			int Anfangsindex, int Endindex);
 	void Fit_Peak_hyperbolic(std::vector<double> &x, std::vector<double> &y, double x0,
 			double FWHM, double &A, int Anfangsindex, int Endindex);
