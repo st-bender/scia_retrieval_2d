@@ -51,6 +51,8 @@ Messung_Limb::Messung_Limb()
 	m_Hoehe_TP = 0;
 	m_Hoehe_Sat = 0;
 	m_Erdradius = 0;
+	m_orbit_phase = 0.;
+	m_TP_SZA = 0.;
 	//statische Felder werden erstmal nicht 0 gesetzt
 }
 //========================================
@@ -99,6 +101,7 @@ Messung_Limb &Messung_Limb::operator =(const Messung_Limb &rhs)
 	m_Longitude_TP = rhs.m_Longitude_TP;
 	m_Hoehe_TP = rhs.m_Hoehe_TP;
 	m_Erdradius = rhs.m_Erdradius;
+	m_orbit_phase = rhs.m_orbit_phase;
 	m_TP_SZA = rhs.m_TP_SZA;
 	m_Number_of_Wavelength = rhs.m_Number_of_Wavelength;
 	// copy vectors
