@@ -122,24 +122,6 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	double MinLat = Lats_Messung[Min_Index];
 	int Breitenzahl = Min_Index - Max_Index + 1;
 
-	//Wir brauchen noch die Höhen, die wir aber kennen
-	// und statisch deklarieren
-	//double mittlere_Hoehe[12] =
-	// { 71.0, 74.0, 77.0, 80.0, 83.0, 86.0, 89.0, 92.0, 106.75, 135.0, 200.0, 375.0 };
-	//double untere_Hoehe[12] =
-	// { 69.5, 72.5, 75.5, 78.5, 81.5, 84.5, 87.5, 90.5,  93.5, 120.0, 150.0, 250.0 };
-	//double obere_Hoehe[12] =
-	// { 72.5, 75.5, 78.5, 81.5, 84.5, 87.5, 90.5, 93.5, 120.0, 150.0, 250.0, 500.0 };
-	//int Anzahl_Hoehen=12;
-	//double mittlere_Hoehe[10] =
-	// { 71.0, 74.0, 77.0, 80.0, 83.0, 86.0, 89.0, 92.0, 106.75, 135.0 };
-	//double untere_Hoehe[10] =
-	// { 69.5, 72.5, 75.5, 78.5, 81.5, 84.5, 87.5, 90.5,  93.5, 120.0 };
-	//double obere_Hoehe[10] =
-	// { 72.5, 75.5, 78.5, 81.5, 84.5, 87.5, 90.5, 93.5,  120.0, 150.0 };
-	//int Anzahl_Hoehen=10;
-
-
 	/////////////////////////////
 	// selbst gesetzt.....
 	MaxLat = 84;
