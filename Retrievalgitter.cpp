@@ -156,13 +156,10 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 		delete[] m_Gitter;       //Evtl vorhandenes Gitter löschen
 	}
 	this->m_Anzahl_Hoehen = Anzahl_Hoehen;
-	//cerr<<"m_Anzahl_Hoehen: "<<m_Anzahl_Hoehen<<"\n";
 	this->m_Anzahl_Breiten = Breitenzahl;
 	cerr << "m_Anzahl_Breiten: " << m_Anzahl_Breiten << "\n";
 	cerr << "m_Anzahl_Hoehen: " << m_Anzahl_Hoehen << "\n";
-	//cerr<<"m_Anzahl_Breiten: "<<m_Anzahl_Breiten<<"\n";
 	this->m_Anzahl_Punkte = m_Anzahl_Breiten * m_Anzahl_Hoehen;
-	//cerr<<"m_Anzahl_Punkte: "<<m_Anzahl_Punkte<<"\n";
 	m_Gitter = new Gitterpunkt[m_Anzahl_Punkte];
 	Gitterpunkt GP;
 	//Gitterpunkte des Gitters erzeugen sortiert nach Höhen und Breiten
