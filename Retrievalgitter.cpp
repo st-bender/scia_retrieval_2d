@@ -121,14 +121,6 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	double MaxLat = Lats_Messung[Max_Index];
 	double MinLat = Lats_Messung[Min_Index];
 	int Breitenzahl = Min_Index - Max_Index + 1;
-	//  cerr<<"Min_Index: "<<Min_Index<<"\n";
-	//  cerr<<"MinLat: "<<MinLat<<"\n";
-	//  cerr<<"Max_Index: "<<Max_Index<<"\n";
-	//  cerr<<"MaxLat: "<<MaxLat<<"\n";
-	//  for(int i=0;i<Lats_Messung.size();i++)
-	//  {
-	//      cerr<<Lats_Messung[i]<<"\n";
-	//  }
 
 	//Wir brauchen noch die Höhen, die wir aber kennen
 	// und statisch deklarieren
