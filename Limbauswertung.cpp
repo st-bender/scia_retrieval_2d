@@ -52,6 +52,8 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 					Konfiguration &Konf)
 {
 	unsigned int k;
+	static double last_orbit_phase = 0.;
+	static double last_latitude_tp = 90.;
 	//Einmalig die Rohdaten aus der Datei Laden
 	vector<Messung_Limb> Rohdaten;
 	// Achtung das ist noch nicht der entgültige Vektor, weil dieser noch um die
@@ -108,6 +110,13 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 	}
 	Test_auf_korrekte_geolocations_Limb(Rohdaten, counter_Richtungsvektor_nicht_ok);
 	if (test_auf_SAA_limb(space)) return 1;
+
+	// skip after-pole points
+	if (Rohdaten[0].m_Latitude_TP > last_latitude_tp
+		&& Rohdaten[0].m_orbit_phase > last_orbit_phase)
+		return 1;
+	last_latitude_tp = Rohdaten[0].m_Latitude_TP;
+	last_orbit_phase = Rohdaten[0].m_orbit_phase;
 	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	//
 	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -155,15 +164,6 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 				// Ergebnis zusammenfassen
 				Ausgewertete_Messung_Limb Ergebnis
 					= mlit->Ergebnis_Zusammenfassen();
-
-				// adjust after-pole point geo locations
-				if (mlit->m_Latitude_TP < 0. &&
-						mlit->m_Latitude_TP > (mlit - 1)->m_Latitude_TP) {
-					double lat_neu = -180. - mlit->m_Latitude_TP;
-					double lon_neu = mlit->m_Longitude_TP - 180.;
-					Ergebnis.m_Latitude_TP = lat_neu;
-					Ergebnis.m_Longitude_TP = lon_neu;
-				}
 
 				// Die braucht man später für die Luftmassenmatrix
 				Ergebnis.m_Wellenlaenge
