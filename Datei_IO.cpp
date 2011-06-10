@@ -520,6 +520,23 @@ int Ausgabe_Saeulendichten(string Dateiname,
 //Ende int Ausgabe_Zeilendichten_Limb(string Dateiname);
 //********************************************************************//
 ////////////////////////////////////////////////////////////////////////////////
+/* prints the back-inserted columns to a file */
+int Ausgabe_Saeulendichten_back(std::string Dateiname,
+		std::vector<Ausgewertete_Messung_Limb> &aml_vec, MPL_Matrix &y)
+{
+	std::vector<Ausgewertete_Messung_Limb> aml_vec_neu;
+	std::vector<Ausgewertete_Messung_Limb>::iterator aml_it;
+
+	/* build a new vector with the back-inserted columns
+	 * instead of the original ones */
+	for (aml_it = aml_vec.begin(); aml_it != aml_vec.end(); ++aml_it) {
+		int i = std::distance(aml_vec.begin(), aml_it);
+		aml_vec_neu.push_back(*aml_it);
+		aml_vec_neu.at(i).m_Zeilendichte = y(i);
+	}
+
+	return Ausgabe_Saeulendichten(Dateiname, aml_vec_neu);
+}
 ////////////////////////////////////////////////////////////////////////////////
 //********************************************************************//
 //START int Ausgabe_Zeilendichten_Nadir

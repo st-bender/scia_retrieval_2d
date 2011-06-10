@@ -33,6 +33,8 @@ std::vector<class Messung_Nadir> ReadL1C_Nadir_mpl_binary(std::string Dateiname,
 ////////////////////////////////////////////////////////////////////////////////
 int Ausgabe_Saeulendichten(std::string Dateiname,
 		std::vector<class Ausgewertete_Messung_Limb> &A_Messung_L);
+int Ausgabe_Saeulendichten_back(std::string Dateiname,
+		std::vector<class Ausgewertete_Messung_Limb> &aml_vec, MPL_Matrix &y);
 int Ausgabe_Saeulendichten(std::string Dateiname,
 		std::vector<class Ausgewertete_Messung_Nadir> &A_Messung_N);
 //funktion ist ja überladbar
