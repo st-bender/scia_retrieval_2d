@@ -133,10 +133,8 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	////////////////////////////////////////////////////////////////////////////
 	// hmm Wartet der, bis Gnuplot fertig ist?---sollte er, in system steckt ja
 	// waitpid drin
-	befehl = "rm " + Temp_Skript_Name;
-	system(befehl.c_str());
-	befehl = "rm " + Rohdaten_Name;
-	system(befehl.c_str());
+	remove(Temp_Skript_Name.c_str());
+	remove(Rohdaten_Name.c_str());
 	return 0;
 };
 ////////////////////////////////////////////////////////////////////////////////
@@ -299,14 +297,12 @@ int Plot_Slantcoloumns_polyfit_MgI(string Arbeitsverzeichnis, string Dateiname,
 	////////////////////////////////////////////////////////////////////////////
 	string befehl;
 	befehl = "gnuplot " + Temp_Skript_Name;
-	//system(befehl.c_str());
+	system(befehl.c_str());
 	////////////////////////////////////////////////////////////////////////////
 	// Gnuplotscript löschen
 	////////////////////////////////////////////////////////////////////////////
-	befehl = "rm " + Temp_Skript_Name;
-//    system(befehl.c_str());
-	befehl = "rm " + Rohdaten_Name;
-//    system(befehl.c_str());
+	remove(Temp_Skript_Name.c_str());
+	remove(Rohdaten_Name.c_str());
 	return 0;
 }
 ////////////////////////////////////////////////////////////////////////////////
@@ -408,14 +404,12 @@ int Plot_Spektren_und_Quotient(string Arbeitsverzeichnis, string Dateiname,
 	////////////////////////////////////////////////////////////////////////////
 	string befehl;
 	befehl = "gnuplot " + Temp_Skript_Name;
-	//system(befehl.c_str());
+	system(befehl.c_str());
 	////////////////////////////////////////////////////////////////////////////
 	// Gnuplotscript löschen
 	////////////////////////////////////////////////////////////////////////////
-	befehl = "rm " + Temp_Skript_Name;
-	//system(befehl.c_str());
-	befehl = "rm " + Rohdaten_Name;
-	//system(befehl.c_str());
+	remove(Temp_Skript_Name.c_str());
+	remove(Rohdaten_Name.c_str());
 	return 0;
 
 }
@@ -510,14 +504,12 @@ int Plot_Quotient_mit_Fehler(string Arbeitsverzeichnis, string Dateiname,
 	////////////////////////////////////////////////////////////////////////////
 	string befehl;
 	befehl = "gnuplot " + Temp_Skript_Name;
-	//system(befehl.c_str());
+	system(befehl.c_str());
 	////////////////////////////////////////////////////////////////////////////
 	// Gnuplotscript löschen
 	////////////////////////////////////////////////////////////////////////////
-	befehl = "rm " + Temp_Skript_Name;
-//    system(befehl.c_str());
-	befehl = "rm " + Rohdaten_Name;
-//    system(befehl.c_str());
+	remove(Temp_Skript_Name.c_str());
+	remove(Rohdaten_Name.c_str());
 	return 0;
 
 }
@@ -580,13 +572,11 @@ int Plots_Zusammenfassen(string Pfad_multips2pdf, string Pfad_multips2ps,
 	cout << "lösche die ps\n";
 	for (sit = Liste_der_ps_Dateinamen.begin();
 			sit != Liste_der_ps_Dateinamen.end(); ++sit ) {
-		Befehlszeile = "rm " + *sit;
-		//system(Befehlszeile.c_str());
+		remove(sit->c_str());
 	}
 	for (sit = Liste_der_grossen_pdf.begin();
 			sit != Liste_der_grossen_pdf.end(); ++sit ) {
-		Befehlszeile = "rm " + *sit;
-		//system(Befehlszeile.c_str());
+		remove(sit->c_str());
 	}
 	return 0;
 }
