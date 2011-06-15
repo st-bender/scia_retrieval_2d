@@ -6,7 +6,6 @@
  */
 
 #include<string>
-#include"Dateinamensteile_Bestimmen.h"
 
 using namespace std;
 
