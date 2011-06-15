@@ -732,6 +732,7 @@ int main(int argc, char *argv[])
 	string sssss_FeI = "00FeI";
 	string sssss_NO = "000NO";
 	string Endung_Limb = "_0limb_Saeulen.txt";
+	string Endung_Limb_back = "_1limb_Saeulen.txt";
 	string Endung_Nadir = "_nadir_Saeulen.txt";
 	string Dateiout_Mittelteil = "_orbit_" + xxxxx + "_" + yyyymmdd_hhmm;
 	//sssss_orbit_xxxxx_yyyy_mm_dd_hh_mm_0limb_Saeulen.txt
@@ -740,6 +741,8 @@ int main(int argc, char *argv[])
 	string Pfad_Saeulen_Limb_unknown = Arbeitsverzeichnis + "/" + sssss_unknown + Dateiout_Mittelteil + Endung_Limb;
 	string Pfad_Saeulen_Limb_FeI = Arbeitsverzeichnis + "/" + sssss_FeI + Dateiout_Mittelteil + Endung_Limb;
 	string Pfad_Saeulen_Limb_NO = Arbeitsverzeichnis + "/" + sssss_NO + Dateiout_Mittelteil + Endung_Limb;
+	string Pfad_Saeulen_Limb_NO_back = Arbeitsverzeichnis + "/" + sssss_NO
+		+ Dateiout_Mittelteil + Endung_Limb_back;
 	string Pfad_Saeulen_Nadir_MgI = Arbeitsverzeichnis + "/" + sssss_MgI + Dateiout_Mittelteil + Endung_Nadir;
 	string Pfad_Saeulen_Nadir_MgII = Arbeitsverzeichnis + "/" + sssss_MgII + Dateiout_Mittelteil + Endung_Nadir;
 	string Pfad_Saeulen_Nadir_unknown = Arbeitsverzeichnis + "/" + sssss_unknown + Dateiout_Mittelteil + Endung_Nadir;
@@ -1477,7 +1480,10 @@ int main(int argc, char *argv[])
 	// NO ////////////////////
 	Dateiname_out = Arbeitsverzeichnis + "/" + sssss_NO + Dateiout_Mittelteil;
 	if (mache_volles_Retrieval_NO == "ja") {
+		MPL_Matrix result = AMF_NO * Dichte_n_NO;
 		Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_NO, S_x_NO, AKM_NO);
+		Ausgabe_Saeulendichten_back(Pfad_Saeulen_Limb_NO_back,
+				Ausgewertete_Limbmessung_NO, result);
 	}
 
 	time(&Teil6_End);
