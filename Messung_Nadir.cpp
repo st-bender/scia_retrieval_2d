@@ -13,6 +13,7 @@
 #include <cstdio>
 #include <iostream>
 #include <sstream>
+#include <sys/stat.h>
 #include "Ausdrucke.h"
 #include "Speziesfenster.h"
 #include "Dateinamensteile_Bestimmen.h"
@@ -247,9 +248,8 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 		string Datnam = sb_basename(m_Dateiname_L1C);
 
 		//TODO Pfad anpassen
-		buf << "mkdir " << Arbeitsverzeichnis.c_str() << "/Plots 2>/dev/null";
-		system(buf.str().c_str());
-		buf.str(string());
+		string plot_dir = Arbeitsverzeichnis + "/Plots";
+		mkdir(plot_dir.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
 			<< "_" << MessungsNr << "_" << Index << ".ps";
 		string new_datnam(buf.str());

@@ -16,6 +16,7 @@
 #include <sstream>
 #include <cstdlib>  //für Ausgabe
 #include <cstdio>   //Filekram
+#include <sys/stat.h>
 #include "Ausdrucke.h"
 #include "Fit_Polynom.h"
 #include "Glaetten.h"
@@ -252,9 +253,8 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 		string Datnam = sb_basename(m_Dateiname_L1C);
 
 		//TODO Pfad anpassen
-		buf << "mkdir " << Arbeitsverzeichnis.c_str() << "/Plots 2>/dev/null";
-		system(buf.str().c_str());
-		buf.str(string());
+		string plot_dir = Arbeitsverzeichnis + "/Plots";
+		mkdir(plot_dir.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
 			<< "_" << Index << "_" << m_Hoehe_TP << "km.ps";
 		string new_datnam(buf.str());
@@ -463,9 +463,8 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		std::string Datnam = sb_basename(m_Dateiname_L1C);
 
 		//TODO Pfad anpassen
-		buf << "mkdir " << Arbeitsverzeichnis.c_str() << "/Plots 2>/dev/null";
-		system(buf.str().c_str());
-		buf.str(std::string());
+		std::string plot_dir = Arbeitsverzeichnis + "/Plots";
+		mkdir(plot_dir.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
 			<< "_" << m_Hoehe_TP << "km.ps";
 		std::string new_datnam(buf.str());
@@ -827,9 +826,8 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 		//falls / im Namen ist das schlecht
 		string Datnam = sb_basename(m_Dateiname_L1C);
 		//TODO Pfad anpassen
-		buf << "mkdir " << Arbeitsverzeichnis.c_str() << "/Plots 2>/dev/null";
-		system(buf.str().c_str());
-		buf.str(string());
+		string plot_dir = Arbeitsverzeichnis + "/Plots";
+		mkdir(plot_dir.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
 			<< "_" << Index << "_" << m_Hoehe_TP << "km.ps";
 		string new_datnam(buf.str());
@@ -1028,9 +1026,8 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 		// ...falls / im Namen ist das schlecht
 		string Datnam = sb_basename(m_Dateiname_L1C);
 		//TODO Pfad anpassen
-		buf << "mkdir " << Arbeitsverzeichnis.c_str() << "/Plots 2>/dev/null";
-		system(buf.str().c_str());
-		buf.str(string());
+		string plot_dir = Arbeitsverzeichnis + "/Plots";
+		mkdir(plot_dir.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
 			<< "_" << Index << "_" << m_Hoehe_TP << "km.ps";
 		string new_datnam(buf.str());
