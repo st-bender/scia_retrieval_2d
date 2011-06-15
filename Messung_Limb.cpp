@@ -22,6 +22,7 @@
 #include "Speziesfenster.h"
 #include "NO_emiss.h"
 #include "Sonnenspektrum.h"
+#include "Dateinamensteile_Bestimmen.h"
 
 extern "C" {
 	void dgesv_(int *N, int *NRHS, double *A, int *LDA, int *IPIV, double *B, int *LDB, int *INFO);
@@ -248,7 +249,7 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 		stringstream buf;
 		//TODO immer prüfen, ob Dateienamenlänge noch stimmt...
 		// falls / im Namen ist das schlecht
-		string Datnam = m_Dateiname_L1C.substr(m_Dateiname_L1C.size() - 39, 39);
+		string Datnam = sb_basename(m_Dateiname_L1C);
 
 		//TODO Pfad anpassen
 		buf << "mkdir " << Arbeitsverzeichnis.c_str() << "/Plots 2>/dev/null";
@@ -459,7 +460,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		std::stringstream buf;
 		//TODO immer prüfen, ob Dateienamenlänge noch stimmt...
 		// falls / im Namen ist das schlecht
-		std::string Datnam = m_Dateiname_L1C.substr(m_Dateiname_L1C.size() - 42, 42);
+		std::string Datnam = sb_basename(m_Dateiname_L1C);
 
 		//TODO Pfad anpassen
 		buf << "mkdir " << Arbeitsverzeichnis.c_str() << "/Plots 2>/dev/null";
@@ -824,7 +825,7 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 		stringstream buf;
 		//TODO immer prüfen, ob Dateienamenlänge noch stimmt...
 		//falls / im Namen ist das schlecht
-		string Datnam = m_Dateiname_L1C.substr(m_Dateiname_L1C.size() - 39, 39);
+		string Datnam = sb_basename(m_Dateiname_L1C);
 		//TODO Pfad anpassen
 		buf << "mkdir " << Arbeitsverzeichnis.c_str() << "/Plots 2>/dev/null";
 		system(buf.str().c_str());
@@ -1025,7 +1026,7 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 		stringstream buf;
 		//TODO immer prüfen, ob Dateienamenlänge noch stimmt
 		// ...falls / im Namen ist das schlecht
-		string Datnam = m_Dateiname_L1C.substr(m_Dateiname_L1C.size() - 39, 39);
+		string Datnam = sb_basename(m_Dateiname_L1C);
 		//TODO Pfad anpassen
 		buf << "mkdir " << Arbeitsverzeichnis.c_str() << "/Plots 2>/dev/null";
 		system(buf.str().c_str());

@@ -15,6 +15,7 @@
 #include <sstream>
 #include "Ausdrucke.h"
 #include "Speziesfenster.h"
+#include "Dateinamensteile_Bestimmen.h"
 
 using namespace std;
 //////////////////////////////////////////////////
@@ -243,7 +244,7 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 		stringstream buf;
 		//TODO immer prüfen, ob Dateienamenlänge noch stimmt...
 		// falls / im Namen ist das schlecht
-		string Datnam = m_Dateiname_L1C.substr(m_Dateiname_L1C.size() - 39, 39);
+		string Datnam = sb_basename(m_Dateiname_L1C);
 
 		//TODO Pfad anpassen
 		buf << "mkdir " << Arbeitsverzeichnis.c_str() << "/Plots 2>/dev/null";
