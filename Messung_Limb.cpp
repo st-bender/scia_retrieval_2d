@@ -258,9 +258,7 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
 			<< "_" << Index << "_" << m_Hoehe_TP << "km.ps";
 		string new_datnam(buf.str());
-		buf.str(string());
-		buf << Arbeitsverzeichnis.c_str() << "/Plots/" << new_datnam.c_str();
-		string s1(buf.str());
+		string s1(plot_dir + "/" + new_datnam);
 		//s1 ist der Volle Pfad der Datei...diesen kann man wegspeichern, um
 		//später die .ps files in ein großes pdf zu packen
 		Spezfenst.m_Liste_der_Plot_Dateinamen.push_back(s1);
@@ -468,9 +466,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
 			<< "_" << m_Hoehe_TP << "km.ps";
 		std::string new_datnam(buf.str());
-		buf.str(std::string());
-		buf << Arbeitsverzeichnis.c_str() << "/Plots/" << new_datnam.c_str();
-		std::string s1(buf.str());
+		std::string s1(plot_dir + "/" + new_datnam);
 		// s1 ist der Volle Pfad der Datei... diesen wegspeichern,
 		// um später die .ps files in ein großes pdf zu packen
 		Spezfenst.m_Liste_der_Plot_Dateinamen.push_back(s1);
@@ -831,9 +827,7 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
 			<< "_" << Index << "_" << m_Hoehe_TP << "km.ps";
 		string new_datnam(buf.str());
-		buf.str(string());
-		buf << Arbeitsverzeichnis.c_str() << "/Plots/" << new_datnam.c_str();
-		string s1(buf.str());
+		string s1(plot_dir + "/" + new_datnam);
 		//s1 ist der Volle Pfad der Datei...diesen kann man wegspeichern, um
 		//später die .ps files in ein großes pdf zu packen
 		Spezfenst.m_Liste_der_Plot_Dateinamen.push_back(s1);
@@ -1031,9 +1025,7 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
 			<< "_" << Index << "_" << m_Hoehe_TP << "km.ps";
 		string new_datnam(buf.str());
-		buf.str(string());
-		buf << Arbeitsverzeichnis.c_str() << "/Plots/" << new_datnam.c_str();
-		string s1(buf.str());
+		string s1(plot_dir + "/" + new_datnam);
 		//s1 ist der Volle Pfad der Datei...diesen kann man wegspeichern,
 		//um später die .ps files in ein großes pdf zu packen
 		Spezfenst.m_Liste_der_Plot_Dateinamen.push_back(s1);

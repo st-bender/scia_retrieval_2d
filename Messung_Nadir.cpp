@@ -253,9 +253,7 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
 			<< "_" << MessungsNr << "_" << Index << ".ps";
 		string new_datnam(buf.str());
-		buf.str(string());
-		buf << Arbeitsverzeichnis.c_str() << "/Plots/" << new_datnam.c_str();
-		string s1(buf.str());
+		string s1(plot_dir + "/" + new_datnam);
 		//s1 ist der Volle Pfad der Datei...
 		//diesen kann man wegspeichern,
 		//um später die .ps files in ein großes pdf zu packen
