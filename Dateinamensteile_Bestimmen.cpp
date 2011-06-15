@@ -9,6 +9,17 @@
 #include"Dateinamensteile_Bestimmen.h"
 
 using namespace std;
+
+std::string sb_basename(std::string filename)
+{
+	std::string bname = filename;
+	std::string::size_type pos = filename.find_last_of("/\\");
+
+	if (pos != std::string::npos)
+		bname = filename.substr(pos + 1);
+
+	return bname;
+}
 ////////////////////////////////////////////////////
 // Funktionsstart  xxxxx_Bestimmen
 ////////////////////////////////////////////////////

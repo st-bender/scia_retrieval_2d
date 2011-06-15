@@ -16,6 +16,7 @@
 
 #include<string>
 
+std::string sb_basename(std::string filename);
 std::string xxxxx_Bestimmen(std::string Orbitlistenpfad);
 std::string yyyymmdd_hhmm_Bestimmen(std::string Name_erste_Limbdatei);
 
