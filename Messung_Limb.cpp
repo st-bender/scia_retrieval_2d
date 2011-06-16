@@ -44,6 +44,7 @@ Messung_Limb::Messung_Limb()
 	m_Tag = 0;
 	m_Stunde = 0;
 	m_Minute = 0;
+	m_Sekunde = 0;
 	m_Deklinationswinkel = 0;
 	m_Sonnen_Longitude = 0;
 	m_Latitude_TP = 0;
@@ -95,6 +96,7 @@ Messung_Limb &Messung_Limb::operator =(const Messung_Limb &rhs)
 	m_Tag = rhs.m_Tag;
 	m_Stunde = rhs.m_Stunde;
 	m_Minute = rhs.m_Minute;
+	m_Sekunde = rhs.m_Sekunde;
 	// Geolocation
 	m_Latitude_Sat = rhs.m_Latitude_Sat;
 	m_Longitude_Sat = rhs.m_Longitude_Sat;
