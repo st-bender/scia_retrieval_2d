@@ -346,10 +346,11 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	double wl;
 	double f_sol_fit;
 	double min_lambda_NO = 1000., max_lambda_NO = 0.;
+	double gamma_threshold = 0.25 * NO.get_spec_scia_max();
 	for (i = 0; i < NO_NJ; i++) {
 		for (j = 0; j < 12; j++) {
 			wl = NO.get_lambda_K(j, i);
-			if (NO.get_gamma_j(j, i) > 1.e-07) {
+			if (NO.get_gamma_j(j, i) > gamma_threshold) {
 				if (wl > 0. && wl < min_lambda_NO) min_lambda_NO = wl;
 				if (wl > max_lambda_NO) max_lambda_NO = wl;
 			}
