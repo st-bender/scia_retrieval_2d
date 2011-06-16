@@ -94,7 +94,7 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 		bool doppelt = false;
 
 		for (lat_it = Lats_Messung.begin(); lat_it != Lats_Messung.end(); lat_it++) {
-			if (abs(aml_it->m_Latitude_TP - (*lat_it)) < Epsilon + Epsilon) {
+			if (abs(aml_it->m_Latitude_TP - (*lat_it)) < Epsilon) {
 				doppelt = true;
 				break;
 			}
