@@ -71,7 +71,7 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 	} else {
 		//Rohdaten =
 		//ReadL1C_Limb_meso_thermo_mpl_binary(Orbitlist.m_Dateinamen[l], Tropo);
-		int Anzahl_Hoehen = 25;
+		int Anzahl_Hoehen = 30;
 		Rohdaten =
 			ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(Orbitlist.m_Dateinamen[l],
 					Tropo, space, Anzahl_Hoehen);
