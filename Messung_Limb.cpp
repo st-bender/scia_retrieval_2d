@@ -400,6 +400,26 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		basewin_rad.at(base_l + i) = rad.at(i_basewin_r_min + i)
 			- f_sol_fit * sigma_rayleigh(wl) * sol_spec.m_Intensitaeten.at(i_basewin_r_min + i);
 	}
+	/* construct new baseline vectors by removing outliers
+	 * This currently discards 20% (10% left and 10% right)
+	 * of the baseline points. */
+	std::vector<double> rad_sort(basewin_rad);
+	std::vector<double> bwin_wl, bwin_rad;
+	std::sort(rad_sort.begin(), rad_sort.end());
+	int offset = rad_sort.size() * 0.10;
+	double rad0 = rad_sort.at(offset);
+	double rad1 = rad_sort.at(rad_sort.size() - offset - 1);
+
+	for (int i = 0; i < N_base; i++) {
+		double rad = basewin_rad.at(i);
+		// push back only if in valid range
+		if (rad >= rad0 && rad <= rad1) {
+			bwin_wl.push_back(basewin_wl.at(i));
+			bwin_rad.push_back(rad);
+		}
+	}
+	// reset N_base
+	N_base = bwin_rad.size();
 
 	std::cout << "# TP: lat = " << m_Latitude_TP;
 	std::cout << ", lon = " << m_Longitude_TP;
@@ -408,7 +428,8 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	// Proto: Fit_Linear(double* x,double* y, double& a0, double& a1,int
 	// Anfangsindex, int Endindex)
 	double a0, a1, rms_err_base;
-	Fit_Linear(basewin_wl, basewin_rad, a0, a1, rms_err_base, 0, N_base - 1);
+	// use the modified base window for the linear fit
+	Fit_Linear(bwin_wl, bwin_rad, a0, a1, rms_err_base, 0, N_base - 1);
 	//Peakfenster WL und I auffüllen
 	// lineare Funktion von Intensitäten des Peakfenster abziehen
 	for (int i = 0; i < N_peak; i++) {
