@@ -100,21 +100,32 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 		ist_Nachtmessung = Test_auf_Nachtmessung_Limb_meso_thermo(Tropo, Konf);
 	}
 	if (ist_Nachtmessung == true) {
+		std::cout << "# night point at lat = " << Rohdaten[0].m_Latitude_TP
+			<< ", alt = " << Rohdaten[0].m_Hoehe_TP << std::endl;
 		counter_Nachtmessungen++;
 		return 1;  //Nachtmessung 1
 	}
 
 	if (Test_auf_NLC_Limb(Rohdaten, Konf) == true) {
+		std::cout << "# NLC at lat = " << Rohdaten[0].m_Latitude_TP
+			<< ", alt = " << Rohdaten[0].m_Hoehe_TP << std::endl;
 		counter_NLC_detektiert++;
 		return 2;  //NLC 2
 	}
 	Test_auf_korrekte_geolocations_Limb(Rohdaten, counter_Richtungsvektor_nicht_ok);
-	if (test_auf_SAA_limb(space)) return 1;
+	if (test_auf_SAA_limb(space)) {
+		std::cout << "# SAA at lat = " << Rohdaten[0].m_Latitude_TP
+			<< ", alt = " << Rohdaten[0].m_Hoehe_TP << std::endl;
+		return 1;
+	}
 
 	// skip after-pole points
 	if (Rohdaten[0].m_Latitude_TP > last_latitude_tp
-		&& Rohdaten[0].m_orbit_phase > last_orbit_phase)
+		&& Rohdaten[0].m_orbit_phase > last_orbit_phase) {
+		std::cout << "# after pole at lat = " << Rohdaten[0].m_Latitude_TP
+			<< ", alt = " << Rohdaten[0].m_Hoehe_TP << std::endl;
 		return 1;
+	}
 	last_latitude_tp = Rohdaten[0].m_Latitude_TP;
 	last_orbit_phase = Rohdaten[0].m_orbit_phase;
 	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
