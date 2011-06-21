@@ -31,7 +31,11 @@ int Konfiguration::Konfiguration_einlesen()
 	eingelesen.
 	***************************************************/
 
-	atmo_Temp = 200.; // default value
+	// defaukt NO values
+	NO_v_u = 0;
+	NO_v_l = 2;
+	NO_v_l_abs = 0;
+	atmo_Temp = 200.;
 	//Datei Öffnen
 	ifstream infile;
 	//cout<<"Datei einlesen\n";
@@ -296,6 +300,14 @@ int Konfiguration::Konfiguration_einlesen()
 			getline(infile, Zeile);
 			ss << Zeile;
 			ss >> atmo_Temp;
+			continue;
+		}
+		if (Zeile == "NO transition") {
+			getline(infile, Zeile);
+			std::vector<int> NO_trans = string_to_vector<int>(Zeile);
+			NO_v_u = NO_trans.at(0);
+			NO_v_l = NO_trans.at(1);
+			NO_v_l_abs = NO_trans.at(2);
 			continue;
 		}
 	} //ende while !eof
