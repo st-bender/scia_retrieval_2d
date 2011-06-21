@@ -488,6 +488,16 @@ int main(int argc, char *argv[])
 	//weitere Spezies
 
 	// NO stuff
+	// from config file
+	NO_emiss NO(Konf.NO_v_u, Konf.NO_v_l, Konf.NO_v_l_abs, Konf.atmo_Temp);
+	NO.get_solar_data(sol_ref);
+	NO.read_luque_data_from_file("Luqueetal.dat");
+	NO.calc_excitation();
+	NO.calc_line_emissivities();
+	std::cout << "NO transition: v_u = " << NO.get_vu()
+		<< ", v_l = " << NO.get_vl()
+		<< ", v_l_abs = " << NO.get_vl_abs()
+		<< " at (initial)" << Konf.atmo_Temp << " K" << std::endl;
 	// 0 - 2
 	NO_emiss NO_02(0, 2, 0, Konf.atmo_Temp);
 	NO_02.get_solar_data(sol_ref);
@@ -658,7 +668,7 @@ int main(int argc, char *argv[])
 			//cerr<<"limbauswertung start\n";
 			//NotTODO Die Säulendichtebestimmung kann deutlich schneller
 			//geschehen, Verbesserungen hier sind aber irrelevant
-			Limb_Auswertung(Orbitlist, l, Solspec, Spezies_Fenster, NO_02,
+			Limb_Auswertung(Orbitlist, l, Solspec, Spezies_Fenster, NO,
 							counter_Nachtmessungen, counter_NLC_detektiert,
 							counter_Richtungsvektor_nicht_ok,
 							Arbeitsverzeichnis, mache_Fit_Plots_limb,
