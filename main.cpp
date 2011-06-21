@@ -791,7 +791,7 @@ int main(int argc, char *argv[])
 	Ausgewertete_Nadirmessung_FeI.resize(0);
 	Retrievalgitter Grid;
 	//5.0 ist vernünftig; 2.0 ist gut für TAU_LOS_plot
-	double Mindestabstand_Lat_in_Grad = 5.0;
+	double Mindestabstand_Lat_in_Grad = 4.0;
 	Grid.Retrievalgitter_erzeugen(Ausgewertete_Limbmessung_MgI,
 			Mindestabstand_Lat_in_Grad, Konf);
 	//Folgende Ausgabe sieht ok aus 28.9.2010 (Durchstoßpunkte werden erst
