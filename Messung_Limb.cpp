@@ -531,8 +531,10 @@ double Messung_Limb::fit_NO_spec(NO_emiss &NO,
 
 	// substitute large peaks by the average of the adjacent points
 	std::vector<double>::iterator y_max = max_element(y.begin(), y.end());
-	if (*y_max > 2.5e10)
+	while (*y_max > 2.5e10) {
 		*y_max = 0.5 * (*(y_max - 1) + *(y_max + 1));
+		y_max = max_element(y.begin(), y.end());
+	}
 
 	std::vector<double>::iterator x_it;
 
