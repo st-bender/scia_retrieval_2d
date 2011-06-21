@@ -398,7 +398,8 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		wl = m_Wellenlaengen.at(i_basewin_r_min + i);
 		basewin_wl.at(base_l + i) = m_Wellenlaengen.at(i_basewin_r_min + i);
 		basewin_rad.at(base_l + i) = rad.at(i_basewin_r_min + i)
-			- f_sol_fit * sigma_rayleigh(wl) * sol_spec.m_Intensitaeten.at(i_basewin_r_min + i);
+			- f_sol_fit * sigma_rayleigh(wl)
+			  * sol_spec.m_Intensitaeten.at(i_basewin_r_min + i);
 	}
 	/* construct new baseline vectors by removing outliers
 	 * This currently discards 20% (10% left and 10% right)
@@ -436,7 +437,8 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		wl = m_Wellenlaengen.at(i_peakwin_min + i);
 		peakwin_wl.at(i) = m_Wellenlaengen.at(i_peakwin_min + i);
 		peakwin_rad.at(i) = rad.at(i_peakwin_min + i)
-			- f_sol_fit * sigma_rayleigh(wl) * sol_spec.m_Intensitaeten.at(i_peakwin_min + i)
+			- f_sol_fit * sigma_rayleigh(wl)
+			  * sol_spec.m_Intensitaeten.at(i_peakwin_min + i)
 			- a0 - a1 * peakwin_wl.at(i);
 	}
 	double rms_err_peak, rms_err_tot;
