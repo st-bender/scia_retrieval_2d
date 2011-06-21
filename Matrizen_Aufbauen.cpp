@@ -602,8 +602,8 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			}
 			if (PeakNr == Spezies_Fenster.m_Wellenlaengen.size()) {
 				//eigentlich kann das gar nicht passieren
-				cout << "E1 und E2 konnten nicht gefunden werden..."
-					 << "mysteriöser bug\n";
+				//cout << "E1 und E2 konnten nicht gefunden werden..."
+				//	 << "mysteriöser bug\n";
 				E1 = 0.0;
 				E2 = 1.0;
 			}
