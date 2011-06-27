@@ -127,6 +127,7 @@ public:
 	void Zeile_Multiplizieren(int Zeile, double Faktor);
 	void Vielfaches_einer_Zeile_addieren(int Summenzeile, int Additionszeile, double Faktor);
 	MPL_Matrix row_diff();
+	MPL_Matrix unity();
 	//int simple_Gaussdiagonalisierung(); siehe ganz oben
 	int Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor();
 	void in_Datei_speichern(std::string Dateiname);
@@ -670,6 +671,17 @@ inline MPL_Matrix MPL_Matrix::row_diff()
 				m_Elemente[(i + 1) * n + j] - m_Elemente[i * n + j];
 
 	return diff;
+}
+inline MPL_Matrix MPL_Matrix::unity()
+{
+	int m = m_Zeilenzahl;
+	MPL_Matrix E(m, m);
+	E.Null_Initialisierung();
+
+	for (int i = 0; i < m; i++)
+		E.m_Elemente[i * m + i] = 1.;
+
+	return E;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
