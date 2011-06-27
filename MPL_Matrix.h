@@ -126,6 +126,7 @@ public:
 	void Zeile_Tauschen(int Zeile_a, int Zeile_b);
 	void Zeile_Multiplizieren(int Zeile, double Faktor);
 	void Vielfaches_einer_Zeile_addieren(int Summenzeile, int Additionszeile, double Faktor);
+	MPL_Matrix row_diff();
 	//int simple_Gaussdiagonalisierung(); siehe ganz oben
 	int Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor();
 	void in_Datei_speichern(std::string Dateiname);
@@ -657,7 +658,19 @@ inline void MPL_Matrix::Vielfaches_einer_Zeile_addieren(int Summenzeile,
 	}
 }// Ende Vielfaches_einer_Zeile_addieren
 
+inline MPL_Matrix MPL_Matrix::row_diff()
+{
+	int m = m_Zeilenzahl, n = m_Spaltenzahl;
+	MPL_Matrix diff(m - 1, n);
+	diff.Null_Initialisierung();
 
+	for (int i = 0; i < m - 1; i++)
+		for (int j = 0; j < n; j++)
+			diff.m_Elemente[i * n + j] =
+				m_Elemente[(i + 1) * n + j] - m_Elemente[i * n + j];
+
+	return diff;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Methodenstart Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor
