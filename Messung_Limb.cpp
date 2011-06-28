@@ -390,13 +390,14 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	// Basisfenster WL und I auffüllen
 	for (int i = 0; i < base_l; i++) {
 		wl = m_Wellenlaengen.at(i_basewin_l_min + i);
-		basewin_wl.at(i) = m_Wellenlaengen.at(i_basewin_l_min + i);
+		basewin_wl.at(i) = wl;
 		basewin_rad.at(i) = rad.at(i_basewin_l_min + i)
-			- f_sol_fit * sigma_rayleigh(wl) * sol_spec.m_Intensitaeten.at(i_basewin_l_min + i);
+			- f_sol_fit * sigma_rayleigh(wl)
+			  * sol_spec.m_Intensitaeten.at(i_basewin_l_min + i);
 	}
 	for (int i = 0; i < base_r; i++) {
 		wl = m_Wellenlaengen.at(i_basewin_r_min + i);
-		basewin_wl.at(base_l + i) = m_Wellenlaengen.at(i_basewin_r_min + i);
+		basewin_wl.at(base_l + i) = wl;
 		basewin_rad.at(base_l + i) = rad.at(i_basewin_r_min + i)
 			- f_sol_fit * sigma_rayleigh(wl)
 			  * sol_spec.m_Intensitaeten.at(i_basewin_r_min + i);
