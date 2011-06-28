@@ -11,6 +11,12 @@
 #include <numeric>
 #include <algorithm>
 #include <cmath>
+#include "MPL_Matrix.h"
+
+extern "C" {
+	void dgesv_(int *N, int *NRHS, double *A, int *LDA, int *IPIV, double *B,
+			int *LDB, int *INFO);
+}
 
 using namespace std;
 
@@ -251,6 +257,71 @@ int my_lowess(vector<double> &x, vector<double> &y, double f)
 	y = y_neu;
 
 	return 0;
+}
+
+/* linear equation solver helper function
+ * LHS = Ax = b = RHS
+ * the original RHS is replaced by the solution x */
+int my_solve(MPL_Matrix &LHS, MPL_Matrix &RHS)
+{
+	// Fortran Matrizen sind zu C++ Matrizen transponiert
+	MPL_Matrix A = LHS.transponiert();
+	// N ist Anzahl der Gitterpunkte
+	int N = LHS.m_Zeilenzahl;
+	// array mit der Pivotisierungsmatrix sollte so groß wie N sein,
+	int *IPIV;
+	IPIV = new int[N];
+	// Spalten von RHS 1 nehmen, um keine C/Fortran Verwirrungen zu provozieren
+	int NRHS = 1;
+	int LDA = N;
+	int LDB = N;
+	int INFO;
+
+	// AUFRUF A ist LHS.transponiert und B ist RHS
+	dgesv_(&N, &NRHS, A.m_Elemente, &LDA, IPIV, RHS.m_Elemente, &LDB, &INFO);
+
+	delete[] IPIV;
+
+	return INFO;
+}
+
+/* Whittaker smoothing for background subtraction
+ * method described in Anal. Chem. 75, 3631--3636 (2003)
+ * returns the smoothed vector with the same length as the input vector (y),
+ * and takes a weight vector (w) (0 for points to be skipped, 1 otherwise). */
+vector<double> my_whittaker_smooth(vector<double> &y, vector<double> &w,
+		int order, double lambda, double &err)
+{
+	int m = y.size();
+	MPL_Matrix dummy(m, m);
+	MPL_Matrix E = dummy.unity();
+	MPL_Matrix D = E.row_diff();
+	MPL_Matrix Y(m, 1), Z(m, 1), W(m, m);
+	W.Null_Initialisierung();
+
+	while (--order > 0)
+		D = D.row_diff();
+
+	// prepare RHS and W
+	for (int i = 0; i < m; i++) {
+		Z(i) = Y(i) = w.at(i) * y.at(i);
+		W(i, i) = w.at(i);
+	}
+
+	// prepare LHS
+	MPL_Matrix A = W + lambda * D.transponiert() * D;
+	my_solve(A, Z);
+
+	// calculate the rms error of the smoothed points
+	double N = std::accumulate(w.begin(), w.end(), 0.);
+	MPL_Matrix R = Y - Z;
+	MPL_Matrix Res = R.transponiert() * W * R;
+	err = std::sqrt(Res(0, 0) / N);
+
+	// generate return vector
+	vector<double> z(Z.m_Elemente, Z.m_Elemente + Z.m_Elementanzahl);
+
+	return z;
 }
 
 /* not really smoothing functions but this file seems to be the best place for now */
