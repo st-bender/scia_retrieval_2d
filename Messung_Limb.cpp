@@ -358,12 +358,15 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 			}
 		}
 	}
-	int i_basewin_l_min = sb_Get_closest_index(min_lambda_NO - 3.);
-	int i_basewin_l_max = sb_Get_closest_index(min_lambda_NO - 1.);
-	int i_basewin_r_min = sb_Get_closest_index(max_lambda_NO + 1.);
-	int i_basewin_r_max = sb_Get_closest_index(max_lambda_NO + 3.);
-	int i_peakwin_min = sb_Get_closest_index(min_lambda_NO - 1.);
-	int i_peakwin_max = sb_Get_closest_index(max_lambda_NO + 1.);
+	// inner and outer baseline and peak window offset
+	// the defaults (from M.L.) are base_offset_o = 3. and base_offset_i = 1.
+	double base_offset_o = 3., base_offset_i = 1.;
+	int i_basewin_l_min = sb_Get_closest_index(min_lambda_NO - base_offset_o);
+	int i_basewin_l_max = sb_Get_closest_index(min_lambda_NO - base_offset_i);
+	int i_basewin_r_min = sb_Get_closest_index(max_lambda_NO + base_offset_i);
+	int i_basewin_r_max = sb_Get_closest_index(max_lambda_NO + base_offset_o);
+	int i_peakwin_min = sb_Get_closest_index(min_lambda_NO - base_offset_i);
+	int i_peakwin_max = sb_Get_closest_index(max_lambda_NO + base_offset_i);
 	// Speicherplatzbedarf für die Fenster ermitteln
 	int base_l = (i_basewin_l_max - i_basewin_l_min + 1);
 	int base_r = (i_basewin_r_max - i_basewin_r_min + 1);
