@@ -370,6 +370,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	// Speicherplatzbedarf für die Fenster ermitteln
 	int base_l = (i_basewin_l_max - i_basewin_l_min + 1);
 	int base_r = (i_basewin_r_max - i_basewin_r_min + 1);
+	int N_fit_tot = i_basewin_r_max - i_basewin_l_min + 1;
 	int N_base = base_l + base_r;
 	int N_peak = i_peakwin_max - i_peakwin_min + 1;
 	// Speicher anfordern
@@ -435,15 +436,43 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	double a0, a1, rms_err_base;
 	// use the modified base window for the linear fit
 	Fit_Linear(bwin_wl, bwin_rad, a0, a1, rms_err_base, 0, N_base - 1);
+
+	// prepare baseline and rayleigh data
+	std::vector<double> baseline_wl, baseline_rad, rayleigh_rad;
+	std::vector<double> y, y_weights;
+	for (int i = 0; i < N_fit_tot; i++) {
+		int idx = i_basewin_l_min + i;
+		wl = m_Wellenlaengen.at(idx);
+		baseline_wl.push_back(wl);
+		baseline_rad.push_back(a0 + a1 * wl);
+		rayleigh_rad.push_back(f_sol_fit * sigma_rayleigh(wl)
+				* sol_spec.m_Intensitaeten.at(idx));
+
+		// prepare radiances and weights for the Whittaker smoother
+		y.push_back(rad.at(idx) - rayleigh_rad.back());
+		double rad = y.back();
+		// exclude the peak window and outliers by zeroing the weights
+		if ((idx > i_peakwin_min && idx < i_peakwin_max)
+			|| rad < rad0 || rad > rad1)
+			y_weights.push_back(0.);
+		else
+			y_weights.push_back(1.);
+	}
+
+	// replace the linear baseline by the Whittaker smoothed radiances
+	// excluding the peak window and outliers as in the linear case.
+	// the original (linear) baseline behaviour can be obtained by commenting
+	// this line or by setting lambda (the 4th argument) to something large,
+	// e.g. ~ 1.e9.
+	baseline_rad = my_whittaker_smooth(y, y_weights, 2, 1.e4, rms_err_base);
+
 	//Peakfenster WL und I auffüllen
 	// lineare Funktion von Intensitäten des Peakfenster abziehen
 	for (int i = 0; i < N_peak; i++) {
-		wl = m_Wellenlaengen.at(i_peakwin_min + i);
 		peakwin_wl.at(i) = m_Wellenlaengen.at(i_peakwin_min + i);
 		peakwin_rad.at(i) = rad.at(i_peakwin_min + i)
-			- f_sol_fit * sigma_rayleigh(wl)
-			  * sol_spec.m_Intensitaeten.at(i_peakwin_min + i)
-			- a0 - a1 * peakwin_wl.at(i);
+			- rayleigh_rad.at(i_peakwin_min - i_basewin_l_min + i)
+			- baseline_rad.at(i_peakwin_min - i_basewin_l_min + i);
 	}
 	double rms_err_peak, rms_err_tot;
 	m_Zeilendichte = fit_NO_spec(NO, peakwin_wl, peakwin_rad,
@@ -460,21 +489,22 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 			spec_wo_rayleigh.push_back(basewin_rad.at(i));
 			NO_fit.push_back(m_Zeilendichte *
 					NO.get_spec_scia_res(i_basewin_l_min + i)
-					+ a0 + a1 * basewin_wl.at(i));
+					+ baseline_rad.at(i));
 		}
 		for (size_t k = 0; k < peakwin_wl.size(); k++) {
 			wavelengths.push_back(m_Wellenlaengen.at(i_peakwin_min + k));
-			spec_wo_rayleigh.push_back(peakwin_rad.at(k));
+			spec_wo_rayleigh.push_back(peakwin_rad.at(k)
+					+ baseline_rad.at(i_peakwin_min - i_basewin_l_min + k));
 			NO_fit.push_back(m_Zeilendichte *
 					NO.get_spec_scia_res(i_peakwin_min + k)
-					+ a0 + a1 * peakwin_wl.at(k));
+					+ baseline_rad.at(i_peakwin_min - i_basewin_l_min + k));
 		}
 		for (i = 0; i < base_r; i++) {
 			wavelengths.push_back(m_Wellenlaengen.at(i_basewin_r_min + i));
 			spec_wo_rayleigh.push_back(basewin_rad.at(base_l + i));
 			NO_fit.push_back(m_Zeilendichte *
 					NO.get_spec_scia_res(i_basewin_r_min + i)
-					+ a0 + a1 * basewin_wl.at(base_l + i));
+					+ baseline_rad.at(i_basewin_r_min - i_basewin_l_min + i));
 		}
 
 		// plot the data to postscript files
