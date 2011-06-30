@@ -1641,19 +1641,22 @@ int Pixel_finden_und_AMF_erhoehen_LOS(MPL_Matrix &AMF, Retrievalgitter &Grid,
 			 << Grid.m_Gitter[Grid.m_Anzahl_Punkte - 1].m_Max_Hoehe << "\n";
 		return 2;
 	}  // kein Punkt des Gitters
-	if (Punkt_Breite > Grid.m_Gitter[0].m_Min_Breite) {
+	// the grid is sorted from north to south,
+	// Grid.m_Gitter[0] is the northernmost point
+	if (Punkt_Breite > Grid.m_Gitter[0].m_Max_Breite) {
 		Pixelnummer = -1;
 		//cout<<"Fall2b\n";
 		//cout<<"Punkt_Breite: "<<Punkt_Breite<<"\n";
-		//cout<<"Grid.m_Gitter[0].m_Min_Breite: "<<Grid.m_Gitter[0].m_Min_Breite<<"\n";
+		//cout<<"Grid.m_Gitter[0].m_Max_Breite: "<<Grid.m_Gitter[0].m_Max_Breite<<"\n";
 		return 2;
 	}  // kein Punkt des Gitters
-	if (Punkt_Breite < Grid.m_Gitter[Grid.m_Anzahl_Punkte - 1].m_Max_Breite) {
+	// Grid.m_Gitter[Grid.m_Anzahl_Punkte - 1] is the southernmost point
+	if (Punkt_Breite < Grid.m_Gitter[Grid.m_Anzahl_Punkte - 1].m_Min_Breite) {
 		Pixelnummer = -1;
 		//cout<<"Fall2c\n";
 		//cout<<"Punkt_Breite: "<<Punkt_Breite<<"\n";
-		//cout<<"Grid.m_Gitter[Grid.m_Anzahl_Punkte-1].m_Max_Breite: "
-		//  <<Grid.m_Gitter[Grid.m_Anzahl_Punkte-1].m_Max_Breite<<"\n";
+		//cout<<"Grid.m_Gitter[Grid.m_Anzahl_Punkte-1].m_Min_Breite: "
+		//  <<Grid.m_Gitter[Grid.m_Anzahl_Punkte-1].m_Min_Breite<<"\n";
 		return 2;
 	}  // kein Punkt des Gitters
 	if (Punkt_Hoehe < Grid.m_Gitter[0].m_Min_Hoehe) {
