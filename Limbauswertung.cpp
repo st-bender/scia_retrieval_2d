@@ -38,7 +38,6 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 					int l,
 					Sonnenspektrum &Solspec,
 					vector<Speziesfenster>& Spezies_Fenster,
-					NO_emiss &NO,
 					int &counter_Nachtmessungen,
 					int &counter_NLC_detektiert,
 					int &counter_Richtungsvektor_nicht_ok,
@@ -86,8 +85,6 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 
 	// Testen, ob die Interpolation erfolgreich war
 	//Solspec.Speichern("CHECKDATA/Sonne_interpoliert_auf_826.txt"); ->ok
-
-	NO.scia_convolve(Rohdaten.at(0));
 
 	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	// Hier wäre ein guter Ort, um zu prüfen, ob die Rohdaten weiter verwendet

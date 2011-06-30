@@ -633,7 +633,7 @@ int main(int argc, char *argv[])
 			//cerr<<"limbauswertung start\n";
 			//NotTODO Die Säulendichtebestimmung kann deutlich schneller
 			//geschehen, Verbesserungen hier sind aber irrelevant
-			Limb_Auswertung(Orbitlist, l, Solspec, Spezies_Fenster, NO,
+			Limb_Auswertung(Orbitlist, l, Solspec, Spezies_Fenster,
 							counter_Nachtmessungen, counter_NLC_detektiert,
 							counter_Richtungsvektor_nicht_ok,
 							Arbeitsverzeichnis, mache_Fit_Plots_limb,
