@@ -18,6 +18,7 @@ sowie die Emissivitäten für jede Messung neu bestimmt werden müssen.
 #include"Liniendaten.h"
 #include<vector>
 #include<string>
+#include "NO_emiss.h"
 
 class Speziesfenster
 {
@@ -37,6 +38,8 @@ public:
 	std::vector<double> m_Peakfenster_WLmin;
 	std::vector<double> m_Peakfenster_WLmax;
 	double m_FWHM;  // FWHM der Peaks, oder zumindest Startwert
+	// vector with NO transitions
+	std::vector<NO_emiss> NO_vec;
 	//Für alle Linien erstmal ein Vektor
 	std::vector<std::string>  m_Liste_der_Plot_Dateinamen;
 	//Membervariablen ende ****************************************************/

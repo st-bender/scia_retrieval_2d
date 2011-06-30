@@ -500,6 +500,7 @@ int main(int argc, char *argv[])
 		<< " at (initial)" << Konf.atmo_Temp << " K" << std::endl;
 	//
 	Spez.m_Spezies_Name = "NO";
+	Spez.NO_vec.push_back(NO);
 	wl = 246.9; // dummy, will be set later more accurately
 	Spez.m_Wellenlaengen.push_back(wl);
 	Spez.m_Basisfenster_links_WLmin.push_back(wl - 1);
