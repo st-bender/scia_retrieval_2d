@@ -734,8 +734,8 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			//vom Startpunkt aus gehts in Richtung Sonne voran
 			MPL_Vektor Sonne_normal(3); //wie bei LOS
 			Umwandlung_Kugel_in_Karthesisch(1,       // 1 km lang damit normiert
-					AM_L[MessungNR].m_Sonnen_Longitude,
-					AM_L[MessungNR].m_Deklination,
+					aml_it->m_Sonnen_Longitude,
+					aml_it->m_Deklination,
 					Sonne_normal(0), Sonne_normal(1), Sonne_normal(2));
 			//Einmal den Sonnenzenitwinkel ausrechnen. ist dieser größer als
 			//90°, so liegt der Gitterpunkt im Dunkeln, und muss 0 Gesetzt
@@ -749,7 +749,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 				continue;
 			}
 
-			// double Punkt_Hoehe=Start_Punkt.Betrag_ausgeben()-AM_L[MessungNR].m_Erdradius;
+			// double Punkt_Hoehe=Start_Punkt.Betrag_ausgeben()-aml_it->m_Erdradius;
 			// ??? wofür stand das mal
 
 			//Abschätzung der Strecke zwischen Startpunkt und TOA_LFS in km
@@ -757,7 +757,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			// mit Cosinussatz a^2=b^2+c^2-2bc cos(alpha)
 			// a ist gesucht alpha=SZA, b=r_E+H, c=r_E+TOA
 			double b = Start_Punkt.Betrag_ausgeben();
-			double c = TOA_LFS + AM_L[MessungNR].m_Erdradius;
+			double c = TOA_LFS + aml_it->m_Erdradius;
 			// Cos(SZA) gerade aus Skalarprodukt des Einheitsvektors in
 			// Sonnenrichtung und des Einheitsvektors in Startpunktrichtung
 			// bestimmbar
@@ -791,7 +791,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 						Punkt_Radius, Punkt_Laenge, Punkt_Breite);
 
 				// Berechne Hoehe
-				Punkt_Hoehe = Punkt_Radius - AM_L[MessungNR].m_Erdradius;
+				Punkt_Hoehe = Punkt_Radius - aml_it->m_Erdradius;
 				if (Punkt_Hoehe > TOA_LFS) {
 					//keine zusätzliche Absorption von LFS für diese Punkte....
 					//(Nur Emission)
@@ -801,8 +801,8 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 				}
 
 				// Testen auf Sonnenzenizenitwinkel unter 90 grad
-				if ((Punkt_Breite > 90.0 + AM_L[MessungNR].m_Deklination)
-						|| (Punkt_Breite < -90.0 + AM_L[MessungNR].m_Deklination)) {
+				if ((Punkt_Breite > 90.0 + aml_it->m_Deklination)
+						|| (Punkt_Breite < -90.0 + aml_it->m_Deklination)) {
 					continue;
 				}
 				double BOA_LFS = 50.0; //bottom of atmosphere
