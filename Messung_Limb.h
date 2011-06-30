@@ -30,7 +30,7 @@ public:
 			std::string Arbeitsverzeichnis, std::string mache_Fit_Plots,
 			double *mean_10_20);
 	int slant_column_NO(class NO_emiss &NO, std::string mache_Fit_Plots,
-			class Sonnenspektrum &sol_spec,
+			class Sonnenspektrum &sol_spec, int idx,
 			class Speziesfenster &Spezfenst, std::string Arbeitsverzeichnis);
 	double fit_NO_spec(class NO_emiss &NO, std::vector<double> &x,
 			std::vector<double> &y, double &rms_err);
