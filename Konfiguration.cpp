@@ -32,9 +32,6 @@ int Konfiguration::Konfiguration_einlesen()
 	***************************************************/
 
 	// defaukt NO values
-	NO_v_u = 0;
-	NO_v_l = 2;
-	NO_v_l_abs = 0;
 	atmo_Temp = 200.;
 	//Datei Öffnen
 	ifstream infile;
@@ -302,12 +299,20 @@ int Konfiguration::Konfiguration_einlesen()
 			ss >> atmo_Temp;
 			continue;
 		}
-		if (Zeile == "NO transition") {
+		if (Zeile == "number of NO transitions") {
 			getline(infile, Zeile);
-			std::vector<int> NO_trans = string_to_vector<int>(Zeile);
-			NO_v_u = NO_trans.at(0);
-			NO_v_l = NO_trans.at(1);
-			NO_v_l_abs = NO_trans.at(2);
+			ss << Zeile;
+			ss >> no_NO_transitions;
+			continue;
+		}
+		if (Zeile == "NO transitions") {
+			for (unsigned i = 0; i < no_NO_transitions; i++) {
+				getline(infile, Zeile);
+				std::vector<int> NO_data = string_to_vector<int>(Zeile);
+				NO_v_u.push_back(NO_data.at(0));
+				NO_v_l.push_back(NO_data.at(1));
+				NO_v_l_abs.push_back(NO_data.at(2));
+			}
 			continue;
 		}
 	} //ende while !eof
@@ -401,6 +406,12 @@ int Konfiguration::Konfiguration_anzeigen()
 	cout << "Max Iterations: " << this->m_Max_Zahl_Iterationen << "\n";
 	cout << "Convergence treshold: " << this->m_Convergence_Treshold << "\n";
 	cout << "atmosphere temperature: " << this->atmo_Temp << "\n";
+	cout << "number of NO transitions: " << this->no_NO_transitions << "\n";
+	cout << "NO transitions:\n";
+	for (unsigned i = 0; i < no_NO_transitions; i++) {
+		cout << "v_u = " << NO_v_u.at(i) << ", v_l = " << NO_v_l.at(i)
+			 << ", v_l_abs = " << NO_v_l_abs.at(i) << endl;
+	}
 	cout << "\n";
 	return 0;
 }//ende Konfiguration_anzeigen

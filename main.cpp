@@ -489,34 +489,38 @@ int main(int argc, char *argv[])
 
 	// NO stuff
 	// from config file
-	NO_emiss NO(Konf.NO_v_u, Konf.NO_v_l, Konf.NO_v_l_abs, Konf.atmo_Temp);
-	NO.get_solar_data(sol_ref);
-	NO.read_luque_data_from_file("Luqueetal.dat");
-	NO.calc_excitation();
-	NO.calc_line_emissivities();
-	std::cout << "NO transition: v_u = " << NO.get_vu()
-		<< ", v_l = " << NO.get_vl()
-		<< ", v_l_abs = " << NO.get_vl_abs()
-		<< " at (initial)" << Konf.atmo_Temp << " K" << std::endl;
-	//
-	Spez.m_Spezies_Name = "NO";
-	Spez.NO_vec.push_back(NO);
-	wl = 246.9; // dummy, will be set later more accurately
-	Spez.m_Wellenlaengen.push_back(wl);
-	Spez.m_Basisfenster_links_WLmin.push_back(wl - 1);
-	Spez.m_Basisfenster_links_WLmax.push_back(wl - 0.5);
-	Spez.m_Basisfenster_rechts_WLmin.push_back(wl + 0.5);
-	Spez.m_Basisfenster_rechts_WLmax.push_back(wl + 1);
-	Spez.m_Peakfenster_WLmin.push_back(wl - 1);
-	Spez.m_Peakfenster_WLmax.push_back(wl + 1);
-	Spez.m_FWHM = Konf.m_FWHM;
-	// Liniendaten
-	Lindat.m_Wellenlaenge = wl;
-	Lindat.m_rel_Einstein = 1;
-	Lindat.m_f_Wert = 0.162;
-	Lindat.m_E1 = 0;
-	Lindat.m_E2 = 1;
-	Spez.m_Liniendaten.push_back(Lindat);
+	for (i = 0; i < Konf.no_NO_transitions; i++) {
+		Spez.m_Spezies_Name = "NO";
+		NO_emiss NO(Konf.NO_v_u.at(i), Konf.NO_v_l.at(i),
+				Konf.NO_v_l_abs.at(i), Konf.atmo_Temp);
+		NO.get_solar_data(sol_ref);
+		NO.read_luque_data_from_file("Luqueetal.dat");
+		NO.calc_excitation();
+		NO.calc_line_emissivities();
+		std::cout << "NO transition " << i
+			<< ": v_u = " << NO.get_vu()
+			<< ", v_l = " << NO.get_vl()
+			<< ", v_l_abs = " << NO.get_vl_abs()
+			<< " at (initial) " << Konf.atmo_Temp << " K" << std::endl;
+		//
+		Spez.NO_vec.push_back(NO);
+		wl = 246.9; // dummy, will be set later more accurately
+		Spez.m_Wellenlaengen.push_back(wl);
+		Spez.m_Basisfenster_links_WLmin.push_back(wl - 1);
+		Spez.m_Basisfenster_links_WLmax.push_back(wl - 0.5);
+		Spez.m_Basisfenster_rechts_WLmin.push_back(wl + 0.5);
+		Spez.m_Basisfenster_rechts_WLmax.push_back(wl + 1);
+		Spez.m_Peakfenster_WLmin.push_back(wl - 1);
+		Spez.m_Peakfenster_WLmax.push_back(wl + 1);
+		Spez.m_FWHM = Konf.m_FWHM;
+		// Liniendaten
+		Lindat.m_Wellenlaenge = wl;
+		Lindat.m_rel_Einstein = 1;
+		Lindat.m_f_Wert = 0.162;
+		Lindat.m_E1 = 0;
+		Lindat.m_E2 = 1;
+		Spez.m_Liniendaten.push_back(Lindat);
+	}
 	Spezies_Fenster.push_back(Spez);
 
 	// SpezVektoren wieder leeren

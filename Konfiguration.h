@@ -59,7 +59,8 @@ public:
 	int m_Max_Zahl_Iterationen;
 	double m_Convergence_Treshold;
 	double atmo_Temp;
-	int NO_v_u, NO_v_l, NO_v_l_abs;
+	unsigned no_NO_transitions;
+	std::vector<int> NO_v_u, NO_v_l, NO_v_l_abs;
 };
 
 
