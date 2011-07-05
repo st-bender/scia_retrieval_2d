@@ -38,7 +38,6 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 					int l,
 					Sonnenspektrum &Solspec,
 					vector<Speziesfenster>& Spezies_Fenster,
-					NO_emiss &NO,
 					int &counter_Nachtmessungen,
 					int &counter_NLC_detektiert,
 					int &counter_Richtungsvektor_nicht_ok,
@@ -86,8 +85,6 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 
 	// Testen, ob die Interpolation erfolgreich war
 	//Solspec.Speichern("CHECKDATA/Sonne_interpoliert_auf_826.txt"); ->ok
-
-	NO.scia_convolve(Rohdaten.at(0));
 
 	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	// Hier wäre ein guter Ort, um zu prüfen, ob die Rohdaten weiter verwendet
@@ -204,19 +201,22 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 				}
 				if (sfit->m_Spezies_Name == "NO") {
 					// create new object, same transition but modelled temperature
-					NO_emiss NO_new(*mlit, NO.get_vu(), NO.get_vl(), NO.get_vl_abs());
-					NO_new.solar = NO.solar;
+					NO_emiss NO_new(*mlit,
+							sfit->NO_vec.at(k).get_vu(),
+							sfit->NO_vec.at(k).get_vl(),
+							sfit->NO_vec.at(k).get_vl_abs());
+					NO_new.solar = sfit->NO_vec.at(k).solar;
 					NO_new.read_luque_data_from_file("Luqueetal.dat");
 					NO_new.calc_excitation();
 					NO_new.calc_line_emissivities();
 					NO_new.scia_convolve(Rohdaten.at(0));
 					double wl = NO_new.get_scia_wl_at_max();
-					mlit->slant_column_NO(NO_new, mache_Fit_Plots, Solspec, *sfit,
-							Arbeitsverzeichnis);
+					mlit->slant_column_NO(NO_new, mache_Fit_Plots, Solspec, k,
+							*sfit, Arbeitsverzeichnis);
 					Ergebnis = mlit->Ergebnis_Zusammenfassen();
 					Ergebnis.m_Wellenlaenge
 						= ldit->m_Wellenlaenge
-						= sfit->m_Wellenlaengen.at(0)
+						= sfit->m_Wellenlaengen.at(k)
 						= wl;
 					Ausgewertete_Limbmessung_NO.push_back(Ergebnis);
 				}
