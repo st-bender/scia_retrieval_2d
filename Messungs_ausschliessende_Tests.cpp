@@ -113,7 +113,7 @@ bool test_auf_SAA_limb(Messung_Limb &space)
 
 	/* the threshold is a rule of thumb from one day (2010-02-18) */
 	/* TODO: replace by a more sophisticated/reliable approach */
-	if (I_max > 1.1e11) {
+	if (I_max > 8.8e10) {
 		cerr << "SAA or peak detected:" << endl;
 		cerr << space.m_Longitude_Sat << "\t" << space.m_Latitude_Sat << "\t";
 		cerr << I_max << "\t" << I_avg << "\t";
