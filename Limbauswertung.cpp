@@ -110,7 +110,7 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 		return 2;  //NLC 2
 	}
 	Test_auf_korrekte_geolocations_Limb(Rohdaten, counter_Richtungsvektor_nicht_ok);
-	if (test_auf_SAA_limb(space)) {
+	if (test_auf_SAA_limb(space) && test_auf_SAA_limb(*(Rohdaten.end() - 2))) {
 		std::cout << "# SAA at lat = " << Rohdaten[0].m_Latitude_TP
 			<< ", alt = " << Rohdaten[0].m_Hoehe_TP << std::endl;
 		return 1;
