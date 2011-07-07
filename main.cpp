@@ -1356,10 +1356,11 @@ int main(int argc, char *argv[])
 	// Spezies MgI //
 	/////////////////////////
 	MPL_Matrix S_x_MgI(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
+	MPL_Matrix S_x_meas_MgI(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
 	//Averaging Kernel Matrix
 	MPL_Matrix AKM_MgI(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
 	if (mache_volles_Retrieval_MgI == "ja") {
-		Retrievalfehler_Abschaetzung(S_x_MgI, AKM_MgI,
+		Retrievalfehler_Abschaetzung(S_x_MgI, S_x_meas_MgI, AKM_MgI,
 									 S_apriori_MgI, S_y_MgI, S_Breite, S_Hoehe,
 									 S_letzte_Hoehe_MgI, MgI_Lambda_Breite,
 									 MgI_Lambda_Hoehe, AMF_MgI, Konf);
@@ -1368,10 +1369,11 @@ int main(int argc, char *argv[])
 	// Spezies MgII //
 	/////////////////////////
 	MPL_Matrix S_x_MgII(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
+	MPL_Matrix S_x_meas_MgII(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
 	//Averaging Kernel Matrix
 	MPL_Matrix AKM_MgII(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
 	if (mache_volles_Retrieval_MgII == "ja") {
-		Retrievalfehler_Abschaetzung(S_x_MgII, AKM_MgII,
+		Retrievalfehler_Abschaetzung(S_x_MgII, S_x_meas_MgII, AKM_MgII,
 									 S_apriori_MgII, S_y_MgII, S_Breite, S_Hoehe,
 									 S_letzte_Hoehe_MgII, MgII_Lambda_Breite,
 									 MgII_Lambda_Hoehe, AMF_MgII, Konf);
@@ -1380,10 +1382,11 @@ int main(int argc, char *argv[])
 	// Spezies unknown //
 	/////////////////////////
 	MPL_Matrix S_x_unknown(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
+	MPL_Matrix S_x_meas_unknown(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
 	//Averaging Kernel Matrix
 	MPL_Matrix AKM_unknown(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
 	if (mache_volles_Retrieval_unknown == "ja") {
-		Retrievalfehler_Abschaetzung(S_x_unknown, AKM_unknown,
+		Retrievalfehler_Abschaetzung(S_x_unknown, S_x_meas_unknown, AKM_unknown,
 									 S_apriori_unknown, S_y_unknown, S_Breite,
 									 S_Hoehe, S_letzte_Hoehe_unknown,
 									 unknown_Lambda_Breite,
@@ -1393,10 +1396,11 @@ int main(int argc, char *argv[])
 	// Spezies FeI  //
 	/////////////////////////
 	MPL_Matrix S_x_FeI(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
+	MPL_Matrix S_x_meas_FeI(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
 	//Averaging Kernel Matrix
 	MPL_Matrix AKM_FeI(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
 	if (mache_volles_Retrieval_FeI == "ja") {
-		Retrievalfehler_Abschaetzung(S_x_FeI, AKM_FeI,
+		Retrievalfehler_Abschaetzung(S_x_FeI, S_x_meas_FeI, AKM_FeI,
 									 S_apriori_FeI, S_y_FeI, S_Breite, S_Hoehe,
 									 S_letzte_Hoehe_FeI, FeI_Lambda_Breite,
 									 FeI_Lambda_Hoehe, AMF_FeI, Konf);
@@ -1405,10 +1409,11 @@ int main(int argc, char *argv[])
 	// Spezies NO //
 	/////////////////////////
 	MPL_Matrix S_x_NO(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
+	MPL_Matrix S_x_meas_NO(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
 	//Averaging Kernel Matrix
 	MPL_Matrix AKM_NO(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
 	if (mache_volles_Retrieval_NO == "ja") {
-		Retrievalfehler_Abschaetzung(S_x_NO, AKM_NO,
+		Retrievalfehler_Abschaetzung(S_x_NO, S_x_meas_NO, AKM_NO,
 									 S_apriori_NO, S_y_NO, S_Breite, S_Hoehe,
 									 S_letzte_Hoehe_NO, NO_Lambda_Breite,
 									 NO_Lambda_Hoehe, AMF_NO, Konf);

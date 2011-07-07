@@ -20,6 +20,7 @@ extern "C" {
 }
 
 int Retrievalfehler_Abschaetzung(MPL_Matrix &S_x,
+								 MPL_Matrix &S_x_meas,
 								 MPL_Matrix &Averaging_Kernel_Matrix,
 								 const MPL_Matrix &S_apriori,
 								 const MPL_Matrix &S_y,
@@ -47,7 +48,11 @@ int Retrievalfehler_Abschaetzung(MPL_Matrix &S_x,
 	S_x += S_letzte_Hoehe_trans * S_letzte_Hoehe;
 	Matrix_Invertieren(S_x);
 	//Nun noch die Averaging Kernel Matrix bestimmen
-	Averaging_Kernel_Matrix = S_x * (AMF_trans * (S_y * AMF));
+	MPL_Matrix D = S_x * AMF_trans * S_y;
+	Averaging_Kernel_Matrix = D * AMF;
+	MPL_Matrix S_y_inv = S_y;
+	Matrix_Invertieren(S_y_inv);
+	S_x_meas = D * S_y_inv * D.transponiert();
 	return 0;
 }
 ///////////////////////////////////////////////////////

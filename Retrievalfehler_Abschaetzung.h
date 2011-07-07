@@ -12,6 +12,7 @@
 #include "MPL_Matrix.h"
 
 int Retrievalfehler_Abschaetzung(MPL_Matrix &S_x,
+								 MPL_Matrix &S_x_meas,
 								 MPL_Matrix &Averaging_Kernel_Matrix,
 								 const MPL_Matrix &S_apriori,
 								 const MPL_Matrix &S_y,
