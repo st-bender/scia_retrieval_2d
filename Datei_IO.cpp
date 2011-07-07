@@ -620,7 +620,8 @@ MPL_Matrix Read_Atmodatei(string Dateiname)
 // Funktionsstart Ausgabe_Dichten
 ////////////////////////////////////////////////////////////////////////////////
 int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
-		MPL_Matrix &Dichten, MPL_Matrix &S_x, MPL_Matrix &AKM)
+		MPL_Matrix &Dichten, MPL_Matrix &S_x, MPL_Matrix &S_x_meas,
+		MPL_Matrix &AKM)
 {
 	// Die Ausgabe erfolgt in 3 Dateien mit zusätzlichem Namen
 	// _Dichten.txt, _Sx.txt und  _AKM.txt
@@ -634,9 +635,10 @@ int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
 
 	//Formatierte Ausgabe
 	FILE *outfile1;
-	string Dateiname1, Dateiname2, Dateiname3;
+	string Dateiname1, Dateiname2, Dateiname2_meas, Dateiname3;
 	Dateiname1 = Dateiname_out + "_Dichten.txt";
 	Dateiname2 = Dateiname_out + "_Sx.txt";
+	Dateiname2_meas = Dateiname_out + "_Sx_meas.txt";
 	Dateiname3 = Dateiname_out + "_AKM.txt";
 	int i;
 	double stabw = 0;
@@ -647,22 +649,24 @@ int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
 	fprintf(outfile1, "%5s "
 			"%13s %12s %13s "
 			"%14s  %12s %14s "
-			"%12s %12s\n",
+			"%12s %12s %12s\n",
 			"GP_ID",
 			"Max_Hoehe[km]", "Hoehe[km]", "Min_Hoehe[km]",
 			"Max_Breite[°]", "Breite[°]", "Min_Breite[°]",
-			"Dichte[cm^-3]", " Standardabweichung[cm^-3]");
+			"Dichte[cm^-3]", "Fehler Mess[cm^-3]",
+			"Fehler tot[cm^-3]");
 	// Alle Zeilen bis auf die letzte
 	for (i = 0; i < Grid.m_Anzahl_Punkte; i++) {
 		stabw = sqrt(S_x(i, i));
+		double stdabw_meas = std::sqrt(S_x_meas(i, i));
 		fprintf(outfile1, "%5i  "
 				"%+1.5E %+1.5E  %+1.5E "
 				" %+1.5E %+1.5E  %+1.5E "
-				" %+1.5E               %+1.5E\n",
+				" %+1.5E       %+1.5E   %+1.5E\n",
 				i,
 				Grid.m_Gitter[i].m_Max_Hoehe, Grid.m_Gitter[i].m_Hoehe, Grid.m_Gitter[i].m_Min_Hoehe,
 				Grid.m_Gitter[i].m_Max_Breite, Grid.m_Gitter[i].m_Breite, Grid.m_Gitter[i].m_Min_Breite,
-				Dichten(i), stabw);
+				Dichten(i), stdabw_meas, stabw);
 	}
 	////////////////////////////////////////////////////////////////////////////
 	// Datei schließen
@@ -672,6 +676,7 @@ int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
 	//S_x
 	// Zeilenweise ausgeben
 	S_x.in_Datei_speichern(Dateiname2);
+	S_x_meas.in_Datei_speichern(Dateiname2_meas);
 
 	//AKM
 	// Zeilenweise ausgeben
