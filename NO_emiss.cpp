@@ -712,6 +712,7 @@ int NO_emiss::scia_convolve(Messung_Limb &ml)
 {
 	int NO_NJ = get_NJ();
 	int i, j;
+	int npix = 50;
 
 	std::vector<double> x = ml.m_Wellenlaengen;
 	std::vector<double>::iterator x_it;
@@ -727,12 +728,19 @@ int NO_emiss::scia_convolve(Messung_Limb &ml)
 			double NO_rad = get_gamma_j(j, i) * 0.25 * M_1_PI;
 			for (x_it = x.begin(); x_it != x.end(); ++x_it) {
 				int l = std::distance(x.begin(), x_it);
-				double w = slit_func(0.22, NO_wl, *x_it);
+				double dl_i = std::abs(NO_wl - *x_it);
+				double w = 0.;
 				if (x_it + 1 != x.end())
 					xdiff = *(x_it + 1) - *x_it;
-				// the weight cut-off is arbitrary but sensible
-				if (w > 0.001)
-					spec_scia_res.at(l) += w * NO_rad * xdiff;
+				if (dl_i < 1.5) {
+					// integrate over the pixel width (npix points)
+					for (int jj = 0; jj < npix; jj++) {
+						double wl = *x_it
+							- 0.5 * xdiff + jj * xdiff / (npix - 1);
+						w += slit_func(0.22, NO_wl, wl);
+					}
+					spec_scia_res.at(l) += w * NO_rad * xdiff / npix;
+				}
 			}
 		}
 	}
