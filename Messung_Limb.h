@@ -36,6 +36,7 @@ public:
 			std::vector<double> &y, double &rms_err);
 	int moving_average(int window_size);
 	int savitzky_golay(int window_size);
+	double msise_temperature();
 	int Intensitaeten_normieren(std::vector<double> &Sonnen_Intensitaet);
 	//int        Intensitaeten_normieren(Sonnenspektrum Solspec, Fenster);
 	// hier müsste überlegt werden, wie man mehrfachkorrekturen umgeht

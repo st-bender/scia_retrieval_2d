@@ -26,6 +26,7 @@
 #include "Dateinamensteile_Bestimmen.h"
 
 extern "C" {
+#include "nrlmsise-00.h"
 	void dgesv_(int *N, int *NRHS, double *A, int *LDA, int *IPIV, double *B, int *LDB, int *INFO);
 } //Lapackroutine zur Lösung eines linearen GLeichungssystems
 
@@ -1167,6 +1168,60 @@ int Messung_Limb::savitzky_golay(int window_size)
 {
 	return my_savitzky_golay(m_Intensitaeten, window_size);
 }
+
+double Messung_Limb::msise_temperature()
+{
+	struct nrlmsise_output output;
+	struct nrlmsise_input input;
+	struct nrlmsise_flags flags;
+
+	// set the flags
+	flags.switches[0] = 0;
+	for (int i = 1; i < 24; i++)
+		flags.switches[i] = 1;
+
+	// construct the input for the temperature calculation
+	input.year = m_Jahr; // year, but ignored
+
+	// get the day of the year
+	int days[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+	if (m_Jahr % 4 == 0 && !(m_Jahr % 100 == 0 && m_Jahr % 400 != 0))
+		days[1] = 29;
+
+	input.doy = 0;
+	for (int i = 0; i < (m_Monat - 1); i++) {
+		input.doy += days[i];
+	}
+	input.doy += m_Tag;
+
+	// ut seconds in day
+	input.sec = m_Stunde * 3600. + m_Minute * 60. + m_Sekunde;
+
+	// geo data
+	input.alt = m_Hoehe_TP;
+	input.g_lat = m_Latitude_TP;
+	input.g_long = m_Longitude_TP;
+	// local apparent solar time (quick default)
+	input.lst = input.sec / 3600. + input.g_long / 15.;
+
+	// solar data (quick default)
+	//input.f107A = 150.;
+	//input.f107 = 150.;
+	//input.ap = 4.;
+	// data for 2010-02-18
+	//input.f107A = 83.1;
+	//input.f107 = 83.1;
+	//input.ap = 4.875;
+	// data for 2009-01-22
+	input.f107A = 66.9;
+	input.f107 = 66.9;
+	input.ap = 1.625;
+
+	gtd7(&input, &flags, &output);
+
+	return output.t[1];
+}
+
 int Messung_Limb::Intensitaeten_normieren(vector<double> &Sonnen_Intensitaet)
 {
 	//Teiler wurde vorher interpoliert
