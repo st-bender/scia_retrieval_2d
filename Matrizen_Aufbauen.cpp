@@ -28,6 +28,7 @@
 #include <cstdio>
 #include <vector>
 #include <iterator>
+#include <numeric>
 
 
 using namespace std;
@@ -1787,3 +1788,34 @@ MPL_Vektor Punkt_auf_Strecke_bei_Radius(MPL_Vektor &Streckenstartpunkt,
 //ENDE  Punkt_auf_Strecke_bei_Radius
 ////////////////////////////////////////////////////////////////////////////////
 
+// Prepares a (column) vector to hold the total number density at the grid
+// points using the number densities from the measurement points that fall
+// into the corresponding grid point.
+int prepare_total_density(Retrievalgitter &grid, MPL_Matrix &dens,
+		std::vector<Ausgewertete_Messung_Limb> &aml_vec)
+{
+	int i;
+	std::vector<Ausgewertete_Messung_Limb>::iterator aml_it;
+
+	for (i = 0; i < grid.m_Anzahl_Punkte; i++) {
+		Gitterpunkt gp = grid.m_Gitter[i];
+		std::vector<double> densities;
+		/*
+		 * finds measurement points that fall into the grid point
+		 * and averages their already calculated number densities.
+		 */
+		for (aml_it = aml_vec.begin(); aml_it != aml_vec.end(); ++aml_it) {
+			if (aml_it->m_Latitude_TP > gp.m_Min_Breite &&
+				aml_it->m_Latitude_TP <= gp.m_Max_Breite &&
+				aml_it->m_Hoehe_TP > gp.m_Min_Hoehe &&
+				aml_it->m_Hoehe_TP <= gp.m_Max_Hoehe) {
+				densities.push_back(aml_it->total_number_density);
+			}
+		}
+		dens(i) = std::accumulate(densities.begin(), densities.end(), 0.);
+		if (densities.size() > 0)
+			dens(i) /= densities.size();
+	}
+
+	return 0;
+}

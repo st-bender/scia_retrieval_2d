@@ -67,4 +67,7 @@ bool Punkt_Pruefen_und_ggf_AMF_erhoehen(MPL_Matrix &AMF, class Retrievalgitter &
 MPL_Vektor Punkt_auf_Strecke_bei_Radius(MPL_Vektor &Streckenstartpunkt,
 										MPL_Vektor &Streckenvektor,
 										double Radius, double Genauigkeit);
+
+int prepare_total_density(Retrievalgitter &grid, MPL_Matrix &dens,
+		std::vector<Ausgewertete_Messung_Limb> &aml_vec);
 #endif /* MATRIZZEN_AUFBAUEN_HH_ */
