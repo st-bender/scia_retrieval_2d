@@ -17,10 +17,6 @@
 #include "Messung_Limb.h"
 #include "Glaetten.h"
 
-extern "C" {
-#include "nrlmsise-00.h"
-}
-
 int line_count(std::string filename)
 {
 	std::ifstream file(filename.c_str());
@@ -84,75 +80,6 @@ NO_emiss::NO_emiss(int vu, int vl, int vl_abs, double T)
 	calc_lines_emiss_absorp();
 	set_Hoenl_London_abs();
 	set_Hoenl_London_emiss();
-}
-// constructor with temperature to be calculated from the measurement data
-NO_emiss::NO_emiss(Messung_Limb &ml, int vu, int vl, int vl_abs)
-{
-	v_u = vu;
-	v_l = vl;
-	v_l_abs = vl_abs;
-	NJ = 37;
-	Temp = temperature_from_limb(ml);
-
-	alloc_memory();
-	set_constants();
-	populate_Fs();
-	calc_lines_emiss_absorp();
-	set_Hoenl_London_abs();
-	set_Hoenl_London_emiss();
-}
-
-double NO_emiss::temperature_from_limb(Messung_Limb &ml)
-{
-	struct nrlmsise_output output;
-	struct nrlmsise_input input;
-	struct nrlmsise_flags flags;
-
-	// set the flags
-	flags.switches[0] = 0;
-	for (int i = 1; i < 24; i++)
-		flags.switches[i] = 1;
-
-	// construct the input for the temperature calculation
-	input.year = ml.m_Jahr; // year, but ignored
-
-	// get the day of the year
-	int days[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-	if (ml.m_Jahr % 4 == 0 && !(ml.m_Jahr % 100 == 0 && ml.m_Jahr % 400 != 0))
-		days[1] = 29;
-
-	input.doy = 0;
-	for (int i = 0; i < (ml.m_Monat - 1); i++) {
-		input.doy += days[i];
-	}
-	input.doy += ml.m_Tag;
-
-	// ut seconds in day
-	input.sec = ml.m_Stunde * 3600. + ml.m_Minute * 60. + ml.m_Sekunde;
-
-	// geo data
-	input.alt = ml.m_Hoehe_TP;
-	input.g_lat = ml.m_Latitude_TP;
-	input.g_long = ml.m_Longitude_TP;
-	// local apparent solar time (quick default)
-	input.lst = input.sec / 3600. + input.g_long / 15.;
-
-	// solar data (quick default)
-	//input.f107A = 150.;
-	//input.f107 = 150.;
-	//input.ap = 4.;
-	// data for 2010-02-18
-	//input.f107A = 83.1;
-	//input.f107 = 83.1;
-	//input.ap = 4.875;
-	// data for 2009-01-22
-	input.f107A = 66.9;
-	input.f107 = 66.9;
-	input.ap = 1.625;
-
-	gtd7(&input, &flags, &output);
-
-	return output.t[1];
 }
 
 int NO_emiss::alloc_memory()
