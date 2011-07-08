@@ -158,8 +158,8 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	}
 	this->m_Anzahl_Hoehen = Anzahl_Hoehen;
 	this->m_Anzahl_Breiten = Breitenzahl;
-	cerr << "m_Anzahl_Breiten: " << m_Anzahl_Breiten << "\n";
-	cerr << "m_Anzahl_Hoehen: " << m_Anzahl_Hoehen << "\n";
+	cout << "m_Anzahl_Breiten: " << m_Anzahl_Breiten << "\n";
+	cout << "m_Anzahl_Hoehen: " << m_Anzahl_Hoehen << "\n";
 	this->m_Anzahl_Punkte = m_Anzahl_Breiten * m_Anzahl_Hoehen;
 	m_Gitter = new Gitterpunkt[m_Anzahl_Punkte];
 	Gitterpunkt GP;
