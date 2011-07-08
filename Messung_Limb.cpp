@@ -564,13 +564,6 @@ double Messung_Limb::fit_NO_spec(NO_emiss &NO,
 	double A;
 	int l0 = sb_Get_Index(x.at(0)) + 1;
 
-	// substitute large peaks by the average of the adjacent points
-	std::vector<double>::iterator y_max = max_element(y.begin(), y.end());
-	while (*y_max > 2.5e10) {
-		*y_max = 0.5 * (*(y_max - 1) + *(y_max + 1));
-		y_max = max_element(y.begin(), y.end());
-	}
-
 	std::vector<double>::iterator x_it;
 
 	double sum_gg = 0., sum_gy = 0.;
