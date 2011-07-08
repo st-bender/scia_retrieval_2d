@@ -201,10 +201,11 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 				}
 				if (sfit->m_Spezies_Name == "NO") {
 					// create new object, same transition but modelled temperature
-					NO_emiss NO_new(*mlit,
-							sfit->NO_vec.at(k).get_vu(),
+					double temp = mlit->msise_temperature();
+					NO_emiss NO_new(sfit->NO_vec.at(k).get_vu(),
 							sfit->NO_vec.at(k).get_vl(),
-							sfit->NO_vec.at(k).get_vl_abs());
+							sfit->NO_vec.at(k).get_vl_abs(),
+							temp);
 					NO_new.solar = sfit->NO_vec.at(k).solar;
 					NO_new.read_luque_data_from_file("Luqueetal.dat");
 					NO_new.calc_excitation();
