@@ -44,6 +44,7 @@ public:
 	int m_Tag;        //Uhrzeit ist wichtig für Längengrad der Sonne
 	int m_Stunde;
 	int m_Minute;
+	int m_Sekunde;
 	// Geolocation
 	double m_Latitude_Sat;
 	double m_Longitude_Sat;
@@ -67,6 +68,7 @@ inline void Ausgewertete_Messung_Limb::Ausgabe_auf_Bildschirm()
 	std::cout << "Tag                      : " << "\t" << m_Tag << std::endl;
 	std::cout << "Stunde                   : " << "\t" << m_Stunde << std::endl;
 	std::cout << "Minute                   : " << "\t" << m_Minute << std::endl;
+	std::cout << "Sekunde                  : " << "\t" << m_Sekunde << std::endl;
 	std::cout << "m_Latitude_Sat           : " << "\t" << m_Latitude_Sat << std::endl;
 	std::cout << "m_Longitude_Sat          : " << "\t" << m_Longitude_Sat << std::endl;
 	std::cout << "m_Hoehe_Sat              : " << "\t" << m_Hoehe_Sat << std::endl;

@@ -1330,6 +1330,7 @@ Ausgewertete_Messung_Limb Messung_Limb::Ergebnis_Zusammenfassen()
 	aus.m_Tag = this->m_Tag;
 	aus.m_Stunde = this->m_Stunde;
 	aus.m_Minute = this->m_Minute;
+	aus.m_Sekunde = this->m_Sekunde;
 	// Geolocation
 	aus.m_Latitude_Sat = this->m_Latitude_Sat;
 	aus.m_Longitude_Sat = this->m_Longitude_Sat;
