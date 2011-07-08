@@ -83,6 +83,8 @@ public:
 	// Ergebnisse
 	double m_Zeilendichte;
 	double m_Fehler_Zeilendichten;
+	// total number density at measurement point
+	double total_number_density;
 	// Zwischenergebnisse
 	double m_Deklinationswinkel;  // aus Datum berechenbar
 	double m_Sonnen_Longitude;

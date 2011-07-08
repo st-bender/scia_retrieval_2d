@@ -33,6 +33,8 @@ public:
 	// Ergebnisse
 	double m_Zeilendichte;
 	double m_Fehler_Zeilendichten;
+	// total number density at measurement point
+	double total_number_density;
 	// Zwischenergebnisse
 	double m_Deklination;
 	double m_Sonnen_Longitude;
@@ -60,6 +62,7 @@ inline void Ausgewertete_Messung_Limb::Ausgabe_auf_Bildschirm()
 {
 	std::cout << "m_Zeilendichte           : " << "\t" << m_Zeilendichte << std::endl;
 	std::cout << "m_Fehler_Zeilendichten   : " << "\t" << m_Fehler_Zeilendichten << std::endl;
+	std::cout << "total_number_density     : " << "\t" << total_number_density << std::endl;
 	std::cout << "m_Deklination            : " << "\t" << m_Deklination << std::endl;
 	std::cout << "m_Sonnen_Longitude       : " << "\t" << m_Sonnen_Longitude << std::endl;
 	std::cout << "Wellenlänge des Übergangs: " << "\t" << m_Wellenlaenge << std::endl;

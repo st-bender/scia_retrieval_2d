@@ -38,6 +38,7 @@ Messung_Limb::Messung_Limb()
 	//initialisierung
 	m_Zeilendichte = 0;
 	m_Fehler_Zeilendichten = 0;
+	total_number_density = 0.;
 	m_Dateiname_L1C = "dummy";
 	m_Number_of_Wavelength = 0;
 	m_Jahr = 0;
@@ -86,6 +87,8 @@ Messung_Limb &Messung_Limb::operator =(const Messung_Limb &rhs)
 	// Ergebnisse
 	m_Zeilendichte = rhs.m_Zeilendichte;
 	m_Fehler_Zeilendichten = rhs.m_Fehler_Zeilendichten;
+	// total number density at measurement point
+	total_number_density = rhs.total_number_density;
 	// Zwischenergebnisse
 	m_Deklinationswinkel = rhs.m_Deklinationswinkel;
 	m_Sonnen_Longitude = rhs.m_Sonnen_Longitude;
@@ -1212,6 +1215,9 @@ double Messung_Limb::msise_temperature()
 
 	gtd7(&input, &flags, &output);
 
+	total_number_density = output.d[0] + output.d[1] + output.d[2]
+		+ output.d[3] + output.d[4] + output.d[6] + output.d[7];
+
 	return output.t[1];
 }
 
@@ -1318,6 +1324,8 @@ Ausgewertete_Messung_Limb Messung_Limb::Ergebnis_Zusammenfassen()
 	//Ergebnisse
 	aus.m_Zeilendichte = this->m_Zeilendichte;
 	aus.m_Fehler_Zeilendichten = this->m_Fehler_Zeilendichten;
+	// total number density
+	aus.total_number_density = this->total_number_density;
 	//Zwischenergebnisse
 	aus.m_Deklination = this->m_Deklinationswinkel;
 	aus.m_Sonnen_Longitude = this->m_Sonnen_Longitude;
