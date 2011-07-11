@@ -1817,5 +1817,44 @@ int prepare_total_density(Retrievalgitter &grid, MPL_Matrix &dens,
 			dens(i) /= densities.size();
 	}
 
+	for (i = 0; i < grid.m_Anzahl_Punkte; i++) {
+		Gitterpunkt gp = grid.m_Gitter[i];
+		if (dens(i) == 0) {
+			int N_d = 0;
+			double dd = 0., d[8];
+			// neighbourhood indices
+			// closest neighbours
+			int idx1[4] = { gp.m_Index_unterer_Nachbar,
+				gp.m_Index_oberer_Nachbar, gp.m_Index_Nord_Nachbar,
+				gp.m_Index_Sued_Nachbar };
+			// diagonal neighbours
+			int idx2[4] = { gp.m_Index_unterer_Nord_Nachbar,
+				gp.m_Index_unterer_Sued_Nachbar,
+				gp.m_Index_oberer_Nord_Nachbar, gp.m_Index_oberer_Sued_Nachbar};
+
+			// save neighbourhood densities...
+			for (int j = 0; j < 4; j++) {
+				// closest neighbours
+				if (idx1[j] != -1)
+					d[j] = dens(idx1[j]);
+				else
+					d[j] = 0.;
+				// weight diagonal neighbours with 1/sqrt(2)
+				if (idx2[j] != -1)
+					d[j + 4] = M_SQRT1_2 * dens(idx2[j]);
+				else
+					d[j + 4] = 0.;
+			}
+
+			// ...and average them if they are larger than zero
+			for (int j = 0; j < 8; j++)
+				if (d[j] > 0.) {
+					dd += d[j];
+					N_d++;
+				}
+			dens(i) = dd / N_d;
+		}
+	}
+
 	return 0;
 }
