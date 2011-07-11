@@ -620,8 +620,8 @@ MPL_Matrix Read_Atmodatei(string Dateiname)
 // Funktionsstart Ausgabe_Dichten
 ////////////////////////////////////////////////////////////////////////////////
 int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
-		MPL_Matrix &Dichten, MPL_Matrix &S_x, MPL_Matrix &S_x_meas,
-		MPL_Matrix &AKM)
+		MPL_Matrix &Dichten, MPL_Matrix &Dichten_tot,
+		MPL_Matrix &S_x, MPL_Matrix &S_x_meas, MPL_Matrix &AKM)
 {
 	// Die Ausgabe erfolgt in 3 Dateien mit zusätzlichem Namen
 	// _Dichten.txt, _Sx.txt und  _AKM.txt
@@ -649,12 +649,12 @@ int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
 	fprintf(outfile1, "%5s "
 			"%13s %12s %13s "
 			"%14s  %12s %14s "
-			"%12s %12s %12s\n",
+			"%12s %12s %12s %12s\n",
 			"GP_ID",
 			"Max_Hoehe[km]", "Hoehe[km]", "Min_Hoehe[km]",
 			"Max_Breite[°]", "Breite[°]", "Min_Breite[°]",
 			"Dichte[cm^-3]", "Fehler Mess[cm^-3]",
-			"Fehler tot[cm^-3]");
+			"Fehler tot[cm^-3]", "Gesamtdichte[cm^-3]");
 	// Alle Zeilen bis auf die letzte
 	for (i = 0; i < Grid.m_Anzahl_Punkte; i++) {
 		stabw = sqrt(S_x(i, i));
@@ -662,11 +662,11 @@ int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
 		fprintf(outfile1, "%5i  "
 				"%+1.5E %+1.5E  %+1.5E "
 				" %+1.5E %+1.5E  %+1.5E "
-				" %+1.5E       %+1.5E   %+1.5E\n",
+				" %+1.5E       %+1.5E   %+1.5E       %+1.5E\n",
 				i,
 				Grid.m_Gitter[i].m_Max_Hoehe, Grid.m_Gitter[i].m_Hoehe, Grid.m_Gitter[i].m_Min_Hoehe,
 				Grid.m_Gitter[i].m_Max_Breite, Grid.m_Gitter[i].m_Breite, Grid.m_Gitter[i].m_Min_Breite,
-				Dichten(i), stdabw_meas, stabw);
+				Dichten(i), stdabw_meas, stabw, Dichten_tot(i));
 	}
 	////////////////////////////////////////////////////////////////////////////
 	// Datei schließen

@@ -42,7 +42,7 @@ int Ausgabe_Saeulendichten(std::string Dateiname,
 MPL_Matrix Read_Atmodatei(std::string Dateiname);
 //Ausgeben
 int Ausgabe_Dichten(std::string Dateiname_out, class Retrievalgitter &Grid,
-		MPL_Matrix &Dichten, MPL_Matrix &S_x, MPL_Matrix &S_x_meas,
-		MPL_Matrix &AKM);
+		MPL_Matrix &Dichten, MPL_Matrix &Dichten_tot,
+		MPL_Matrix &S_x, MPL_Matrix &S_x_meas, MPL_Matrix &AKM);
 
 #endif /* DATEI_IO_HH_ */
