@@ -803,6 +803,11 @@ int main(int argc, char *argv[])
 	//später ermittelt)
 	string Pfad_Grid = Arbeitsverzeichnis + "/" + "Gitter.txt";
 	Grid.In_Datei_Ausgeben(Pfad_Grid);
+
+	// ein Vektor der totalen Anzahldichte
+	MPL_Matrix Dichte_n_tot(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
+	Dichte_n_tot.Null_Initialisierung();
+	prepare_total_density(Grid, Dichte_n_tot, Ausgewertete_Limbmessung_NO);
 	////////////////////////////////////////////////////////////////////////////
 	// Spezies Mg I //
 	////////////////////////////////////////////////////////////////////////////
