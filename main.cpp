@@ -292,7 +292,7 @@ int main(int argc, char *argv[])
 	l = 0;
 	Konfiguration Konf;
 	Konf.Konfiguration_einlesen();
-	//Konf.Konfiguration_anzeigen();  //-> Test erfolgreich
+	Konf.Konfiguration_anzeigen();  //-> Test erfolgreich
 	//Konf mit argv Argumenten
 	Konf.m_Pfad_Datei_mit_Dateinamen_fuer_Messungen_eines_Orbits = Orbitlistenpfad;
 	Konf.m_Pfad_Solar_Spektrum = Solarpfad;
