@@ -33,6 +33,8 @@ int Konfiguration::Konfiguration_einlesen()
 
 	// defaukt NO values
 	atmo_Temp = 200.;
+	// default retrieval algortihm
+	retrieval_algo = 1;
 	//Datei Öffnen
 	ifstream infile;
 	//cout<<"Datei einlesen\n";
@@ -315,6 +317,12 @@ int Konfiguration::Konfiguration_einlesen()
 			}
 			continue;
 		}
+		if (Zeile == "Retrieval algorithm") {
+			getline(infile, Zeile);
+			ss << Zeile;
+			ss >> retrieval_algo;
+			continue;
+		}
 	} //ende while !eof
 
 	//Datei Schließen
@@ -412,6 +420,7 @@ int Konfiguration::Konfiguration_anzeigen()
 		cout << "v_u = " << NO_v_u.at(i) << ", v_l = " << NO_v_l.at(i)
 			 << ", v_l_abs = " << NO_v_l_abs.at(i) << endl;
 	}
+	cout << "Retrieval algorithm:\n" << this->retrieval_algo << "\n";
 	cout << "\n";
 	return 0;
 }//ende Konfiguration_anzeigen
