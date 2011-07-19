@@ -31,7 +31,7 @@ int Konfiguration::Konfiguration_einlesen()
 	eingelesen.
 	***************************************************/
 
-	// defaukt NO values
+	// default NO values
 	atmo_Temp = 200.;
 	// default retrieval algortihm
 	retrieval_algo = 1;
