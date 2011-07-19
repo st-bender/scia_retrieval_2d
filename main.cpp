@@ -1284,60 +1284,111 @@ int main(int argc, char *argv[])
 	//bla=Dichte_n_MgI;
 	// TODO neue Version fit machen
 	if (mache_volles_Retrieval_MgI == "ja") {
-		Retrievaliteration_old(Dichte_n_MgI, Dichte_apriori_MgI,
+		switch (Konf.retrieval_algo) {
+		case 0:
+			Retrievaliteration_old(Dichte_n_MgI, Dichte_apriori_MgI,
 							   Saeulendichten_MgI,
 							   S_apriori_MgI, S_y_MgI, S_Breite, S_Hoehe,
 							   S_letzte_Hoehe_MgI, MgI_Lambda_Breite,
 							   MgI_Lambda_Hoehe, AMF_MgI, Konf);
+		case 1:
+		default:
+			Retrievaliteration(Dichte_n_MgI, Dichte_apriori_MgI,
+						   Saeulendichten_MgI,
+						   S_apriori_MgI, S_y_MgI, S_Breite, S_Hoehe,
+						   MgI_Lambda_Breite,
+						   MgI_Lambda_Hoehe, AMF_MgI, Konf);
+			break;
+		}
 	}
 	/////////////////////////
 	// Spezies Mg II//
 	/////////////////////////
 	if (mache_volles_Retrieval_MgII == "ja") {
-		/*
-		Retrievaliteration_old(Dichte_n_MgII, Dichte_apriori_MgII,
+		switch (Konf.retrieval_algo) {
+		case 0:
+			Retrievaliteration_old(Dichte_n_MgII, Dichte_apriori_MgII,
 							   Saeulendichten_MgII,
 							   S_apriori_MgII, S_y_MgII, S_Breite, S_Hoehe,
 							   S_letzte_Hoehe_MgII, MgII_Lambda_Breite,
 							   MgII_Lambda_Hoehe, AMF_MgII, Konf);
-		// */
-		//*
-		Retrievaliteration(Dichte_n_MgII, Dichte_apriori_MgII,
+			break;
+		case 1:
+		default:
+			Retrievaliteration(Dichte_n_MgII, Dichte_apriori_MgII,
 						   Saeulendichten_MgII,
 						   S_apriori_MgII, S_y_MgII, S_Breite, S_Hoehe,
 						   MgII_Lambda_Breite,
 						   MgII_Lambda_Hoehe, AMF_MgII, Konf);
-		// */
+			break;
+		}
 	}
 	/////////////////////////
 	// Spezies unknown//
 	/////////////////////////
 	if (mache_volles_Retrieval_unknown == "ja") {
-		Retrievaliteration_old(Dichte_n_unknown, Dichte_apriori_unknown,
+		switch (Konf.retrieval_algo) {
+		case 0:
+			Retrievaliteration_old(Dichte_n_unknown, Dichte_apriori_unknown,
 							   Saeulendichten_unknown,
 							   S_apriori_unknown, S_y_unknown, S_Breite, S_Hoehe,
 							   S_letzte_Hoehe_unknown, unknown_Lambda_Breite,
 							   unknown_Lambda_Hoehe, AMF_unknown, Konf);
+			break;
+		case 1:
+		default:
+			Retrievaliteration(Dichte_n_unknown, Dichte_apriori_unknown,
+						   Saeulendichten_unknown,
+						   S_apriori_unknown, S_y_unknown, S_Breite, S_Hoehe,
+						   unknown_Lambda_Breite,
+						   unknown_Lambda_Hoehe, AMF_unknown, Konf);
+			break;
+		}
 	}
 	/////////////////////////
 	// Spezies FeI   //
 	/////////////////////////
 	if (mache_volles_Retrieval_FeI == "ja") {
-		Retrievaliteration_old(Dichte_n_FeI, Dichte_apriori_FeI,
+		switch (Konf.retrieval_algo) {
+		case 0:
+			Retrievaliteration_old(Dichte_n_FeI, Dichte_apriori_FeI,
 							   Saeulendichten_FeI,
 							   S_apriori_FeI, S_y_FeI, S_Breite, S_Hoehe,
 							   S_letzte_Hoehe_FeI, FeI_Lambda_Breite,
 							   FeI_Lambda_Hoehe, AMF_FeI, Konf);
+			break;
+		case 1:
+		default:
+			Retrievaliteration(Dichte_n_FeI, Dichte_apriori_FeI,
+						   Saeulendichten_FeI,
+						   S_apriori_FeI, S_y_FeI, S_Breite, S_Hoehe,
+						   FeI_Lambda_Breite,
+						   FeI_Lambda_Hoehe, AMF_FeI, Konf);
+			break;
+		}
 	}
 	/////////////////////////
 	// Spezies NO
 	/////////////////////////
 	if (mache_volles_Retrieval_NO == "ja") {
-		Retrievaliteration(Dichte_n_NO, Dichte_apriori_NO,
+		switch (Konf.retrieval_algo) {
+		case 0:
+			Retrievaliteration_old(Dichte_n_NO, Dichte_apriori_NO,
+						   Saeulendichten_NO,
+						   S_apriori_NO, S_y_NO, S_Breite, S_Hoehe,
+						   S_letzte_Hoehe_NO,
+						   NO_Lambda_Breite,
+						   NO_Lambda_Hoehe, AMF_NO, Konf);
+			break;
+		case 1:
+		default:
+			Retrievaliteration(Dichte_n_NO, Dichte_apriori_NO,
 						   Saeulendichten_NO,
 						   S_apriori_NO, S_y_NO, S_Breite, S_Hoehe,
 						   NO_Lambda_Breite,
 						   NO_Lambda_Hoehe, AMF_NO, Konf);
+			break;
+		}
 	}
 
 
