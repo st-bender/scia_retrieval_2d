@@ -139,7 +139,7 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	// ENDE LU Zerlegung der LHS
 	////////////////////////////////////////////////////////////////////////////
 
-	double Residual, Residual_1, residual_prev = 0.;
+	double Residual, Residual_1, residual_prev = 0.001;
 	MPL_Matrix Mat_Residual;
 	Residual = 0;
 	Residual_1 = 0;
@@ -189,7 +189,7 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 			cerr << "Residual: " << Residual << endl;
 			break;
 		}
-		if (abs(residual_prev - Residual) / Residual < Threshold) {
+		if (abs(residual_prev - Residual) / residual_prev < Threshold) {
 			cerr << "Konvergenz bei Iterationsschritt: " << Iterationsschritt << endl;
 			cerr << "Residual: " << Residual << endl;
 			break;
