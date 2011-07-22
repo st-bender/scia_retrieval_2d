@@ -20,12 +20,13 @@
 void Matrizen_Aufbauen(MPL_Matrix &S_Breite, MPL_Matrix &S_Hoehe,
 						MPL_Matrix &S_letzte_Hoehe, double Lambda_letzte_Hoehe,
 						MPL_Matrix &S_apriori, MPL_Matrix &S_y, MPL_Matrix &AMF,
-						double Lambda_apriori, MPL_Matrix &Saeulendichten_Fehler,
+						double Lambda_apriori,
 						class Speziesfenster &Spezies_Fenster,
 						class Retrievalgitter &Grid,
 						std::vector<class Ausgewertete_Messung_Limb> &AM_L,
 						std::vector<class Ausgewertete_Messung_Nadir> &AM_N,
 						class Konfiguration &Konf, int &IERR);
+void generate_Sy(MPL_Matrix &S_y, MPL_Matrix &Saeulendichten_Fehler);
 MPL_Matrix Einheitsmatrix_aufbauen(int Dimension);
 MPL_Matrix Werte_bei_maximaler_Hoehe_Flagmatrix_Aufbauen(class Retrievalgitter &Grid);
 MPL_Matrix Differenz_von_benachbarten_Zeilenelementen_Matrix_aufbauen(int Zeilen, int Spalten);

@@ -36,7 +36,7 @@ using namespace std;
 void Matrizen_Aufbauen(MPL_Matrix &S_Breite, MPL_Matrix &S_Hoehe,
 						MPL_Matrix &S_letzte_Hoehe, double Lambda_letzte_Hoehe,
 						MPL_Matrix &S_apriori, MPL_Matrix &S_y, MPL_Matrix &AMF,
-						double Lambda_apriori, MPL_Matrix &Saeulendichten_Fehler,
+						double Lambda_apriori,
 						Speziesfenster &Spezies_Fenster,
 						Retrievalgitter &Grid,
 						vector<Ausgewertete_Messung_Limb> &AM_L,
@@ -63,13 +63,6 @@ void Matrizen_Aufbauen(MPL_Matrix &S_Breite, MPL_Matrix &S_Hoehe,
 	S_apriori *= Lambda_apriori;
 	// Flagmatrix oberste Hoehe
 
-	// Wichtungsfaktorenmatrix der Messwerte 1/Fehler^2 von y auf Diagonalen
-	//cerr<<"S_y\n";
-	S_y = Einheitsmatrix_aufbauen(Saeulendichten_Fehler.m_Elementanzahl);
-	for (int i = 0; i < Saeulendichten_Fehler.m_Elementanzahl; i++) {
-		double d = Saeulendichten_Fehler(i);
-		S_y(i, i) = 1 / (d * d);
-	}
 	//cerr<<"AMF\n";
 	//Raytracing zum Aufbau der Luftmassenfaktoren Matrix durchführen
 	//(sehr große Funktion)
@@ -79,6 +72,17 @@ void Matrizen_Aufbauen(MPL_Matrix &S_Breite, MPL_Matrix &S_Hoehe,
 			Spezies_Fenster, IERR);
 	//cerr<<"nach AMF\n";
 }
+void generate_Sy(MPL_Matrix &S_y, MPL_Matrix &Saeulendichten_Fehler)
+{
+	// Wichtungsfaktorenmatrix der Messwerte 1/Fehler^2 von y auf Diagonalen
+	//cerr<<"S_y\n";
+	S_y = Einheitsmatrix_aufbauen(Saeulendichten_Fehler.m_Elementanzahl);
+	for (int i = 0; i < Saeulendichten_Fehler.m_Elementanzahl; i++) {
+		double d = Saeulendichten_Fehler(i);
+		S_y(i, i) = 1 / (d * d);
+	}
+}
+
 //==============================================================================
 //
 //==============================================================================

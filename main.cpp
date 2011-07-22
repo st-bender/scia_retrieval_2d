@@ -823,25 +823,6 @@ int main(int argc, char *argv[])
 			+ Ausgewertete_Nadirmessung_MgI.size(), 1); //Spaltenvektor
 	MPL_Matrix Saeulendichten_Fehler_MgI(Ausgewertete_Limbmessung_MgI.size()
 			+ Ausgewertete_Nadirmessung_MgI.size(), 1); //Spaltenvektor
-	// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
-	// Limb MgI
-	//cerr<<"MgI Limb\n";
-	for (unsigned int i = 0; i < Ausgewertete_Limbmessung_MgI.size(); i++) {
-		Saeulendichten_MgI(i) = Ausgewertete_Limbmessung_MgI[i].m_Zeilendichte;
-		Saeulendichten_Fehler_MgI(i)
-			= Ausgewertete_Limbmessung_MgI[i].m_Fehler_Zeilendichten;
-	}
-	// Nadir MgI
-	//cerr<<"MgI Nadir\n";
-	for (unsigned int i = Ausgewertete_Limbmessung_MgI.size();
-			i < Ausgewertete_Limbmessung_MgI.size() + Ausgewertete_Nadirmessung_MgI.size(); i++) {
-		int Nadir_i = i - Ausgewertete_Limbmessung_MgI.size();
-		Saeulendichten_MgI(i)
-			= Ausgewertete_Nadirmessung_MgI[Nadir_i].m_Zeilendichte;
-		Saeulendichten_Fehler_MgI(i)
-			= Ausgewertete_Nadirmessung_MgI[Nadir_i].m_Fehler_Zeilendichten;
-	}
-	//Ende Säulendichten und Fehler auffüllen
 	// verwendete Konfiguration bis 20.1.2011
 	//double MgI_Lambda_Hoehe= 5E-7;//5E-6;//5E-6;//5E-6;     gute Werte 5 E-6 
 	// TODO das laden der Parameter eindeutiger machen
@@ -898,7 +879,6 @@ int main(int argc, char *argv[])
 						   MgI_Lambda_letzte_Hoehe,
 						   S_apriori_MgI, S_y_MgI,
 						   AMF_MgI, MgI_Lambda_apriori,
-						   Saeulendichten_Fehler_MgI,
 						   // TODO 1 ist MgI, 0 ist MgII hier wieder korrigieren
 						   Spezies_Fenster[spez_index],
 						   Grid,
@@ -910,6 +890,27 @@ int main(int argc, char *argv[])
 			return -1; //Hauptprogramm beenden
 		}
 	}
+	// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
+	// Limb MgI
+	//cerr<<"MgI Limb\n";
+	for (unsigned int i = 0; i < Ausgewertete_Limbmessung_MgI.size(); i++) {
+		Saeulendichten_MgI(i) = Ausgewertete_Limbmessung_MgI[i].m_Zeilendichte;
+		Saeulendichten_Fehler_MgI(i)
+			= Ausgewertete_Limbmessung_MgI[i].m_Fehler_Zeilendichten;
+	}
+	// Nadir MgI
+	//cerr<<"MgI Nadir\n";
+	for (unsigned int i = Ausgewertete_Limbmessung_MgI.size();
+			i < Ausgewertete_Limbmessung_MgI.size() + Ausgewertete_Nadirmessung_MgI.size(); i++) {
+		int Nadir_i = i - Ausgewertete_Limbmessung_MgI.size();
+		Saeulendichten_MgI(i)
+			= Ausgewertete_Nadirmessung_MgI[Nadir_i].m_Zeilendichte;
+		Saeulendichten_Fehler_MgI(i)
+			= Ausgewertete_Nadirmessung_MgI[Nadir_i].m_Fehler_Zeilendichten;
+	}
+	if (mache_volles_Retrieval_MgI == "ja")
+		generate_Sy(S_y_MgI, Saeulendichten_Fehler_MgI);
+	//Ende Säulendichten und Fehler auffüllen
 	////////////////////////////////////////////////////////////////////////////
 	// ENDE Spezies Mg I //
 	////////////////////////////////////////////////////////////////////////////
@@ -931,25 +932,6 @@ int main(int argc, char *argv[])
 			+ Ausgewertete_Nadirmessung_MgII.size(), 1); //Spaltenvektor
 	MPL_Matrix Saeulendichten_Fehler_MgII(Ausgewertete_Limbmessung_MgII.size()
 			+ Ausgewertete_Nadirmessung_MgII.size(), 1); //Spaltenvektor
-	// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
-	// Limb MgII
-	//cerr<<"MgII Limb\n";
-	for (unsigned int i = 0; i < Ausgewertete_Limbmessung_MgII.size(); i++) {
-		Saeulendichten_MgII(i) = Ausgewertete_Limbmessung_MgII[i].m_Zeilendichte;
-		Saeulendichten_Fehler_MgII(i)
-			= Ausgewertete_Limbmessung_MgII[i].m_Fehler_Zeilendichten;
-	}
-	// Nadir MgII
-	//cerr<<"MgII Nadir\n";
-	for (unsigned int i = Ausgewertete_Limbmessung_MgII.size();
-			i < Ausgewertete_Limbmessung_MgII.size() + Ausgewertete_Nadirmessung_MgII.size(); i++) {
-		int Nadir_i = i - Ausgewertete_Limbmessung_MgII.size();
-		Saeulendichten_MgII(i)
-			= Ausgewertete_Nadirmessung_MgII[Nadir_i].m_Zeilendichte;
-		Saeulendichten_Fehler_MgII(i)
-			= Ausgewertete_Nadirmessung_MgII[Nadir_i].m_Fehler_Zeilendichten;
-	}
-	//Ende Säulendichten und Fehler auffüllen
 	// Konfiguration bis januar 2011
 	//double MgII_Lambda_Hoehe= 5E-6;//5E-6;//5E-6;//5E-6;
 	//double MgII_Lambda_Breite= 1E-6;//1E-6;//1E-7;//1E-7;
@@ -986,7 +968,6 @@ int main(int argc, char *argv[])
 						   MgII_Lambda_letzte_Hoehe,
 						   S_apriori_MgII, S_y_MgII,
 						   AMF_MgII, MgII_Lambda_apriori,
-						   Saeulendichten_Fehler_MgII,
 						   // TODO 1 ist MgI, 0 ist MgII hier wieder korrigieren
 						   Spezies_Fenster[spez_index],
 						   Grid,
@@ -998,6 +979,27 @@ int main(int argc, char *argv[])
 			return -1; //Hauptprogramm beenden
 		}
 	}
+	// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
+	// Limb MgII
+	//cerr<<"MgII Limb\n";
+	for (unsigned int i = 0; i < Ausgewertete_Limbmessung_MgII.size(); i++) {
+		Saeulendichten_MgII(i) = Ausgewertete_Limbmessung_MgII[i].m_Zeilendichte;
+		Saeulendichten_Fehler_MgII(i)
+			= Ausgewertete_Limbmessung_MgII[i].m_Fehler_Zeilendichten;
+	}
+	// Nadir MgII
+	//cerr<<"MgII Nadir\n";
+	for (unsigned int i = Ausgewertete_Limbmessung_MgII.size();
+			i < Ausgewertete_Limbmessung_MgII.size() + Ausgewertete_Nadirmessung_MgII.size(); i++) {
+		int Nadir_i = i - Ausgewertete_Limbmessung_MgII.size();
+		Saeulendichten_MgII(i)
+			= Ausgewertete_Nadirmessung_MgII[Nadir_i].m_Zeilendichte;
+		Saeulendichten_Fehler_MgII(i)
+			= Ausgewertete_Nadirmessung_MgII[Nadir_i].m_Fehler_Zeilendichten;
+	}
+	if (mache_volles_Retrieval_MgII == "ja")
+		generate_Sy(S_y_MgII, Saeulendichten_Fehler_MgII);
+	//Ende Säulendichten und Fehler auffüllen
 	////////////////////////////////////////////////////////////////////////////
 	// ENDE Spezies Mg II //
 	////////////////////////////////////////////////////////////////////////////
@@ -1019,24 +1021,6 @@ int main(int argc, char *argv[])
 			+ Ausgewertete_Nadirmessung_unknown.size(), 1); //Spaltenvektor
 	MPL_Matrix Saeulendichten_Fehler_unknown(Ausgewertete_Limbmessung_unknown.size()
 			+ Ausgewertete_Nadirmessung_unknown.size(), 1); //Spaltenvektor
-	// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
-	// Limb unknown
-	//cerr<<"unknown Limb\n";
-	for (unsigned int i = 0; i < Ausgewertete_Limbmessung_unknown.size(); i++) {
-		Saeulendichten_unknown(i) = Ausgewertete_Limbmessung_unknown[i].m_Zeilendichte;
-		Saeulendichten_Fehler_unknown(i)
-			= Ausgewertete_Limbmessung_unknown[i].m_Fehler_Zeilendichten;
-	}
-	// Nadir unknown
-	//cerr<<"unknown Nadir\n";
-	for (unsigned int i = Ausgewertete_Limbmessung_unknown.size();
-			i < Ausgewertete_Limbmessung_unknown.size() + Ausgewertete_Nadirmessung_unknown.size(); i++) {
-		int Nadir_i = i - Ausgewertete_Limbmessung_unknown.size();
-		Saeulendichten_unknown(i)
-			= Ausgewertete_Nadirmessung_unknown[Nadir_i].m_Zeilendichte;
-		Saeulendichten_Fehler_unknown(i)
-			= Ausgewertete_Nadirmessung_unknown[Nadir_i].m_Fehler_Zeilendichten;
-	}
 
 	// Spezies Index for unknown
 	spez_index = 2;
@@ -1070,7 +1054,6 @@ int main(int argc, char *argv[])
 						   unknown_Lambda_letzte_Hoehe,
 						   S_apriori_unknown, S_y_unknown,
 						   AMF_unknown, unknown_Lambda_apriori,
-						   Saeulendichten_Fehler_unknown,
 						   // TODO 1 ist MgI, 0 ist MgII hier wieder korrigieren
 						   Spezies_Fenster[spez_index],
 						   Grid,
@@ -1082,6 +1065,26 @@ int main(int argc, char *argv[])
 			return -1; //Hauptprogramm beenden
 		}
 	}
+	// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
+	// Limb unknown
+	//cerr<<"unknown Limb\n";
+	for (unsigned int i = 0; i < Ausgewertete_Limbmessung_unknown.size(); i++) {
+		Saeulendichten_unknown(i) = Ausgewertete_Limbmessung_unknown[i].m_Zeilendichte;
+		Saeulendichten_Fehler_unknown(i)
+			= Ausgewertete_Limbmessung_unknown[i].m_Fehler_Zeilendichten;
+	}
+	// Nadir unknown
+	//cerr<<"unknown Nadir\n";
+	for (unsigned int i = Ausgewertete_Limbmessung_unknown.size();
+			i < Ausgewertete_Limbmessung_unknown.size() + Ausgewertete_Nadirmessung_unknown.size(); i++) {
+		int Nadir_i = i - Ausgewertete_Limbmessung_unknown.size();
+		Saeulendichten_unknown(i)
+			= Ausgewertete_Nadirmessung_unknown[Nadir_i].m_Zeilendichte;
+		Saeulendichten_Fehler_unknown(i)
+			= Ausgewertete_Nadirmessung_unknown[Nadir_i].m_Fehler_Zeilendichten;
+	}
+	if (mache_volles_Retrieval_unknown == "ja")
+		generate_Sy(S_y_unknown, Saeulendichten_Fehler_unknown);
 	////////////////////////////////////////////////////////////////////////////
 	// ENDE Spezies unknown
 	////////////////////////////////////////////////////////////////////////////
@@ -1103,20 +1106,6 @@ int main(int argc, char *argv[])
 			+ Ausgewertete_Nadirmessung_FeI.size(), 1); //Spaltenvektor
 	MPL_Matrix Saeulendichten_Fehler_FeI(Ausgewertete_Limbmessung_FeI.size()
 			+ Ausgewertete_Nadirmessung_FeI.size(), 1); //Spaltenvektor
-	// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
-	for (unsigned int i = 0; i < Ausgewertete_Limbmessung_FeI.size(); i++) {
-		Saeulendichten_FeI(i) = Ausgewertete_Limbmessung_FeI[i].m_Zeilendichte;
-		Saeulendichten_Fehler_FeI(i)
-			= Ausgewertete_Limbmessung_FeI[i].m_Fehler_Zeilendichten;
-	}
-	for (unsigned int i = Ausgewertete_Limbmessung_FeI.size();
-			i < Ausgewertete_Limbmessung_FeI.size() + Ausgewertete_Nadirmessung_FeI.size(); i++) {
-		int Nadir_i = i - Ausgewertete_Limbmessung_FeI.size();
-		Saeulendichten_FeI(i)
-			= Ausgewertete_Nadirmessung_FeI[Nadir_i].m_Zeilendichte;
-		Saeulendichten_Fehler_FeI(i)
-			= Ausgewertete_Nadirmessung_FeI[Nadir_i].m_Fehler_Zeilendichten;
-	}
 
 	// Spezies Index for FeI
 	spez_index = 3;
@@ -1150,7 +1139,6 @@ int main(int argc, char *argv[])
 						   FeI_Lambda_letzte_Hoehe,
 						   S_apriori_FeI, S_y_FeI,
 						   AMF_FeI, FeI_Lambda_apriori,
-						   Saeulendichten_Fehler_FeI,
 						   Spezies_Fenster[spez_index], // TODO Index setzten
 						   Grid,
 						   Ausgewertete_Limbmessung_FeI,
@@ -1161,6 +1149,22 @@ int main(int argc, char *argv[])
 			return -1; //Hauptprogramm beenden
 		}
 	}
+	// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
+	for (unsigned int i = 0; i < Ausgewertete_Limbmessung_FeI.size(); i++) {
+		Saeulendichten_FeI(i) = Ausgewertete_Limbmessung_FeI[i].m_Zeilendichte;
+		Saeulendichten_Fehler_FeI(i)
+			= Ausgewertete_Limbmessung_FeI[i].m_Fehler_Zeilendichten;
+	}
+	for (unsigned int i = Ausgewertete_Limbmessung_FeI.size();
+			i < Ausgewertete_Limbmessung_FeI.size() + Ausgewertete_Nadirmessung_FeI.size(); i++) {
+		int Nadir_i = i - Ausgewertete_Limbmessung_FeI.size();
+		Saeulendichten_FeI(i)
+			= Ausgewertete_Nadirmessung_FeI[Nadir_i].m_Zeilendichte;
+		Saeulendichten_Fehler_FeI(i)
+			= Ausgewertete_Nadirmessung_FeI[Nadir_i].m_Fehler_Zeilendichten;
+	}
+	if (mache_volles_Retrieval_FeI == "ja")
+		generate_Sy(S_y_FeI, Saeulendichten_Fehler_FeI);
 	////////////////////////////////////////////////////////////////////////////
 	// ENDE Spezies FeI
 	////////////////////////////////////////////////////////////////////////////
@@ -1183,23 +1187,6 @@ int main(int argc, char *argv[])
 			+ Ausgewertete_Nadirmessung_NO.size(), 1); //Spaltenvektor
 	MPL_Matrix Saeulendichten_Fehler_NO(Ausgewertete_Limbmessung_NO.size()
 			+ Ausgewertete_Nadirmessung_NO.size(), 1); //Spaltenvektor
-
-	// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
-	for (unsigned int i = 0; i < Ausgewertete_Limbmessung_NO.size(); i++) {
-		Saeulendichten_NO(i) = Ausgewertete_Limbmessung_NO[i].m_Zeilendichte;
-		Saeulendichten_Fehler_NO(i)
-			= Ausgewertete_Limbmessung_NO[i].m_Fehler_Zeilendichten;
-	}
-	// Nadir NO
-	for (unsigned int i = Ausgewertete_Limbmessung_NO.size();
-			i < Ausgewertete_Limbmessung_NO.size()
-				+ Ausgewertete_Nadirmessung_NO.size(); i++) {
-		int Nadir_i = i - Ausgewertete_Limbmessung_NO.size();
-		Saeulendichten_NO(i)
-			= Ausgewertete_Nadirmessung_NO[Nadir_i].m_Zeilendichte;
-		Saeulendichten_Fehler_NO(i)
-			= Ausgewertete_Nadirmessung_NO[Nadir_i].m_Fehler_Zeilendichten;
-	}
 
 	// Spezies Index for NO
 	spez_index = 4;
@@ -1235,7 +1222,6 @@ int main(int argc, char *argv[])
 						   NO_Lambda_letzte_Hoehe,
 						   S_apriori_NO, S_y_NO,
 						   AMF_NO, NO_Lambda_apriori,
-						   Saeulendichten_Fehler_NO,
 						   Spezies_Fenster[spez_index],
 						   Grid,
 						   Ausgewertete_Limbmessung_NO,
@@ -1246,6 +1232,25 @@ int main(int argc, char *argv[])
 			return -1; //Hauptprogramm beenden
 		}
 	}
+
+	// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
+	for (unsigned int i = 0; i < Ausgewertete_Limbmessung_NO.size(); i++) {
+		Saeulendichten_NO(i) = Ausgewertete_Limbmessung_NO[i].m_Zeilendichte;
+		Saeulendichten_Fehler_NO(i)
+			= Ausgewertete_Limbmessung_NO[i].m_Fehler_Zeilendichten;
+	}
+	// Nadir NO
+	for (unsigned int i = Ausgewertete_Limbmessung_NO.size();
+			i < Ausgewertete_Limbmessung_NO.size()
+				+ Ausgewertete_Nadirmessung_NO.size(); i++) {
+		int Nadir_i = i - Ausgewertete_Limbmessung_NO.size();
+		Saeulendichten_NO(i)
+			= Ausgewertete_Nadirmessung_NO[Nadir_i].m_Zeilendichte;
+		Saeulendichten_Fehler_NO(i)
+			= Ausgewertete_Nadirmessung_NO[Nadir_i].m_Fehler_Zeilendichten;
+	}
+	if (mache_volles_Retrieval_NO == "ja")
+		generate_Sy(S_y_NO, Saeulendichten_Fehler_NO);
 	////////////////////////////////////////////////////////////////////////////
 	// ENDE Spezies NO
 	////////////////////////////////////////////////////////////////////////////
