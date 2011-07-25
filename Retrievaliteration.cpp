@@ -202,16 +202,6 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 		dgetrs_(&textflag, &N, &NRHS, A.m_Elemente, &LDA, IPIV, RHS.m_Elemente,
 				&LDB, &INFO);
 		Dichten += RHS; // inkrementierung
-		/*if(Iterationsschritt==(Itmax-1))
-		{
-		    cout<<"Residual: "<<Residual<<"\n";
-		    cout<<"Threshold*Residual_1: "<<Threshold*Residual_1<<"\n";
-		    cout<<"Iteration konvergiert nicht, oder zu langsam\n";
-		    // dynamischen Kram löschen
-		    Dichten.in_Datei_speichern("/tmp/mlangowski/0/Dichten_nach_Iteration.txt");
-		    delete[] IPIV;
-		    return 1; //Fehlerflag 1
-		}*/
 	}//for Iterationsschritt
 	// keine Probleme während Iteration aufgetreten
 	//Dichten.in_Datei_speichern("/tmp/mlangowski/0/Dichten_nach_Iteration.txt");
@@ -333,12 +323,6 @@ int Retrievaliteration_old(MPL_Matrix &Dichten,
 	double Residual, Residual_1, residual_prev = 0.;
 	Residual = 0;
 	Residual_1 = 0;
-	/*{
-	    MPL_Matrix S_ypsilon(S_y.m_Zeilenzahl,1);
-	    for(int i=0;i<S_y.m_Zeilenzahl;i++)
-	    {    S_ypsilon(i)=S_y(i,i);}
-	S_ypsilon.in_Datei_speichern("/tmp/mlangowski/0/S_y_MgI_vor_Retrieval.txt");
-	}*/
 	MPL_Matrix RHS_Teil1;
 	RHS_Teil1 = AMF_trans * (S_y * Saeulendichten);
 
