@@ -177,7 +177,7 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 		// Anfangsresiduum bestimmen
 		Residual = sqrt(Mat_Residual(0));
 		if ((Iterationsschritt == 0) || (Iterationsschritt == Itmax - 1)) {
-			cerr << "Iterationsschritt:" << Iterationsschritt << "\t"
+			cout << "Iterationsschritt:" << Iterationsschritt << "\t"
 				 << "Residual: " << Residual << "\n";
 		}
 		if (Iterationsschritt == 0) {
@@ -185,13 +185,13 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 			Residual_1 = Residual;
 		}
 		if (Residual < Threshold * Residual_1) {
-			cerr << "Konvergenz bei Iterationsschritt: " << Iterationsschritt << endl;
-			cerr << "Residual: " << Residual << endl;
+			cout << "Konvergenz bei Iterationsschritt: " << Iterationsschritt << endl;
+			cout << "Residual: " << Residual << endl;
 			break;
 		}
 		if (abs(residual_prev - Residual) / residual_prev < Threshold) {
-			cerr << "Konvergenz bei Iterationsschritt: " << Iterationsschritt << endl;
-			cerr << "Residual: " << Residual << endl;
+			cout << "Konvergenz bei Iterationsschritt: " << Iterationsschritt << endl;
+			cout << "Residual: " << Residual << endl;
 			break;
 		}
 		residual_prev = Residual;
@@ -370,7 +370,7 @@ int Retrievaliteration_old(MPL_Matrix &Dichten,
 		//cout<<"Iterationsschritt: "<<Iterationsschritt<<"\n";
 		//cout<<"Residual: "<<Residual<<"\n";
 		if ((Iterationsschritt == 0) || (Iterationsschritt == Itmax - 1)) {
-			cerr << "Iterationsschritt:" << Iterationsschritt << "\t"
+			cout << "Iterationsschritt:" << Iterationsschritt << "\t"
 				 << "Residual: " << Residual << "\n";
 		}
 		if (Iterationsschritt == 0) {
@@ -384,13 +384,15 @@ int Retrievaliteration_old(MPL_Matrix &Dichten,
 			//cout<<"Threshold: "<<Threshold<<"\n";
 			//cout<<"Threshold*Residual_1: "<<Threshold*Residual_1<<"\n";
 			//evtl konvergenzflag setzen
-			cerr << "Konvergenz bei Iterationsschritt: " << Iterationsschritt << "\n";
+			cout << "Konvergenz bei Iterationsschritt: " << Iterationsschritt << "\n";
+			cout << "Residual: " << Residual << endl;
 			break;
 			// achtung mit break und continue in for-schleifen
 			// (vor allem mit continue->(i++; continue;)
 		}
 		if (abs(residual_prev - Residual) / Residual < Threshold) {
-			cerr << "Konvergenz bei Iterationsschritt: " << Iterationsschritt << endl;
+			cout << "Konvergenz bei Iterationsschritt: " << Iterationsschritt << endl;
+			cout << "Residual: " << Residual << endl;
 			break;
 		}
 		residual_prev = Residual;
