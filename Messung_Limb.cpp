@@ -1235,18 +1235,12 @@ double Messung_Limb::msise_temperature()
 	// local apparent solar time (quick default)
 	input.lst = input.sec / 3600. + input.g_long / 15.;
 
-	// solar data (quick default)
-	//input.f107A = 150.;
-	//input.f107 = 150.;
-	//input.ap = 4.;
-	// data for 2010-02-18
-	//input.f107A = 83.1;
-	//input.f107 = 83.1;
-	//input.ap = 4.875;
-	// data for 2009-01-22
-	input.f107A = 66.9;
-	input.f107 = 66.9;
-	input.ap = 1.625;
+	// solar data from spidr data files
+	double f107 = spidr_value_from_file("DATA/spidr_f107_2000-2010.dat");
+	double ap = spidr_value_from_file("DATA/spidr_ap_2000-2010.dat");
+	input.f107A = f107;
+	input.f107 = f107;
+	input.ap = ap;
 
 	gtd7(&input, &flags, &output);
 
