@@ -207,7 +207,7 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 							sfit->NO_vec.at(k).get_vl_abs(),
 							temp);
 					NO_new.solar = sfit->NO_vec.at(k).solar;
-					NO_new.read_luque_data_from_file("Luqueetal.dat");
+					NO_new.read_luque_data_from_file("DATA/Luqueetal.dat");
 					NO_new.calc_excitation();
 					NO_new.calc_line_emissivities();
 					NO_new.scia_convolve(Rohdaten.at(0));
