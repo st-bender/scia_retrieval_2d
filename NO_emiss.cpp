@@ -17,12 +17,6 @@
 #include "Messung_Limb.h"
 #include "Glaetten.h"
 
-int line_count(std::string filename)
-{
-	std::ifstream file(filename.c_str());
-	return std::count(std::istreambuf_iterator<char>(file),
-			std::istreambuf_iterator<char>(), '\n') + 1;
-}
 double B_v(int v)
 {
 	return 1.7049
