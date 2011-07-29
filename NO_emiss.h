@@ -12,6 +12,7 @@
 #include "MPL_Matrix.h"
 
 namespace NO_const {
+	// all energy values in cm^{-1}
 	const double E_u = 43965.7;
 	// Vibrational parameters, from Hertzberg, 1950, and Huber and Hertzberg, 1976
 	// same as in Eparvier and Barth
