@@ -1380,6 +1380,10 @@ Ausgewertete_Messung_Limb Messung_Limb::Ergebnis_Zusammenfassen()
 	aus.m_Longitude_TP = this->m_Longitude_TP;
 	aus.m_Hoehe_TP = this->m_Hoehe_TP;
 	aus.m_Erdradius = this->m_Erdradius;
+	// phase of orbit (0...1)
+	aus.m_orbit_phase = this->m_orbit_phase;
+	aus.center_lat = this->center_lat;
+	aus.center_lon = this->center_lon;
 	return aus;
 }//Ausgewertete_Messung_Limb Ergebnis_Zusammenfassen() ende
 //========================================

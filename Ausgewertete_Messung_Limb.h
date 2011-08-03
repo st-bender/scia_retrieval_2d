@@ -55,6 +55,9 @@ public:
 	double m_Longitude_TP;
 	double m_Hoehe_TP;
 	double m_Erdradius;
+	// phase of orbit (0...1)
+	double m_orbit_phase;
+	double center_lat, center_lon;
 };
 
 // inline Implementierungen
@@ -79,6 +82,9 @@ inline void Ausgewertete_Messung_Limb::Ausgabe_auf_Bildschirm()
 	std::cout << "m_Longitude_TP           : " << "\t" << m_Longitude_TP << std::endl;
 	std::cout << "m_Hoehe_TP               : " << "\t" << m_Hoehe_TP << std::endl;
 	std::cout << "m_Erdradius              : " << "\t" << m_Erdradius << std::endl;
+	std::cout << "m_orbit_phase            : " << "\t" << m_orbit_phase << std::endl;
+	std::cout << "center_lat               : " << "\t" << center_lat << std::endl;
+	std::cout << "center_lon               : " << "\t" << center_lon << std::endl;
 }
 
 
