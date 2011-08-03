@@ -114,6 +114,7 @@ public:
 	double m_orbit_phase;
 	double m_TP_SZA;      // alt
 	//double  m_SAA_TP;     // alt
+	double center_lat, center_lon;
 	// Datenfelder
 	int m_Number_of_Wavelength;
 	std::vector<double> m_Wellenlaengen;
