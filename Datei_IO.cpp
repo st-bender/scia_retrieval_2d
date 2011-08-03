@@ -81,7 +81,7 @@ double average_over_wl_range(float *input, float *Wellenlaengen,
 vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 		Limb_Datensatz *Limbdaten, float *Wellenlaengen,
 		int no_of_pix, int no_of_alt, float orbit_phase, int Datum[6],
-		int no_of_heights, int offset, int direction)
+		float cent_lat_lon[10], int no_of_heights, int offset, int direction)
 {
 	bool has_straylight = false;
 	// normal average or median for the dark signal correction
@@ -112,6 +112,8 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 		ml.m_Minute = Datum[4];
 		ml.m_Sekunde = Datum[5];
 		ml.m_orbit_phase = orbit_phase;
+		ml.center_lat = cent_lat_lon[0];
+		ml.center_lon = cent_lat_lon[1];
 		ml.m_Latitude_Sat = Limbdaten[offset + direction * i].m_Sub_Sat_Lat; //achtung geodätische Koordinaten
 		ml.m_Longitude_Sat = Limbdaten[offset + direction * i].m_Sub_Sat_Lon;
 		ml.m_Hoehe_Sat = Limbdaten[offset + direction * i].m_Sat_Hoehe;
@@ -194,7 +196,8 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
 	// 4. Erstellung des Übergabevektors
 	vector<Messung_Limb> Ergebnisvektor
 		= make_messung_limb_vector(Dateiname, Limbdaten, Wellenlaengen,
-				no_of_pix, no_of_alt, orbit_phase, Datum, 7, 23, 1);
+				no_of_pix, no_of_alt, orbit_phase, Datum, Center_Lat_Lon,
+				7, 23, 1);
 
 	//Teile von Schritt 4 nochmal für die Troposhärische Säule
 	//Eigentlich reichen Intensitäten
@@ -312,7 +315,7 @@ ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(string Dateiname,
 	// 4. Erstellung des Übergabevektors
 	vector<Messung_Limb> Ergebnisvektor
 		= make_messung_limb_vector(Dateiname, Limbdaten, Wellenlaengen,
-				no_of_pix, no_of_alt, orbit_phase, Datum,
+				no_of_pix, no_of_alt, orbit_phase, Datum, Center_Lat_Lon,
 				Anzahl_Hoehen, Anzahl_Hoehen - 1, -1);
 
 	//Teile von Schritt 4 nochmal für die niedrigste Höhe
