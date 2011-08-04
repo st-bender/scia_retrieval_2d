@@ -94,14 +94,14 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 		bool doppelt = false;
 
 		for (lat_it = Lats_Messung.begin(); lat_it != Lats_Messung.end(); lat_it++) {
-			if (abs(aml_it->m_Latitude_TP - (*lat_it)) < Epsilon) {
+			if (abs(aml_it->center_lat - (*lat_it)) < Epsilon) {
 				doppelt = true;
 				break;
 			}
 		}
 
 		if (!(doppelt)) {
-			Lats_Messung.push_back(aml_it->m_Latitude_TP);
+			Lats_Messung.push_back(aml_it->center_lat);
 		}
 	}
 	// Lats_Messung enthält nun alle Lats nur einmal und in Zeitgeordneter
