@@ -652,10 +652,12 @@ int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
 	fprintf(outfile1, "%5s "
 			"%13s %12s %13s "
 			"%14s  %12s %14s "
+			"  %12s  "
 			"%12s %12s %12s %12s\n",
 			"GP_ID",
 			"Max_Hoehe[km]", "Hoehe[km]", "Min_Hoehe[km]",
 			"Max_Breite[°]", "Breite[°]", "Min_Breite[°]",
+			"Laenge[°]",
 			"Dichte[cm^-3]", "Fehler Mess[cm^-3]",
 			"Fehler tot[cm^-3]", "Gesamtdichte[cm^-3]");
 	// Alle Zeilen bis auf die letzte
@@ -665,10 +667,12 @@ int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
 		fprintf(outfile1, "%5i  "
 				"%+1.5E %+1.5E  %+1.5E "
 				" %+1.5E %+1.5E  %+1.5E "
+				" %+1.5E  "
 				" %+1.5E       %+1.5E   %+1.5E       %+1.5E\n",
 				i,
 				Grid.m_Gitter[i].m_Max_Hoehe, Grid.m_Gitter[i].m_Hoehe, Grid.m_Gitter[i].m_Min_Hoehe,
 				Grid.m_Gitter[i].m_Max_Breite, Grid.m_Gitter[i].m_Breite, Grid.m_Gitter[i].m_Min_Breite,
+				Grid.m_Gitter[i].longitude,
 				Dichten(i), stdabw_meas, stabw, Dichten_tot(i));
 	}
 	////////////////////////////////////////////////////////////////////////////
