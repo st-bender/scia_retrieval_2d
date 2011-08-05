@@ -1170,40 +1170,6 @@ int Messung_Limb::savitzky_golay(int window_size)
 	return my_savitzky_golay(m_Intensitaeten, window_size);
 }
 
-double Messung_Limb::spidr_value_from_file(std::string filename)
-{
-	double ret;
-	std::string line, date;
-	std::stringstream ss;
-	std::ifstream f;
-	size_t pos;
-
-	// construct the date string from member variables
-	ss << m_Jahr << "-" << std::setw(2) << std::setfill('0')
-		<< m_Monat << "-" << m_Tag;
-	ss >> date;
-
-	f.open(filename.c_str());
-	if (!f.is_open()) {
-		std::cerr << "Error opening `" << filename << "'." << std::endl;
-		return 0.;
-	}
-	while (std::getline(f, line)) {
-		pos = line.find(date);
-		if (pos != std::string::npos) {
-			std::istringstream iss(line);
-			std::string dummy1, dummy2;
-			// skip the first two items (date and time)
-			iss >> dummy1 >> dummy2;
-			// the third is what we need
-			iss >> ret;
-		}
-	}
-	f.close();
-
-	return ret;
-}
-
 double Messung_Limb::msise_temperature()
 {
 	struct nrlmsise_output output;
@@ -1240,8 +1206,10 @@ double Messung_Limb::msise_temperature()
 	input.lst = input.sec / 3600. + input.g_long / 15.;
 
 	// solar data from spidr data files
-	double f107 = spidr_value_from_file("DATA/spidr_f107_2000-2010.dat");
-	double ap = spidr_value_from_file("DATA/spidr_ap_2000-2010.dat");
+	double f107 = spidr_value_from_file(m_Jahr, m_Monat, m_Tag,
+			"DATA/spidr_f107_2000-2010.dat");
+	double ap = spidr_value_from_file(m_Jahr, m_Monat, m_Tag,
+			"DATA/spidr_ap_2000-2010.dat");
 	input.f107A = f107;
 	input.f107 = f107;
 	input.ap = ap;

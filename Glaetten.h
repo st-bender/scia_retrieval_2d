@@ -22,5 +22,7 @@ std::vector<double> my_whittaker_smooth(std::vector<double> &y,
 double interpolate(std::vector<double> &x, std::vector<double> &y, double x0);
 double n_air(double wl);
 double shift_wavelength(double wl);
+double spidr_value_from_file(int year, int month, int day,
+		std::string filename);
 
 #endif /* GLAETTEN_HH_ */
