@@ -1856,7 +1856,12 @@ int prepare_total_density(Retrievalgitter &grid, MPL_Matrix &dens,
 					dd += d[j];
 					N_d++;
 				}
-			dens(i) = dd / N_d;
+			if (N_d > 0)
+				dens(i) = dd / N_d;
+			else
+				// default if no other data is available
+				// sensible for low altitudes
+				dens(i) = 2.e16;
 		}
 	}
 
