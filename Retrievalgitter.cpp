@@ -9,6 +9,7 @@
 
 #include "Ausgewertete_Messung_Limb.h"
 #include "Konfiguration.h"
+#include "Glaetten.h"
 
 #include <vector>
 #include <cmath>
@@ -86,7 +87,7 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	//Zunächst Latitudes in einen Vektor schreiben, aber nur die, welche noch
 	//nicht vorgekommen sind Es wird davon ausgegangen, dass der Datensatz nach
 	//Zeit sortiert ist
-	vector<double> Lats_Messung;
+	vector<double> Lats_Messung, Lons_Messung;
 	vector<double>::iterator lat_it;
 	vector<Ausgewertete_Messung_Limb>::iterator aml_it;
 
@@ -102,6 +103,7 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 
 		if (!(doppelt)) {
 			Lats_Messung.push_back(aml_it->center_lat);
+			Lons_Messung.push_back(aml_it->center_lon);
 		}
 	}
 	// Lats_Messung enthält nun alle Lats nur einmal und in Zeitgeordneter
@@ -121,6 +123,18 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	double MaxLat = Lats_Messung[Max_Index];
 	double MinLat = Lats_Messung[Min_Index];
 	int Breitenzahl = Min_Index - Max_Index + 1;
+	/*
+	 * finds the longitude of the orbit at the equator.
+	 * linear interpolation works because the angles are small.
+	 */
+	// reverse the vectors for the interpolation to work
+	std::reverse(Lats_Messung.begin(), Lats_Messung.end());
+	std::reverse(Lons_Messung.begin(), Lons_Messung.end());
+	double lon0 = interpolate(Lats_Messung, Lons_Messung, 0.);
+	// emprical longitude factor
+	const double phi_fac = 11.91;
+	// deg -> rad conversion factor
+	const double deg = M_PI / 180.;
 
 	/////////////////////////////
 	// selbst gesetzt.....
@@ -230,6 +244,8 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 			GP.m_Breite = MaxLat - i * Gitterkonstante;
 			GP.m_Max_Breite = GP.m_Breite + 0.5 * Gitterkonstante;
 			GP.m_Min_Breite = GP.m_Breite - 0.5 * Gitterkonstante;
+			// calculate the grid point longitude
+			GP.longitude = std::tan(GP.m_Breite * deg) * phi_fac + lon0;
 			//SZA initialisieren
 			// Die beiden gibts nicht mehr
 			// TODO entgültig löschen
