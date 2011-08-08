@@ -69,8 +69,8 @@ MPL_Vektor Punkt_auf_Strecke_bei_Radius(MPL_Vektor &Streckenstartpunkt,
 										MPL_Vektor &Streckenvektor,
 										double Radius, double Genauigkeit);
 
-int prepare_total_density(Retrievalgitter &grid, MPL_Matrix &dens,
-		std::vector<Ausgewertete_Messung_Limb> &aml_vec);
+int prepare_total_density(class Retrievalgitter &grid, MPL_Matrix &dens,
+		std::vector<class Ausgewertete_Messung_Limb> &aml_vec);
 void SNOE_apriori_NO(class Retrievalgitter &grid,
 		class Ausgewertete_Messung_Limb &aml, MPL_Matrix &apriori);
 #endif /* MATRIZZEN_AUFBAUEN_HH_ */
