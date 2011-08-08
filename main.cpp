@@ -1179,6 +1179,9 @@ int main(int argc, char *argv[])
 	// einen Vektor x_a für die a-priori-Lösung der Dichte (oder Startwert usw)
 	MPL_Matrix Dichte_apriori_NO(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
 	Dichte_apriori_NO.Null_Initialisierung();  // Null als Startwert
+	if (Konf.NO_apriori)
+		SNOE_apriori_NO(Grid, Ausgewertete_Limbmessung_NO.front(),
+				Dichte_apriori_NO);
 
 	// Vektor mit Zeilendichten für alle Messungen einer Spezies
 	//quadratische matrix
