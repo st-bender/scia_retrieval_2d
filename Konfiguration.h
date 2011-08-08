@@ -61,6 +61,7 @@ public:
 	double atmo_Temp;
 	unsigned no_NO_transitions;
 	std::vector<int> NO_v_u, NO_v_l, NO_v_l_abs;
+	bool NO_apriori;
 	int retrieval_algo;
 };
 

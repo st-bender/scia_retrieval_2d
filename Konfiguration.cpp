@@ -33,6 +33,7 @@ int Konfiguration::Konfiguration_einlesen()
 
 	// default NO values
 	atmo_Temp = 200.;
+	NO_apriori = false;
 	// default retrieval algortihm
 	retrieval_algo = 1;
 	//Datei Öffnen
@@ -317,6 +318,15 @@ int Konfiguration::Konfiguration_einlesen()
 			}
 			continue;
 		}
+		if (Zeile == "NO apriori") {
+			int apri = 0;
+			getline(infile, Zeile);
+			ss << Zeile;
+			ss >> apri;
+			if (apri == 0) NO_apriori = false;
+			else NO_apriori = true;
+			continue;
+		}
 		if (Zeile == "Retrieval algorithm") {
 			getline(infile, Zeile);
 			ss << Zeile;
@@ -420,6 +430,10 @@ int Konfiguration::Konfiguration_anzeigen()
 		cout << "v_u = " << NO_v_u.at(i) << ", v_l = " << NO_v_l.at(i)
 			 << ", v_l_abs = " << NO_v_l_abs.at(i) << endl;
 	}
+	cout << "NO apriori: ";
+	if (NO_apriori) cout << "SNOEM";
+	else cout << "null";
+	cout << endl;
 	cout << "Retrieval algorithm:\n" << this->retrieval_algo << "\n";
 	cout << "\n";
 	return 0;
