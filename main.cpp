@@ -1500,7 +1500,7 @@ int main(int argc, char *argv[])
 	//cout<<"Dateiout_Mittelteil: "<<Dateiout_Mittelteil<<"\n";
 	if (mache_volles_Retrieval_MgI == "ja") {
 		Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_MgI, Dichte_n_tot,
-				S_x_MgI, S_x_meas_MgI, AKM_MgI);
+				Dichte_apriori_MgI, S_x_MgI, S_x_meas_MgI, AKM_MgI);
 	}
 	//////////////////////////////
 	// MgII ////////////////////
@@ -1508,7 +1508,7 @@ int main(int argc, char *argv[])
 	//cout<<"Dateiname_out: "<<Dateiname_out<<"\n";
 	if (mache_volles_Retrieval_MgII == "ja") {
 		Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_MgII, Dichte_n_tot,
-				S_x_MgII, S_x_meas_MgII, AKM_MgII);
+				Dichte_apriori_MgII, S_x_MgII, S_x_meas_MgII, AKM_MgII);
 	}
 	//////////////////////////////
 	// unknown//////////////
@@ -1516,6 +1516,7 @@ int main(int argc, char *argv[])
 	//cout<<"Dateiname_out: "<<Dateiname_out<<"\n";
 	if (mache_volles_Retrieval_unknown == "ja") {
 		Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_unknown, Dichte_n_tot,
+				Dichte_apriori_unknown,
 				S_x_unknown, S_x_meas_unknown, AKM_unknown);
 	}
 	// FeI//////////////
@@ -1523,15 +1524,15 @@ int main(int argc, char *argv[])
 	//cout<<"Dateiname_out: "<<Dateiname_out<<"\n";
 	if (mache_volles_Retrieval_FeI == "ja") {
 		Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_FeI, Dichte_n_tot,
-				S_x_FeI, S_x_meas_FeI, AKM_FeI);
+				Dichte_apriori_FeI, S_x_FeI, S_x_meas_FeI, AKM_FeI);
 	}
 	//////////////////////////////
 	// NO ////////////////////
 	Dateiname_out = Arbeitsverzeichnis + "/" + sssss_NO + Dateiout_Mittelteil;
 	if (mache_volles_Retrieval_NO == "ja") {
 		MPL_Matrix result = AMF_NO * Dichte_n_NO;
-		Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_NO, Dichte_n_tot, S_x_NO,
-				S_x_meas_NO, AKM_NO);
+		Ausgabe_Dichten(Dateiname_out, Grid, Dichte_n_NO, Dichte_n_tot,
+				Dichte_apriori_NO, S_x_NO, S_x_meas_NO, AKM_NO);
 		Ausgabe_Saeulendichten_back(Pfad_Saeulen_Limb_NO_back,
 				Ausgewertete_Limbmessung_NO, result);
 	}
