@@ -502,6 +502,7 @@ int main(int argc, char *argv[])
 			<< ", v_l = " << NO.get_vl()
 			<< ", v_l_abs = " << NO.get_vl_abs()
 			<< " at (initial) " << Konf.atmo_Temp << " K" << std::endl;
+		NO.print_line_emissivities();
 		//
 		Spez.NO_vec.push_back(NO);
 		wl = 246.9; // dummy, will be set later more accurately
