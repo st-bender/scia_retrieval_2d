@@ -22,6 +22,7 @@
 #include <cmath>                      // trigonometrische Funktionen
 
 #include "Koordinatentransformation.h"
+#include "Glaetten.h"
 
 #include <ctime>
 #include <cstdlib>
@@ -1866,4 +1867,83 @@ int prepare_total_density(Retrievalgitter &grid, MPL_Matrix &dens,
 	}
 
 	return 0;
+}
+
+/*
+ * interface to the SNOEM model for the SNOE NO data as apriori input
+ * for the retrieval.
+ * nx, ny, nz: dimensions of the longitude, latitude, altitude arrays
+ * glon, glat, zkm: arrays for the longitude, latitude, and altitudes
+ * kp, f107: solar data input at the respective day
+ * snoe_3d(): the actual model procedure
+ * *snoe_no: pointer to the output array (of dim. nx, ny, nz)
+ */
+extern "C" {
+	int __params_MOD_nx, __params_MOD_ny, __params_MOD_nz;
+	float __params_MOD_kp, __params_MOD_f107;
+	float *__dynam_MOD_glon, *__dynam_MOD_glat, *__dynam_MOD_zkm;
+	void __snoe_MOD_snoe_3d(int *doy, float *snoe_no);
+}
+
+/*
+ * runs the model for the retrieval grid, for each latitude we have one
+ * longitude and the model returns the number densities for the requested
+ * altitudes, found in zkm[].
+ * the analysed limb data is used to determine the date for the model run.
+ *
+ * this code must be linked with
+ *   -lNOEM -lnetcdf
+ * libNOEM schould be compiled with gfortran for the correct symbol names
+ * and the model expects to find a file "noem_eof.nc" in the "input/" subdir.
+ */
+void SNOE_apriori_NO(Retrievalgitter &grid, Ausgewertete_Messung_Limb &aml,
+		MPL_Matrix &apriori)
+{
+	// to get the day of the year
+	int days[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+	if (aml.m_Jahr % 4 == 0 &&
+			!(aml.m_Jahr % 100 == 0 && aml.m_Jahr % 400 != 0))
+		days[1] = 29;
+
+	int doy = 0;
+	for (int i = 0; i < (aml.m_Monat - 1); i++) doy += days[i];
+	doy += aml.m_Tag;
+
+	// get solar data from the spidr input files
+	__params_MOD_f107 = spidr_value_from_file(aml.m_Jahr, aml.m_Monat,
+			aml.m_Tag, "DATA/spidr_f107_2000-2010.dat");
+	__params_MOD_kp = spidr_value_from_file(aml.m_Jahr, aml.m_Monat,
+			aml.m_Tag, "DATA/spidr_kp_2000-2010.dat");
+	std::cout << "# snoe parameters: f10.7 = " << __params_MOD_f107
+		<< ", kp = " << __params_MOD_kp << std::endl;
+
+	__params_MOD_nx = 1;
+	__params_MOD_ny = 1;
+	__params_MOD_nz = grid.m_Anzahl_Hoehen;
+
+	__dynam_MOD_glon = new float[__params_MOD_nx];
+	__dynam_MOD_glat = new float[__params_MOD_ny];
+	__dynam_MOD_zkm = new float[__params_MOD_nz];
+	float *snoe_no = new float[__params_MOD_nz];
+
+	// initialise altitude array
+	for (int i = 0; i < grid.m_Anzahl_Hoehen; i++)
+		__dynam_MOD_zkm[i] = grid.m_Gitter[i * grid.m_Anzahl_Breiten].m_Hoehe;
+
+	// run the model for each latitude
+	for (int i = 0; i < grid.m_Anzahl_Breiten; i++) {
+		Gitterpunkt gp = grid.m_Gitter[i];
+		__dynam_MOD_glon[0] = gp.longitude;
+		__dynam_MOD_glat[0] = gp.m_Breite;
+		__snoe_MOD_snoe_3d(&doy, snoe_no);
+		for (int j = 0; j < __params_MOD_nz; j++) {
+			apriori(j * grid.m_Anzahl_Breiten + i) = snoe_no[j];
+		}
+	}
+
+	// cleanup
+	delete[] snoe_no;
+	delete[] __dynam_MOD_zkm;
+	delete[] __dynam_MOD_glat;
+	delete[] __dynam_MOD_glon;
 }
