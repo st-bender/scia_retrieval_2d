@@ -362,8 +362,9 @@ double spidr_value_from_file(int year, int month, int day,
 	size_t pos;
 
 	// construct the date string from the variables
-	ss << year << "-" << std::setw(2) << std::setfill('0')
-		<< month << "-" << day;
+	ss << year
+		<< "-" << std::setw(2) << std::setfill('0') << month
+		<< "-" << std::setw(2) << std::setfill('0') << day;
 	ss >> date;
 
 	f.open(filename.c_str());
