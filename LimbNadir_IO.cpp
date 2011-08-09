@@ -11,6 +11,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -192,7 +193,11 @@ int Load_Limb_l_mpl_binary(string Datei_in,
 		return 1;
 	}
 	//cout<<"Lese header\n";
+	std::stringstream ss;
 	char c_textheader[100];
+	infile.read((char *) c_textheader, sizeof(char) * 100);
+	ss << c_textheader;
+	ss >> lang_textheader;
 	for (int i = 0; i < lang_textheader; i++) {
 		infile.read((char *) c_textheader, sizeof(char) * 100);
 		textheader[i] = c_textheader;
