@@ -434,7 +434,15 @@ int Konfiguration::Konfiguration_anzeigen()
 	if (NO_apriori) cout << "SNOEM";
 	else cout << "null";
 	cout << endl;
-	cout << "Retrieval algorithm:\n" << this->retrieval_algo << "\n";
+	cout << "Retrieval algorithm: ";
+	switch (retrieval_algo) {
+	case 0:
+		cout << "old";
+		break;
+	case 1:
+	default:
+		cout << "new";
+	}
 	cout << "\n";
 	return 0;
 }//ende Konfiguration_anzeigen
