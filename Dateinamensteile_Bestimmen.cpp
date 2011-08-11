@@ -7,8 +7,6 @@
 
 #include<string>
 
-using namespace std;
-
 std::string sb_basename(std::string filename)
 {
 	std::string bname = filename;
@@ -22,7 +20,7 @@ std::string sb_basename(std::string filename)
 ////////////////////////////////////////////////////
 // Funktionsstart  xxxxx_Bestimmen
 ////////////////////////////////////////////////////
-string xxxxx_Bestimmen(string Orbitlistenpfad)
+std::string xxxxx_Bestimmen(std::string Orbitlistenpfad)
 {
 	std::string bname = sb_basename(Orbitlistenpfad);
 	std::string::size_type pos = bname.find_first_of("0123456789");
@@ -39,7 +37,7 @@ string xxxxx_Bestimmen(string Orbitlistenpfad)
 ////////////////////////////////////////////////////
 // Funktionsstart yyyymmdd_hhmm
 ////////////////////////////////////////////////////
-string yyyymmdd_hhmm_Bestimmen(string Name_erste_Limbdatei)
+std::string yyyymmdd_hhmm_Bestimmen(std::string Name_erste_Limbdatei)
 {
 	// Die Datei ist im MPL_binary Format
 	// z.b. SCIA_limb_20040111_084344_1_0_09752.dat.l_mpl_binary
