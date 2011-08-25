@@ -91,6 +91,7 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	vector<double>::iterator lat_it;
 	vector<Ausgewertete_Messung_Limb>::iterator aml_it;
 
+	std::cout << "# measurement geolocations begin" << std::endl;
 	for (aml_it = AM_Limb.begin(); aml_it != AM_Limb.end(); aml_it++) {
 		bool doppelt = false;
 
@@ -104,8 +105,11 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 		if (!(doppelt)) {
 			Lats_Messung.push_back(aml_it->center_lat);
 			Lons_Messung.push_back(aml_it->center_lon);
+			std::cout << Lons_Messung.back() << "\t"
+				<< Lats_Messung.back() << std::endl;
 		}
 	}
+	std::cout << "# measurement geolocations end" << std::endl;
 	// Lats_Messung enthält nun alle Lats nur einmal und in Zeitgeordneter
 	// Reihenfolge Der Satellit auf dem Stück zwischen Maximaler und Minimaler
 	// Höhe in Nord nach Süd Richtung
