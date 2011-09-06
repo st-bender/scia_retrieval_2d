@@ -509,11 +509,12 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 				// gibts auch keine Verwirrungen, ob der Stumpfe oder der
 				// Spitze Winkel gemeint ist
 				//
-				MPL_Vektor Sonne_normal(3);
+				MPL_Vektor Verbindung(3), Verbindung_normal(3);
 				MPL_Vektor LOS_normal(3);
-				Sonne_normal = Sonne_Pos / Sonne_Pos.Betrag_ausgeben();
+				Verbindung = Sonne_Pos - aktueller_Punkt;
+				Verbindung_normal = Verbindung / Verbindung.Betrag_ausgeben();
 				LOS_normal = Verbindungsvektor / Verbindungsvektor.Betrag_ausgeben();
-				Cos_Streuwinkel = -1 * (Sonne_normal * LOS_normal); //skalarprodukt
+				Cos_Streuwinkel = -1 * (Verbindung_normal * LOS_normal); //skalarprodukt
 				//cerr<<"Streuwinkel berechnet\n";
 			}
 
