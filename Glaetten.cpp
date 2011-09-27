@@ -291,8 +291,8 @@ int my_solve(MPL_Matrix &LHS, MPL_Matrix &RHS)
  * method described in Anal. Chem. 75, 3631--3636 (2003)
  * returns the smoothed vector with the same length as the input vector (y),
  * and takes a weight vector (w) (0 for points to be skipped, 1 otherwise). */
-vector<double> my_whittaker_smooth(vector<double> &y, vector<double> &w,
-		int order, double lambda, double &err)
+std::vector<double> my_whittaker_smooth(std::vector<double> &y,
+		std::vector<double> &w, int order, double lambda, double &err)
 {
 	int m = y.size();
 	MPL_Matrix dummy(m, m);
@@ -321,7 +321,7 @@ vector<double> my_whittaker_smooth(vector<double> &y, vector<double> &w,
 	err = std::sqrt(Res(0, 0) / N);
 
 	// generate return vector
-	vector<double> z(Z.m_Elemente, Z.m_Elemente + Z.m_Elementanzahl);
+	std::vector<double> z(Z.m_Elemente, Z.m_Elemente + Z.m_Elementanzahl);
 
 	return z;
 }
