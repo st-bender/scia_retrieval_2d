@@ -390,6 +390,11 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	std::vector<double> rad = m_Intensitaeten;
 	std::vector<double> fit_spec, ones;
 
+	/* prints the geolocation of the tangent point for later inspection */
+	std::cout << "# TP: lat = " << m_Latitude_TP;
+	std::cout << ", lon = " << m_Longitude_TP;
+	std::cout << ", height = " << m_Hoehe_TP << std::endl;
+
 	for (i = 0; i < N_base + N_peak; i++) {
 		double wl = m_Wellenlaengen.at(i_basewin_l_min + i);
 		double sol_i = sol_spec.m_Intensitaeten.at(i_basewin_l_min + i);
@@ -436,9 +441,6 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	// reset N_base
 	N_base = bwin_rad.size();
 
-	std::cout << "# TP: lat = " << m_Latitude_TP;
-	std::cout << ", lon = " << m_Longitude_TP;
-	std::cout << ", height = " << m_Hoehe_TP << std::endl;
 	// linearen Fit des Basisfensters durchführen
 	// Proto: Fit_Linear(double* x,double* y, double& a0, double& a1,int
 	// Anfangsindex, int Endindex)
