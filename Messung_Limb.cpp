@@ -345,7 +345,8 @@ double fit_spectra(std::vector<double> &x, std::vector<double> &y)
 //========================================
 int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		Sonnenspektrum &sol_spec, int index,
-		Speziesfenster &Spezfenst, std::string Arbeitsverzeichnis)
+		Speziesfenster &Spezfenst, std::string Arbeitsverzeichnis,
+		bool debug)
 {
 	// I/(piFGamma)=integral(AMF n ds) mit AMF = s exp(-tau) ...aber zu der
 	// Formel später nochmal zurück Das spätere Retrieval ermittelt dann die
@@ -391,9 +392,11 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	std::vector<double> fit_spec, ones;
 
 	/* prints the geolocation of the tangent point for later inspection */
-	std::cout << "# TP: lat = " << m_Latitude_TP;
-	std::cout << ", lon = " << m_Longitude_TP;
-	std::cout << ", height = " << m_Hoehe_TP << std::endl;
+	if (debug == true) {
+		std::cout << "# TP: lat = " << m_Latitude_TP;
+		std::cout << ", lon = " << m_Longitude_TP;
+		std::cout << ", height = " << m_Hoehe_TP << std::endl;
+	}
 
 	for (i = 0; i < N_base + N_peak; i++) {
 		double wl = m_Wellenlaengen.at(i_basewin_l_min + i);
@@ -403,7 +406,8 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		ones.push_back(1.);
 	}
 	f_sol_fit = fit_spectra(ones, fit_spec);
-	std::cout << "# solar fit factor = " << f_sol_fit << std::endl;
+	if (debug == true)
+		std::cout << "# solar fit factor = " << f_sol_fit << std::endl;
 	if (f_sol_fit < 0.) f_sol_fit = 0.;
 	// Basisfenster WL und I auffüllen
 	for (int i = 0; i < base_l; i++) {
@@ -561,8 +565,10 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 				 m_Zeilendichte, m_Fehler_Zeilendichten);
 	}
 
-	std::cout << "# slant column = " << m_Zeilendichte;
-	std::cout << ", error = " << m_Fehler_Zeilendichten << std::endl;
+	if (debug == true) {
+		std::cout << "# slant column = " << m_Zeilendichte;
+		std::cout << ", error = " << m_Fehler_Zeilendichten << std::endl;
+	}
 
 	return 0;
 }
