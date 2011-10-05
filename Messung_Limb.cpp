@@ -344,7 +344,7 @@ double fit_spectra(std::vector<double> &x, std::vector<double> &y)
 }
 //========================================
 int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
-		Sonnenspektrum &sol_spec, int idx,
+		Sonnenspektrum &sol_spec, int index,
 		Speziesfenster &Spezfenst, std::string Arbeitsverzeichnis)
 {
 	// I/(piFGamma)=integral(AMF n ds) mit AMF = s exp(-tau) ...aber zu der
@@ -529,7 +529,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		std::string plot_dir = Arbeitsverzeichnis + "/Plots";
 		mkdir(plot_dir.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
-			<< "_" << idx << "_" << m_Hoehe_TP << "km.ps";
+			<< "_" << index << "_" << m_Hoehe_TP << "km.ps";
 		std::string new_datnam(buf.str());
 		std::string s1(plot_dir + "/" + new_datnam);
 		// s1 ist der Volle Pfad der Datei... diesen wegspeichern,
