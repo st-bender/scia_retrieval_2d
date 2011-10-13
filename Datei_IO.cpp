@@ -640,9 +640,9 @@ int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
 	FILE *outfile1;
 	string Dateiname1, Dateiname2, Dateiname2_meas, Dateiname3;
 	Dateiname1 = Dateiname_out + "_Dichten.txt";
-	Dateiname2 = Dateiname_out + "_Sx.txt";
-	Dateiname2_meas = Dateiname_out + "_Sx_meas.txt";
-	Dateiname3 = Dateiname_out + "_AKM.txt";
+	Dateiname2 = Dateiname_out + "_Sx.txt.gz";
+	Dateiname2_meas = Dateiname_out + "_Sx_meas.txt.gz";
+	Dateiname3 = Dateiname_out + "_AKM.txt.gz";
 	int i;
 	double stabw = 0;
 	//Datei öffnen
