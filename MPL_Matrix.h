@@ -48,6 +48,7 @@
 #include<iostream>
 #include <cstdio>
 #include<fstream>
+#include "gzstream.h"
 
 extern "C" {
 	void dgemm_(char *TRANSA, char *TRANSB, int *M, int *N, int *K,
@@ -830,7 +831,7 @@ inline int MPL_Matrix::Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor(
 ////////////////////////////////////////////////////////////////////////////////
 inline void MPL_Matrix::in_Datei_speichern(std::string Dateiname)
 {
-	std::ofstream outfile;
+	ogzstream outfile;
 	outfile.open(Dateiname.c_str());
 	for (int i = 0; i < this->m_Zeilenzahl; i++) {
 		for (int j = 0; j < this->m_Spaltenzahl; j++) {

@@ -47,6 +47,8 @@
 <listOptionValue builtIn="false" value="atlas"/>
 <listOptionValue builtIn="false" value="NOEM"/>
 <listOptionValue builtIn="false" value="netcdf"/>
+<listOptionValue builtIn="false" value="gzstream"/>
+<listOptionValue builtIn="false" value="z"/>
 </option>
 <option id="gnu.cpp.link.option.flags.522169920" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-m64" valueType="string"/>
 <option id="gnu.cpp.link.option.paths.1265356100" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
