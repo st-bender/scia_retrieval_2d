@@ -80,10 +80,6 @@ int Nadir_Auswertung(Orbitliste &Orbitlist,
 				mnit->Zeilendichte_Bestimmen((*sfit), k,
 						Arbeitsverzeichnis, mache_Fit_Plots, i);
 
-				// Zu Testzwecken fertige Messung in Datei Speichern
-				if ((k == 0) && (j == 0) && (i == 0)) {
-					mnit->Ausgabe_in_Datei("CHECKDATA/Messung_Nadir_Fenster0_Hoehe_74km_0teLinie.txt");
-				}
 				// Ergebnis zusammenfassen
 				Ausgewertete_Messung_Nadir Ergebnis = mnit->Ergebnis_Zusammenfassen();
 				// Die braucht man später für die Luftmassenmatrix
