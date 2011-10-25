@@ -84,20 +84,23 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 		float cent_lat_lon[10], int no_of_heights, int offset, int direction)
 {
 	bool has_straylight = false;
+	// dark signal and error
+	// constant dark signal (default and fall-back)
+	//dark_sig = 2.731e9;
+	double dark_sig = 3.9e9;
+	double dark_err = 0.0;
+	/*
 	// normal average or median for the dark signal correction
-	double dark_sig = average_over_wl_range(Limbdaten[no_of_alt - 1].m_radiance,
+	dark_sig = average_over_wl_range(Limbdaten[no_of_alt - 1].m_radiance,
 			Wellenlaengen, no_of_pix, 278.0, 282.0, false);
-	double dark_err = average_over_wl_range(Limbdaten[no_of_alt - 1].m_error,
+	dark_err = average_over_wl_range(Limbdaten[no_of_alt - 1].m_error,
 			Wellenlaengen, no_of_pix, 278.0, 282.0, false);
+	*/
 
 	/*
 	if (dark_sig > 6.e9)
 		has_straylight = true;
 	// */
-
-	// constant dark signal
-	//dark_sig = 2.731e9;
-	dark_sig = 3.9e9;
 
 	// 4. Erstellung des Übergabevektors
 	vector<Messung_Limb> Ergebnisvektor;
