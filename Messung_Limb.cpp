@@ -551,15 +551,15 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 			s_OrbNum = Datnam.substr(pos_suffix - 5, 5);
 		}
 		buf.str(std::string());
-		buf << "Orbit " << s_OrbNum.c_str() << ", Limb TP:"
-			<< " Lat: " << m_Latitude_TP << " deg,"
-			<< " Lon: " << m_Longitude_TP << " deg,"
-			<< " Hoehe: " << m_Hoehe_TP << " km.";
+		buf << "Orbit " << s_OrbNum.c_str() << ", TP:"
+			<< " Lat: " << std::setprecision(3) << m_Latitude_TP << " deg,"
+			<< " Lon: " << std::setprecision(4) << m_Longitude_TP << " deg,"
+			<< " Alt: " << std::setprecision(4) << m_Hoehe_TP << " km.";
 		std::string s2(buf.str());
 
 		Plot_2xy(Arbeitsverzeichnis.c_str(), s1.c_str(), s2.c_str(),
-				 "Wellenlaenge in nm",
-				 "Schraege Saeule bei Peakposition in cm^{-2}/nm",
+				 "wavelength [nm]",
+				 "residual radiance [ph{/Symbol \\327}cm^{-2} s^{-1} nm^{-1}]",
 				 wavelengths, spec_wo_rayleigh, wavelengths, NO_fit,
 				 0, wavelengths.size() - 1,
 				 m_Zeilendichte, m_Fehler_Zeilendichten);

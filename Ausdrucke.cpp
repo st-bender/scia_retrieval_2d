@@ -78,10 +78,10 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	}
 	stringstream buf;
 	buf.precision(4);
-	buf << "Saeulendichte (ohne Phase): " << Mittelwert << " cm^{-2}";
+	buf << "scd: " << Mittelwert << " cm^{-2}";
 	string text_messwert(buf.str());
 	buf.str(string()); // clear the stream
-	buf << "Residuum: " << Fehler << " cm^{-2}";
+	buf << "error: " << Fehler << " cm^{-2}";
 	string text_Fehler(buf.str());
 	////////////////////////////////////////////////////////////////////////////
 	// Gnuplotscript schreiben
@@ -91,7 +91,9 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	//was ungefährliches setzen
 	outfile2 << "#!/usr/bin/env gnuplot" << endl;
 	outfile2 << "set terminal postscript landscape enhanced color "
-			 << "\"FreeSans\" 14\n";
+			 << "font \"Helvetica\" 24\n";
+	outfile2 << "set size ratio 0.5\n";
+	outfile2 << "set format y \"%.0t{/Symbol \\327}10^{%T}\"\n";
 	outfile2 << "set style line 1 lc 1 lt 1 lw 3 pt 7 ps 4\n";
 	outfile2 << "set style line 2 lc 2 lt 2 lw 3 pt 5 ps 4\n";
 	outfile2 << "set output '" << Dateiname.c_str() << "'\n";
@@ -99,12 +101,11 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	outfile2 << "set xlabel \'" << xlabel.c_str() << "\'\n";
 	outfile2 << "set ylabel \'" << ylabel.c_str() << "\'\n";
 	outfile2 << "set nokey \n"; //keine Legende
-	outfile2 << "set mxtics 10\n";
 	outfile2 << "set label \"" << text_messwert.c_str() << "\" at "
-			 << x_min + 0.6 * (x_max - x_min) << ","
-			 << y_min + 0.95 * (y_max - y_min) << "\n";
+			 << x_min + 0.4 * (x_max - x_min) << ","
+			 << y_min + 0.98 * (y_max - y_min) << "\n";
 	outfile2 << "set label \"" << text_Fehler.c_str() << "\" at "
-			 << x_min + 0.6 * (x_max - x_min) << ","
+			 << x_min + 0.4 * (x_max - x_min) << ","
 			 << y_min + 0.9 * (y_max - y_min) << "\n";
 	// nun beide Datenreihen mit  Linien Plotten
 	outfile2 << "plot '" << Rohdaten_Name.c_str()
