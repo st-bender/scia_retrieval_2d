@@ -91,11 +91,11 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	//was ungefährliches setzen
 	outfile2 << "#!/usr/bin/env gnuplot" << endl;
 	outfile2 << "set terminal postscript landscape enhanced color "
-			 << "font \"Helvetica\" 24\n";
+			 << "font \"Helvetica\" 24 solid linewidth 2\n";
 	outfile2 << "set size ratio 0.5\n";
 	outfile2 << "set format y \"%.0t{/Symbol \\327}10^{%T}\"\n";
 	outfile2 << "set style line 1 lc 1 lt 1 lw 3 pt 7 ps 4\n";
-	outfile2 << "set style line 2 lc 2 lt 2 lw 3 pt 5 ps 4\n";
+	outfile2 << "set style line 2 lc 3 lt 2 lw 3 pt 5 ps 4\n";
 	outfile2 << "set output '" << Dateiname.c_str() << "'\n";
 	outfile2 << "set title \'" << title.c_str() << "\'\n";
 	outfile2 << "set xlabel \'" << xlabel.c_str() << "\'\n";
