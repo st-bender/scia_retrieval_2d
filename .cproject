@@ -19,7 +19,7 @@
 <folderInfo id="cdt.managedbuild.toolchain.gnu.solaris.base.1819864612.525773004" name="/" resourcePath="">
 <toolChain id="cdt.managedbuild.toolchain.gnu.solaris.base.1798195620" name="cdt.managedbuild.toolchain.gnu.solaris.base" superClass="cdt.managedbuild.toolchain.gnu.solaris.base">
 <targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.target.gnu.solaris.base.2058496166" name="Debug Platform" osList="solaris" superClass="cdt.managedbuild.target.gnu.solaris.base"/>
-<builder buildPath="${workspace_loc:/scia_retrieval_2d/Solaris GCC}" id="cdt.managedbuild.target.gnu.builder.solaris.base.1223839120" keepEnvironmentInBuildfile="true" managedBuildOn="true" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="4" superClass="cdt.managedbuild.target.gnu.builder.solaris.base"/>
+<builder buildPath="${workspace_loc:/scia_retrieval_2d/Solaris GCC}" command="gmake" id="cdt.managedbuild.target.gnu.builder.solaris.base.1223839120" keepEnvironmentInBuildfile="true" managedBuildOn="true" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="4" superClass="cdt.managedbuild.target.gnu.builder.solaris.base"/>
 <tool id="cdt.managedbuild.tool.gnu.archiver.base.117624321" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
 <tool id="cdt.managedbuild.tool.gnu.solaris.cpp.compiler.base.1766099636" name="Solaris C++ Compiler" superClass="cdt.managedbuild.tool.gnu.solaris.cpp.compiler.base">
 <option id="gnu.cpp.compiler.option.other.other.1439123815" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -m64" valueType="string"/>
@@ -40,19 +40,17 @@
 <tool id="cdt.managedbuild.tool.gnu.c.linker.base.46946176" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base"/>
 <tool id="cdt.managedbuild.tool.gnu.cpp.linker.base.1537915545" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.base">
 <option id="gnu.cpp.link.option.libs.1211482184" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-<listOptionValue builtIn="false" value="lapack"/>
-<listOptionValue builtIn="false" value="cblas"/>
-<listOptionValue builtIn="false" value="f77blas"/>
+<listOptionValue builtIn="false" value="sunperf"/>
 <listOptionValue builtIn="false" value="gfortran"/>
-<listOptionValue builtIn="false" value="atlas"/>
 <listOptionValue builtIn="false" value="NOEM"/>
 <listOptionValue builtIn="false" value="netcdf"/>
 <listOptionValue builtIn="false" value="gzstream"/>
 <listOptionValue builtIn="false" value="z"/>
 </option>
-<option id="gnu.cpp.link.option.flags.522169920" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-m64" valueType="string"/>
+<option id="gnu.cpp.link.option.flags.522169920" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-m64 -Wl,-rpath=/opt/SUNWspro/lib/amd64" valueType="string"/>
 <option id="gnu.cpp.link.option.paths.1265356100" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/scia_retrieval_2d/lib}&quot;"/>
+<listOptionValue builtIn="false" value="/opt/SUNWspro/lib/amd64"/>
 </option>
 <option id="gnu.cpp.link.option.debugging.gprof.1512379842" name="Generate gprof information (-pg)" superClass="gnu.cpp.link.option.debugging.gprof" value="false" valueType="boolean"/>
 <option id="gnu.cpp.link.option.debugging.prof.1032280328" name="Generate prof information (-p)" superClass="gnu.cpp.link.option.debugging.prof" value="false" valueType="boolean"/>
