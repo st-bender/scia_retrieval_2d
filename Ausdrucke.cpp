@@ -20,7 +20,8 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 			 string title, string xlabel, string ylabel,
 			 vector<double> &x1, vector<double> &y1,
 			 vector<double> &x2, vector<double> &y2,
-			 int Startindex, int Endindex, double Mittelwert, double Fehler)
+			 int Startindex, int Endindex, double Mittelwert, double Fehler,
+			 bool keep)
 {
 	string Rohdaten_Name = Dateiname + ".raw.dat";
 	string Temp_Skript_Name = Dateiname + ".plt";
@@ -135,7 +136,8 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	// hmm Wartet der, bis Gnuplot fertig ist?---sollte er, in system steckt ja
 	// waitpid drin
 	remove(Temp_Skript_Name.c_str());
-	remove(Rohdaten_Name.c_str());
+	// remove the plot data file only if requested (the default)
+	if (!keep) remove(Rohdaten_Name.c_str());
 	return 0;
 };
 ////////////////////////////////////////////////////////////////////////////////
