@@ -533,7 +533,9 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		std::string plot_dir = Arbeitsverzeichnis + "/Plots";
 		mkdir(plot_dir.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
-			<< "_" << index << "_" << m_Hoehe_TP << "km.ps";
+			<< "_" << index << "_"
+			<< std::setw(3) << std::setfill('0') << std::setprecision(0)
+			<< std::fixed << m_Hoehe_TP << "km.ps";
 		std::string new_datnam(buf.str());
 		std::string s1(plot_dir + "/" + new_datnam);
 		// s1 ist der Volle Pfad der Datei... diesen wegspeichern,
@@ -552,6 +554,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		}
 		buf.str(std::string());
 		buf << "Orbit " << s_OrbNum.c_str() << ", TP:"
+			<< std::resetiosflags(std::ios::fixed)
 			<< " Lat: " << std::setprecision(3) << m_Latitude_TP << " deg,"
 			<< " Lon: " << std::setprecision(4) << m_Longitude_TP << " deg,"
 			<< " Alt: " << std::setprecision(4) << m_Hoehe_TP << " km.";
