@@ -25,4 +25,8 @@ double shift_wavelength(double wl);
 double spidr_value_from_file(int year, int month, int day,
 		std::string filename);
 
+std::vector<std::vector<double> > haar_dec(std::vector<double> &input,
+		int level = -1);
+std::vector<double> haar_rec(std::vector<std::vector<double> > &coeffs);
+
 #endif /* GLAETTEN_HH_ */

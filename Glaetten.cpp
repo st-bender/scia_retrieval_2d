@@ -387,3 +387,81 @@ double spidr_value_from_file(int year, int month, int day,
 
 	return ret;
 }
+
+std::vector<std::vector<double> > haar1d_dwt(std::vector<double> &input)
+{
+	int i;
+	int n = input.size();
+	double i0, i1;
+	if (n % 2) {
+		input.push_back(input.back());
+		n++;
+	}
+	std::vector<double> a(n / 2);
+	std::vector<double> d(n / 2);
+	std::vector<std::vector<double> > ret;
+
+	for (i = 0; i < n / 2; i++) {
+		i0 = input.at(2 * i);
+		i1 = input.at(2 * i + 1);
+
+		a.at(i) = M_SQRT1_2 * (i0 + i1);
+		d.at(i) = M_SQRT1_2 * (i0 - i1);
+	}
+	ret.push_back(a);
+	ret.push_back(d);
+
+	return ret;
+}
+std::vector<double> haar1d_idwt(std::vector<double> &a, std::vector<double> &d)
+{
+	int i;
+	int na = a.size(), nd = d.size();
+	int n = (na > nd ? nd : na);
+	double i0, i1;
+	std::vector<double> ret;
+
+	for (i = 0; i < n; i++) {
+		i0 = a.at(i);
+		i1 = d.at(i);
+
+		ret.push_back(M_SQRT1_2 * (i0 + i1));
+		ret.push_back(M_SQRT1_2 * (i0 - i1));
+	}
+
+	return ret;
+}
+
+std::vector<std::vector<double> > haar_dec(std::vector<double> &input,
+		int level)
+{
+	int i;
+	int max_level = (int)floor(log(input.size()) / log(2.));
+	std::vector<double> a, d;
+	std::vector<std::vector<double> > ad, coeffs;
+
+	if (level == -1) level = max_level;
+
+	a = input;
+	for (i = 0; i < level; i++) {
+		ad = haar1d_dwt(a);
+		a = ad.at(0);
+		d = ad.at(1);
+		coeffs.push_back(d);
+	}
+	coeffs.push_back(a);
+	std::reverse(coeffs.begin(), coeffs.end());
+
+	return coeffs;
+}
+std::vector<double> haar_rec(std::vector<std::vector<double> > &coeffs)
+{
+	std::vector<double> a = coeffs.front();
+	std::vector<std::vector<double> >::iterator ds;
+
+	for (ds = coeffs.begin() + 1; ds != coeffs.end(); ++ds) {
+		a = haar1d_idwt(a, *ds);
+	}
+
+	return a;
+}
