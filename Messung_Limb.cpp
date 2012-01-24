@@ -1512,6 +1512,21 @@ void Messung_Limb::Fit_Linear(vector<double> &x, vector<double> &y,
 	rms_err = std::sqrt(err);
 }//Ende Fit_linear
 
+void Messung_Limb::haar1d_approx(int approx_level, int wl_dec_level)
+{
+	std::vector<std::vector<double> > coeffs;
+	coeffs = haar_dec(m_Intensitaeten, wl_dec_level);
+
+	while (approx_level > 0) {
+		int idx = coeffs.size() - approx_level;
+		std::vector<double> zeros(coeffs.at(idx).size(), 0.);
+		coeffs.at(idx) = zeros;
+		approx_level--;
+	}
+
+	m_Intensitaeten = haar_rec(coeffs);
+}
+
 void Messung_Limb::Fit_Polynom_4ten_Grades(double *x, double *y, double x0,
 		double *Par_a0, double *Par_a1, double *Par_a2, double *Par_a3,
 		double *Par_a4, int Anfangsindex, int Endindex)

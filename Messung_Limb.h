@@ -73,6 +73,7 @@ public:
 	double Evaluate_Error_primitive(std::vector<double> &x, std::vector<double> &y,
 			double a0, double a1, double A, double FWHM, double x0,
 			int Anfangsindex, int Endindex);
+	void haar1d_approx(int approx_level, int wl_dec_level = -1);
 	//Wartungsfunktionen
 	//können und sollten sogar später auskommentiert werden,
 	//und dienen im wesentlichen zum debuggen
