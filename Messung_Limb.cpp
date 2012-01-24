@@ -390,7 +390,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	std::vector<double> peakwin_rad(N_peak);
 	std::vector<double> rad = m_Intensitaeten;
 	std::vector<double> sol_rad = sol_spec.m_Intensitaeten;
-	std::vector<double> fit_spec, ones;
+	std::vector<double> fit_spec, ones(N_base + N_peak, 1.);
 
 	/* prints the geolocation of the tangent point for later inspection */
 	if (debug == true) {
@@ -404,7 +404,6 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		double sol_i = sol_rad.at(i_basewin_l_min + i);
 		double rad_i = rad.at(i_basewin_l_min + i);
 		fit_spec.push_back(rad_i / (sigma_rayleigh(wl) * sol_i));
-		ones.push_back(1.);
 	}
 	f_sol_fit = fit_spectra(ones, fit_spec);
 	if (debug == true)
