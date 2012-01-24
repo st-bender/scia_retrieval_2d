@@ -11,6 +11,7 @@
 #include<iostream>
 #include <cstdlib>
 #include <sstream>
+#include <algorithm>
 
 using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
@@ -43,40 +44,15 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	////////////////////////////////////////////////////////////////////////////
 	outfile1.close();
 	// x und y Grenzen des Datensatzes finden //////////////////////////////
-	double x_min, x_max, y_min, y_max;
-	x_min = x1[Startindex];
-	x_max = x1[Startindex];
-	y_min = y1[Startindex];
-	y_max = y1[Startindex];
-	double x_min_test, x_max_test, y_min_test, y_max_test;
-	for (int i = Startindex; i <= Endindex; i++) {
-		if (x1[i] < x2[i]) {
-			x_min_test = x1[i];
-			x_max_test = x2[i];
-		} else {
-			x_min_test = x2[i];
-			x_max_test = x1[i];
-		}
-		if (y1[i] < y2[i]) {
-			y_min_test = y1[i];
-			y_max_test = y2[i];
-		} else {
-			y_min_test = y2[i];
-			y_max_test = y1[i];
-		}
-		if (x_min_test < x_min) { //XMIN
-			x_min = x_min_test;
-		}
-		if (x_max_test > x_max) { //XMAX
-			x_max = x_max_test;
-		}
-		if (y_min_test < y_min) { //YMIN
-			y_min = y_min_test;
-		}
-		if (y_max_test > y_max) { //YMAX
-			y_max = y_max_test;
-		}
-	}
+	double x_min = std::min(*std::min_element(x1.begin(), x1.end()),
+			*std::min_element(x2.begin(), x2.end()));
+	double x_max = std::max(*std::max_element(x1.begin(), x1.end()),
+			*std::max_element(x2.begin(), x2.end()));
+	double y_min = std::min(*std::min_element(y1.begin(), y1.end()),
+			*std::min_element(y2.begin(), y2.end()));
+	double y_max = std::max(*std::max_element(y1.begin(), y1.end()),
+			*std::max_element(y2.begin(), y2.end()));
+
 	stringstream buf;
 	buf.precision(4);
 	buf << "scd: " << Mittelwert << " cm^{-2}";
