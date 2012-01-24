@@ -389,6 +389,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	std::vector<double> peakwin_wl(N_peak);
 	std::vector<double> peakwin_rad(N_peak);
 	std::vector<double> rad = m_Intensitaeten;
+	std::vector<double> sol_rad = sol_spec.m_Intensitaeten;
 	std::vector<double> fit_spec, ones;
 
 	/* prints the geolocation of the tangent point for later inspection */
@@ -400,7 +401,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 
 	for (i = 0; i < N_base + N_peak; i++) {
 		double wl = m_Wellenlaengen.at(i_basewin_l_min + i);
-		double sol_i = sol_spec.m_Intensitaeten.at(i_basewin_l_min + i);
+		double sol_i = sol_rad.at(i_basewin_l_min + i);
 		double rad_i = rad.at(i_basewin_l_min + i);
 		fit_spec.push_back(rad_i / (sigma_rayleigh(wl) * sol_i));
 		ones.push_back(1.);
@@ -415,14 +416,14 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		basewin_wl.at(i) = wl;
 		basewin_rad.at(i) = rad.at(i_basewin_l_min + i)
 			- f_sol_fit * sigma_rayleigh(wl)
-			  * sol_spec.m_Intensitaeten.at(i_basewin_l_min + i);
+			  * sol_rad.at(i_basewin_l_min + i);
 	}
 	for (int i = 0; i < base_r; i++) {
 		wl = m_Wellenlaengen.at(i_basewin_r_min + i);
 		basewin_wl.at(base_l + i) = wl;
 		basewin_rad.at(base_l + i) = rad.at(i_basewin_r_min + i)
 			- f_sol_fit * sigma_rayleigh(wl)
-			  * sol_spec.m_Intensitaeten.at(i_basewin_r_min + i);
+			  * sol_rad.at(i_basewin_r_min + i);
 	}
 	/* construct new baseline vectors by removing outliers
 	 * This currently discards 20% (10% left and 10% right)
@@ -461,7 +462,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		baseline_wl.push_back(wl);
 		baseline_rad.push_back(a0 + a1 * wl);
 		rayleigh_rad.push_back(f_sol_fit * sigma_rayleigh(wl)
-				* sol_spec.m_Intensitaeten.at(idx));
+				* sol_rad.at(idx));
 
 		// prepare radiances and weights for the Whittaker smoother
 		y.push_back(rad.at(idx) - rayleigh_rad.back());
