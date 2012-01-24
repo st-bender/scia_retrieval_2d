@@ -144,6 +144,7 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 		mlit->Deklinationswinkel_bestimmen(); //Sonnenlatitude
 		mlit->Sonnen_Longitude_bestimmen();
 		mlit->Intensitaeten_normieren(Solspec.m_Int_interpoliert);
+		mlit->haar1d_approx(1);
 		// m_Intensitaeten enthält nun nichtmehr I sondern I/(piF)
 		// Das könnte man auch nur für die Par Fenster durchführen
 		//Schleife über alle Spezies wie z.b. Mg oder Mg+
