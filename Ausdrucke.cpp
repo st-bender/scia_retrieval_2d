@@ -77,6 +77,7 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	outfile2 << "set title \'" << title.c_str() << "\'\n";
 	outfile2 << "set xlabel \'" << xlabel.c_str() << "\'\n";
 	outfile2 << "set ylabel \'" << ylabel.c_str() << "\'\n";
+	outfile2 << "set xtics 1\n";
 	outfile2 << "set nokey \n"; //keine Legende
 	outfile2 << "set label \"" << text_messwert.c_str() << "\" at "
 			 << x_min + 0.4 * (x_max - x_min) << ","
