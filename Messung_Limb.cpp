@@ -370,7 +370,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	}
 	// inner and outer baseline and peak window offset
 	// the defaults (from M.L.) are base_offset_o = 3. and base_offset_i = 1.
-	double base_offset_o = 3., base_offset_i = 1.;
+	double base_offset_o = 1.5, base_offset_i = 0.3;
 	int i_basewin_l_min = sb_Get_closest_index(min_lambda_NO - base_offset_o);
 	int i_basewin_l_max = sb_Get_closest_index(min_lambda_NO - base_offset_i) - 1;
 	int i_basewin_r_min = sb_Get_closest_index(max_lambda_NO + base_offset_i) + 1;
