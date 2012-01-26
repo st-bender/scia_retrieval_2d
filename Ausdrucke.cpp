@@ -12,8 +12,19 @@
 #include <cstdlib>
 #include <sstream>
 #include <algorithm>
+#include <iterator>
 
 using namespace std;
+
+// helper function to convert a pair of doubles into a std::string,
+// separated by a tab; used below for the ostream_iterator in std::transform.
+std::string pair_to_string(double x, double y)
+{
+	std::ostringstream str;
+	str << x << "\t" << y;
+	return str.str();
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Funktionsstart Plot_2xy
 ////////////////////////////////////////////////////////////////////////////////
@@ -24,25 +35,27 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 			 int Startindex, int Endindex, double Mittelwert, double Fehler,
 			 bool keep)
 {
-	string Rohdaten_Name = Dateiname + ".raw.dat";
+	string Rohdaten_Name_a = Dateiname + "_a.raw.dat";
+	string Rohdaten_Name_b = Dateiname + "_b.raw.dat";
 	string Temp_Skript_Name = Dateiname + ".plt";
 
-	ofstream outfile1, outfile2;
-	outfile1.open(Rohdaten_Name.c_str());
+	ofstream outfile1a, outfile1b, outfile2;
+	outfile1a.open(Rohdaten_Name_a.c_str());
+	outfile1b.open(Rohdaten_Name_b.c_str());
 	////////////////////////////////////////////////////////////////////////////
 	// Gnuplotscript Rohdatenfile schreiben
 	////////////////////////////////////////////////////////////////////////////
-	for (int i = Startindex; i < Endindex; i++) {
-		outfile1 << x1[i] << "\t" << y1[i] << "\t" << x2[i] << "\t"
-				 << y2[i] << "\n";
-	}
-	//letzte Zeile
-	outfile1 << x1[Endindex] << "\t" << y1[Endindex] << "\t" << x2[Endindex]
-			 << "\t" << y2[Endindex];
+	std::transform(x1.begin(), x1.end(), y1.begin(),
+			std::ostream_iterator<std::string>(outfile1a, "\n"),
+			pair_to_string);
+	std::transform(x2.begin(), x2.end(), y2.begin(),
+			std::ostream_iterator<std::string>(outfile1b, "\n"),
+			pair_to_string);
 	////////////////////////////////////////////////////////////////////////////
 	// Gnuplotscript Rohdatenfile schreiben ENDE
 	////////////////////////////////////////////////////////////////////////////
-	outfile1.close();
+	outfile1a.close();
+	outfile1b.close();
 	// x und y Grenzen des Datensatzes finden //////////////////////////////
 	double x_min = std::min(*std::min_element(x1.begin(), x1.end()),
 			*std::min_element(x2.begin(), x2.end()));
@@ -86,9 +99,11 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 			 << x_min + 0.4 * (x_max - x_min) << ","
 			 << y_min + 0.9 * (y_max - y_min) << "\n";
 	// nun beide Datenreihen mit  Linien Plotten
-	outfile2 << "plot '" << Rohdaten_Name.c_str()
-			 << "' using 1:2 with lines ls 1, '" << Rohdaten_Name.c_str()
-			 << "' using 3:4 with lines ls 2\n";
+	outfile2 << "plot '"
+			 << Rohdaten_Name_a.c_str()
+			 << "' using 1:2 with lines ls 1, '"
+			 << Rohdaten_Name_b.c_str()
+			 << "' using 1:2 with lines ls 2\n";
 
 //    outfile2<<"set terminal postscript landscape enhanced color "
 //            <<"\"NimbusSans-Regu\" 28\n";
@@ -114,7 +129,10 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	// waitpid drin
 	remove(Temp_Skript_Name.c_str());
 	// remove the plot data file only if requested (the default)
-	if (!keep) remove(Rohdaten_Name.c_str());
+	if (!keep) {
+		remove(Rohdaten_Name_a.c_str());
+		remove(Rohdaten_Name_b.c_str());
+	}
 	return 0;
 };
 ////////////////////////////////////////////////////////////////////////////////
