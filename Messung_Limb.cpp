@@ -352,6 +352,9 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	// Formel später nochmal zurück Das spätere Retrieval ermittelt dann die
 	// Dichte n aus der rechten Seite
 
+	// threshold for peak detection in the NO wavelength range
+	const double peak_threshold = 6.e10;
+
 	//Zunächst Indizes der Wellenlaengen der Basisfenster bestimmen
 	int i, j;
 	int NO_NJ = NO.get_NJ();
@@ -403,8 +406,18 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		double wl = m_Wellenlaengen.at(i_basewin_l_min + i);
 		double sol_i = sol_rad.at(i_basewin_l_min + i);
 		double rad_i = rad.at(i_basewin_l_min + i);
-		fit_spec.push_back(rad_i / (sigma_rayleigh(wl) * sol_i));
+		// peak detection: unusual high radiance
+		// make sure, that the surrounding points are lower
+		if (rad_i > peak_threshold
+				&& rad.at(i_basewin_l_min + i - 1) < rad_i
+				&& rad.at(i_basewin_l_min + i + 1) < rad_i) {
+			// exclude the previous, the current, and the next point.
+			fit_spec.pop_back();
+			i++;
+		} else
+			fit_spec.push_back(rad_i / (sigma_rayleigh(wl) * sol_i));
 	}
+	ones.resize(fit_spec.size());
 	f_sol_fit = fit_spectra(ones, fit_spec);
 	if (debug == true)
 		std::cout << "# solar fit factor = " << f_sol_fit << std::endl;
