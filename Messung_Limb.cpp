@@ -497,10 +497,26 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	//Peakfenster WL und I auffüllen
 	// lineare Funktion von Intensitäten des Peakfenster abziehen
 	for (int i = 0; i < N_peak; i++) {
+		int idx = i_peakwin_min + i;
 		peakwin_wl.at(i) = m_Wellenlaengen.at(i_peakwin_min + i);
 		peakwin_rad.at(i) = rad.at(i_peakwin_min + i)
 			- rayleigh_rad.at(i_peakwin_min - i_basewin_l_min + i)
 			- baseline_rad.at(i_peakwin_min - i_basewin_l_min + i);
+		// peak detection
+		if (rad.at(idx) > peak_threshold
+				&& i > 2 && i < N_peak - 3
+				&& rad.at(idx - 1) < rad.at(idx)
+				&& rad.at(idx + 1) < rad.at(idx)) {
+			// interpolate the three points around the peak linearly
+			double y0 = peakwin_rad.at(i - 2);
+			double yN = rad.at(idx + 2)
+				- rayleigh_rad.at(idx - i_basewin_l_min + 2)
+				- baseline_rad.at(idx - i_basewin_l_min + 2);
+			double a = 0.25 * (yN - y0);
+			for (int k = 0; k < 3; k++)
+				peakwin_rad.at(i - 1 + k) = k*a + y0;
+			i++;
+		}
 	}
 	double rms_err_peak, rms_err_tot;
 	m_Zeilendichte = fit_NO_spec(NO, peakwin_wl, peakwin_rad,
