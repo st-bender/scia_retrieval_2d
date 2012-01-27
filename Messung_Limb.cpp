@@ -582,7 +582,8 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 			s_OrbNum = Datnam.substr(pos_suffix - 5, 5);
 		}
 		buf.str(std::string());
-		buf << "Orbit " << s_OrbNum.c_str() << ", TP:"
+		buf << "Orbit " << s_OrbNum.c_str() << ", "
+			<< NO.get_vu() << NO.get_vl() << ", "
 			<< std::resetiosflags(std::ios::fixed)
 			<< " Lat: " << std::setprecision(3) << m_Latitude_TP << " deg,"
 			<< " Lon: " << std::setprecision(4) << m_Longitude_TP << " deg,"
