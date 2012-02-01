@@ -586,8 +586,8 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 			<< NO.get_vu() << NO.get_vl() << ", "
 			<< std::resetiosflags(std::ios::fixed)
 			<< " Lat: " << std::setprecision(3) << m_Latitude_TP << " deg,"
-			<< " Lon: " << std::setprecision(4) << m_Longitude_TP << " deg,"
-			<< " Alt: " << std::setprecision(4) << m_Hoehe_TP << " km.";
+			<< " Lon: " << std::setprecision(3) << m_Longitude_TP << " deg,"
+			<< " Alt: " << std::setprecision(3) << m_Hoehe_TP << " km.";
 		std::string s2(buf.str());
 
 		Plot_2xy(Arbeitsverzeichnis.c_str(), s1.c_str(), s2.c_str(),
