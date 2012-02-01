@@ -352,6 +352,9 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	// Formel später nochmal zurück Das spätere Retrieval ermittelt dann die
 	// Dichte n aus der rechten Seite
 
+	// threshold for peak detection in the NO wavelength range
+	const double peak_threshold = 6.e10;
+
 	//Zunächst Indizes der Wellenlaengen der Basisfenster bestimmen
 	int i, j;
 	int NO_NJ = NO.get_NJ();
@@ -370,10 +373,10 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	}
 	// inner and outer baseline and peak window offset
 	// the defaults (from M.L.) are base_offset_o = 3. and base_offset_i = 1.
-	double base_offset_o = 3., base_offset_i = 1.;
+	double base_offset_o = 1.5, base_offset_i = 0.3;
 	int i_basewin_l_min = sb_Get_closest_index(min_lambda_NO - base_offset_o);
-	int i_basewin_l_max = sb_Get_closest_index(min_lambda_NO - base_offset_i);
-	int i_basewin_r_min = sb_Get_closest_index(max_lambda_NO + base_offset_i);
+	int i_basewin_l_max = sb_Get_closest_index(min_lambda_NO - base_offset_i) - 1;
+	int i_basewin_r_min = sb_Get_closest_index(max_lambda_NO + base_offset_i) + 1;
 	int i_basewin_r_max = sb_Get_closest_index(max_lambda_NO + base_offset_o);
 	int i_peakwin_min = sb_Get_closest_index(min_lambda_NO - base_offset_i);
 	int i_peakwin_max = sb_Get_closest_index(max_lambda_NO + base_offset_i);
@@ -389,7 +392,8 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	std::vector<double> peakwin_wl(N_peak);
 	std::vector<double> peakwin_rad(N_peak);
 	std::vector<double> rad = m_Intensitaeten;
-	std::vector<double> fit_spec, ones;
+	std::vector<double> sol_rad = sol_spec.m_Intensitaeten;
+	std::vector<double> fit_spec, ones(N_base + N_peak, 1.);
 
 	/* prints the geolocation of the tangent point for later inspection */
 	if (debug == true) {
@@ -400,11 +404,20 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 
 	for (i = 0; i < N_base + N_peak; i++) {
 		double wl = m_Wellenlaengen.at(i_basewin_l_min + i);
-		double sol_i = sol_spec.m_Intensitaeten.at(i_basewin_l_min + i);
+		double sol_i = sol_rad.at(i_basewin_l_min + i);
 		double rad_i = rad.at(i_basewin_l_min + i);
-		fit_spec.push_back(rad_i / (sigma_rayleigh(wl) * sol_i));
-		ones.push_back(1.);
+		// peak detection: unusual high radiance
+		// make sure, that the surrounding points are lower
+		if (rad_i > peak_threshold
+				&& rad.at(i_basewin_l_min + i - 1) < rad_i
+				&& rad.at(i_basewin_l_min + i + 1) < rad_i) {
+			// exclude the previous, the current, and the next point.
+			fit_spec.pop_back();
+			i++;
+		} else
+			fit_spec.push_back(rad_i / (sigma_rayleigh(wl) * sol_i));
 	}
+	ones.resize(fit_spec.size());
 	f_sol_fit = fit_spectra(ones, fit_spec);
 	if (debug == true)
 		std::cout << "# solar fit factor = " << f_sol_fit << std::endl;
@@ -415,14 +428,14 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		basewin_wl.at(i) = wl;
 		basewin_rad.at(i) = rad.at(i_basewin_l_min + i)
 			- f_sol_fit * sigma_rayleigh(wl)
-			  * sol_spec.m_Intensitaeten.at(i_basewin_l_min + i);
+			  * sol_rad.at(i_basewin_l_min + i);
 	}
 	for (int i = 0; i < base_r; i++) {
 		wl = m_Wellenlaengen.at(i_basewin_r_min + i);
 		basewin_wl.at(base_l + i) = wl;
 		basewin_rad.at(base_l + i) = rad.at(i_basewin_r_min + i)
 			- f_sol_fit * sigma_rayleigh(wl)
-			  * sol_spec.m_Intensitaeten.at(i_basewin_r_min + i);
+			  * sol_rad.at(i_basewin_r_min + i);
 	}
 	/* construct new baseline vectors by removing outliers
 	 * This currently discards 20% (10% left and 10% right)
@@ -461,7 +474,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		baseline_wl.push_back(wl);
 		baseline_rad.push_back(a0 + a1 * wl);
 		rayleigh_rad.push_back(f_sol_fit * sigma_rayleigh(wl)
-				* sol_spec.m_Intensitaeten.at(idx));
+				* sol_rad.at(idx));
 
 		// prepare radiances and weights for the Whittaker smoother
 		y.push_back(rad.at(idx) - rayleigh_rad.back());
@@ -484,10 +497,26 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	//Peakfenster WL und I auffüllen
 	// lineare Funktion von Intensitäten des Peakfenster abziehen
 	for (int i = 0; i < N_peak; i++) {
+		int idx = i_peakwin_min + i;
 		peakwin_wl.at(i) = m_Wellenlaengen.at(i_peakwin_min + i);
 		peakwin_rad.at(i) = rad.at(i_peakwin_min + i)
 			- rayleigh_rad.at(i_peakwin_min - i_basewin_l_min + i)
 			- baseline_rad.at(i_peakwin_min - i_basewin_l_min + i);
+		// peak detection
+		if (rad.at(idx) > peak_threshold
+				&& i > 2 && i < N_peak - 3
+				&& rad.at(idx - 1) < rad.at(idx)
+				&& rad.at(idx + 1) < rad.at(idx)) {
+			// interpolate the three points around the peak linearly
+			double y0 = peakwin_rad.at(i - 2);
+			double yN = rad.at(idx + 2)
+				- rayleigh_rad.at(idx - i_basewin_l_min + 2)
+				- baseline_rad.at(idx - i_basewin_l_min + 2);
+			double a = 0.25 * (yN - y0);
+			for (int k = 0; k < 3; k++)
+				peakwin_rad.at(i - 1 + k) = k*a + y0;
+			i++;
+		}
 	}
 	double rms_err_peak, rms_err_tot;
 	m_Zeilendichte = fit_NO_spec(NO, peakwin_wl, peakwin_rad,
@@ -553,16 +582,17 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 			s_OrbNum = Datnam.substr(pos_suffix - 5, 5);
 		}
 		buf.str(std::string());
-		buf << "Orbit " << s_OrbNum.c_str() << ", TP:"
+		buf << "Orbit " << s_OrbNum.c_str() << ", "
+			<< NO.get_vu() << NO.get_vl() << ", "
 			<< std::resetiosflags(std::ios::fixed)
 			<< " Lat: " << std::setprecision(3) << m_Latitude_TP << " deg,"
-			<< " Lon: " << std::setprecision(4) << m_Longitude_TP << " deg,"
-			<< " Alt: " << std::setprecision(4) << m_Hoehe_TP << " km.";
+			<< " Lon: " << std::setprecision(3) << m_Longitude_TP << " deg,"
+			<< " Alt: " << std::setprecision(3) << m_Hoehe_TP << " km.";
 		std::string s2(buf.str());
 
 		Plot_2xy(Arbeitsverzeichnis.c_str(), s1.c_str(), s2.c_str(),
 				 "wavelength [nm]",
-				 "residual radiance [ph{/Symbol \\327}cm^{-2} s^{-1} nm^{-1}]",
+				 "residual radiance [ph/cm^2/s/nm]",
 				 wavelengths, spec_wo_rayleigh, wavelengths, NO_fit,
 				 0, wavelengths.size() - 1,
 				 m_Zeilendichte, m_Fehler_Zeilendichten);
