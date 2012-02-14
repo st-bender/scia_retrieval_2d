@@ -507,8 +507,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	// lineare Funktion von Intensitäten des Peakfenster abziehen
 	for (int i = 0; i < N_peak; i++) {
 		peakwin_wl.at(i) = m_Wellenlaengen.at(i_peakwin_min + i);
-		peakwin_rad.at(i) = rad.at(i_peakwin_min + i)
-			- rayleigh_rad.at(i_peakwin_min - i_basewin_l_min + i)
+		peakwin_rad.at(i) = y.at(i_peakwin_min - i_basewin_l_min + i)
 			- baseline_rad.at(i_peakwin_min - i_basewin_l_min + i);
 	}
 	double rms_err_peak, rms_err_tot;
@@ -520,25 +519,21 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 
 	if (mache_Fit_Plots == "ja") {
 		// prepare data to plot
-		std::vector<double> wavelengths, spec_wo_rayleigh, NO_fit;
+		std::vector<double> wavelengths, spec_wo_rayleigh = y, NO_fit;
 		for (i = 0; i < base_l; i++) {
 			wavelengths.push_back(m_Wellenlaengen.at(i_basewin_l_min + i));
-			spec_wo_rayleigh.push_back(basewin_rad.at(i));
 			NO_fit.push_back(m_Zeilendichte *
 					NO.get_spec_scia_res(i_basewin_l_min + i)
 					+ baseline_rad.at(i));
 		}
 		for (size_t k = 0; k < peakwin_wl.size(); k++) {
 			wavelengths.push_back(m_Wellenlaengen.at(i_peakwin_min + k));
-			spec_wo_rayleigh.push_back(peakwin_rad.at(k)
-					+ baseline_rad.at(i_peakwin_min - i_basewin_l_min + k));
 			NO_fit.push_back(m_Zeilendichte *
 					NO.get_spec_scia_res(i_peakwin_min + k)
 					+ baseline_rad.at(i_peakwin_min - i_basewin_l_min + k));
 		}
 		for (i = 0; i < base_r; i++) {
 			wavelengths.push_back(m_Wellenlaengen.at(i_basewin_r_min + i));
-			spec_wo_rayleigh.push_back(basewin_rad.at(base_l + i));
 			NO_fit.push_back(m_Zeilendichte *
 					NO.get_spec_scia_res(i_basewin_r_min + i)
 					+ baseline_rad.at(i_basewin_r_min - i_basewin_l_min + i));
