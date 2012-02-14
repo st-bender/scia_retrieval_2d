@@ -32,7 +32,7 @@ public:
 	int slant_column_NO(class NO_emiss &NO, std::string mache_Fit_Plots,
 			class Sonnenspektrum &sol_spec, int index,
 			class Speziesfenster &Spezfenst, std::string Arbeitsverzeichnis,
-			bool debug = true);
+			bool debug = true, bool first_run = true);
 	double fit_NO_spec(class NO_emiss &NO, std::vector<double> &x,
 			std::vector<double> &y, double &rms_err);
 	int moving_average(int window_size);

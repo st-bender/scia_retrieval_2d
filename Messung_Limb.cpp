@@ -346,7 +346,7 @@ double fit_spectra(std::vector<double> &x, std::vector<double> &y)
 int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		Sonnenspektrum &sol_spec, int index,
 		Speziesfenster &Spezfenst, std::string Arbeitsverzeichnis,
-		bool debug)
+		bool debug, bool first_run)
 {
 	// I/(piFGamma)=integral(AMF n ds) mit AMF = s exp(-tau) ...aber zu der
 	// Formel später nochmal zurück Das spätere Retrieval ermittelt dann die
