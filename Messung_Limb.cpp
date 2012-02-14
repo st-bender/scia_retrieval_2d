@@ -400,6 +400,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		std::cout << "# TP: lat = " << m_Latitude_TP;
 		std::cout << ", lon = " << m_Longitude_TP;
 		std::cout << ", height = " << m_Hoehe_TP << std::endl;
+		std::cout << "# orbit_phase = " << m_orbit_phase << std::endl;
 	}
 
 	for (i = 0; i < N_base + N_peak; i++) {
