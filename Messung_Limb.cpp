@@ -473,6 +473,18 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 			y_weights.push_back(1.);
 	}
 
+	if (first_run == true)
+		NO.set_fw_haar_wl_coeffs(haar_dec(y));
+	else {
+		// reconstruct the spectrum from the wavelet coefficients
+		std::vector<std::vector<double> > NO_wl_coeffs =
+			NO.get_fw_haar_wl_coeffs();
+		y = haar_rec(NO_wl_coeffs);
+	}
+	// re-size the vector in the case it got longer due to the
+	// wavelet reconstruction
+	y.resize(y_weights.size());
+
 	// replace the linear baseline by the Whittaker smoothed radiances
 	// excluding the peak window and outliers as in the linear case.
 	// the original (linear) baseline behaviour can be obtained by commenting

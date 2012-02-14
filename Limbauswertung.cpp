@@ -20,6 +20,8 @@
 
 #include <vector>
 #include <iterator>
+#include <algorithm>
+#include <numeric>
 #include "Orbitliste.h"
 #include "Sonnenspektrum.h"
 #include "Speziesfenster.h"
@@ -30,6 +32,12 @@
 #include "NO_emiss.h"
 
 using namespace std;
+
+struct scan_haar_wl_coeffs {
+	int index;
+	double orbit_phase;
+	std::vector<std::vector<double> > coeffs;
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 // Funktionsstart Limb_Auswertung
@@ -135,6 +143,8 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 	vector<Messung_Limb>::iterator mlit;
 	vector<Speziesfenster>::iterator sfit;
 	vector<Liniendaten>::iterator ldit;
+	vector<struct scan_haar_wl_coeffs> shwc_vec;
+	unsigned int no_of_NO_lines = 0;
 	//Schleife über alle Rohdaten
 	for (mlit = Rohdaten.begin(); mlit != Rohdaten.end(); ++mlit) {
 		//Übergabe der Rohdaten, sodass diese nicht verändert werden
@@ -144,7 +154,6 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 		mlit->Deklinationswinkel_bestimmen(); //Sonnenlatitude
 		mlit->Sonnen_Longitude_bestimmen();
 		mlit->Intensitaeten_normieren(Solspec.m_Int_interpoliert);
-		mlit->haar1d_approx(1);
 		// m_Intensitaeten enthält nun nichtmehr I sondern I/(piF)
 		// Das könnte man auch nur für die Par Fenster durchführen
 		//Schleife über alle Spezies wie z.b. Mg oder Mg+
@@ -201,6 +210,8 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 					Ausgewertete_Limbmessung_FeI.push_back(Ergebnis);
 				}
 				if (sfit->m_Spezies_Name == "NO") {
+					if (!no_of_NO_lines)
+						no_of_NO_lines = sfit->m_Liniendaten.size();
 					// create new object, same transition but modelled temperature
 					double temp = mlit->msise_temperature();
 					NO_emiss NO_new(sfit->NO_vec.at(k).get_vu(),
@@ -213,19 +224,132 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 					NO_new.calc_line_emissivities();
 					NO_new.scia_convolve(Rohdaten.at(0));
 					double wl = NO_new.get_scia_wl_at_max();
-					mlit->slant_column_NO(NO_new, mache_Fit_Plots, Solspec, k,
+					struct scan_haar_wl_coeffs shwc;
+					mlit->slant_column_NO(NO_new, "nein", Solspec, k,
 							*sfit, Arbeitsverzeichnis);
 					Ergebnis = mlit->Ergebnis_Zusammenfassen();
 					Ergebnis.m_Wellenlaenge
 						= ldit->m_Wellenlaenge
 						= sfit->m_Wellenlaengen.at(k)
 						= wl;
-					Ausgewertete_Limbmessung_NO.push_back(Ergebnis);
+					// save the wavelet coefficients for later use
+					shwc.index = k;
+					shwc.orbit_phase = mlit->m_orbit_phase;
+					shwc.coeffs = NO_new.get_fw_haar_wl_coeffs();
+					shwc_vec.push_back(shwc);
 				}
 
 			}//ende k Linie
 		}//ende j Spezies_Fenster
 	}//ende i Rohdaten
+
+	/* wavelet analysis below */
+	// extract the two last component vectors of the limb scan
+	// to separate vectors per NO line.
+	std::vector<std::vector<double> > c0[no_of_NO_lines];
+	std::vector<std::vector<double> > c1[no_of_NO_lines];
+	std::vector<struct scan_haar_wl_coeffs>::iterator scit;
+	unsigned int i;
+	unsigned int n0 = shwc_vec.front().coeffs.back().size();
+	unsigned int n1 = (shwc_vec.front().coeffs.end() - 2)->size();
+	for (i = 0; i < n0; i++) {
+		std::vector<double> cn0[no_of_NO_lines];
+		for (k = 0, scit = shwc_vec.begin(); scit != shwc_vec.end(); ++scit, k++) {
+			std::vector<double> cs0 = scit->coeffs.back();
+			cn0[k % no_of_NO_lines].push_back(cs0.at(i));
+		}
+		for (k = 0; k < no_of_NO_lines; k++) {
+			c0[k].push_back(cn0[k]);
+		}
+	}
+	for (i = 0; i < n1; i++) {
+		std::vector<double> cn1[no_of_NO_lines];
+		for (k = 0, scit = shwc_vec.begin(); scit != shwc_vec.end(); ++scit, k++) {
+			std::vector<double> cs1 = *(scit->coeffs.end() - 2);
+			cn1[k % no_of_NO_lines].push_back(cs1.at(i));
+		}
+		for (k = 0; k < no_of_NO_lines; k++) {
+			c1[k].push_back(cn1[k]);
+		}
+	}
+
+	// calculates the median (or average if preferred) of
+	// each component in the coefficient vector from the scan,
+	// giving a vector of the same length as the last and second to last
+	// wavelet component vectors of the spectra.
+	std::vector<double> c0a[no_of_NO_lines];
+	std::vector<double> c1a[no_of_NO_lines];
+	std::vector<double> c0m[no_of_NO_lines];
+	std::vector<double> c1m[no_of_NO_lines];
+	std::vector<double> c00[no_of_NO_lines];
+	std::vector<double> c10[no_of_NO_lines];
+	for (k = 0; k < no_of_NO_lines; k++) {
+		std::vector<std::vector<double> >::iterator it;
+		// last components
+		for (it = c0[k].begin(); it != c0[k].end(); ++it) {
+			// arithmetic mean
+			double avg = std::accumulate(it->begin(), it->end(), 0.);
+			avg /= it->size();
+			// find the median
+			std::nth_element(it->begin(), it->begin() + it->size() / 2, it->end());
+			double med = it->at(it->size() / 2);
+			std::cout << "avg = " << avg
+				<< ", median = " << med << std::endl;
+			c0a[k].push_back(avg);
+			c0m[k].push_back(med);
+			c00[k].push_back(0.);
+		}
+		// second to last components
+		for (it = c1[k].begin(); it != c1[k].end(); ++it) {
+			// arithmetic mean
+			double avg = std::accumulate(it->begin(), it->end(), 0.);
+			avg /= it->size();
+			// find the median
+			std::nth_element(it->begin(), it->begin() + it->size() / 2, it->end());
+			double med = it->at(it->size() / 2);
+			std::cout << "avg = " << avg
+				<< ", median = " << med << std::endl;
+			c1a[k].push_back(avg);
+			c1m[k].push_back(med);
+			c10[k].push_back(0.);
+		}
+	}
+
+	i = 0;
+	for (mlit = Rohdaten.begin(); mlit != Rohdaten.end(); ++mlit) {
+		for (sfit = Spezies_Fenster.begin();
+				sfit != Spezies_Fenster.end(); ++sfit) {
+			for (k = 0, ldit = sfit->m_Liniendaten.begin();
+					ldit != sfit->m_Liniendaten.end(); k++, ++ldit) {
+				if (sfit->m_Spezies_Name == "NO") {
+					double temp = mlit->msise_temperature();
+					NO_emiss NO_new(sfit->NO_vec.at(k).get_vu(),
+							sfit->NO_vec.at(k).get_vl(),
+							sfit->NO_vec.at(k).get_vl_abs(),
+							temp);
+					NO_new.solar = sfit->NO_vec.at(k).solar;
+					NO_new.read_luque_data_from_file("DATA/Luqueetal.dat");
+					NO_new.calc_excitation();
+					NO_new.calc_line_emissivities();
+					NO_new.scia_convolve(Rohdaten.at(0));
+					double wl = NO_new.get_scia_wl_at_max();
+					shwc_vec.at(i).coeffs.back() = c0m[k];
+					*(shwc_vec.at(i).coeffs.end() - 2) = c1m[k];
+					NO_new.set_fw_haar_wl_coeffs(shwc_vec.at(i).coeffs);
+					mlit->slant_column_NO(NO_new, mache_Fit_Plots, Solspec, k,
+							*sfit, Arbeitsverzeichnis, true, false);
+					Ausgewertete_Messung_Limb Ergebnis
+						= mlit->Ergebnis_Zusammenfassen();
+					Ergebnis.m_Wellenlaenge
+						= ldit->m_Wellenlaenge
+						= sfit->m_Wellenlaengen.at(k)
+						= wl;
+					Ausgewertete_Limbmessung_NO.push_back(Ergebnis);
+					i++;
+				}
+			}
+		}
+	}
 
 	return 0; // keine Probleme
 }
