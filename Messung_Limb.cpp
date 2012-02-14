@@ -356,30 +356,16 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	const double peak_threshold = 6.e10;
 
 	//Zunächst Indizes der Wellenlaengen der Basisfenster bestimmen
-	int i, j;
-	int NO_NJ = NO.get_NJ();
+	int i;
 	double wl;
 	double f_sol_fit;
-	double min_lambda_NO = 1000., max_lambda_NO = 0.;
-	double gamma_threshold = 0.25 * NO.get_spec_scia_max();
-	for (i = 0; i < NO_NJ; i++) {
-		for (j = 0; j < 12; j++) {
-			wl = NO.get_lambda_K(j, i);
-			if (NO.get_gamma_j(j, i) > gamma_threshold) {
-				if (wl > 0. && wl < min_lambda_NO) min_lambda_NO = wl;
-				if (wl > max_lambda_NO) max_lambda_NO = wl;
-			}
-		}
-	}
-	// inner and outer baseline and peak window offset
-	// the defaults (from M.L.) are base_offset_o = 3. and base_offset_i = 1.
-	double base_offset_o = 1.5, base_offset_i = 0.3;
-	int i_basewin_l_min = sb_Get_closest_index(min_lambda_NO - base_offset_o);
-	int i_basewin_l_max = sb_Get_closest_index(min_lambda_NO - base_offset_i) - 1;
-	int i_basewin_r_min = sb_Get_closest_index(max_lambda_NO + base_offset_i) + 1;
-	int i_basewin_r_max = sb_Get_closest_index(max_lambda_NO + base_offset_o);
-	int i_peakwin_min = sb_Get_closest_index(min_lambda_NO - base_offset_i);
-	int i_peakwin_max = sb_Get_closest_index(max_lambda_NO + base_offset_i);
+	int max_index = sb_Get_closest_index(NO.get_scia_wl_at_max());
+	int i_basewin_l_min = max_index - 18;
+	int i_basewin_l_max = max_index - 7;
+	int i_basewin_r_min = max_index + 6;
+	int i_basewin_r_max = max_index + 18;
+	int i_peakwin_min = max_index - 6;
+	int i_peakwin_max = max_index + 5;
 	// Speicherplatzbedarf für die Fenster ermitteln
 	int base_l = (i_basewin_l_max - i_basewin_l_min + 1);
 	int base_r = (i_basewin_r_max - i_basewin_r_min + 1);
