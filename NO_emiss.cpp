@@ -913,3 +913,13 @@ double NO_emiss::get_scia_wl_at_max()
 {
 	return scia_wl_at_max;
 }
+
+void NO_emiss::set_fw_haar_wl_coeffs(std::vector<std::vector<double> > coeffs)
+{
+	fw_haar_wl_coeffs = coeffs;
+}
+
+std::vector<std::vector<double> > NO_emiss::get_fw_haar_wl_coeffs()
+{
+	return fw_haar_wl_coeffs;
+}

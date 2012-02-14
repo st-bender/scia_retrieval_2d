@@ -86,6 +86,8 @@ class NO_emiss {
 	MPL_Matrix gamma_j;
 	std::vector<double> spec_scia_res;
 	double scia_wl_at_max;
+	// Haar wavelet coefficients of the spectrum in the fit window.
+	std::vector<std::vector<double> > fw_haar_wl_coeffs;
 
 	public:
 	// solar spectrum
@@ -117,6 +119,8 @@ class NO_emiss {
 	double get_spec_scia_res(int i);
 	double get_spec_scia_max();
 	double get_scia_wl_at_max();
+	void set_fw_haar_wl_coeffs(std::vector<std::vector<double> > coeffs);
+	std::vector<std::vector<double> > get_fw_haar_wl_coeffs();
 };
 
 #endif /* NO_EMISS_H_ */
