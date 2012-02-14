@@ -410,10 +410,18 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		// peak detection: unusual high radiance
 		// make sure, that the surrounding points are lower
 		if (rad_i > peak_threshold
+				&& i > 2 && i < N_base + N_peak - 2
 				&& rad.at(i_basewin_l_min + i - 1) < rad_i
 				&& rad.at(i_basewin_l_min + i + 1) < rad_i) {
 			// exclude the previous, the current, and the next point.
 			fit_spec.pop_back();
+			// interpolate three points of the peak linearly
+			double y0 = rad.at(i_basewin_l_min + i - 2);
+			double yN = rad.at(i_basewin_l_min + i + 2);
+			double a = 0.25 * (yN - y0);
+			for (int k = 0; k < 3; k++)
+				rad.at(i_basewin_l_min + i - 1 + k) = k*a + y0;
+			// done interpolating
 			i++;
 		} else
 			fit_spec.push_back(rad_i / (sigma_rayleigh(wl) * sol_i));
