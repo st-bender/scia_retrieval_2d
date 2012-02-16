@@ -386,6 +386,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		std::cout << "# TP: lat = " << m_Latitude_TP;
 		std::cout << ", lon = " << m_Longitude_TP;
 		std::cout << ", height = " << m_Hoehe_TP << std::endl;
+		std::cout << "# orbit_phase = " << m_orbit_phase << std::endl;
 	}
 
 	for (i = 0; i < N_base + N_peak; i++) {
@@ -395,10 +396,18 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		// peak detection: unusual high radiance
 		// make sure, that the surrounding points are lower
 		if (rad_i > peak_threshold
+				&& i > 2 && i < N_base + N_peak - 2
 				&& rad.at(i_basewin_l_min + i - 1) < rad_i
 				&& rad.at(i_basewin_l_min + i + 1) < rad_i) {
 			// exclude the previous, the current, and the next point.
 			fit_spec.pop_back();
+			// interpolate three points of the peak linearly
+			double y0 = rad.at(i_basewin_l_min + i - 2);
+			double yN = rad.at(i_basewin_l_min + i + 2);
+			double a = 0.25 * (yN - y0);
+			for (int k = 0; k < 3; k++)
+				rad.at(i_basewin_l_min + i - 1 + k) = k*a + y0;
+			// done interpolating
 			i++;
 		} else
 			fit_spec.push_back(rad_i / (sigma_rayleigh(wl) * sol_i));
@@ -495,26 +504,9 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	//Peakfenster WL und I auffüllen
 	// lineare Funktion von Intensitäten des Peakfenster abziehen
 	for (int i = 0; i < N_peak; i++) {
-		int idx = i_peakwin_min + i;
 		peakwin_wl.at(i) = m_Wellenlaengen.at(i_peakwin_min + i);
-		peakwin_rad.at(i) = rad.at(i_peakwin_min + i)
-			- rayleigh_rad.at(i_peakwin_min - i_basewin_l_min + i)
+		peakwin_rad.at(i) = y.at(i_peakwin_min - i_basewin_l_min + i)
 			- baseline_rad.at(i_peakwin_min - i_basewin_l_min + i);
-		// peak detection
-		if (rad.at(idx) > peak_threshold
-				&& i > 2 && i < N_peak - 3
-				&& rad.at(idx - 1) < rad.at(idx)
-				&& rad.at(idx + 1) < rad.at(idx)) {
-			// interpolate the three points around the peak linearly
-			double y0 = peakwin_rad.at(i - 2);
-			double yN = rad.at(idx + 2)
-				- rayleigh_rad.at(idx - i_basewin_l_min + 2)
-				- baseline_rad.at(idx - i_basewin_l_min + 2);
-			double a = 0.25 * (yN - y0);
-			for (int k = 0; k < 3; k++)
-				peakwin_rad.at(i - 1 + k) = k*a + y0;
-			i++;
-		}
 	}
 	double rms_err_peak, rms_err_tot;
 	m_Zeilendichte = fit_NO_spec(NO, peakwin_wl, peakwin_rad,
@@ -525,25 +517,21 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 
 	if (mache_Fit_Plots == "ja") {
 		// prepare data to plot
-		std::vector<double> wavelengths, spec_wo_rayleigh, NO_fit;
+		std::vector<double> wavelengths, spec_wo_rayleigh = y, NO_fit;
 		for (i = 0; i < base_l; i++) {
 			wavelengths.push_back(m_Wellenlaengen.at(i_basewin_l_min + i));
-			spec_wo_rayleigh.push_back(basewin_rad.at(i));
 			NO_fit.push_back(m_Zeilendichte *
 					NO.get_spec_scia_res(i_basewin_l_min + i)
 					+ baseline_rad.at(i));
 		}
 		for (size_t k = 0; k < peakwin_wl.size(); k++) {
 			wavelengths.push_back(m_Wellenlaengen.at(i_peakwin_min + k));
-			spec_wo_rayleigh.push_back(peakwin_rad.at(k)
-					+ baseline_rad.at(i_peakwin_min - i_basewin_l_min + k));
 			NO_fit.push_back(m_Zeilendichte *
 					NO.get_spec_scia_res(i_peakwin_min + k)
 					+ baseline_rad.at(i_peakwin_min - i_basewin_l_min + k));
 		}
 		for (i = 0; i < base_r; i++) {
 			wavelengths.push_back(m_Wellenlaengen.at(i_basewin_r_min + i));
-			spec_wo_rayleigh.push_back(basewin_rad.at(base_l + i));
 			NO_fit.push_back(m_Zeilendichte *
 					NO.get_spec_scia_res(i_basewin_r_min + i)
 					+ baseline_rad.at(i_basewin_r_min - i_basewin_l_min + i));
