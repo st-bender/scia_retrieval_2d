@@ -51,8 +51,6 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 					Konfiguration &Konf)
 {
 	unsigned int k;
-	static double last_orbit_phase = 0.;
-	static double last_latitude_tp = 90.;
 	//Einmalig die Rohdaten aus der Datei Laden
 	vector<Messung_Limb> Rohdaten;
 	// Achtung das ist noch nicht der entgültige Vektor, weil dieser noch um die
@@ -116,15 +114,17 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 		return 1;
 	}
 
-	// skip after-pole points
-	if (Rohdaten[0].m_Latitude_TP > last_latitude_tp
-		&& Rohdaten[0].m_orbit_phase > last_orbit_phase) {
-		std::cout << "# after pole at lat = " << Rohdaten[0].m_Latitude_TP
-			<< ", alt = " << Rohdaten[0].m_Hoehe_TP << std::endl;
+	// skips before/after-pole points by requiring that the TP latitude
+	// increases with tangent altitude since MLT scans go from top to
+	// bottom and the satellite moves from north to south.
+	if (Rohdaten.front().m_Latitude_TP > Rohdaten.back().m_Latitude_TP) {
+		std::cout << "# before/after pole: start lat "
+			<< Rohdaten.front().m_Latitude_TP
+			<< ", alt = " << Rohdaten.front().m_Hoehe_TP;
+		std::cout << "; end lat = " << Rohdaten.back().m_Latitude_TP
+			<< ", alt = " << Rohdaten.back().m_Hoehe_TP << std::endl;
 		return 1;
 	}
-	last_latitude_tp = Rohdaten[0].m_Latitude_TP;
-	last_orbit_phase = Rohdaten[0].m_orbit_phase;
 	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	//
 	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
