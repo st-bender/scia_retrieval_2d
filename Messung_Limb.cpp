@@ -552,7 +552,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
 			<< "_" << index << "_"
 			<< std::setw(3) << std::setfill('0') << std::setprecision(0)
-			<< std::fixed << m_Hoehe_TP << "km.ps";
+			<< std::fixed << m_Hoehe_TP << "km.pdf";
 		std::string new_datnam(buf.str());
 		std::string s1(plot_dir + "/" + new_datnam);
 		// s1 ist der Volle Pfad der Datei... diesen wegspeichern,
@@ -578,7 +578,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 			<< " Alt: " << std::setprecision(3) << m_Hoehe_TP << " km.";
 		std::string s2(buf.str());
 
-		Plot_2xy(Arbeitsverzeichnis.c_str(), s1.c_str(), s2.c_str(),
+		Plot_2xy_mpl(Arbeitsverzeichnis.c_str(), s1.c_str(), s2.c_str(),
 				 "wavelength [nm]",
 				 "residual radiance [ph/cm^2/s/nm]",
 				 wavelengths, spec_wo_rayleigh, wavelengths, NO_fit,

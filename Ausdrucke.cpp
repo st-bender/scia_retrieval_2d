@@ -142,6 +142,114 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 // ENDE Plot_2xy
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
+// Funktionsstart Plot_2xy_mpl
+////////////////////////////////////////////////////////////////////////////////
+int Plot_2xy_mpl(string Arbeitsverzeichnis, std::string Dateiname,
+			 std::string title, std::string xlabel, std::string ylabel,
+			 std::vector<double> &x1, std::vector<double> &y1,
+			 std::vector<double> &x2, std::vector<double> &y2,
+			 int Startindex, int Endindex, double Mittelwert, double Fehler,
+			 bool keep)
+{
+	std::string Rohdaten_Name_a = Dateiname + "_a.raw.dat";
+	std::string Rohdaten_Name_b = Dateiname + "_b.raw.dat";
+	std::string Temp_Skript_Name = Dateiname + ".py";
+
+	std::ofstream outfile1a, outfile1b, outfile2;
+	outfile1a.open(Rohdaten_Name_a.c_str());
+	outfile1b.open(Rohdaten_Name_b.c_str());
+	////////////////////////////////////////////////////////////////////////////
+	// Gnuplotscript Rohdatenfile schreiben
+	////////////////////////////////////////////////////////////////////////////
+	std::transform(x1.begin(), x1.end(), y1.begin(),
+			std::ostream_iterator<std::string>(outfile1a, "\n"),
+			pair_to_string);
+	std::transform(x2.begin(), x2.end(), y2.begin(),
+			std::ostream_iterator<std::string>(outfile1b, "\n"),
+			pair_to_string);
+	////////////////////////////////////////////////////////////////////////////
+	// Gnuplotscript Rohdatenfile schreiben ENDE
+	////////////////////////////////////////////////////////////////////////////
+	outfile1a.close();
+	outfile1b.close();
+	// x und y Grenzen des Datensatzes finden //////////////////////////////
+	double x_min = std::min(*std::min_element(x1.begin(), x1.end()),
+			*std::min_element(x2.begin(), x2.end()));
+	double x_max = std::max(*std::max_element(x1.begin(), x1.end()),
+			*std::max_element(x2.begin(), x2.end()));
+	double y_min = std::min(*std::min_element(y1.begin(), y1.end()),
+			*std::min_element(y2.begin(), y2.end()));
+	double y_max = std::max(*std::max_element(y1.begin(), y1.end()),
+			*std::max_element(y2.begin(), y2.end()));
+
+	std::stringstream buf;
+	buf.precision(4);
+	buf << "scd: " << Mittelwert << " $cm^{-2}$";
+	std::string text_messwert(buf.str());
+	buf.str(string()); // clear the stream
+	buf << "error: " << Fehler << " $cm^{-2}$";
+	std::string text_Fehler(buf.str());
+	////////////////////////////////////////////////////////////////////////////
+	// Gnuplotscript schreiben
+	////////////////////////////////////////////////////////////////////////////
+	outfile2.open(Temp_Skript_Name.c_str());
+	//outfile2<<"set terminal x11\n";   // Betriebssystemabhängig, standard auf
+	//was ungefährliches setzen
+	outfile2 << "#!/usr/bin/env python" << std::endl;
+	outfile2 << "import numpy as np" << std::endl;
+	outfile2 << "from matplotlib import rc, use\nuse('agg')\n"
+		<< "import matplotlib.pyplot as plt\n"
+		<< "import matplotlib.colors as col\n"
+		<< "import matplotlib.ticker as tic\n"
+		<< "from mpl_toolkits.axes_grid1 import make_axes_locatable" << std::endl;
+	outfile2 << "rc('font', size=8)\n"
+		<< "rc('mathtext', default='regular')\n"
+		<< "rc('ps', usedistiller='xpdf')" << std::endl;
+	outfile2 << "xy1 = np.genfromtxt('" << Rohdaten_Name_a.c_str() << "')\n";
+	outfile2 << "xy2 = np.genfromtxt('" << Rohdaten_Name_b.c_str() << "')\n";
+	outfile2 << "fig, ax = plt.subplots(figsize=(4, 2.5))" << std::endl;
+	outfile2 << "ax.set_title('" << title.c_str() << "')" << std::endl;
+	outfile2 << "ax.title.set_y(1.05)" << std::endl;
+	outfile2 << "ax.set_xlabel('" << xlabel.c_str() << "')" << std::endl;
+	outfile2 << "ax.set_ylabel(r'$" << ylabel.c_str() << "$')" << std::endl;
+	outfile2 << "ax.annotate(r'" << text_messwert.c_str() << "', ("
+			 << x_min + 0.4 * (x_max - x_min) << ","
+			 << y_min + 0.98 * (y_max - y_min) << "))\n";
+	outfile2 << "ax.annotate(r'" << text_Fehler.c_str() << "', ("
+			 << x_min + 0.4 * (x_max - x_min) << ","
+			 << y_min + 0.9 * (y_max - y_min) << "))\n";
+	// nun beide Datenreihen mit  Linien Plotten
+	outfile2 << "ax.plot(xy1.T[0], xy1.T[1], 'r-', xy2.T[0], xy2.T[1], 'b-')\n";
+	outfile2 << "plt.tight_layout()\n";
+	outfile2 << "plt.savefig('" << Dateiname.c_str() << "')" << std::endl;
+
+	////////////////////////////////////////////////////////////////////////////
+	// Gnuplotscript schreiben ENDE
+	////////////////////////////////////////////////////////////////////////////
+	outfile2.close();
+	////////////////////////////////////////////////////////////////////////////
+	// Gnuplotscript ausführen
+	////////////////////////////////////////////////////////////////////////////
+	std::string befehl;
+	befehl = "python " + Temp_Skript_Name;
+	system(befehl.c_str());
+	////////////////////////////////////////////////////////////////////////////
+	// Gnuplotscript löschen
+	////////////////////////////////////////////////////////////////////////////
+	// hmm Wartet der, bis Gnuplot fertig ist?---sollte er, in system steckt ja
+	// waitpid drin
+	// remove the plot data file only if requested (the default)
+	if (!keep) {
+		remove(Temp_Skript_Name.c_str());
+		remove(Rohdaten_Name_a.c_str());
+		remove(Rohdaten_Name_b.c_str());
+	}
+	return 0;
+};
+////////////////////////////////////////////////////////////////////////////////
+// ENDE Plot_2xy
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Funktionsstart Plot_Slantcoloumns_polyfit_MgI
 ////////////////////////////////////////////////////////////////////////////////
 int Plot_Slantcoloumns_polyfit_MgI(string Arbeitsverzeichnis, string Dateiname,
