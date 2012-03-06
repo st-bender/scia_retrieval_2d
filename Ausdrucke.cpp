@@ -108,13 +108,6 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 			 << Rohdaten_Name_b.c_str()
 			 << "' using 1:2 with lines ls 2\n";
 
-//    outfile2<<"set terminal postscript landscape enhanced color "
-//            <<"\"NimbusSans-Regu\" 28\n";
-	//outfile2<<"set terminal epslatex \"NimbusSans-Regu\" 28\n";
-	//-> funzt nicht, wies soll
-//   outfile2<<"set output '"<<Dateiname.c_str()<<"'\n";
-//    outfile2<<"replot\n";
-//    outfile2<<"set terminal x11\n";
 	////////////////////////////////////////////////////////////////////////////
 	// Gnuplotscript schreiben ENDE
 	////////////////////////////////////////////////////////////////////////////
