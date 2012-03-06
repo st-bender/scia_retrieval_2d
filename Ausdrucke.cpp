@@ -130,9 +130,9 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	////////////////////////////////////////////////////////////////////////////
 	// hmm Wartet der, bis Gnuplot fertig ist?---sollte er, in system steckt ja
 	// waitpid drin
-	remove(Temp_Skript_Name.c_str());
 	// remove the plot data file only if requested (the default)
 	if (!keep) {
+		remove(Temp_Skript_Name.c_str());
 		remove(Rohdaten_Name_a.c_str());
 		remove(Rohdaten_Name_b.c_str());
 	}
