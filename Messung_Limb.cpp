@@ -392,7 +392,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	std::vector<double> peakwin_wl(N_peak);
 	std::vector<double> peakwin_rad(N_peak);
 	std::vector<double> rad = m_Intensitaeten;
-	std::vector<double> sol_rad = sol_spec.m_Intensitaeten;
+	std::vector<double> sol_rad = sol_spec.m_Int_interpoliert;
 	std::vector<double> fit_spec, ones(N_base + N_peak, 1.);
 
 	/* prints the geolocation of the tangent point for later inspection */
