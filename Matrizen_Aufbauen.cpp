@@ -325,6 +325,9 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		// Verbindungsvektor Sat-TP startend vom Satelliten
 		MPL_Vektor Verbindungsvektor(3);
 		Verbindungsvektor = TP_Pos - Sat_Pos;
+		MPL_Vektor Verbindungsvektor_normal(3);
+		Verbindungsvektor_normal = Verbindungsvektor /
+					Verbindungsvektor.Betrag_ausgeben();
 		//START kleine Statistik für Winkelabweichungen bei Limb   /////////////
 		int Winkel_OK = 3;
 		Wstat.Winkel_berechnen_und_einordnen(Verbindungsvektor,
@@ -363,51 +366,8 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 				 << endl;
 			continue;
 		}
-		// Die Standardatmosphären sind bis 200km höhe vorhanden, Absorption
-		// gibts aber auch ab 100 km kaum noch...  auch bei 200km liegt daher
-		// der größte Teil des Weges im ALL und trägt nicht bei...ist es
-		// effektiver nur den Weg abzurastern
-		// bis zu einer Höhe von 200km, sonst Rechenzeitverschwendung
-		// bei ca. 3000 km Abstand zwischen TP und Sat braucht man weniger als
-		// 20 Schritte um auf 1 km genau die Höhe zu erreichen bei 10000
-		// Schritten ist dies eine kleine Zahl.
-		// Suche Faktor, bei dem Der Punkt gerade bei TOA liegt
-		double TOA_Faktor = 0.5;
-		double Veraenderung = 0.5;
-		MPL_Vektor aktueller_Vektor(3);
-		aktueller_Vektor = Sat_Pos + TOA_Faktor * Verbindungsvektor;
-		//cout<<"aktueller Betrag: "<<aktueller_Vektor.Betrag_ausgeben()<<"\n";
-		//cout<<"TP_Pos Betrag: "<<TP_Pos.Betrag_ausgeben()<<"\n";
-		//cout<<"Hoehe_TOA:"<<Hoehe_TOA<<"\n";
-		//cout<<"Sat_Pos_Betrag: "<<Sat_Pos.Betrag_ausgeben()<<"\n";
-		double Epsilon = 0.1; // in km (100m)
-		//int counter =0;
-		while (abs(aktueller_Vektor.Betrag_ausgeben() - Hoehe_TOA) > Epsilon + Epsilon) {
-			// Die Schleife scheint ein bisschen Zeit zu fressen....
-			// vll 0.5 Sekunden
-			//  cout<<"Veraenderung:"<<Veraenderung<<"\n";
-			//  cout<<"aktueller Betrag:"<<aktueller_Vektor.Betrag_ausgeben()<<"\n";
-			//  cout<<"Hoehe_TOA:"<<Hoehe_TOA<<"\n";
-			//  cout<<"TOA_Faktor:"<<TOA_Faktor<<"\n";
-			Veraenderung *= 0.5;
-			//cout<<"TOA_Faktor: "<<TOA_Faktor<<"\n";
-			//cout<<"Veraenderung: "<<Veraenderung<<"\n";
-			//cout<<"aktueller_Vektor.Betrag_ausgeben(): "
-			//  <<aktueller_Vektor.Betrag_ausgeben()<<"\n";
-			//cout<<"Hoehe_TOA: "<<Hoehe_TOA<<"\n";
-			//sleep(2);
-			if (aktueller_Vektor.Betrag_ausgeben() <= Hoehe_TOA) {
-				TOA_Faktor -= Veraenderung;
-			} else {
-				TOA_Faktor += Veraenderung;
-			}
-			aktueller_Vektor = Sat_Pos + TOA_Faktor * Verbindungsvektor;
-			//counter ++;
-			//cout<<"counter:" <<counter<<"\n";
-		}
-		//cerr<<counter<<" Iterationen nötig zur Bestimmung von TOA\n";
-		double Sehnenlaenge_in_Atmosphaere = 2.0 * (1.0 - TOA_Faktor)
-			* Verbindungsvektor.Betrag_ausgeben();
+		double Sehnenlaenge_in_Atmosphaere = 2. * sqrt(Hoehe_TOA*Hoehe_TOA
+				- std::pow(aml_it->m_Erdradius + aml_it->m_Hoehe_TP, 2));
 		//cerr<<"Sehnenlaenge_in_Atmosphaere: "<<Sehnenlaenge_in_Atmosphaere<<"\n";
 		//cout<<"Weglaenge in Atmosphäre: "<<Sehnenlaenge_in_Atmosphaere<<" km.\n";
 		////////////////////////////////////////////////////////////////////////
@@ -421,11 +381,12 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		//cout<<"Winkelberechnung alle "<< Winkelberechnungsfrequenz
 		//  <<" Schritte, also "<<Schrittzahl/Winkelberechnungsfrequenz<<"mal.\n";
 		MPL_Vektor TOA_Start(3);
-		TOA_Start = Sat_Pos + TOA_Faktor * Verbindungsvektor;
+		TOA_Start = TP_Pos
+			- 0.5 * (Verbindungsvektor_normal * Sehnenlaenge_in_Atmosphaere);
 		MPL_Vektor TOA_Schritt(3);
 		//   Einheitsvektor in Richtung      Gesamtlänge     Anzahl Teilstücke
-		TOA_Schritt = (Verbindungsvektor * Sehnenlaenge_in_Atmosphaere)
-			/ (Verbindungsvektor.Betrag_ausgeben() * ((double)Schrittzahl));
+		TOA_Schritt = (Verbindungsvektor_normal * Sehnenlaenge_in_Atmosphaere)
+			/ (double)Schrittzahl;
 		//Sehnenlänge ist auf 100m genau...deshalb später überschüssige Punkte
 		//abfangen
 
@@ -513,7 +474,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 				MPL_Vektor LOS_normal(3);
 				Verbindung = Sonne_Pos - aktueller_Punkt;
 				Verbindung_normal = Verbindung / Verbindung.Betrag_ausgeben();
-				LOS_normal = Verbindungsvektor / Verbindungsvektor.Betrag_ausgeben();
+				LOS_normal = Verbindungsvektor_normal;
 				Cos_Streuwinkel = -1 * (Verbindung_normal * LOS_normal); //skalarprodukt
 				//cerr<<"Streuwinkel berechnet\n";
 			}
