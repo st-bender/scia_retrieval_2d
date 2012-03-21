@@ -654,10 +654,10 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 
 		for (int GitterpunktNR = 0; GitterpunktNR < Grid.m_Anzahl_Punkte; GitterpunktNR++) {
 			// Schleife über alle Gitterpunkte
-			double Epsilon_double_precision = 1e-14; //etwa 100 mal größer
+			const double Epsilon_double_precision = 2.e-14; //etwa 100 mal größer
 			//AMF wird nun durch *=exp(-Tau_LFS) erhöht,
 			//falls AMF==0, muss AMF nicht betrachtet werden
-			if (abs(AMF(MessungNR, GitterpunktNR)) < 2. * Epsilon_double_precision) {
+			if (abs(AMF(MessungNR, GitterpunktNR)) < Epsilon_double_precision) {
 				// == 0 bei double, prüfen, ob korrekt
 				continue;
 			}
@@ -1075,10 +1075,10 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		////////////////////////////////////////////////////////////////////////
 		for (int GitterpunktNR = 0; GitterpunktNR < Grid.m_Anzahl_Punkte; GitterpunktNR++) {
 			// Schleife über alle Gitterpunkte
-			double Epsilon_double_precision = 1e-14; //etwa 100 mal größer
+			const double Epsilon_double_precision = 2e-14; //etwa 100 mal größer
 			//AMF wird nun durch *=exp(-Tau_LFS) erhöht,
 			//falls AMF==0, muss AMF nicht betrachtet werden
-			if (abs(AMF(MessungNR, GitterpunktNR)) < 2. * Epsilon_double_precision) {
+			if (abs(AMF(MessungNR, GitterpunktNR)) < Epsilon_double_precision) {
 				// == 0 bei double, prüfen, ob korrekt
 				continue;
 			}
