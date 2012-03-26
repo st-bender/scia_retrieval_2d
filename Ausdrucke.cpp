@@ -108,13 +108,6 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 			 << Rohdaten_Name_b.c_str()
 			 << "' using 1:2 with lines ls 2\n";
 
-//    outfile2<<"set terminal postscript landscape enhanced color "
-//            <<"\"NimbusSans-Regu\" 28\n";
-	//outfile2<<"set terminal epslatex \"NimbusSans-Regu\" 28\n";
-	//-> funzt nicht, wies soll
-//   outfile2<<"set output '"<<Dateiname.c_str()<<"'\n";
-//    outfile2<<"replot\n";
-//    outfile2<<"set terminal x11\n";
 	////////////////////////////////////////////////////////////////////////////
 	// Gnuplotscript schreiben ENDE
 	////////////////////////////////////////////////////////////////////////////
@@ -130,14 +123,14 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	////////////////////////////////////////////////////////////////////////////
 	// hmm Wartet der, bis Gnuplot fertig ist?---sollte er, in system steckt ja
 	// waitpid drin
-	remove(Temp_Skript_Name.c_str());
 	// remove the plot data file only if requested (the default)
 	if (!keep) {
+		remove(Temp_Skript_Name.c_str());
 		remove(Rohdaten_Name_a.c_str());
 		remove(Rohdaten_Name_b.c_str());
 	}
 	return 0;
-};
+}
 ////////////////////////////////////////////////////////////////////////////////
 // ENDE Plot_2xy
 ////////////////////////////////////////////////////////////////////////////////
