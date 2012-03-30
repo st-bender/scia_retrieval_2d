@@ -206,10 +206,10 @@ int Plot_2xy_mpl(string Arbeitsverzeichnis, std::string Dateiname,
 	outfile2 << "ax.set_xlabel('" << xlabel.c_str() << "')" << std::endl;
 	outfile2 << "ax.set_ylabel(r'$" << ylabel.c_str() << "$')" << std::endl;
 	outfile2 << "ax.annotate(r'" << text_messwert.c_str() << "', ("
-			 << x_min + 0.4 * (x_max - x_min) << ","
+			 << x_min + 0.2 * (x_max - x_min) << ","
 			 << y_min + 0.98 * (y_max - y_min) << "))\n";
 	outfile2 << "ax.annotate(r'" << text_Fehler.c_str() << "', ("
-			 << x_min + 0.4 * (x_max - x_min) << ","
+			 << x_min + 0.2 * (x_max - x_min) << ","
 			 << y_min + 0.9 * (y_max - y_min) << "))\n";
 	// nun beide Datenreihen mit  Linien Plotten
 	outfile2 << "ax.plot(xy1.T[0], xy1.T[1], 'r-', xy2.T[0], xy2.T[1], 'b-')\n";
