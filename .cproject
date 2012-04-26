@@ -22,11 +22,12 @@
 <builder buildPath="${workspace_loc:/scia_retrieval_2d/Solaris GCC}" command="gmake" id="cdt.managedbuild.target.gnu.builder.solaris.base.1223839120" keepEnvironmentInBuildfile="true" managedBuildOn="true" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="4" superClass="cdt.managedbuild.target.gnu.builder.solaris.base"/>
 <tool id="cdt.managedbuild.tool.gnu.archiver.base.117624321" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
 <tool id="cdt.managedbuild.tool.gnu.solaris.cpp.compiler.base.1766099636" name="Solaris C++ Compiler" superClass="cdt.managedbuild.tool.gnu.solaris.cpp.compiler.base">
-<option id="gnu.cpp.compiler.option.other.other.1439123815" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -m64" valueType="string"/>
+<option id="gnu.cpp.compiler.option.other.other.1439123815" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -m64 -Wconversion" valueType="string"/>
 <option id="gnu.cpp.compiler.option.optimization.level.569744046" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.more" valueType="enumerated"/>
 <option id="gnu.cpp.compiler.option.optimization.flags.162964016" name="Other optimization flags" superClass="gnu.cpp.compiler.option.optimization.flags" value="-mtune=native" valueType="string"/>
 <option id="gnu.cpp.compiler.option.debugging.gprof.1466375041" name="Generate gprof information (-pg)" superClass="gnu.cpp.compiler.option.debugging.gprof" value="false" valueType="boolean"/>
 <option id="gnu.cpp.compiler.option.debugging.prof.418895878" name="Generate prof information (-p)" superClass="gnu.cpp.compiler.option.debugging.prof" value="false" valueType="boolean"/>
+<option id="gnu.cpp.compiler.option.warnings.pedantic.1740387219" name="Pedantic (-pedantic)" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.82400017" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.solaris.c.compiler.base.863019344" name="Solaris C Compiler" superClass="cdt.managedbuild.tool.gnu.solaris.c.compiler.base">
@@ -35,6 +36,7 @@
 <option id="gnu.c.compiler.option.optimization.flags.726963795" name="Other optimization flags" superClass="gnu.c.compiler.option.optimization.flags" value="-mtune=native" valueType="string"/>
 <option id="gnu.c.compiler.option.debugging.gprof.464711081" name="Generate gprof information (-pg)" superClass="gnu.c.compiler.option.debugging.gprof" value="false" valueType="boolean"/>
 <option id="gnu.c.compiler.option.debugging.prof.1773570198" name="Generate prof information (-p)" superClass="gnu.c.compiler.option.debugging.prof" value="false" valueType="boolean"/>
+<option id="gnu.c.compiler.option.warnings.pedantic.745457782" name="Pedantic (-pedantic)" superClass="gnu.c.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
 <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1457218916" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.c.linker.base.46946176" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base"/>
@@ -811,6 +813,8 @@
 <tool id="cdt.managedbuild.tool.gnu.archiver.base.280811411" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
 <tool id="cdt.managedbuild.tool.gnu.c.compiler.base.1648301139" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base">
 <option id="gnu.c.compiler.option.misc.other.273429272" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 -m64" valueType="string"/>
+<option id="gnu.c.compiler.option.optimization.flags.64856871" superClass="gnu.c.compiler.option.optimization.flags" value="-mtune=native" valueType="string"/>
+<option id="gnu.c.compiler.option.warnings.pedantic.2101222163" superClass="gnu.c.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
 <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.478496755" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.cpp.linker.base.642777297" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.base">
@@ -840,7 +844,9 @@
 <inputType id="cdt.managedbuild.tool.gnu.assembler.input.396135276" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.1351675976" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base">
-<option id="gnu.cpp.compiler.option.other.other.165767414" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -m64" valueType="string"/>
+<option id="gnu.cpp.compiler.option.other.other.165767414" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -m64 -Wconversion" valueType="string"/>
+<option id="gnu.cpp.compiler.option.optimization.flags.1174027065" superClass="gnu.cpp.compiler.option.optimization.flags" value="-mtune=native" valueType="string"/>
+<option id="gnu.cpp.compiler.option.warnings.pedantic.1501376884" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1944311990" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.c.linker.base.1093478957" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base"/>
