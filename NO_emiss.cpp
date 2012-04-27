@@ -211,11 +211,11 @@ int NO_emiss::populate_Fs()
 		F_l_abs(1, i) = F1(B_Vl_abs, D_Vl_abs, Y_l_abs, lambda_l, j);
 		
 		F_u(0, i) = B_Vu * i * (i + 1)
-			- D_Vu * i * i * (i + 1.) * (i + 1)
+			- D_Vu * i * i * (i + 1) * (i + 1)
 			+ 0.5 * gam_u * i;
 		F_u(1, i) = B_Vu * i * (i + 1)
-			- D_Vu * i * i * (i + 1.) * (i + 1)
-			- 0.5 * gam_u * (i + 1.);
+			- D_Vu * i * i * (i + 1) * (i + 1)
+			- 0.5 * gam_u * (i + 1);
 
 		if (i <= NJ) {
 			NJ_to_N(0, i) = phi * (2. * j + 1.) / sum_j
