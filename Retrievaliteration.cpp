@@ -52,9 +52,9 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	// sieht die LHS immer gleich aus
 	R = (Lambda_Breite * (S_Breite_trans * S_Breite));  // Breitenglattung
 	R += (Lambda_Hoehe * (S_Hoehe_trans * S_Hoehe)); // Hoehenglattung
+	R += (S_apriori);
 	LHS = (AMF_trans * (S_y * AMF));
 	LHS += R;
-	LHS += (S_apriori);
 //    cout<<"LHS: "<<LHS.m_Zeilenzahl<<"\t"<<LHS.m_Spaltenzahl<<"\n";
 	////////////////////////////////////////////////////////////////////////////
 	// TODO Der Absatz muss neu geschrieben werden, weil stimmt nichtmehr
@@ -156,7 +156,8 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	// erster Schritt
 	///////////////////////////////////////
 	//RHS sollte ein Spaltenvektor sein
-	RHS = AMF_trans * (S_y * Saeulendichten) + R * Dichten_apriori;
+	RHS = AMF_trans * S_y * (Saeulendichten - AMF * Dichten_apriori)
+		  + R * Dichten_apriori;
 	// Lösungen durch Rückeinsetzen finden
 	dgetrs_(&textflag, &N, &NRHS, A.m_Elemente, &LDA, IPIV, RHS.m_Elemente,
 			&LDB, &INFO);
