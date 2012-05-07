@@ -1702,6 +1702,7 @@ bool Punkt_Pruefen_und_ggf_AMF_erhoehen(MPL_Matrix &AMF, Retrievalgitter &Grid,
 		//der Matrix
 		Pixelnummer = PN_Test;
 		//cout<<"AMF(MessungNR,Pixelnummer)"<<AMF(MessungNR,Pixelnummer)<<"\n";
+		// 100000.0 * Schrittlaenge ~ s_{ij} = part of the LOS within the pixel
 		AMF(MessungNR, Pixelnummer) += 100000.0 * Schrittlaenge
 			* exp(-Tau_LOS) * Phasenfunktion;
 		Tau_LOS_Limb_Matrix(MessungNR, Pixelnummer) = (Tau_LOS);
