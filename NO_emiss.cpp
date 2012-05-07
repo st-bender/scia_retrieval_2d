@@ -666,7 +666,7 @@ int NO_emiss::calc_line_emissivities()
 	gamma_j.Null_Initialisierung();
 
 	emiss_tot = 0.;
-	for (i = 0; i <= NJ - 2; i++) {
+	for (i = 0; i <= NJ; i++) {
 		k_u = i;
 		for (l = 0; l <= 11; l++) {
 			if (l == 0 || l == 1 || l == 2 || l == 7 || l == 9 || l == 11)
