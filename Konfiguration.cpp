@@ -282,8 +282,8 @@ int Konfiguration::Konfiguration_einlesen()
 			//cout<<Zeile<<"\n";
 			getline(infile, Zeile);
 			vector<double> dummy = string_to_vector<double>(Zeile);
-			this->m_Max_Zahl_Levenberg_Schritte = dummy[0];
-			this->m_Levenberg_Schrittweite = (int) dummy[1];
+			this->m_Max_Zahl_Levenberg_Schritte = static_cast<int>(dummy[0]);
+			this->m_Levenberg_Schrittweite = dummy[1];
 			continue;
 		}
 		if (Zeile == "Maximal number of iteration steps and convergence threshold") {
