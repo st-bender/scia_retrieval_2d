@@ -31,7 +31,7 @@ int Plot_2xy_mpl(std::string Arbeitsverzeichnis, std::string Dateiname,
 			 std::vector<double> &x1, std::vector<double> &y1,
 			 std::vector<double> &x2, std::vector<double> &y2,
 			 int Startindex, int Endindex,
-			 double Mittelwert, double Fehler, bool keep = false);
+			 double Mittelwert, double Fehler, bool keep = false, bool run = true);
 int Plot_Slantcoloumns_polyfit_MgI(std::string Arbeitsverzeichnis, std::string Dateiname,
 								   std::string title, double *WL, int Startind,
 								   int Endind, double *WL_fein,

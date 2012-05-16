@@ -142,7 +142,7 @@ int Plot_2xy_mpl(string Arbeitsverzeichnis, std::string Dateiname,
 			 std::vector<double> &x1, std::vector<double> &y1,
 			 std::vector<double> &x2, std::vector<double> &y2,
 			 int Startindex, int Endindex, double Mittelwert, double Fehler,
-			 bool keep)
+			 bool keep, bool run)
 {
 	std::string Rohdaten_Name_a = Dateiname + "_a.raw.dat";
 	std::string Rohdaten_Name_b = Dateiname + "_b.raw.dat";
@@ -224,9 +224,11 @@ int Plot_2xy_mpl(string Arbeitsverzeichnis, std::string Dateiname,
 	////////////////////////////////////////////////////////////////////////////
 	// Gnuplotscript ausführen
 	////////////////////////////////////////////////////////////////////////////
-	std::string befehl;
-	befehl = "python " + Temp_Skript_Name;
-	system(befehl.c_str());
+	if (run) {
+		std::string befehl;
+		befehl = "python " + Temp_Skript_Name;
+		system(befehl.c_str());
+	}
 	////////////////////////////////////////////////////////////////////////////
 	// Gnuplotscript löschen
 	////////////////////////////////////////////////////////////////////////////
