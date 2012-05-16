@@ -583,7 +583,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 				 "residual radiance [ph/cm^2/s/nm]",
 				 wavelengths, spec_wo_rayleigh, wavelengths, NO_fit,
 				 0, wavelengths.size() - 1,
-				 m_Zeilendichte, m_Fehler_Zeilendichten);
+				 m_Zeilendichte, m_Fehler_Zeilendichten, true, false);
 	}
 
 	if (debug == true) {
