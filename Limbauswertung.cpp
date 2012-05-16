@@ -117,7 +117,16 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 	// skips before/after-pole points by requiring that the TP latitude
 	// increases with tangent altitude since MLT scans go from top to
 	// bottom and the satellite moves from north to south.
-	if (Rohdaten.front().m_Latitude_TP > Rohdaten.back().m_Latitude_TP) {
+	// For nominal scans, this should be the opposite.
+	double lat_tp0, lat_tp1;
+	if (limb_meso_thermo == "ja") {
+		lat_tp0 = Rohdaten.front().m_Latitude_TP;
+		lat_tp1 = Rohdaten.back().m_Latitude_TP;
+	} else {
+		lat_tp0 = Rohdaten.back().m_Latitude_TP;
+		lat_tp1 = Rohdaten.front().m_Latitude_TP;
+	}
+	if (lat_tp0 > lat_tp1) {
 		std::cout << "# before/after pole: start lat "
 			<< Rohdaten.front().m_Latitude_TP
 			<< ", alt = " << Rohdaten.front().m_Hoehe_TP;
