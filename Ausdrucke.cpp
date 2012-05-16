@@ -213,6 +213,7 @@ int Plot_2xy_mpl(string Arbeitsverzeichnis, std::string Dateiname,
 			 << y_min + 0.9 * (y_max - y_min) << "))\n";
 	// nun beide Datenreihen mit  Linien Plotten
 	outfile2 << "ax.plot(xy1.T[0], xy1.T[1], 'r-', xy2.T[0], xy2.T[1], 'b-')\n";
+	outfile2 << "ax.xaxis.set_major_locator(tic.MultipleLocator(1.))\n";
 	outfile2 << "plt.tight_layout()\n";
 	outfile2 << "plt.savefig('" << Dateiname.c_str() << "')" << std::endl;
 
