@@ -97,6 +97,11 @@ bool test_auf_SAA_limb(Messung_Limb &space)
 			upper_bound(space.m_Wellenlaengen.begin(), space.m_Wellenlaengen.end(), wl_end));
 	int Ni = i1 - i0;
 
+	/* checks for the usability of the spectrum and sets
+	 * SAA to true (= unusable) if there are no points in
+	 * the desired wavelength range. */
+	if (Ni == 0) return true;
+
 	double I_max = *max_element(space.m_Intensitaeten.begin() + i0,
 			space.m_Intensitaeten.begin() + i1);
 	double I_sum = accumulate(space.m_Intensitaeten.begin() + i0,
