@@ -204,7 +204,7 @@ int Plot_2xy_mpl(string Arbeitsverzeichnis, std::string Dateiname,
 	outfile2 << "ax.set_title('" << title.c_str() << "')" << std::endl;
 	outfile2 << "ax.title.set_y(1.05)" << std::endl;
 	outfile2 << "ax.set_xlabel('" << xlabel.c_str() << "')" << std::endl;
-	outfile2 << "ax.set_ylabel(r'$" << ylabel.c_str() << "$')" << std::endl;
+	outfile2 << "ax.set_ylabel(r'" << ylabel.c_str() << "')" << std::endl;
 	outfile2 << "ax.annotate(r'" << text_messwert.c_str() << "', ("
 			 << x_min + 0.2 * (x_max - x_min) << ","
 			 << y_min + 0.98 * (y_max - y_min) << "))\n";
