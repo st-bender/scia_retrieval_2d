@@ -11,6 +11,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -192,7 +193,11 @@ int Load_Limb_l_mpl_binary(string Datei_in,
 		return 1;
 	}
 	//cout<<"Lese header\n";
+	std::stringstream ss;
 	char c_textheader[100];
+	infile.read((char *) c_textheader, sizeof(char) * 100);
+	ss << c_textheader;
+	ss >> lang_textheader;
 	for (int i = 0; i < lang_textheader; i++) {
 		infile.read((char *) c_textheader, sizeof(char) * 100);
 		textheader[i] = c_textheader;
@@ -204,7 +209,9 @@ int Load_Limb_l_mpl_binary(string Datei_in,
 	infile.read((char *) Orbitstate, sizeof(int) * 5);
 	infile.read((char *) Datum, sizeof(int) * 6);
 	infile.read((char *) Center_Lat_Lon, sizeof(float) * 10);
-	infile.read((char *) &orbit_phase, sizeof(float));
+	// the orbit phase is only there if the textheader is longer than 29 lines
+	if (lang_textheader > 29)
+		infile.read((char *) &orbit_phase, sizeof(float));
 	// no of pixrel bekannt....speicher reservieren
 	Wellenlaengen = new float[no_of_pix];
 	//cout<<"Lese Wellenlängen\n";

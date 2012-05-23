@@ -48,12 +48,7 @@
 #include<iostream>
 #include <cstdio>
 #include<fstream>
-
-
-
-
-using namespace std;
-
+#include "gzstream.h"
 
 extern "C" {
 	void dgemm_(char *TRANSA, char *TRANSB, int *M, int *N, int *K,
@@ -132,9 +127,11 @@ public:
 	void Zeile_Tauschen(int Zeile_a, int Zeile_b);
 	void Zeile_Multiplizieren(int Zeile, double Faktor);
 	void Vielfaches_einer_Zeile_addieren(int Summenzeile, int Additionszeile, double Faktor);
+	MPL_Matrix row_diff();
+	MPL_Matrix unity();
 	//int simple_Gaussdiagonalisierung(); siehe ganz oben
 	int Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor();
-	void in_Datei_speichern(string Dateiname);
+	void in_Datei_speichern(std::string Dateiname);
 
 	//Membervariablen
 	int m_Zeilenzahl;
@@ -225,9 +222,9 @@ inline MPL_Matrix &MPL_Matrix::operator *= (const MPL_Matrix &rhs)
 	if (this->m_Spaltenzahl != rhs.m_Zeilenzahl) {
 		MPL_Matrix dummy(1, 1);
 		dummy.m_Elemente[0] = 0;
-		cout << "*= Wrong Matrix Multiplication A*B, "
-			 << "coloums number of A != rows number of B\n";
-		cout << "returning nonsense!!!!\n";
+		std::cerr << "*= Wrong Matrix Multiplication A*B, "
+			 << "coloums number of A != rows number of B" << std::endl;
+		std::cerr << "returning nonsense!!!!" << std::endl;
 		//return;
 		*this = dummy;
 		return *this;
@@ -269,7 +266,8 @@ inline MPL_Matrix &MPL_Matrix::operator +=(const MPL_Matrix &rhs)
 	//Zeilen und Spaltenzahl muss gleich sein
 	if ((m_Spaltenzahl != rhs.m_Spaltenzahl)
 			&& (m_Zeilenzahl != rhs.m_Zeilenzahl)) {
-		cout << "Addition nicht möglich, ungleiche Matrixdimensionen\n";
+		std::cerr << "Addition nicht möglich, ungleiche Matrixdimensionen"
+				  << std::endl;
 		return *this; //einfach garnix gemacht
 	}
 	// Wenn spaltenzahl und Zeilenzahl gleich,
@@ -288,7 +286,8 @@ inline MPL_Matrix &MPL_Matrix::operator -= (const MPL_Matrix &rhs)
 	//Zeilen und Spaltenzahl muss gleich sein
 	if ((m_Spaltenzahl != rhs.m_Spaltenzahl)
 			&& (m_Zeilenzahl != rhs.m_Zeilenzahl)) {
-		cout << "Addition nicht möglich, ungleiche Matrixdimensionen\n";
+		std::cerr << "Addition nicht möglich, ungleiche Matrixdimensionen"
+				  << std::endl;
 		return *this; //einfach garnix gemacht
 	}
 	// Wenn spaltenzahl und Zeilenzahl gleich,
@@ -316,7 +315,7 @@ inline MPL_Matrix &MPL_Matrix::operator *= (double rhs)
 inline MPL_Matrix &MPL_Matrix::operator /= (double rhs)
 {
 	if (rhs == 0) {
-		cout << "Division durch 0 wird nicht durchgeführt!\n";
+		std::cerr << "Division durch 0 wird nicht durchgeführt!" << std::endl;
 		return *this;
 	}
 	for (int i = 0; i < m_Elementanzahl; i++) {
@@ -360,7 +359,8 @@ inline double &MPL_Matrix::operator()(int Zeile, int Spalte)
 			&& (Zeile >= 0) && (Zeile < m_Zeilenzahl))
 		return this->m_Elemente[Spalte + Zeile * this->m_Spaltenzahl];
 	else {
-		cout << "Achtung!!! Zugriff auf Elemente ausserhalb der Matrix\n";
+		std::cerr << "Achtung!!! Zugriff auf Elemente ausserhalb der Matrix"
+				  << std::endl;
 		return m_Elemente[0];//auch schlecht, aber wenigstens nicht ausserhalb
 	}
 }
@@ -374,7 +374,8 @@ inline double MPL_Matrix::operator()(int Zeile, int Spalte) const
 			&& (Zeile >= 0) && (Zeile < m_Zeilenzahl))
 		return this->m_Elemente[Spalte + Zeile * this->m_Spaltenzahl];
 	else {
-		cout << "Achtung!!! Zugriff auf Elemente ausserhalb der Matrix\n";
+		std::cerr << "Achtung!!! Zugriff auf Elemente ausserhalb der Matrix"
+				  << std::endl;
 		return -1;
 	}
 }
@@ -386,7 +387,8 @@ inline double &MPL_Matrix::operator()(int Elementindex)
 	if ((Elementindex >= 0) && (Elementindex < m_Elementanzahl))
 		return this->m_Elemente[Elementindex];
 	else {
-		cout << "Achtung!!! Zugriff auf Elemente ausserhalb der Matrix\n";
+		std::cerr << "Achtung!!! Zugriff auf Elemente ausserhalb der Matrix"
+				  << std::endl;
 		return m_Elemente[0];//auch schlecht, aber wenigstens nicht ausserhalb
 	}
 }
@@ -398,7 +400,8 @@ inline double MPL_Matrix::operator()(int Elementindex) const
 	if ((Elementindex >= 0) && (Elementindex < m_Elementanzahl))
 		return this->m_Elemente[Elementindex];
 	else {
-		cout << "Achtung!!! Zugriff auf Elemente ausserhalb der Matrix\n";
+		std::cerr << "Achtung!!! Zugriff auf Elemente ausserhalb der Matrix"
+				  << std::endl;
 		return m_Elemente[0];//auch schlecht, aber wenigstens nicht ausserhalb
 	}
 
@@ -412,9 +415,9 @@ inline MPL_Matrix MPL_Matrix::operator * (const MPL_Matrix &rhs) const
 {
 	//Zunächst prüfen, ob Multiplikation möglich ist
 	if (this->m_Spaltenzahl != rhs.m_Zeilenzahl) {
-		cout << "*= Wrong Matrix Multiplication A*B, "
-			 << "coloums number of A != rows number of B\n";
-		cout << "returning nonsense!!!!\n";
+		std::cerr << "*= Wrong Matrix Multiplication A*B, "
+			 << "coloums number of A != rows number of B" << std::endl;
+		std::cerr << "returning nonsense!!!!" << std::endl;
 		return *this;
 	}
 	// gemm vorbereiten  (das ist ein Routine aus ATLAS)
@@ -452,7 +455,8 @@ inline MPL_Matrix MPL_Matrix::operator +(const MPL_Matrix &rhs) const
 	//Zeilen und Spaltenzahl muss gleich sein
 	if ((m_Spaltenzahl != rhs.m_Spaltenzahl)
 			&& (m_Zeilenzahl != rhs.m_Zeilenzahl)) {
-		cout << "Addition nicht möglich, ungleiche Matrixdimensionen\n";
+		std::cerr << "Addition nicht möglich, ungleiche Matrixdimensionen"
+				  << std::endl;
 		return *this; //einfach garnix gemacht
 	}
 	MPL_Matrix Summe(rhs.m_Zeilenzahl, rhs.m_Spaltenzahl);
@@ -471,7 +475,8 @@ inline MPL_Matrix MPL_Matrix::operator - (const MPL_Matrix &rhs) const
 	//Zeilen und Spaltenzahl muss gleich sein
 	if ((m_Spaltenzahl != rhs.m_Spaltenzahl)
 			&& (m_Zeilenzahl != rhs.m_Zeilenzahl)) {
-		cout << "Subtraktion nicht möglich, ungleiche Matrixdimensionen\n";
+		std::cerr << "Subtraktion nicht möglich, ungleiche Matrixdimensionen"
+				  << std::endl;
 		return *this; //einfach garnix gemacht
 	}
 	MPL_Matrix Differenz(rhs.m_Zeilenzahl, rhs.m_Spaltenzahl);
@@ -502,7 +507,7 @@ inline MPL_Matrix MPL_Matrix::operator / (const double &rhs) const
 	if (rhs == 0) {
 		// ==0 ist bei double ziemlich undefiniert...
 		// evtl nochmal grenzen einbaun
-		cout << "Division durch 0 wird nivht durchgeführt\n";
+		std::cerr << "Division durch 0 wird nivht durchgeführt" << std::endl;
 		return *this;
 	}
 	MPL_Matrix Skalare_Division;
@@ -611,8 +616,8 @@ inline MPL_Matrix MPL_Matrix::transponiert() //transponierte Matrix
 inline void MPL_Matrix::Zeile_Tauschen(int Zeile_a, int Zeile_b)
 {
 	if ((Zeile_a >= this->m_Zeilenzahl) || (Zeile_b >= this->m_Zeilenzahl)) {
-		cout << "Zeilen können nicht getauscht werden, "
-			 << "weil eine Zeile nicht existiert!\n";
+		std::cerr << "Zeilen können nicht getauscht werden, "
+			 << "weil eine Zeile nicht existiert!" << std::endl;
 		return;
 	}
 	double dreieck;
@@ -629,7 +634,8 @@ inline void MPL_Matrix::Zeile_Tauschen(int Zeile_a, int Zeile_b)
 inline void MPL_Matrix::Zeile_Multiplizieren(int Zeile, double Faktor)
 {
 	if (Zeile >= this->m_Zeilenzahl) {
-		cout << "Fehler in Zeile_Multiplizieren...Zeile existiert nicht\n";
+		std::cerr << "Fehler in Zeile_Multiplizieren...Zeile existiert nicht"
+				  << std::endl;
 		return;
 	}
 	for (int i = 0; i < this->m_Spaltenzahl; i++) {
@@ -644,8 +650,8 @@ inline void MPL_Matrix::Vielfaches_einer_Zeile_addieren(int Summenzeile,
 {
 	if ((Summenzeile >= this->m_Zeilenzahl)
 			|| (Additionszeile >= this->m_Zeilenzahl)) {
-		cout << "Fehler in MPL_Matrix::Vielfaches_einer_Zeile_addieren..."
-			 << " Zeile existiert nicht\n";
+		std::cerr << "Fehler in MPL_Matrix::Vielfaches_einer_Zeile_addieren..."
+			 << " Zeile existiert nicht" << std::endl;
 		return;
 	}
 	for (int i = 0; i < this->m_Spaltenzahl; i++) {
@@ -654,7 +660,30 @@ inline void MPL_Matrix::Vielfaches_einer_Zeile_addieren(int Summenzeile,
 	}
 }// Ende Vielfaches_einer_Zeile_addieren
 
+inline MPL_Matrix MPL_Matrix::row_diff()
+{
+	int m = m_Zeilenzahl, n = m_Spaltenzahl;
+	MPL_Matrix diff(m - 1, n);
+	diff.Null_Initialisierung();
 
+	for (int i = 0; i < m - 1; i++)
+		for (int j = 0; j < n; j++)
+			diff.m_Elemente[i * n + j] =
+				m_Elemente[(i + 1) * n + j] - m_Elemente[i * n + j];
+
+	return diff;
+}
+inline MPL_Matrix MPL_Matrix::unity()
+{
+	int m = m_Zeilenzahl;
+	MPL_Matrix E(m, m);
+	E.Null_Initialisierung();
+
+	for (int i = 0; i < m; i++)
+		E.m_Elemente[i * m + i] = 1.;
+
+	return E;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Methodenstart Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor
@@ -721,7 +750,8 @@ inline int MPL_Matrix::Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor(
 		double epsilon = 1E-15;
 		if ((m_Elemente[i + Matrixzeilen[i] * m_Spaltenzahl] + epsilon > 0)
 				&& (m_Elemente[i + Matrixzeilen[i] * m_Spaltenzahl] - epsilon < 0)) {
-			cout << "Matrix ist singulär, Gausselimination scheitert\n";
+			std::cerr << "Matrix ist singulär, Gausselimination scheitert"
+					  << std::endl;
 			//Speicher Freigeben
 			delete[] Matrixzeilen;
 			return 1;
@@ -730,26 +760,26 @@ inline int MPL_Matrix::Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor(
 
 		// Diagonale 1 erzeugen..(division der Zeile durch das führende Element)
 		double Faktor_1 = 1.0 / m_Elemente[i + Matrixzeilen[i] * m_Spaltenzahl];
-//        cout<<"Faktor_1: "<<Faktor_1<<"\n";
+//        std::cerr<<"Faktor_1: "<<Faktor_1<<"\n";
 		this->Zeile_Multiplizieren(Matrixzeilen[i], Faktor_1);
 //        //////////////////////////////////////////////////////////////////////
 //        // zum Test Matrixzeilen und Matrix ausgeben
-//        cout<<"Matrixzeilen: ";
+//        std::cerr<<"Matrixzeilen: ";
 //        for(int b=0;b<n;b++)
-//        {cout<< Matrixzeilen[b]<<"\t";}
-//        cout<<"\n";
+//        {std::cerr<< Matrixzeilen[b]<<"\t";}
+//        std::cerr<<"\n";
 //        // Matrix ausgeben
 //        {
 //            for (int f=0;f<m_Zeilenzahl;f++)
 //            {
 //                for (int g=0;g<m_Spaltenzahl;g++)
 //                {
-//                    cout<<m_Elemente[g+f*m_Spaltenzahl];
-//                    cout<<"  \t";
+//                    std::cerr<<m_Elemente[g+f*m_Spaltenzahl];
+//                    std::cerr<<"  \t";
 //                }//ende for i
-//                cout<<"\n";
+//                std::cerr<<"\n";
 //            }//ende for j
-//            cout<<"\n";
+//            std::cerr<<"\n";
 //        }//Ende Matrix_Ausgeben(MPLMatrix M)
 //        //////////////////////////////////////////////////////////////////////
 		// Die auserwählte Zeile von den restlichen Zeilen so abziehen,
@@ -799,9 +829,9 @@ inline int MPL_Matrix::Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor(
 ////////////////////////////////////////////////////////////////////////////////
 // Methodenstart in_Datei_speichern
 ////////////////////////////////////////////////////////////////////////////////
-inline void MPL_Matrix::in_Datei_speichern(string Dateiname)
+inline void MPL_Matrix::in_Datei_speichern(std::string Dateiname)
 {
-	ofstream outfile;
+	ogzstream outfile;
 	outfile.open(Dateiname.c_str());
 	for (int i = 0; i < this->m_Zeilenzahl; i++) {
 		for (int j = 0; j < this->m_Spaltenzahl; j++) {

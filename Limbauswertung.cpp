@@ -27,13 +27,14 @@
 #include "Messung_Limb.h"
 #include "Datei_IO.h"  //ReadL1C_Limb
 #include "Messungs_ausschliessende_Tests.h"
+#include "NO_emiss.h"
 
 using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Funktionsstart Limb_Auswertung
 ////////////////////////////////////////////////////////////////////////////////
-int Limb_Auswertung(Orbitliste Orbitlist,
+int Limb_Auswertung(Orbitliste &Orbitlist,
 					int l,
 					Sonnenspektrum &Solspec,
 					vector<Speziesfenster>& Spezies_Fenster,
@@ -46,9 +47,10 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 					vector<Ausgewertete_Messung_Limb>& Ausgewertete_Limbmessung_MgII,
 					vector<Ausgewertete_Messung_Limb>& Ausgewertete_Limbmessung_unknown,
 					vector<Ausgewertete_Messung_Limb>& Ausgewertete_Limbmessung_FeI,
+					vector<Ausgewertete_Messung_Limb>& Ausgewertete_Limbmessung_NO,
 					Konfiguration &Konf)
 {
-	unsigned int i, j, k;
+	unsigned int k;
 	//Einmalig die Rohdaten aus der Datei Laden
 	vector<Messung_Limb> Rohdaten;
 	// Achtung das ist noch nicht der entgültige Vektor, weil dieser noch um die
@@ -66,48 +68,72 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 	} else {
 		//Rohdaten =
 		//ReadL1C_Limb_meso_thermo_mpl_binary(Orbitlist.m_Dateinamen[l], Tropo);
-		int Anzahl_Hoehen = 25;
+		int Anzahl_Hoehen = 30;
 		Rohdaten =
 			ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(Orbitlist.m_Dateinamen[l],
 					Tropo, space, Anzahl_Hoehen);
 	}
 	//cerr<<Orbitlist.m_Dateinamen[l]<<" wird bearbeitet\n";
-	//if(l==0) // einmal das Sonnenspektrum anpassen/interpolieren
-	//{
 	//Testen, ob ReadL1C ordentlich gearbeitet hat
 	//Rohdaten[0].Ausgabe_in_Datei("CHECKDATA/Rohdaten_erste_Limb_Messung.txt");
 	//-> Das geht jetzt
+
 	Solspec.Interpolieren(Rohdaten[0]);
 	//Solspec.nicht_interpolieren();
 
 	// Testen, ob die Interpolation erfolgreich war
 	//Solspec.Speichern("CHECKDATA/Sonne_interpoliert_auf_826.txt"); ->ok
-	//}
+
 	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	// Hier wäre ein guter Ort, um zu prüfen, ob die Rohdaten weiter verwendet
 	// werden dürfen
 	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	bool ist_Nachtmessung;
-	bool NLC_detektiert;
 	if (limb_meso_thermo != "ja") {
 		ist_Nachtmessung = Test_auf_Nachtmessung_Limb(Tropo, Konf);
 	} else {
 		ist_Nachtmessung = Test_auf_Nachtmessung_Limb_meso_thermo(Tropo, Konf);
 	}
 	if (ist_Nachtmessung == true) {
-		// cout<<"counter_Nachtmessungen vorher: "<<*counter_Nachtmessungen <<"\n";
+		std::cout << "# night point at lat = " << Rohdaten[0].m_Latitude_TP
+			<< ", alt = " << Rohdaten[0].m_Hoehe_TP << std::endl;
 		counter_Nachtmessungen++;
-		// cout<<"counter_Nachtmessungen nacher: "<<*counter_Nachtmessungen <<"\n";
 		return 1;  //Nachtmessung 1
 	}
-	/*Test_auf_NLC_Limb(Rohdaten, NLC_detektiert);
-	if(NLC_detektiert==true)
-	{
-	    (*counter_NLC_detektiert)++;
-	    return 2;  //NLC 2
-	}*/
+
+	if (Test_auf_NLC_Limb(Rohdaten, Konf) == true) {
+		std::cout << "# NLC at lat = " << Rohdaten[0].m_Latitude_TP
+			<< ", alt = " << Rohdaten[0].m_Hoehe_TP << std::endl;
+		counter_NLC_detektiert++;
+		return 2;  //NLC 2
+	}
 	Test_auf_korrekte_geolocations_Limb(Rohdaten, counter_Richtungsvektor_nicht_ok);
-	if (test_auf_SAA_limb(space)) return 1;
+	if (test_auf_SAA_limb(space) && test_auf_SAA_limb(*(Rohdaten.end() - 2))) {
+		std::cout << "# SAA at lat = " << Rohdaten[0].m_Latitude_TP
+			<< ", alt = " << Rohdaten[0].m_Hoehe_TP << std::endl;
+		return 1;
+	}
+
+	// skips before/after-pole points by requiring that the TP latitude
+	// increases with tangent altitude since MLT scans go from top to
+	// bottom and the satellite moves from north to south.
+	// For nominal scans, this should be the opposite.
+	double lat_tp0, lat_tp1;
+	if (limb_meso_thermo == "ja") {
+		lat_tp0 = Rohdaten.front().m_Latitude_TP;
+		lat_tp1 = Rohdaten.back().m_Latitude_TP;
+	} else {
+		lat_tp0 = Rohdaten.back().m_Latitude_TP;
+		lat_tp1 = Rohdaten.front().m_Latitude_TP;
+	}
+	if (lat_tp0 > lat_tp1) {
+		std::cout << "# before/after pole: start lat "
+			<< Rohdaten.front().m_Latitude_TP
+			<< ", alt = " << Rohdaten.front().m_Hoehe_TP;
+		std::cout << "; end lat = " << Rohdaten.back().m_Latitude_TP
+			<< ", alt = " << Rohdaten.back().m_Hoehe_TP << std::endl;
+		return 1;
+	}
 	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	//
 	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -124,62 +150,45 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 		// wegen Parallelisierung
 		// sin und cos sind langsame Funktionen...
 		// werden aber hierbei auch nicht oft eingesetzt
-		(*mlit).Deklinationswinkel_bestimmen(); //Sonnenlatitude
-		(*mlit).Sonnen_Longitude_bestimmen();
-		(*mlit).Intensitaeten_normieren(Solspec.m_Int_interpoliert);
+		mlit->Deklinationswinkel_bestimmen(); //Sonnenlatitude
+		mlit->Sonnen_Longitude_bestimmen();
+		mlit->Intensitaeten_normieren(Solspec.m_Int_interpoliert);
 		// m_Intensitaeten enthält nun nichtmehr I sondern I/(piF)
 		// Das könnte man auch nur für die Par Fenster durchführen
-		//cout<<Messung.m_Intensitaeten_durch_piF[0]<<"\n";
 		//Schleife über alle Spezies wie z.b. Mg oder Mg+
 		for (sfit = Spezies_Fenster.begin(); sfit != Spezies_Fenster.end(); ++sfit) {
 			//Schleife über alle Linien dieser Spezies
-			for (k = 0, ldit = (*sfit).m_Liniendaten.begin();
-					ldit != (*sfit).m_Liniendaten.end(); k++, ++ldit) {
+			for (k = 0, ldit = sfit->m_Liniendaten.begin();
+					ldit != sfit->m_Liniendaten.end(); k++, ++ldit) {
 				// Aus SZA_TP und SAA_TP lässt sich die Polararisation in den
 				// Liniendaten des Speziesfensters ermitteln, und damit die
 				// Emissivität berechnen
 				//Spezfenst.m_Liniendaten[k].m_theta=Messung.m_Streuwinkel;
 				//der Streuwinkel muss woanders berechnet werden
 				// Die Phasenfunktion, steckt so nun in den Slant Coloumns drin
-				//cout<<Spezfenst.m_Liniendaten[k].m_theta<<"\n";
-				(*ldit).Emissivitaet_ermitteln();
-				//cerr<<Spezies_Fenster[j].m_Basisfenster_rechts_WLmin[k]<<"\n";
-				//cerr<<"j:"<<j<<"\t"<<"k:"<<k<<"\t"
-				//  <<Spezies_Fenster[j].m_Wellenlaengen[k]<<"\t"
-				//  <<Spezies_Fenster[j].m_Liniendaten[k].m_E1<<"\t"
-				//  <<Spezies_Fenster[j].m_Liniendaten[k].m_Gamma<<"\n";
-				(*mlit).Intensitaeten_durch_piF_Gamma_berechnen((*sfit), k);
+				ldit->Emissivitaet_ermitteln();
+				mlit->Intensitaeten_durch_piF_Gamma_berechnen((*sfit), ldit->m_Gamma);
 				// In der Formel ist piF in W/(m^2*Wellenlänge) verlangt..
 				// also muss noch mit der Kanalbreite multipliziert werden
-				(*mlit).Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen((*sfit), k);
-				//cout<<Messung.m_Intensitaeten_durch_piF_Gamma[1]<<"\n";
-				// ->hmm 4e7...keine Ahnung ob das Sinn macht
+				mlit->Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen((*sfit));
 
 				// Jetzt Zeilendichte und Fehler bestimmen
 				// Hmm hier gibts noch Diskussionsbedarf
-				(*mlit).Zeilendichte_Bestimmen((*sfit), k,
-						Arbeitsverzeichnis, mache_Fit_Plots);
+				if (sfit->m_Spezies_Name != "NO")
+					mlit->Zeilendichte_Bestimmen((*sfit), k,
+							Arbeitsverzeichnis, mache_Fit_Plots);
 
 				// Ergebnis zusammenfassen
 				Ausgewertete_Messung_Limb Ergebnis
-					= (*mlit).Ergebnis_Zusammenfassen();
-
-				// adjust after-pole point geo locations
-				if ((*mlit).m_Latitude_TP < 0. &&
-						(*mlit).m_Latitude_TP > (*(mlit - 1)).m_Latitude_TP) {
-					double lat_neu = -180. - (*mlit).m_Latitude_TP;
-					double lon_neu = (*mlit).m_Longitude_TP - 180.;
-					Ergebnis.m_Latitude_TP = lat_neu;
-					Ergebnis.m_Longitude_TP = lon_neu;
-				}
+					= mlit->Ergebnis_Zusammenfassen();
 
 				// Die braucht man später für die Luftmassenmatrix
 				Ergebnis.m_Wellenlaenge
-					= (*sfit).m_Wellenlaengen[k];
+					= ldit->m_Wellenlaenge;
 				//Ergebnis.Ausgabe_auf_Bildschirm();
 				// Zusammenfassung der Zwischenresultate dem Vektor für die
 				// jeweilige Spezies zuordnen
-				if ((*sfit).m_Spezies_Name == "MgI") {
+				if (sfit->m_Spezies_Name == "MgI") {
 					//TODO negative Werte zulassen
 					if (Ergebnis.m_Zeilendichte > 0) {
 						Ausgewertete_Limbmessung_MgI.push_back(Ergebnis);
@@ -190,14 +199,36 @@ int Limb_Auswertung(Orbitliste Orbitlist,
 						Ausgewertete_Limbmessung_MgI.push_back(Ergebnis);
 					}
 				}
-				if ((*sfit).m_Spezies_Name == "MgII") {
+				if (sfit->m_Spezies_Name == "MgII") {
 					Ausgewertete_Limbmessung_MgII.push_back(Ergebnis);
 				}
-				if ((*sfit).m_Spezies_Name == "unknown") {
+				if (sfit->m_Spezies_Name == "unknown") {
 					Ausgewertete_Limbmessung_unknown.push_back(Ergebnis);
 				}
-				if ((*sfit).m_Spezies_Name == "FeI") {
+				if (sfit->m_Spezies_Name == "FeI") {
 					Ausgewertete_Limbmessung_FeI.push_back(Ergebnis);
+				}
+				if (sfit->m_Spezies_Name == "NO") {
+					// create new object, same transition but modelled temperature
+					double temp = mlit->msise_temperature();
+					NO_emiss NO_new(sfit->NO_vec.at(k).get_vu(),
+							sfit->NO_vec.at(k).get_vl(),
+							sfit->NO_vec.at(k).get_vl_abs(),
+							temp);
+					NO_new.solar = sfit->NO_vec.at(k).solar;
+					NO_new.read_luque_data_from_file("DATA/Luqueetal.dat");
+					NO_new.calc_excitation();
+					NO_new.calc_line_emissivities();
+					NO_new.scia_convolve(Rohdaten.at(0));
+					double wl = NO_new.get_scia_wl_at_max();
+					mlit->slant_column_NO(NO_new, mache_Fit_Plots, Solspec, k,
+							*sfit, Arbeitsverzeichnis);
+					Ergebnis = mlit->Ergebnis_Zusammenfassen();
+					Ergebnis.m_Wellenlaenge
+						= ldit->m_Wellenlaenge
+						= sfit->m_Wellenlaengen.at(k)
+						= wl;
+					Ausgewertete_Limbmessung_NO.push_back(Ergebnis);
 				}
 
 			}//ende k Linie

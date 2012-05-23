@@ -10,12 +10,9 @@
 
 
 #include "MPL_Matrix.h"
-#include "Konfiguration.h"
-
-using namespace std;
-
 
 int Retrievalfehler_Abschaetzung(MPL_Matrix &S_x,
+								 MPL_Matrix &S_x_meas,
 								 MPL_Matrix &Averaging_Kernel_Matrix,
 								 const MPL_Matrix &S_apriori,
 								 const MPL_Matrix &S_y,
@@ -25,7 +22,7 @@ int Retrievalfehler_Abschaetzung(MPL_Matrix &S_x,
 								 const double &Lambda_Breite,
 								 const double &Lambda_Hoehe,
 								 MPL_Matrix &AMF,
-								 const Konfiguration &Konf);
+								 const class Konfiguration &Konf);
 void Matrix_Invertieren(MPL_Matrix &M);
 
 

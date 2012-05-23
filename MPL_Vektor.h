@@ -25,8 +25,6 @@
 #include <cmath>
 #include <iostream>
 
-using namespace std;
-
 class MPL_Vektor
 {
 public:
@@ -129,7 +127,8 @@ inline MPL_Vektor &MPL_Vektor::operator =(const MPL_Vektor &rhs)
 inline MPL_Vektor &MPL_Vektor::operator +=(const MPL_Vektor &rhs)
 {
 	if (this->m_Elementanzahl != rhs.m_Elementanzahl) {
-		cout << "Vektoraddition verschieden langer Vektoren ist unsinnig!!!!\n";
+		std::cerr << "Vektoraddition verschieden langer Vektoren ist unsinnig!!!!"
+				  << std::endl;
 		return *this;
 	}
 	for (int i = 0; i < m_Elementanzahl; i++) {
@@ -142,7 +141,8 @@ inline MPL_Vektor &MPL_Vektor::operator +=(const MPL_Vektor &rhs)
 inline MPL_Vektor &MPL_Vektor::operator -=(const MPL_Vektor &rhs)
 {
 	if (this->m_Elementanzahl != rhs.m_Elementanzahl) {
-		cout << "Vektorsubtraktion verschieden langer Vektoren ist unsinnig!!!!\n";
+		std::cerr << "Vektorsubtraktion verschieden langer Vektoren ist unsinnig!!!!"
+				  << std::endl;
 		return *this;
 	}
 	for (int i = 0; i < m_Elementanzahl; i++) {
@@ -164,7 +164,8 @@ inline MPL_Vektor &MPL_Vektor::operator *=(const double &rhs)
 inline MPL_Vektor &MPL_Vektor::operator /=(const double &rhs)
 {
 	if (rhs == 0) { // Achtung ...eigentlich in epsilonumgebung betrachten
-		cout << "Achtung Division durch 0 bei skalarer Vektordivision\n";
+		std::cerr << "Achtung Division durch 0 bei skalarer Vektordivision"
+				  << std::endl;
 		return *this;
 	}
 
@@ -200,7 +201,8 @@ inline double &MPL_Vektor::operator()(int Element)
 	if ((Element >= 0) && (Element < m_Elementanzahl))
 		return this->m_Elemente[Element];
 	else {
-		cout << "Achtung!!! Zugriff auf Elemente ausserhalb des Vektors\n";
+		std::cerr << "Achtung!!! Zugriff auf Elemente ausserhalb des Vektors"
+				  << std::endl;
 		return m_Elemente[0];//auch schlecht, aber wenigstens nicht ausserhalb
 	}
 }
@@ -209,7 +211,8 @@ inline double MPL_Vektor::operator()(int Element) const
 	if ((Element >= 0) && (Element < m_Elementanzahl))
 		return this->m_Elemente[Element];
 	else {
-		cout << "Achtung!!! Zugriff auf Elemente ausserhalb des Vektors\n";
+		std::cerr << "Achtung!!! Zugriff auf Elemente ausserhalb des Vektors"
+				  << std::endl;
 		return m_Elemente[0];//auch schlecht, aber wenigstens nicht ausserhalb
 	}
 }
@@ -219,7 +222,8 @@ inline double MPL_Vektor::operator()(int Element) const
 inline MPL_Vektor MPL_Vektor::operator +(const MPL_Vektor &rhs)
 {
 	if (this->m_Elementanzahl != rhs.m_Elementanzahl) {
-		cout << "Vektoraddition verschieden langer Vektoren ist unsinnig!!!!\n";
+		std::cerr << "Vektoraddition verschieden langer Vektoren ist unsinnig!!!!"
+				  << std::endl;
 		return *this;
 	}
 	MPL_Vektor aus(m_Elementanzahl);
@@ -232,7 +236,8 @@ inline MPL_Vektor MPL_Vektor::operator +(const MPL_Vektor &rhs)
 inline MPL_Vektor MPL_Vektor::operator -(const MPL_Vektor &rhs)
 {
 	if (this->m_Elementanzahl != rhs.m_Elementanzahl) {
-		cout << "Vektorsubtraktion verschieden langer Vektoren ist unsinnig!!!!\n";
+		std::cerr << "Vektorsubtraktion verschieden langer Vektoren ist unsinnig!!!!"
+				  << std::endl;
 		return *this;
 	}
 	MPL_Vektor aus(m_Elementanzahl);
@@ -246,7 +251,8 @@ inline MPL_Vektor MPL_Vektor::operator -(const MPL_Vektor &rhs)
 inline double MPL_Vektor::operator *(const MPL_Vektor &rhs)
 {
 	if (this->m_Elementanzahl != rhs.m_Elementanzahl) {
-		cout << "Skalarprodukt verschieden langer Vektoren ist unsinnig!!!!\n";
+		std::cerr << "Skalarprodukt verschieden langer Vektoren ist unsinnig!!!!"
+				  << std::endl;
 		return 0;
 	}
 	double aus = 0;
@@ -259,7 +265,7 @@ inline double MPL_Vektor::operator *(const MPL_Vektor &rhs)
 inline MPL_Vektor MPL_Vektor::operator /(const double &rhs)
 {
 	if (rhs == 0) {
-		cout << "Achtung Division durch 0!!!!!\n";
+		std::cerr << "Achtung Division durch 0!!!!!" << std::endl;
 		return *this;
 	}
 	MPL_Vektor aus(m_Elementanzahl);
@@ -369,8 +375,9 @@ inline void MPL_Vektor::Normieren()
 {
 	double d_Betrag = Betrag_ausgeben();
 	if (d_Betrag < 0.000001) {
-		cout << "Es wird versucht einen Vektor zu normieren, "
-			 << "dessen Betrag <0.000001 ist. Dies wird nicht gemacht\n";
+		std::cerr << "Es wird versucht einen Vektor zu normieren, "
+			 << "dessen Betrag <0.000001 ist. Dies wird nicht gemacht"
+			 << std::endl;
 		return; // Nullvektor abbbruch
 	}
 	for (int i = 0; i < this->m_Elementanzahl; i++) {

@@ -43,6 +43,8 @@ Gitterpunkt &Gitterpunkt::operator =(const Gitterpunkt &rhs)
 	this->m_vorderer_Durchstosspunkt = rhs.m_vorderer_Durchstosspunkt;
 	this->m_hinterer_Durchstosspunkt = rhs.m_hinterer_Durchstosspunkt;
 
+	// longitude
+	this->longitude = rhs.longitude;
 
 	//this->m_SZA=rhs.m_SZA; // TODO Winkel in Raytracing...hier später löschen
 	return *this;

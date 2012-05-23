@@ -9,12 +9,7 @@
 
 #include <vector>
 #include <string>
-#include "Speziesfenster.h"
 #include "Ausgewertete_Messung_Limb.h"
-#include "Konfiguration.h"
-
-
-using namespace std;
 
 class Messung_Limb
 {
@@ -25,24 +20,32 @@ public:
 	// Assignmentoperator Overload
 	Messung_Limb &operator =(const Messung_Limb &rhs);
 	//Methoden
-	int Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
-			string Arbeitsverzeichnis, string mache_Fit_Plots);
-	int Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst, int Index,
-			string Arbeitsverzeichnis, string mache_Fit_Plots,
+	int Zeilendichte_Bestimmen(class Speziesfenster &Spezfenst, int Index,
+			std::string Arbeitsverzeichnis, std::string mache_Fit_Plots);
+	int Saeulendichte_Bestimmen_MgI285nm(class Speziesfenster &Spezfenst,
+			int Index,
+			std::string Arbeitsverzeichnis, std::string mache_Fit_Plots,
 			double *mean_10_20);
-	int Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst, int Index,
-			string Arbeitsverzeichnis, string mache_Fit_Plots,
+	int Plots_der_Spektren_erzeugen(class Speziesfenster &Spezfenst, int Index,
+			std::string Arbeitsverzeichnis, std::string mache_Fit_Plots,
 			double *mean_10_20);
+	int slant_column_NO(class NO_emiss &NO, std::string mache_Fit_Plots,
+			class Sonnenspektrum &sol_spec, int index,
+			class Speziesfenster &Spezfenst, std::string Arbeitsverzeichnis,
+			bool debug = true);
+	double fit_NO_spec(class NO_emiss &NO, std::vector<double> &x,
+			std::vector<double> &y, double &rms_err);
 	int moving_average(int window_size);
 	int savitzky_golay(int window_size);
-	int Intensitaeten_normieren(vector<double> &Sonnen_Intensitaet);
+	double msise_temperature();
+	int Intensitaeten_normieren(std::vector<double> &Sonnen_Intensitaet);
 	//int        Intensitaeten_normieren(Sonnenspektrum Solspec, Fenster);
 	// hier müsste überlegt werden, wie man mehrfachkorrekturen umgeht
-	int Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfenst,
-			int Index);
+	int Intensitaeten_durch_piF_Gamma_berechnen(class Speziesfenster Spezfenst,
+			double wl_gamma);
 	// In der Formel ist piF in W/(m^2*Wellenlänge) verlangt..
 	// also muss noch mit der Kanalbreite multipliziert werden
-	int Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Speziesfenster Spezfenst, int Index);
+	int Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(class Speziesfenster Spezfenst);
 	int Deklinationswinkel_bestimmen();
 	int Sonnen_Longitude_bestimmen();
 
@@ -53,7 +56,7 @@ public:
 	int sb_Get_Index(double WL);
 	int sb_Get_closest_index(double WL);
 	void Fit_Linear(double *x, double *y, double &a0, double &a1,
-			int Anfangsindex, int Endindex);
+			double &rms_err, int Anfangsindex, int Endindex);
 	void Fit_Polynom_4ten_Grades(double *x, double *y, double x0,
 			double *Par_a0, double *Par_a1, double *Par_a2, double *Par_a3,
 			double *Par_a4, int Anfangsindex, int Endindex);
@@ -62,24 +65,27 @@ public:
 	double Evaluate_Error_primitive(double *x, double *y, double a0, double a1,
 			double A, double FWHM, double x0, int Anfangsindex, int Endindex);
 	// vectorised prototypes
-	void Fit_Linear(vector<double> &x, vector<double> &y, double &a0, double &a1,
+	void Fit_Linear(std::vector<double> &x, std::vector<double> &y,
+			double &a0, double &a1, double &rms_err,
 			int Anfangsindex, int Endindex);
-	void Fit_Peak_hyperbolic(vector<double> &x, vector<double> &y, double x0,
+	void Fit_Peak_hyperbolic(std::vector<double> &x, std::vector<double> &y, double x0,
 			double FWHM, double &A, int Anfangsindex, int Endindex);
-	double Evaluate_Error_primitive(vector<double> &x, vector<double> &y,
+	double Evaluate_Error_primitive(std::vector<double> &x, std::vector<double> &y,
 			double a0, double a1, double A, double FWHM, double x0,
 			int Anfangsindex, int Endindex);
 	//Wartungsfunktionen
 	//können und sollten sogar später auskommentiert werden,
 	//und dienen im wesentlichen zum debuggen
 	//zum Testen und debuggen und überprüfen, ob der fit halbwegs passt
-	int Ausgabe_in_Datei(string Dateiname);
+	int Ausgabe_in_Datei(std::string Dateiname);
 
 	//Membervariablen
 
 	// Ergebnisse
 	double m_Zeilendichte;
 	double m_Fehler_Zeilendichten;
+	// total number density at measurement point
+	double total_number_density;
 	// Zwischenergebnisse
 	double m_Deklinationswinkel;  // aus Datum berechenbar
 	double m_Sonnen_Longitude;
@@ -88,13 +94,14 @@ public:
 	//double  m_SZA;          //abhängig von Deklination Uhrzeit und Lat und Lon
 							  //.....dasselbe wie beim streuwinkel
 	//Dateiname
-	string m_Dateiname_L1C;
+	std::string m_Dateiname_L1C;
 	//Datum
 	int m_Jahr;
 	int m_Monat;
 	int m_Tag;
 	int m_Stunde;
 	int m_Minute;
+	int m_Sekunde;
 	// Geolocation
 	double m_Latitude_Sat;   // hierfür muss das Programm noch geändert werden
 	double m_Longitude_Sat;
@@ -107,16 +114,18 @@ public:
 	double m_orbit_phase;
 	double m_TP_SZA;      // alt
 	//double  m_SAA_TP;     // alt
+	double center_lat, center_lon;
 	// Datenfelder
 	int m_Number_of_Wavelength;
-	vector<double> m_Wellenlaengen;
-	vector<double> m_Sonne;
-	vector<double> m_Intensitaeten;  // genauer genommen photonen/(s cm^2nm)
-	vector<double> m_Intensitaeten_relativer_Fehler; // 1=100% vom Messwert
-	vector<double> m_Intensitaeten_durch_piF;
-	vector<double> m_Intensitaeten_durch_piF_Gamma; // ein bisschen mehr Speicher...optimierbar
-	vector<double> m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand;
+	std::vector<double> m_Wellenlaengen;
+	std::vector<double> m_Sonne;
+	std::vector<double> m_Intensitaeten;  // genauer genommen photonen/(s cm^2nm)
+	std::vector<double> m_Intensitaeten_relativer_Fehler; // 1=100% vom Messwert
+	std::vector<double> m_Intensitaeten_durch_piF;
+	std::vector<double> m_Intensitaeten_durch_piF_Gamma; // ein bisschen mehr Speicher...optimierbar
+	std::vector<double> m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand;
 };
 
 double slit_func(double fwhm, double x0, double x);
+double slit_func_gauss(double fwhm, double x0, double x);
 #endif /* MESSUNG_LIMB_HH_ */

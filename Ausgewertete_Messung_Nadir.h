@@ -12,9 +12,6 @@
 #include <cstdio>
 #include <iostream>
 
-
-using namespace std;
-
 class Ausgewertete_Messung_Nadir
 {
 public:
@@ -45,25 +42,25 @@ public:
 inline void Ausgewertete_Messung_Nadir::Ausgabe_auf_Bildschirm()
 {
 	// Ergebnisse
-	cout << "m_Zeilendichte           : " << "\t" << m_Zeilendichte << "\n";
-	cout << "m_Fehler_Zeilendichten   : " << "\t" << m_Fehler_Zeilendichten << "\n";
+	std::cout << "m_Zeilendichte           : " << "\t" << m_Zeilendichte << std::endl;
+	std::cout << "m_Fehler_Zeilendichten   : " << "\t" << m_Fehler_Zeilendichten << std::endl;
 	// Zwischenergebnisse
-	cout << "m_Deklination            : " << "\t" << m_Deklination << "\n";
-	cout << "m_Sonnen_Longitude       : " << "\t" << m_Sonnen_Longitude << "\n";
+	std::cout << "m_Deklination            : " << "\t" << m_Deklination << std::endl;
+	std::cout << "m_Sonnen_Longitude       : " << "\t" << m_Sonnen_Longitude << std::endl;
 	// Zusatzinfo
-	cout << "Wellenlänge des Übergangs: " << "\t" << m_Wellenlaenge << "\n";
+	std::cout << "Wellenlänge des Übergangs: " << "\t" << m_Wellenlaenge << std::endl;
 	// Datum
-	cout << "m_Jahr: " << "\t" << m_Jahr << "\n";
-	cout << "m_Monat: " << "\t" << m_Monat << "\n";
-	cout << "m_Tag: " << "\t" << m_Tag << "\n";
-	cout << "m_Stunde: " << "\t" << m_Stunde << "\n";
-	cout << "m_Minute: " << "\t" << m_Minute << "\n";
+	std::cout << "m_Jahr: " << "\t" << m_Jahr << std::endl;
+	std::cout << "m_Monat: " << "\t" << m_Monat << std::endl;
+	std::cout << "m_Tag: " << "\t" << m_Tag << std::endl;
+	std::cout << "m_Stunde: " << "\t" << m_Stunde << std::endl;
+	std::cout << "m_Minute: " << "\t" << m_Minute << std::endl;
 	// Geolokationen
-	cout << "m_Latitude_Sat: " << "\t" << m_Latitude_Sat << "\n";
-	cout << "m_Longitude_Sat: " << "\t" << m_Longitude_Sat << "\n";
-	cout << "m_Hoehe_Sat: " << "\t" << m_Hoehe_Sat << "\n";
-	cout << "m_Latitude_Ground: " << "\t" << m_Latitude_Ground << "\n";
-	cout << "m_Longitude_Ground: " << "\t" << m_Longitude_Ground << "\n";
-	cout << "m_Erdradius: " << "\t" << m_Erdradius << "\n";
+	std::cout << "m_Latitude_Sat: " << "\t" << m_Latitude_Sat << std::endl;
+	std::cout << "m_Longitude_Sat: " << "\t" << m_Longitude_Sat << std::endl;
+	std::cout << "m_Hoehe_Sat: " << "\t" << m_Hoehe_Sat << std::endl;
+	std::cout << "m_Latitude_Ground: " << "\t" << m_Latitude_Ground << std::endl;
+	std::cout << "m_Longitude_Ground: " << "\t" << m_Longitude_Ground << std::endl;
+	std::cout << "m_Erdradius: " << "\t" << m_Erdradius << std::endl;
 }
 #endif /* AUSGEWERTETE_MESSUNG_NADIR_HH_ */

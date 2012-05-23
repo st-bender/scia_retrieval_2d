@@ -10,8 +10,21 @@
 #include<fstream>
 #include<iostream>
 #include <cstdlib>
+#include <sstream>
+#include <algorithm>
+#include <iterator>
 
 using namespace std;
+
+// helper function to convert a pair of doubles into a std::string,
+// separated by a tab; used below for the ostream_iterator in std::transform.
+std::string pair_to_string(double x, double y)
+{
+	std::ostringstream str;
+	str << x << "\t" << y;
+	return str.str();
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Funktionsstart Plot_2xy
 ////////////////////////////////////////////////////////////////////////////////
@@ -19,67 +32,47 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 			 string title, string xlabel, string ylabel,
 			 vector<double> &x1, vector<double> &y1,
 			 vector<double> &x2, vector<double> &y2,
-			 int Startindex, int Endindex, double Mittelwert, double Fehler)
+			 int Startindex, int Endindex, double Mittelwert, double Fehler,
+			 bool keep)
 {
-	string Rohdaten_Name = Dateiname + ".raw.dat";
+	string Rohdaten_Name_a = Dateiname + "_a.raw.dat";
+	string Rohdaten_Name_b = Dateiname + "_b.raw.dat";
 	string Temp_Skript_Name = Dateiname + ".plt";
 
-	ofstream outfile1, outfile2;
-	outfile1.open(Rohdaten_Name.c_str());
+	ofstream outfile1a, outfile1b, outfile2;
+	outfile1a.open(Rohdaten_Name_a.c_str());
+	outfile1b.open(Rohdaten_Name_b.c_str());
 	////////////////////////////////////////////////////////////////////////////
 	// Gnuplotscript Rohdatenfile schreiben
 	////////////////////////////////////////////////////////////////////////////
-	for (int i = Startindex; i < Endindex; i++) {
-		outfile1 << x1[i] << "\t" << y1[i] << "\t" << x2[i] << "\t"
-				 << y2[i] << "\n";
-	}
-	//letzte Zeile
-	outfile1 << x1[Endindex] << "\t" << y1[Endindex] << "\t" << x2[Endindex]
-			 << "\t" << y2[Endindex];
+	std::transform(x1.begin(), x1.end(), y1.begin(),
+			std::ostream_iterator<std::string>(outfile1a, "\n"),
+			pair_to_string);
+	std::transform(x2.begin(), x2.end(), y2.begin(),
+			std::ostream_iterator<std::string>(outfile1b, "\n"),
+			pair_to_string);
 	////////////////////////////////////////////////////////////////////////////
 	// Gnuplotscript Rohdatenfile schreiben ENDE
 	////////////////////////////////////////////////////////////////////////////
-	outfile1.close();
+	outfile1a.close();
+	outfile1b.close();
 	// x und y Grenzen des Datensatzes finden //////////////////////////////
-	double x_min, x_max, y_min, y_max;
-	x_min = x1[Startindex];
-	x_max = x1[Startindex];
-	y_min = y1[Startindex];
-	y_max = y1[Startindex];
-	double x_min_test, x_max_test, y_min_test, y_max_test;
-	for (int i = Startindex; i <= Endindex; i++) {
-		if (x1[i] < x2[i]) {
-			x_min_test = x1[i];
-			x_max_test = x2[i];
-		} else {
-			x_min_test = x2[i];
-			x_max_test = x1[i];
-		}
-		if (y1[i] < y2[i]) {
-			y_min_test = y1[i];
-			y_max_test = y2[i];
-		} else {
-			y_min_test = y2[i];
-			y_max_test = y1[i];
-		}
-		if (x_min_test < x_min) { //XMIN
-			x_min = x_min_test;
-		}
-		if (x_max_test > x_max) { //XMAX
-			x_max = x_max_test;
-		}
-		if (y_min_test < y_min) { //YMIN
-			y_min = y_min_test;
-		}
-		if (y_max_test > y_max) { //YMAX
-			y_max = y_max_test;
-		}
-	}
-	char buf[256];
-	sprintf(buf, " Saeulendichte (ohne Phase): %1.3E cm^{-2}", Mittelwert);
-	string text_messwert = buf;
-	sprintf(buf, " Residuum: %1.3E cm^{-2}", Fehler);
-	string text_Fehler = buf;
+	double x_min = std::min(*std::min_element(x1.begin(), x1.end()),
+			*std::min_element(x2.begin(), x2.end()));
+	double x_max = std::max(*std::max_element(x1.begin(), x1.end()),
+			*std::max_element(x2.begin(), x2.end()));
+	double y_min = std::min(*std::min_element(y1.begin(), y1.end()),
+			*std::min_element(y2.begin(), y2.end()));
+	double y_max = std::max(*std::max_element(y1.begin(), y1.end()),
+			*std::max_element(y2.begin(), y2.end()));
+
+	stringstream buf;
+	buf.precision(4);
+	buf << "scd: " << Mittelwert << " cm^{-2}";
+	string text_messwert(buf.str());
+	buf.str(string()); // clear the stream
+	buf << "error: " << Fehler << " cm^{-2}";
+	string text_Fehler(buf.str());
 	////////////////////////////////////////////////////////////////////////////
 	// Gnuplotscript schreiben
 	////////////////////////////////////////////////////////////////////////////
@@ -88,33 +81,33 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	//was ungefährliches setzen
 	outfile2 << "#!/usr/bin/env gnuplot" << endl;
 	outfile2 << "set terminal postscript landscape enhanced color "
-			 << "\"FreeSans\" 14\n";
+			 << "font \"Helvetica\" 24 solid linewidth 2\n";
+	outfile2 << "set size ratio 0.5\n";
+	if (y_max - y_min < 10000. && y_max - y_min > 1.)
+		outfile2 << "set format y \"%.1f\"\n";
+	else
+		outfile2 << "set format y \"%.1t{/Symbol \\327}10^{%T}\"\n";
 	outfile2 << "set style line 1 lc 1 lt 1 lw 3 pt 7 ps 4\n";
-	outfile2 << "set style line 2 lc 2 lt 2 lw 3 pt 5 ps 4\n";
+	outfile2 << "set style line 2 lc 3 lt 2 lw 3 pt 5 ps 4\n";
 	outfile2 << "set output '" << Dateiname.c_str() << "'\n";
 	outfile2 << "set title \'" << title.c_str() << "\'\n";
 	outfile2 << "set xlabel \'" << xlabel.c_str() << "\'\n";
 	outfile2 << "set ylabel \'" << ylabel.c_str() << "\'\n";
+	outfile2 << "set xtics 1\n";
 	outfile2 << "set nokey \n"; //keine Legende
-	outfile2 << "set mxtics 10\n";
 	outfile2 << "set label \"" << text_messwert.c_str() << "\" at "
-			 << x_min + 0.6 * (x_max - x_min) << ","
-			 << y_min + 0.95 * (y_max - y_min) << "\n";
+			 << x_min + 0.4 * (x_max - x_min) << ","
+			 << y_min + 0.98 * (y_max - y_min) << "\n";
 	outfile2 << "set label \"" << text_Fehler.c_str() << "\" at "
-			 << x_min + 0.6 * (x_max - x_min) << ","
+			 << x_min + 0.4 * (x_max - x_min) << ","
 			 << y_min + 0.9 * (y_max - y_min) << "\n";
 	// nun beide Datenreihen mit  Linien Plotten
-	outfile2 << "plot '" << Rohdaten_Name.c_str()
-			 << "' using 1:2 with lines ls 1, '" << Rohdaten_Name.c_str()
-			 << "' using 3:4 with lines ls 2\n";
+	outfile2 << "plot '"
+			 << Rohdaten_Name_a.c_str()
+			 << "' using 1:2 with lines ls 1, '"
+			 << Rohdaten_Name_b.c_str()
+			 << "' using 1:2 with lines ls 2\n";
 
-//    outfile2<<"set terminal postscript landscape enhanced color "
-//            <<"\"NimbusSans-Regu\" 28\n";
-	//outfile2<<"set terminal epslatex \"NimbusSans-Regu\" 28\n";
-	//-> funzt nicht, wies soll
-//   outfile2<<"set output '"<<Dateiname.c_str()<<"'\n";
-//    outfile2<<"replot\n";
-//    outfile2<<"set terminal x11\n";
 	////////////////////////////////////////////////////////////////////////////
 	// Gnuplotscript schreiben ENDE
 	////////////////////////////////////////////////////////////////////////////
@@ -130,12 +123,14 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	////////////////////////////////////////////////////////////////////////////
 	// hmm Wartet der, bis Gnuplot fertig ist?---sollte er, in system steckt ja
 	// waitpid drin
-	befehl = "rm " + Temp_Skript_Name;
-	system(befehl.c_str());
-	befehl = "rm " + Rohdaten_Name;
-	system(befehl.c_str());
+	// remove the plot data file only if requested (the default)
+	if (!keep) {
+		remove(Temp_Skript_Name.c_str());
+		remove(Rohdaten_Name_a.c_str());
+		remove(Rohdaten_Name_b.c_str());
+	}
 	return 0;
-};
+}
 ////////////////////////////////////////////////////////////////////////////////
 // ENDE Plot_2xy
 ////////////////////////////////////////////////////////////////////////////////
@@ -296,14 +291,12 @@ int Plot_Slantcoloumns_polyfit_MgI(string Arbeitsverzeichnis, string Dateiname,
 	////////////////////////////////////////////////////////////////////////////
 	string befehl;
 	befehl = "gnuplot " + Temp_Skript_Name;
-	//system(befehl.c_str());
+	system(befehl.c_str());
 	////////////////////////////////////////////////////////////////////////////
 	// Gnuplotscript löschen
 	////////////////////////////////////////////////////////////////////////////
-	befehl = "rm " + Temp_Skript_Name;
-//    system(befehl.c_str());
-	befehl = "rm " + Rohdaten_Name;
-//    system(befehl.c_str());
+	remove(Temp_Skript_Name.c_str());
+	remove(Rohdaten_Name.c_str());
 	return 0;
 }
 ////////////////////////////////////////////////////////////////////////////////
@@ -405,14 +398,12 @@ int Plot_Spektren_und_Quotient(string Arbeitsverzeichnis, string Dateiname,
 	////////////////////////////////////////////////////////////////////////////
 	string befehl;
 	befehl = "gnuplot " + Temp_Skript_Name;
-	//system(befehl.c_str());
+	system(befehl.c_str());
 	////////////////////////////////////////////////////////////////////////////
 	// Gnuplotscript löschen
 	////////////////////////////////////////////////////////////////////////////
-	befehl = "rm " + Temp_Skript_Name;
-	//system(befehl.c_str());
-	befehl = "rm " + Rohdaten_Name;
-	//system(befehl.c_str());
+	remove(Temp_Skript_Name.c_str());
+	remove(Rohdaten_Name.c_str());
 	return 0;
 
 }
@@ -507,14 +498,12 @@ int Plot_Quotient_mit_Fehler(string Arbeitsverzeichnis, string Dateiname,
 	////////////////////////////////////////////////////////////////////////////
 	string befehl;
 	befehl = "gnuplot " + Temp_Skript_Name;
-	//system(befehl.c_str());
+	system(befehl.c_str());
 	////////////////////////////////////////////////////////////////////////////
 	// Gnuplotscript löschen
 	////////////////////////////////////////////////////////////////////////////
-	befehl = "rm " + Temp_Skript_Name;
-//    system(befehl.c_str());
-	befehl = "rm " + Rohdaten_Name;
-//    system(befehl.c_str());
+	remove(Temp_Skript_Name.c_str());
+	remove(Rohdaten_Name.c_str());
 	return 0;
 
 }
@@ -536,27 +525,27 @@ int Plots_Zusammenfassen(string Pfad_multips2pdf, string Pfad_multips2ps,
 	// Kommandozeilenparameter übergeben werden...also probieren wir mal 512=2^8
 	// Da noch noch die exe und der aufruf als parameter da sind muss weniger
 	// als 2^8 genommen werden
-	int M = 200;
-	vector<string> Liste_der_grossen_ps;
+	unsigned int M = 200;
+	vector<string> Liste_der_grossen_pdf;
 	vector<string>::iterator sit;
 	string Befehlszeile;
-	int Max_Zahl_grosse_ps = Liste_der_ps_Dateinamen.size() / M;
+	unsigned int Max_Zahl_grosse_pdf = Liste_der_ps_Dateinamen.size() / M;
 	//Achtung integerdivision ist absicht
 	if ((Liste_der_ps_Dateinamen.size() % M) != 0) {
-		Max_Zahl_grosse_ps++;
+		Max_Zahl_grosse_pdf++;
 	}
-	// Zuerst viele ps in wenigen grossen ps zusammenfassen
+	// Zuerst viele ps in wenigen grossen pdf zusammenfassen
 	cout << "Liste_der_ps_Dateinamen.size(): "
 		 << Liste_der_ps_Dateinamen.size() << "\n";
-	cout << "Max_Zahl_grosse_ps: " << Max_Zahl_grosse_ps << "\n";
-	cout << "Erzeuge_große_PS\n";
-	for (int k = 0; k < Max_Zahl_grosse_ps; k++) {
+	cout << "Max_Zahl_grosse_pdf: " << Max_Zahl_grosse_pdf << "\n";
+	cout << "Erzeuge_große_PDF\n";
+	for (unsigned int k = 0; k < Max_Zahl_grosse_pdf; k++) {
 		cout << k << "te große ps Datei\n";
-		char buf[256];
-		sprintf(buf, "%s%i.ps", Name_pdf_Datei.c_str(), k);
-		string Name_grosse_ps = buf;
-		Liste_der_grossen_ps.push_back(Name_grosse_ps);
-		Befehlszeile = Pfad_multips2ps + " " + Name_grosse_ps;
+		stringstream buf;
+		buf << Name_pdf_Datei << k << ".pdf";
+		string Name_grosse_pdf(buf.str());
+		Liste_der_grossen_pdf.push_back(Name_grosse_pdf);
+		Befehlszeile = Pfad_multips2pdf + " " + Name_grosse_pdf;
 		for (unsigned int i = 0;
 			  (i < M) && ((i + k * M) < Liste_der_ps_Dateinamen.size()); i++) {
 			//statt size mal potenzen von 2 Probieren
@@ -565,10 +554,10 @@ int Plots_Zusammenfassen(string Pfad_multips2pdf, string Pfad_multips2ps,
 		system(Befehlszeile.c_str());
 	}
 	cout << "Erzeuge große pdf\n";
-	// die großen ps zu einer pdf zusammenfassen
+	// die großen pdf zu einer pdf zusammenfassen
 	Befehlszeile = Pfad_multips2pdf + " " + Name_pdf_Datei;
-	for (sit = Liste_der_grossen_ps.begin();
-			sit != Liste_der_grossen_ps.end(); ++sit ) {
+	for (sit = Liste_der_grossen_pdf.begin();
+			sit != Liste_der_grossen_pdf.end(); ++sit ) {
 		Befehlszeile += " " + *sit;
 	}
 	//cout<<Liste_der_ps_Dateinamen.size()<<"\n";
@@ -577,13 +566,11 @@ int Plots_Zusammenfassen(string Pfad_multips2pdf, string Pfad_multips2ps,
 	cout << "lösche die ps\n";
 	for (sit = Liste_der_ps_Dateinamen.begin();
 			sit != Liste_der_ps_Dateinamen.end(); ++sit ) {
-		Befehlszeile = "rm " + *sit;
-		//system(Befehlszeile.c_str());
+		remove(sit->c_str());
 	}
-	for (sit = Liste_der_grossen_ps.begin();
-			sit != Liste_der_grossen_ps.end(); ++sit ) {
-		Befehlszeile = "rm " + *sit;
-		//system(Befehlszeile.c_str());
+	for (sit = Liste_der_grossen_pdf.begin();
+			sit != Liste_der_grossen_pdf.end(); ++sit ) {
+		remove(sit->c_str());
 	}
 	return 0;
 }

@@ -8,14 +8,8 @@
 #ifndef RETRIEVALGITTER_HH_
 #define RETRIEVALGITTER_HH_
 
-
-using namespace std;
-
-#include"Gitterpunkt.h"
-#include "Ausgewertete_Messung_Limb.h"
-#include "Konfiguration.h"
-
 #include <vector>
+#include "Gitterpunkt.h"
 
 class Retrievalgitter
 {
@@ -28,10 +22,10 @@ public:
 	//Destruktor
 	~Retrievalgitter();
 	//Methoden
-	void Retrievalgitter_erzeugen(vector<Ausgewertete_Messung_Limb>& AM_Limb,
-			double Epsilon, Konfiguration &Konf);
+	void Retrievalgitter_erzeugen(std::vector<class Ausgewertete_Messung_Limb> &AM_Limb,
+			double Epsilon, class Konfiguration &Konf);
 	void Alle_Durchstosspunkte_Null_setzen();
-	void In_Datei_Ausgeben(string Dateiname);
+	void In_Datei_Ausgeben(std::string Dateiname);
 
 // //TODO löschen nach Implementierung im Raytracing
 // // wird bei der Berechnung der AMF Matrix für Zwischenrechnungen benötigt
@@ -55,8 +49,8 @@ public:
 	Gitterpunkt *m_Gitter;
 };
 //Hilfsfunktionen
-int Get_Index_of_Maximum(vector<double> A);
-int Get_Index_of_Minimum(vector<double> A, int Startindex);
+int Get_Index_of_Maximum(std::vector<double> A);
+int Get_Index_of_Minimum(std::vector<double> A, int Startindex);
 
 
 #endif /* RETRIEVALGITTER_HH_ */

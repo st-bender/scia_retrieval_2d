@@ -8,6 +8,8 @@
 #include "Retrievalgitter.h"
 
 #include "Ausgewertete_Messung_Limb.h"
+#include "Konfiguration.h"
+#include "Glaetten.h"
 
 #include <vector>
 #include <cmath>
@@ -85,24 +87,29 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	//Zunächst Latitudes in einen Vektor schreiben, aber nur die, welche noch
 	//nicht vorgekommen sind Es wird davon ausgegangen, dass der Datensatz nach
 	//Zeit sortiert ist
-	vector<double> Lats_Messung;
+	vector<double> Lats_Messung, Lons_Messung;
 	vector<double>::iterator lat_it;
 	vector<Ausgewertete_Messung_Limb>::iterator aml_it;
 
+	std::cout << "# measurement geolocations begin" << std::endl;
 	for (aml_it = AM_Limb.begin(); aml_it != AM_Limb.end(); aml_it++) {
 		bool doppelt = false;
 
 		for (lat_it = Lats_Messung.begin(); lat_it != Lats_Messung.end(); lat_it++) {
-			if (abs((*aml_it).m_Latitude_TP - (*lat_it)) < Epsilon + Epsilon) {
+			if (abs(aml_it->center_lat - (*lat_it)) < Epsilon) {
 				doppelt = true;
 				break;
 			}
 		}
 
 		if (!(doppelt)) {
-			Lats_Messung.push_back((*aml_it).m_Latitude_TP);
+			Lats_Messung.push_back(aml_it->center_lat);
+			Lons_Messung.push_back(aml_it->center_lon);
+			std::cout << Lons_Messung.back() << "\t"
+				<< Lats_Messung.back() << std::endl;
 		}
 	}
+	std::cout << "# measurement geolocations end" << std::endl;
 	// Lats_Messung enthält nun alle Lats nur einmal und in Zeitgeordneter
 	// Reihenfolge Der Satellit auf dem Stück zwischen Maximaler und Minimaler
 	// Höhe in Nord nach Süd Richtung
@@ -120,39 +127,27 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	double MaxLat = Lats_Messung[Max_Index];
 	double MinLat = Lats_Messung[Min_Index];
 	int Breitenzahl = Min_Index - Max_Index + 1;
-	//  cerr<<"Min_Index: "<<Min_Index<<"\n";
-	//  cerr<<"MinLat: "<<MinLat<<"\n";
-	//  cerr<<"Max_Index: "<<Max_Index<<"\n";
-	//  cerr<<"MaxLat: "<<MaxLat<<"\n";
-	//  for(int i=0;i<Lats_Messung.size();i++)
-	//  {
-	//      cerr<<Lats_Messung[i]<<"\n";
-	//  }
-
-	//Wir brauchen noch die Höhen, die wir aber kennen
-	// und statisch deklarieren
-	//double mittlere_Hoehe[12] =
-	// {71.0, 74.0, 77.0, 80.0, 83.0, 86.0, 89.0, 92.0, 106.75, 135.0, 200.0, 375.0};
-	//double untere_Hoehe[12] =
-	// {69.5, 72.5, 75.5, 78.5, 81.5, 84.5, 87.5, 90.5,  93.5, 120.0, 150.0, 250.0};
-	//double obere_Hoehe[12] =
-	// {72.5, 75.5, 78.5, 81.5, 84.5, 87.5, 90.5, 93.5, 120.0, 150.0, 250.0, 500.0};
-	//int Anzahl_Hoehen=12;
-	//double mittlere_Hoehe[10] =
-	// {71.0, 74.0, 77.0, 80.0, 83.0, 86.0, 89.0, 92.0, 106.75, 135.0};
-	//double untere_Hoehe[10] =
-	// {69.5, 72.5, 75.5, 78.5, 81.5, 84.5, 87.5, 90.5,  93.5, 120.0};
-	//double obere_Hoehe[10] =
-	// {72.5, 75.5, 78.5, 81.5, 84.5, 87.5, 90.5, 93.5,  120.0, 150.0};
-	//int Anzahl_Hoehen=10;
-
+	/*
+	 * finds the longitude of the orbit at the equator.
+	 * linear interpolation works because the angles are small.
+	 */
+	// reverse the vectors for the interpolation to work
+	std::reverse(Lats_Messung.begin(), Lats_Messung.end());
+	std::reverse(Lons_Messung.begin(), Lons_Messung.end());
+	double lon0 = interpolate(Lats_Messung, Lons_Messung, 0.);
+	// emprical longitude factor
+	const double phi_fac = 11.91;
+	// deg -> rad conversion factor
+	const double deg = M_PI / 180.;
 
 	/////////////////////////////
 	// selbst gesetzt.....
-	MaxLat = 84;
-	MinLat = -84.0;
+	MaxLat = 88.75;
+	MinLat = -88.75;
 	//MinLat=0.0;
-	Breitenzahl = 25; //20
+	std::cout << "# grid: maxlat = " << MaxLat << ", minlat = " << MinLat << std::endl;
+	std::cout << "# lon0 = " << lon0 << std::endl;
+	Breitenzahl = 72; //20
 	//Breitenzahl=10;
 	const double Gitterkonstante = (MaxLat - MinLat) / (double)(Breitenzahl - 1);
 	// Hoeheneinteilung
@@ -163,7 +158,7 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	//  unbekannte Spezies bei niedrigen Hoehen......teste bis 110
 	double h_start = Konf.m_MinAlt;
 	double h_end = Konf.m_MaxAlt;
-	double dh = 1., dhh = 0.5 * dh;
+	double dh = 2., dhh = 0.5 * dh;
 	int Anzahl_Hoehen = int((h_end - h_start) / dh) + 1;   // 82  //42  //132
 	vector<double> untere_Hoehe(Anzahl_Hoehen);
 	vector<double> mittlere_Hoehe(Anzahl_Hoehen);
@@ -181,13 +176,10 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 		delete[] m_Gitter;       //Evtl vorhandenes Gitter löschen
 	}
 	this->m_Anzahl_Hoehen = Anzahl_Hoehen;
-	//cerr<<"m_Anzahl_Hoehen: "<<m_Anzahl_Hoehen<<"\n";
 	this->m_Anzahl_Breiten = Breitenzahl;
-	cerr << "m_Anzahl_Breiten: " << m_Anzahl_Breiten << "\n";
-	cerr << "m_Anzahl_Hoehen: " << m_Anzahl_Hoehen << "\n";
-	//cerr<<"m_Anzahl_Breiten: "<<m_Anzahl_Breiten<<"\n";
+	cout << "m_Anzahl_Breiten: " << m_Anzahl_Breiten << "\n";
+	cout << "m_Anzahl_Hoehen: " << m_Anzahl_Hoehen << "\n";
 	this->m_Anzahl_Punkte = m_Anzahl_Breiten * m_Anzahl_Hoehen;
-	//cerr<<"m_Anzahl_Punkte: "<<m_Anzahl_Punkte<<"\n";
 	m_Gitter = new Gitterpunkt[m_Anzahl_Punkte];
 	Gitterpunkt GP;
 	//Gitterpunkte des Gitters erzeugen sortiert nach Höhen und Breiten
@@ -256,6 +248,8 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 			GP.m_Breite = MaxLat - i * Gitterkonstante;
 			GP.m_Max_Breite = GP.m_Breite + 0.5 * Gitterkonstante;
 			GP.m_Min_Breite = GP.m_Breite - 0.5 * Gitterkonstante;
+			// calculate the grid point longitude
+			GP.longitude = std::tan(GP.m_Breite * deg) * phi_fac + lon0;
 			//SZA initialisieren
 			// Die beiden gibts nicht mehr
 			// TODO entgültig löschen
@@ -513,9 +507,9 @@ void Retrievalgitter::In_Datei_Ausgeben(string Dateiname)
     double mittlere_Hoehe[11] =
       { 74, 77, 80, 83, 86, 89, 92, 106.75, 135, 200, 375};
     double untere_Hoehe[11] =
-      {72.5, 75.5, 78.5, 81.5, 84.5, 87.5, 90.5, 93.5, 120, 150, 250};
+      { 72.5, 75.5, 78.5, 81.5, 84.5, 87.5, 90.5, 93.5, 120, 150, 250 };
     double obere_Hoehe[11] =
-      {75.5, 78.5, 81.5, 84.5, 87.5, 90.5, 93.5, 120, 150, 250, 500};
+      { 75.5, 78.5, 81.5, 84.5, 87.5, 90.5, 93.5, 120, 150, 250, 500 };
     int Anzahl_Hoehen=11;
     //Gitterpunkte des Gitters erzeugen sortiert nach Höhen und Breiten
     for(int i=0;i<Breitenzahl;i++) //Breiten von Nord nach Süd

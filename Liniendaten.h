@@ -10,8 +10,6 @@
 
 #include <string>
 
-using namespace std;
-
 class Liniendaten
 {
 	//Daten für eine Linie //Da nur wenig Daten-> nicht zeitkritisch
@@ -19,7 +17,7 @@ public:
 	//Konstruktor
 	Liniendaten();
 	//Methoden
-	void Einlesen(string Dateiname, double Wellenlaenge);  // aus Datei einlesen
+	void Einlesen(std::string Dateiname, double Wellenlaenge);  // aus Datei einlesen
 	void Emissivitaet_ermitteln(); // aus Rohdaten Gamma berechnen
 								   // !! ACHTUNG HIER GIBTS DISKUSSIONSBEDARF!!
 								   // siehe Code

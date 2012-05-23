@@ -25,8 +25,6 @@
 #include <cstdio>
 #include <iostream>
 
-using namespace std;
-
 class Ausgewertete_Messung_Limb
 {
 public:
@@ -35,6 +33,8 @@ public:
 	// Ergebnisse
 	double m_Zeilendichte;
 	double m_Fehler_Zeilendichten;
+	// total number density at measurement point
+	double total_number_density;
 	// Zwischenergebnisse
 	double m_Deklination;
 	double m_Sonnen_Longitude;
@@ -46,6 +46,7 @@ public:
 	int m_Tag;        //Uhrzeit ist wichtig für Längengrad der Sonne
 	int m_Stunde;
 	int m_Minute;
+	int m_Sekunde;
 	// Geolocation
 	double m_Latitude_Sat;
 	double m_Longitude_Sat;
@@ -54,28 +55,36 @@ public:
 	double m_Longitude_TP;
 	double m_Hoehe_TP;
 	double m_Erdradius;
+	// phase of orbit (0...1)
+	double m_orbit_phase;
+	double center_lat, center_lon;
 };
 
 // inline Implementierungen
 inline void Ausgewertete_Messung_Limb::Ausgabe_auf_Bildschirm()
 {
-	cout << "m_Zeilendichte           : " << "\t" << m_Zeilendichte << "\n";
-	cout << "m_Fehler_Zeilendichten   : " << "\t" << m_Fehler_Zeilendichten << "\n";
-	cout << "m_Deklination            : " << "\t" << m_Deklination << "\n";
-	cout << "m_Sonnen_Longitude       : " << "\t" << m_Sonnen_Longitude << "\n";
-	cout << "Wellenlänge des Übergangs: " << "\t" << m_Wellenlaenge << "\n";
-	cout << "Jahr                     : " << "\t" << m_Jahr << "\n";
-	cout << "Monat                    : " << "\t" << m_Monat << "\n";
-	cout << "Tag                      : " << "\t" << m_Tag << "\n";
-	cout << "Stunde                   : " << "\t" << m_Stunde << "\n";
-	cout << "Minute                   : " << "\t" << m_Minute << "\n";
-	cout << "m_Latitude_Sat           : " << "\t" << m_Latitude_Sat << "\n";
-	cout << "m_Longitude_Sat          : " << "\t" << m_Longitude_Sat << "\n";
-	cout << "m_Hoehe_Sat              : " << "\t" << m_Hoehe_Sat << "\n";
-	cout << "m_Latitude_TP            : " << "\t" << m_Latitude_TP << "\n";
-	cout << "m_Longitude_TP           : " << "\t" << m_Longitude_TP << "\n";
-	cout << "m_Hoehe_TP               : " << "\t" << m_Hoehe_TP << "\n";
-	cout << "m_Erdradius              : " << "\t" << m_Erdradius << "\n";
+	std::cout << "m_Zeilendichte           : " << "\t" << m_Zeilendichte << std::endl;
+	std::cout << "m_Fehler_Zeilendichten   : " << "\t" << m_Fehler_Zeilendichten << std::endl;
+	std::cout << "total_number_density     : " << "\t" << total_number_density << std::endl;
+	std::cout << "m_Deklination            : " << "\t" << m_Deklination << std::endl;
+	std::cout << "m_Sonnen_Longitude       : " << "\t" << m_Sonnen_Longitude << std::endl;
+	std::cout << "Wellenlänge des Übergangs: " << "\t" << m_Wellenlaenge << std::endl;
+	std::cout << "Jahr                     : " << "\t" << m_Jahr << std::endl;
+	std::cout << "Monat                    : " << "\t" << m_Monat << std::endl;
+	std::cout << "Tag                      : " << "\t" << m_Tag << std::endl;
+	std::cout << "Stunde                   : " << "\t" << m_Stunde << std::endl;
+	std::cout << "Minute                   : " << "\t" << m_Minute << std::endl;
+	std::cout << "Sekunde                  : " << "\t" << m_Sekunde << std::endl;
+	std::cout << "m_Latitude_Sat           : " << "\t" << m_Latitude_Sat << std::endl;
+	std::cout << "m_Longitude_Sat          : " << "\t" << m_Longitude_Sat << std::endl;
+	std::cout << "m_Hoehe_Sat              : " << "\t" << m_Hoehe_Sat << std::endl;
+	std::cout << "m_Latitude_TP            : " << "\t" << m_Latitude_TP << std::endl;
+	std::cout << "m_Longitude_TP           : " << "\t" << m_Longitude_TP << std::endl;
+	std::cout << "m_Hoehe_TP               : " << "\t" << m_Hoehe_TP << std::endl;
+	std::cout << "m_Erdradius              : " << "\t" << m_Erdradius << std::endl;
+	std::cout << "m_orbit_phase            : " << "\t" << m_orbit_phase << std::endl;
+	std::cout << "center_lat               : " << "\t" << center_lat << std::endl;
+	std::cout << "center_lon               : " << "\t" << center_lon << std::endl;
 }
 
 

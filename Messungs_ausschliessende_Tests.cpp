@@ -11,6 +11,7 @@
 #include<vector>
 #include"MPL_Vektor.h"
 #include"Koordinatentransformation.h"
+#include "Konfiguration.h"
 #include <algorithm>
 #include <numeric>
 
@@ -96,6 +97,11 @@ bool test_auf_SAA_limb(Messung_Limb &space)
 			upper_bound(space.m_Wellenlaengen.begin(), space.m_Wellenlaengen.end(), wl_end));
 	int Ni = i1 - i0;
 
+	/* checks for the usability of the spectrum and sets
+	 * SAA to true (= unusable) if there are no points in
+	 * the desired wavelength range. */
+	if (Ni == 0) return true;
+
 	double I_max = *max_element(space.m_Intensitaeten.begin() + i0,
 			space.m_Intensitaeten.begin() + i1);
 	double I_sum = accumulate(space.m_Intensitaeten.begin() + i0,
@@ -112,7 +118,7 @@ bool test_auf_SAA_limb(Messung_Limb &space)
 
 	/* the threshold is a rule of thumb from one day (2010-02-18) */
 	/* TODO: replace by a more sophisticated/reliable approach */
-	if (I_max > 1.1e11) {
+	if (I_max > 8.8e10) {
 		cerr << "SAA or peak detected:" << endl;
 		cerr << space.m_Longitude_Sat << "\t" << space.m_Latitude_Sat << "\t";
 		cerr << I_max << "\t" << I_avg << "\t";
@@ -126,7 +132,7 @@ bool test_auf_SAA_limb(Messung_Limb &space)
 //////////////////////////////////////////////////////////////////////////
 // Funktionsstart Test_auf_NLC_Limb
 /////////////////////////////////////////////////////////////////////////
-int Test_auf_NLC_Limb(vector<Messung_Limb> &Rohdaten, bool &ist_NLC_Messung)
+bool Test_auf_NLC_Limb(vector<Messung_Limb> &Rohdaten, Konfiguration &Konf)
 {
 	//Die Intensitäten in einem Breiten Bereich zwischen etwa 1/4 des Spektrums
 	//und 3/4 des Spektrums werden für die 7 Tangentenhöhen gemittelt. Das
@@ -140,10 +146,11 @@ int Test_auf_NLC_Limb(vector<Messung_Limb> &Rohdaten, bool &ist_NLC_Messung)
 	//eine gute Idee, da dort das Signal extrem verrauscht und stark ist.
 	// 71 ist in 0;  91 ist in 6
 
+	if (Konf.m_NLC == 0) return false;
 	int Index1 = 242;
 	//Die Indizes könnte man auch ermitteln, aber die sind ja immer gleich
 	int Index2 = 727;
-	ist_NLC_Messung = false;
+	bool ist_NLC_Messung = false;
 	double mittleres_Signal[7];
 	for (int Hoehenlevel = 0; Hoehenlevel < 7; Hoehenlevel++) {
 		mittleres_Signal[Hoehenlevel] = 0;
@@ -157,7 +164,7 @@ int Test_auf_NLC_Limb(vector<Messung_Limb> &Rohdaten, bool &ist_NLC_Messung)
 			ist_NLC_Messung = true;
 		}
 	}
-	return 0;
+	return ist_NLC_Messung;
 }
 //////////////////////////////////////////////////////////////////////////
 // ENDE Test_auf_NLC_Limb
@@ -186,17 +193,17 @@ int Test_auf_korrekte_geolocations_Limb(vector<Messung_Limb> &Rohdaten,
 	//Fehlermeldung)
 	//Die meisten Messwerte liegen zwischen 0.01 und 0.02
 	const double pi = M_PI;
-	unsigned int i = 0; //i wie INDEX
-	while (i < Rohdaten.size()) {
+	vector<Messung_Limb>::iterator rd_it = Rohdaten.begin();
+	while (rd_it != Rohdaten.end()) {
 		//Ortsvektoren bestimmen
 		MPL_Vektor Ort_Sat(3), Ort_TP(3);
-		Umwandlung_Kugel_in_Karthesisch(Rohdaten[i].m_Erdradius + Rohdaten[i].m_Hoehe_Sat,
-										Rohdaten[i].m_Longitude_Sat,
-										Rohdaten[i].m_Latitude_Sat,
+		Umwandlung_Kugel_in_Karthesisch(rd_it->m_Erdradius + rd_it->m_Hoehe_Sat,
+										rd_it->m_Longitude_Sat,
+										rd_it->m_Latitude_Sat,
 										Ort_Sat(0), Ort_Sat(1), Ort_Sat(2));
-		Umwandlung_Kugel_in_Karthesisch(Rohdaten[i].m_Erdradius + Rohdaten[i].m_Hoehe_TP,
-										Rohdaten[i].m_Longitude_TP,
-										Rohdaten[i].m_Latitude_TP,
+		Umwandlung_Kugel_in_Karthesisch(rd_it->m_Erdradius + rd_it->m_Hoehe_TP,
+										rd_it->m_Longitude_TP,
+										rd_it->m_Latitude_TP,
 										Ort_TP(0), Ort_TP(1), Ort_TP(2));
 
 		//Verbindungsvektor
@@ -210,11 +217,37 @@ int Test_auf_korrekte_geolocations_Limb(vector<Messung_Limb> &Rohdaten,
 		double SIN_Winkel = Verbindung * TP_normiert;
 		double Winkel = 180.0 / pi * asin(SIN_Winkel);
 		//aussortieren und counter setzen
-		if (Winkel > 0.02) {
+		if (abs(Winkel) > 0.02) {
+			// Mehr Fehleroutput schreiben
+			cerr << "Fehler bei der Winkelberechnung: Gebe_Daten der Datei an:"
+				 << endl;
+			cerr << "Dateiname: " << rd_it->m_Dateiname_L1C << endl;
+			cerr << "Erdradius: " << rd_it->m_Erdradius << endl;
+			cerr << "Hoehe_Sat: " << rd_it->m_Hoehe_Sat << endl;
+			cerr << "Lon_Sat_Ground: " << rd_it->m_Longitude_Sat   << endl;
+			cerr << "Lat_Sat_Ground: " << rd_it->m_Latitude_Sat << endl;
+			cerr << "Hoehe_TP: " << rd_it->m_Hoehe_TP << endl;
+			cerr << "Lon_TP_Ground: " << rd_it->m_Longitude_TP << endl;
+			cerr << "Lat_TP_Ground: " << rd_it->m_Latitude_TP << endl;
+			cerr << "x_sat: " << Ort_Sat(0) << endl;
+			cerr << "y_sat: " << Ort_Sat(1) << endl;
+			cerr << "z_sat: " << Ort_Sat(2) << endl;
+			cerr << "x_TP: " << Ort_TP(0) << endl;
+			cerr << "y_TP: " << Ort_TP(1) << endl;
+			cerr << "z_TP: " << Ort_TP(2) << endl;
+			cerr << "x_TP-Sat-normiert: " << Verbindung(0) << endl;
+			cerr << "y_TP-Sat-normiert: " << Verbindung(1) << endl;
+			cerr << "z_TP-Sat-normiert: " << Verbindung(2) << endl;
+			cerr << "x_TP_normiert: " << TP_normiert(0) << endl;
+			cerr << "y_TP_normiert: " << TP_normiert(1) << endl;
+			cerr << "z_TP_normiert: " << TP_normiert(2) << endl;
+			cerr << "Sin_Winkelabweichung: " << SIN_Winkel << endl;
+			cerr << "Winkelabweichung_in_Grad: " << Winkel << endl;
+			// aussortieren und counter setzen
 			counter_Winkel_nicht_ok++;
-			Rohdaten.erase(Rohdaten.begin() + i);
+			rd_it = Rohdaten.erase(rd_it);
 		} else {
-			i++;
+			++rd_it;
 		}
 	} //ende while
 	return 0;

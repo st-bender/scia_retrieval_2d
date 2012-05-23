@@ -28,6 +28,8 @@ public:
 	double m_Max_Breite;
 	double m_Breite;
 	double m_Min_Breite;
+	// longitude
+	double longitude;
 	// Indizierung
 	int m_eigener_Index;
 	// Indizierung Nachbarpunkte

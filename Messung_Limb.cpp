@@ -5,16 +5,6 @@
  *      Author: martin
  *****************************************/
 
-
-//Macro SAVEDELETE
-#define SAVEDELETE(array)     \
-if(array!=0)                                 \
-{                                                \
-    delete[] array;                        \
-    array=0;                                 \
-}                                                \
- 
-
 #include "Messung_Limb.h"
 #include <cmath>
 #include <cstdlib>
@@ -23,13 +13,21 @@ if(array!=0)                                 \
 
 #include <fstream>  //für Ausgabe
 #include <iostream>//für Ausgabe
+#include <sstream>
 #include <cstdlib>  //für Ausgabe
 #include <cstdio>   //Filekram
+#include <iomanip>
+#include <sys/stat.h>
 #include "Ausdrucke.h"
 #include "Fit_Polynom.h"
 #include "Glaetten.h"
+#include "Speziesfenster.h"
+#include "NO_emiss.h"
+#include "Sonnenspektrum.h"
+#include "Dateinamensteile_Bestimmen.h"
 
 extern "C" {
+#include "nrlmsise-00.h"
 	void dgesv_(int *N, int *NRHS, double *A, int *LDA, int *IPIV, double *B, int *LDB, int *INFO);
 } //Lapackroutine zur Lösung eines linearen GLeichungssystems
 
@@ -41,6 +39,7 @@ Messung_Limb::Messung_Limb()
 	//initialisierung
 	m_Zeilendichte = 0;
 	m_Fehler_Zeilendichten = 0;
+	total_number_density = 0.;
 	m_Dateiname_L1C = "dummy";
 	m_Number_of_Wavelength = 0;
 	m_Jahr = 0;
@@ -48,6 +47,7 @@ Messung_Limb::Messung_Limb()
 	m_Tag = 0;
 	m_Stunde = 0;
 	m_Minute = 0;
+	m_Sekunde = 0;
 	m_Deklinationswinkel = 0;
 	m_Sonnen_Longitude = 0;
 	m_Latitude_TP = 0;
@@ -57,6 +57,10 @@ Messung_Limb::Messung_Limb()
 	m_Hoehe_TP = 0;
 	m_Hoehe_Sat = 0;
 	m_Erdradius = 0;
+	m_orbit_phase = 0.;
+	m_TP_SZA = 0.;
+	center_lat = 0.;
+	center_lon = 0.;
 	//statische Felder werden erstmal nicht 0 gesetzt
 }
 //========================================
@@ -86,6 +90,8 @@ Messung_Limb &Messung_Limb::operator =(const Messung_Limb &rhs)
 	// Ergebnisse
 	m_Zeilendichte = rhs.m_Zeilendichte;
 	m_Fehler_Zeilendichten = rhs.m_Fehler_Zeilendichten;
+	// total number density at measurement point
+	total_number_density = rhs.total_number_density;
 	// Zwischenergebnisse
 	m_Deklinationswinkel = rhs.m_Deklinationswinkel;
 	m_Sonnen_Longitude = rhs.m_Sonnen_Longitude;
@@ -97,6 +103,7 @@ Messung_Limb &Messung_Limb::operator =(const Messung_Limb &rhs)
 	m_Tag = rhs.m_Tag;
 	m_Stunde = rhs.m_Stunde;
 	m_Minute = rhs.m_Minute;
+	m_Sekunde = rhs.m_Sekunde;
 	// Geolocation
 	m_Latitude_Sat = rhs.m_Latitude_Sat;
 	m_Longitude_Sat = rhs.m_Longitude_Sat;
@@ -105,11 +112,15 @@ Messung_Limb &Messung_Limb::operator =(const Messung_Limb &rhs)
 	m_Longitude_TP = rhs.m_Longitude_TP;
 	m_Hoehe_TP = rhs.m_Hoehe_TP;
 	m_Erdradius = rhs.m_Erdradius;
+	m_orbit_phase = rhs.m_orbit_phase;
 	m_TP_SZA = rhs.m_TP_SZA;
+	center_lat = rhs.center_lat;
+	center_lon = rhs.center_lon;
 	m_Number_of_Wavelength = rhs.m_Number_of_Wavelength;
 	// copy vectors
 	m_Wellenlaengen = rhs.m_Wellenlaengen;
 	m_Intensitaeten = rhs.m_Intensitaeten;
+	m_Intensitaeten_relativer_Fehler = rhs.m_Intensitaeten_relativer_Fehler;
 	m_Sonne = rhs.m_Sonne;
 	m_Intensitaeten_durch_piF = rhs.m_Intensitaeten_durch_piF;
 	m_Intensitaeten_durch_piF_Gamma = rhs.m_Intensitaeten_durch_piF_Gamma;
@@ -199,9 +210,9 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	// linearen Fit des Basisfensters durchführen
 	// Proto: Fit_Linear(double* x,double* y, double& a0, double& a1,int
 	// Anfangsindex, int Endindex)
-	double a0, a1;
-	Fit_Linear(Basisfenster_WL, Basisfenster_Intensitaet, a0, a1, 0,
-			N_Basis - 1);
+	double a0, a1, rms_err_base;
+	Fit_Linear(Basisfenster_WL, Basisfenster_Intensitaet, a0, a1, rms_err_base,
+			0, N_Basis - 1);
 	// lineare Funktion von Intensitäten des Peakfenster abziehen
 	for (int i = 0; i < N_Peak; i++) {
 		Peakfenster_Intensitaet[i] -= a0 + a1 * Peakfenster_WL[i];
@@ -246,24 +257,19 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 			Funktion[i] = Peak + Basis;
 		}
 
-		string s1, s_OrbNum, s2;
-		int h = this->m_Hoehe_TP;
-		char buf[256];
+		string s_OrbNum;
+		stringstream buf;
 		//TODO immer prüfen, ob Dateienamenlänge noch stimmt...
 		// falls / im Namen ist das schlecht
-		string Datnam = m_Dateiname_L1C.substr(m_Dateiname_L1C.size() - 39, 39);
+		string Datnam = sb_basename(m_Dateiname_L1C);
 
 		//TODO Pfad anpassen
-		sprintf(buf, "mkdir %s/Plots 2>/dev/null", Arbeitsverzeichnis.c_str());
-
-		string Befehl = buf;
-		system(Befehl.c_str());
-		sprintf(buf, "%s_%s_%i_%ikm.ps", Datnam.c_str(),
-				Spezfenst.m_Spezies_Name.c_str(), Index, h);
-		string new_datnam = buf;
-		sprintf(buf, "%s/Plots/%s", Arbeitsverzeichnis.c_str(),
-				new_datnam.c_str());
-		s1 = buf;
+		string plot_dir = Arbeitsverzeichnis + "/Plots";
+		mkdir(plot_dir.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
+			<< "_" << Index << "_" << m_Hoehe_TP << "km.ps";
+		string new_datnam(buf.str());
+		string s1(plot_dir + "/" + new_datnam);
 		//s1 ist der Volle Pfad der Datei...diesen kann man wegspeichern, um
 		//später die .ps files in ein großes pdf zu packen
 		Spezfenst.m_Liste_der_Plot_Dateinamen.push_back(s1);
@@ -278,9 +284,12 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 			s_OrbNum = Datnam.substr(pos_suffix - 5, 5);
 		}
 		//Orbitnummer ermittelt///////
-		sprintf(buf, "Orbit %5s Limb TP: Lat: %G Grad  Lon: %G Grad Hoehe: %G km",
-				s_OrbNum.c_str(), m_Latitude_TP, m_Longitude_TP, m_Hoehe_TP);
-		s2 = buf;
+		buf.str(string());
+		buf << "Orbit " << s_OrbNum.c_str() << ", Limb TP:"
+			<< " Lat: " << m_Latitude_TP << " deg,"
+			<< " Lon: " << m_Longitude_TP << " deg,"
+			<< " Hoehe: " << m_Hoehe_TP << " km.";
+		string s2(buf.str());
 		//cout<<s1<<"\n";
 		//int Plot_2xy(string Dateiname,string title, string xlabel,
 		//string ylabel,double* x1,double*y1, double* x2,double* y2,
@@ -301,7 +310,320 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	return 0;
 }//int Zeilendichte_Bestimmen() ende
 //========================================
+/* the rough rayleigh cross section for wl in [nm] in [cm^2] */
+double sigma_rayleigh(double wl)
+{
+	/* ref.: planet. space sci., vol. 32, no. 6, pp 785-790, 1984 */
+	double wls_Fk[35] = { 200, 205, 210, 215, 220, 225, 230, 240, 250, 260,
+		270, 280, 290, 300, 310, 320, 330, 340, 350, 360, 370, 380, 390, 400,
+		450, 500, 550, 600, 650, 750, 800, 850, 900, 950, 1000 };
+	double Fks[35] = { 1.080, 1.077, 1.074, 1.072, 1.070, 1.068, 1.066, 1.064,
+		1.062, 1.060, 1.059, 1.057, 1.056, 1.055, 1.055, 1.054, 1.053, 1.052,
+		1.052, 1.052, 1.051, 1.051, 1.051, 1.050, 1.049, 1.049, 1.048, 1.048,
+		1.048, 1.048, 1.047, 1.047, 1.047, 1.047, 1.047 };
+	double F_k, n = n_air(wl);
+	double nm1_div_NA = (n - 1.) / 2.687e-2;
+
+	std::vector<double> wl_Fk(wls_Fk, wls_Fk + 35);
+	std::vector<double> F_ks(Fks, Fks + 35);
+
+	F_k = interpolate(wl_Fk, F_ks, wl);
+
+	return 32. * M_PI*M_PI*M_PI / 3. * nm1_div_NA*nm1_div_NA
+		* F_k / (wl*wl*wl*wl) * 1.e-14;
+}
+double fit_spectra(std::vector<double> &x, std::vector<double> &y)
+{
+	double sum_gy = 0., sum_gg = 0.;
+	for (size_t i = 0; i < x.size(); i++) {
+		double g = x.at(i);
+		sum_gy += g * y.at(i);
+		sum_gg += g * g;
+	}
+	return sum_gy / sum_gg;
+}
 //========================================
+int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
+		Sonnenspektrum &sol_spec, int index,
+		Speziesfenster &Spezfenst, std::string Arbeitsverzeichnis,
+		bool debug)
+{
+	// I/(piFGamma)=integral(AMF n ds) mit AMF = s exp(-tau) ...aber zu der
+	// Formel später nochmal zurück Das spätere Retrieval ermittelt dann die
+	// Dichte n aus der rechten Seite
+
+	// threshold for peak detection in the NO wavelength range
+	const double peak_threshold = 6.e10;
+
+	//Zunächst Indizes der Wellenlaengen der Basisfenster bestimmen
+	int i, j;
+	int NO_NJ = NO.get_NJ();
+	double wl;
+	double f_sol_fit;
+	double min_lambda_NO = 1000., max_lambda_NO = 0.;
+	double gamma_threshold = 0.25 * NO.get_spec_scia_max();
+	for (i = 0; i < NO_NJ; i++) {
+		for (j = 0; j < 12; j++) {
+			wl = NO.get_lambda_K(j, i);
+			if (NO.get_gamma_j(j, i) > gamma_threshold) {
+				if (wl > 0. && wl < min_lambda_NO) min_lambda_NO = wl;
+				if (wl > max_lambda_NO) max_lambda_NO = wl;
+			}
+		}
+	}
+	// inner and outer baseline and peak window offset
+	// the defaults (from M.L.) are base_offset_o = 3. and base_offset_i = 1.
+	double base_offset_o = 1.5, base_offset_i = 0.3;
+	int i_basewin_l_min = sb_Get_closest_index(min_lambda_NO - base_offset_o);
+	int i_basewin_l_max = sb_Get_closest_index(min_lambda_NO - base_offset_i) - 1;
+	int i_basewin_r_min = sb_Get_closest_index(max_lambda_NO + base_offset_i) + 1;
+	int i_basewin_r_max = sb_Get_closest_index(max_lambda_NO + base_offset_o);
+	int i_peakwin_min = sb_Get_closest_index(min_lambda_NO - base_offset_i);
+	int i_peakwin_max = sb_Get_closest_index(max_lambda_NO + base_offset_i);
+	// Speicherplatzbedarf für die Fenster ermitteln
+	int base_l = (i_basewin_l_max - i_basewin_l_min + 1);
+	int base_r = (i_basewin_r_max - i_basewin_r_min + 1);
+	int N_fit_tot = i_basewin_r_max - i_basewin_l_min + 1;
+	int N_base = base_l + base_r;
+	int N_peak = i_peakwin_max - i_peakwin_min + 1;
+	// Speicher anfordern
+	std::vector<double> basewin_wl(N_base);
+	std::vector<double> basewin_rad(N_base);
+	std::vector<double> peakwin_wl(N_peak);
+	std::vector<double> peakwin_rad(N_peak);
+	std::vector<double> rad = m_Intensitaeten;
+	std::vector<double> sol_rad = sol_spec.m_Int_interpoliert;
+	std::vector<double> fit_spec, ones(N_base + N_peak, 1.);
+
+	/* prints the geolocation of the tangent point for later inspection */
+	if (debug == true) {
+		std::cout << "# TP: lat = " << m_Latitude_TP;
+		std::cout << ", lon = " << m_Longitude_TP;
+		std::cout << ", height = " << m_Hoehe_TP << std::endl;
+		std::cout << "# orbit_phase = " << m_orbit_phase << std::endl;
+	}
+
+	for (i = 0; i < N_base + N_peak; i++) {
+		double wl = m_Wellenlaengen.at(i_basewin_l_min + i);
+		double sol_i = sol_rad.at(i_basewin_l_min + i);
+		double rad_i = rad.at(i_basewin_l_min + i);
+		// peak detection: unusual high radiance
+		// make sure, that the surrounding points are lower
+		if (rad_i > peak_threshold
+				&& i > 2 && i < N_base + N_peak - 2
+				&& rad.at(i_basewin_l_min + i - 1) < rad_i
+				&& rad.at(i_basewin_l_min + i + 1) < rad_i) {
+			// exclude the previous, the current, and the next point.
+			fit_spec.pop_back();
+			// interpolate three points of the peak linearly
+			double y0 = rad.at(i_basewin_l_min + i - 2);
+			double yN = rad.at(i_basewin_l_min + i + 2);
+			double a = 0.25 * (yN - y0);
+			for (int k = 0; k < 3; k++)
+				rad.at(i_basewin_l_min + i - 1 + k) = k*a + y0;
+			// done interpolating
+			i++;
+		} else
+			fit_spec.push_back(rad_i / (sigma_rayleigh(wl) * sol_i));
+	}
+	ones.resize(fit_spec.size());
+	f_sol_fit = fit_spectra(ones, fit_spec);
+	if (debug == true)
+		std::cout << "# solar fit factor = " << f_sol_fit << std::endl;
+	if (f_sol_fit < 0.) f_sol_fit = 0.;
+	// Basisfenster WL und I auffüllen
+	for (int i = 0; i < base_l; i++) {
+		wl = m_Wellenlaengen.at(i_basewin_l_min + i);
+		basewin_wl.at(i) = wl;
+		basewin_rad.at(i) = rad.at(i_basewin_l_min + i)
+			- f_sol_fit * sigma_rayleigh(wl)
+			  * sol_rad.at(i_basewin_l_min + i);
+	}
+	for (int i = 0; i < base_r; i++) {
+		wl = m_Wellenlaengen.at(i_basewin_r_min + i);
+		basewin_wl.at(base_l + i) = wl;
+		basewin_rad.at(base_l + i) = rad.at(i_basewin_r_min + i)
+			- f_sol_fit * sigma_rayleigh(wl)
+			  * sol_rad.at(i_basewin_r_min + i);
+	}
+	/* construct new baseline vectors by removing outliers
+	 * This currently discards 20% (10% left and 10% right)
+	 * of the baseline points. */
+	std::vector<double> rad_sort(basewin_rad);
+	std::vector<double> bwin_wl, bwin_rad;
+	std::sort(rad_sort.begin(), rad_sort.end());
+	int offset = rad_sort.size() * 0.10;
+	double rad0 = rad_sort.at(offset);
+	double rad1 = rad_sort.at(rad_sort.size() - offset - 1);
+
+	for (int i = 0; i < N_base; i++) {
+		double rad = basewin_rad.at(i);
+		// push back only if in valid range
+		if (rad >= rad0 && rad <= rad1) {
+			bwin_wl.push_back(basewin_wl.at(i));
+			bwin_rad.push_back(rad);
+		}
+	}
+	// reset N_base
+	N_base = bwin_rad.size();
+
+	// linearen Fit des Basisfensters durchführen
+	// Proto: Fit_Linear(double* x,double* y, double& a0, double& a1,int
+	// Anfangsindex, int Endindex)
+	double a0, a1, rms_err_base;
+	// use the modified base window for the linear fit
+	Fit_Linear(bwin_wl, bwin_rad, a0, a1, rms_err_base, 0, N_base - 1);
+
+	// prepare baseline and rayleigh data
+	std::vector<double> baseline_wl, baseline_rad, rayleigh_rad;
+	std::vector<double> y, y_weights;
+	for (int i = 0; i < N_fit_tot; i++) {
+		int idx = i_basewin_l_min + i;
+		wl = m_Wellenlaengen.at(idx);
+		baseline_wl.push_back(wl);
+		baseline_rad.push_back(a0 + a1 * wl);
+		rayleigh_rad.push_back(f_sol_fit * sigma_rayleigh(wl)
+				* sol_rad.at(idx));
+
+		// prepare radiances and weights for the Whittaker smoother
+		y.push_back(rad.at(idx) - rayleigh_rad.back());
+		double rad = y.back();
+		// exclude the peak window and outliers by zeroing the weights
+		if ((idx > i_peakwin_min && idx < i_peakwin_max)
+			|| rad < rad0 || rad > rad1)
+			y_weights.push_back(0.);
+		else
+			y_weights.push_back(1.);
+	}
+
+	// replace the linear baseline by the Whittaker smoothed radiances
+	// excluding the peak window and outliers as in the linear case.
+	// the original (linear) baseline behaviour can be obtained by commenting
+	// this line or by setting lambda (the 4th argument) to something large,
+	// e.g. ~ 1.e9.
+	baseline_rad = my_whittaker_smooth(y, y_weights, 2, 1.e4, rms_err_base);
+
+	//Peakfenster WL und I auffüllen
+	// lineare Funktion von Intensitäten des Peakfenster abziehen
+	for (int i = 0; i < N_peak; i++) {
+		peakwin_wl.at(i) = m_Wellenlaengen.at(i_peakwin_min + i);
+		peakwin_rad.at(i) = y.at(i_peakwin_min - i_basewin_l_min + i)
+			- baseline_rad.at(i_peakwin_min - i_basewin_l_min + i);
+	}
+	double rms_err_peak, rms_err_tot;
+	m_Zeilendichte = fit_NO_spec(NO, peakwin_wl, peakwin_rad,
+			rms_err_peak);
+	rms_err_tot = std::sqrt((N_base * rms_err_base * rms_err_base
+		+ N_peak * rms_err_peak * rms_err_peak) / (N_base + N_peak));
+	m_Fehler_Zeilendichten = rms_err_tot / NO.get_spec_scia_max();
+
+	if (mache_Fit_Plots == "ja") {
+		// prepare data to plot
+		std::vector<double> wavelengths, spec_wo_rayleigh = y, NO_fit;
+		for (i = 0; i < base_l; i++) {
+			wavelengths.push_back(m_Wellenlaengen.at(i_basewin_l_min + i));
+			NO_fit.push_back(m_Zeilendichte *
+					NO.get_spec_scia_res(i_basewin_l_min + i)
+					+ baseline_rad.at(i));
+		}
+		for (size_t k = 0; k < peakwin_wl.size(); k++) {
+			wavelengths.push_back(m_Wellenlaengen.at(i_peakwin_min + k));
+			NO_fit.push_back(m_Zeilendichte *
+					NO.get_spec_scia_res(i_peakwin_min + k)
+					+ baseline_rad.at(i_peakwin_min - i_basewin_l_min + k));
+		}
+		for (i = 0; i < base_r; i++) {
+			wavelengths.push_back(m_Wellenlaengen.at(i_basewin_r_min + i));
+			NO_fit.push_back(m_Zeilendichte *
+					NO.get_spec_scia_res(i_basewin_r_min + i)
+					+ baseline_rad.at(i_basewin_r_min - i_basewin_l_min + i));
+		}
+
+		// plot the data to postscript files
+		std::string s_OrbNum;
+		std::stringstream buf;
+		//TODO immer prüfen, ob Dateienamenlänge noch stimmt...
+		// falls / im Namen ist das schlecht
+		std::string Datnam = sb_basename(m_Dateiname_L1C);
+
+		//TODO Pfad anpassen
+		std::string plot_dir = Arbeitsverzeichnis + "/Plots";
+		mkdir(plot_dir.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
+			<< "_" << index << "_"
+			<< std::setw(3) << std::setfill('0') << std::setprecision(0)
+			<< std::fixed << m_Hoehe_TP << "km.ps";
+		std::string new_datnam(buf.str());
+		std::string s1(plot_dir + "/" + new_datnam);
+		// s1 ist der Volle Pfad der Datei... diesen wegspeichern,
+		// um später die .ps files in ein großes pdf zu packen
+		Spezfenst.m_Liste_der_Plot_Dateinamen.push_back(s1);
+		// Orbitnummer ermitteln
+		// die Orbitnummer sind die 5 Zeichen vor .dat
+		size_t pos_suffix = 0;
+		pos_suffix = Datnam.find(".dat");
+		if (pos_suffix == string::npos) {
+			std::cerr << " kein .dat in Limbdateiname... "
+					  << "Orbitnummer nicht findbar" << std::endl;
+			s_OrbNum = "xxxxx";
+		} else {
+			s_OrbNum = Datnam.substr(pos_suffix - 5, 5);
+		}
+		buf.str(std::string());
+		buf << "Orbit " << s_OrbNum.c_str() << ", "
+			<< NO.get_vu() << NO.get_vl() << ", "
+			<< std::resetiosflags(std::ios::fixed)
+			<< " Lat: " << std::setprecision(3) << m_Latitude_TP << " deg,"
+			<< " Lon: " << std::setprecision(3) << m_Longitude_TP << " deg,"
+			<< " Alt: " << std::setprecision(3) << m_Hoehe_TP << " km.";
+		std::string s2(buf.str());
+
+		Plot_2xy(Arbeitsverzeichnis.c_str(), s1.c_str(), s2.c_str(),
+				 "wavelength [nm]",
+				 "residual radiance [ph/cm^2/s/nm]",
+				 wavelengths, spec_wo_rayleigh, wavelengths, NO_fit,
+				 0, wavelengths.size() - 1,
+				 m_Zeilendichte, m_Fehler_Zeilendichten);
+	}
+
+	if (debug == true) {
+		std::cout << "# slant column = " << m_Zeilendichte;
+		std::cout << ", error = " << m_Fehler_Zeilendichten << std::endl;
+	}
+
+	return 0;
+}
+
+double Messung_Limb::fit_NO_spec(NO_emiss &NO,
+		std::vector<double> &x, std::vector<double> &y,
+		double &rms_err)
+{
+	double A;
+	int l0 = sb_Get_Index(x.at(0)) + 1;
+
+	std::vector<double>::iterator x_it;
+
+	double sum_gg = 0., sum_gy = 0.;
+	for (x_it = x.begin(); x_it != x.end(); ++x_it) {
+		int l = std::distance(x.begin(), x_it);
+		double g = NO.get_spec_scia_res(l0 + l);
+		double yl = y.at(l);
+		sum_gy += g * yl;
+		sum_gg += g * g;
+	}
+	A = sum_gy / sum_gg;
+
+	double err = 0.;
+	for (x_it = x.begin(); x_it != x.end(); ++x_it) {
+		int l = std::distance(x.begin(), x_it);
+		double diff = (y.at(l) - A * NO.get_spec_scia_res(l0 + l));
+		err += diff * diff;
+	}
+	err /= x.size();
+	rms_err = std::sqrt(err);
+
+	return A;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Funktionsstart Saeulendichte_Bestimmen_MgI285nm
@@ -433,8 +755,8 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 	// Proto:
 	// Fit_Linear(double* x,double* y, double& a0, double& a1,
 	//   int Anfangsindex, int Endindex)
-	double a0, a1;
-	Fit_Linear(Basisfenster_WL, Basisfenster_Intensitaet, a0, a1, 0,
+	double a0, a1, rms_err_base;
+	Fit_Linear(Basisfenster_WL, Basisfenster_Intensitaet, a0, a1, rms_err_base, 0,
 			N_Basis - 1);
 
 	int Polynomgrad = 4;
@@ -586,22 +908,18 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 	//Plotroutine aufrufen
 	if (mache_Fit_Plots == "ja") {
 		// Dateinamenschnickschnack
-		string s1, s_OrbNum, s2;
-		int h = this->m_Hoehe_TP;
-		char buf[256];
+		string s_OrbNum;
+		stringstream buf;
 		//TODO immer prüfen, ob Dateienamenlänge noch stimmt...
 		//falls / im Namen ist das schlecht
-		string Datnam = m_Dateiname_L1C.substr(m_Dateiname_L1C.size() - 39, 39);
+		string Datnam = sb_basename(m_Dateiname_L1C);
 		//TODO Pfad anpassen
-		sprintf(buf, "mkdir %s/Plots 2>/dev/null", Arbeitsverzeichnis.c_str());
-		string Befehl = buf;
-		system(Befehl.c_str());
-		sprintf(buf, "%s_%s_%i_%ikm.ps",
-				Datnam.c_str(), Spezfenst.m_Spezies_Name.c_str(), Index, h);
-		string new_datnam = buf;
-		sprintf(buf, "%s/Plots/%s",
-				Arbeitsverzeichnis.c_str(), new_datnam.c_str());
-		s1 = buf;
+		string plot_dir = Arbeitsverzeichnis + "/Plots";
+		mkdir(plot_dir.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
+			<< "_" << Index << "_" << m_Hoehe_TP << "km.ps";
+		string new_datnam(buf.str());
+		string s1(plot_dir + "/" + new_datnam);
 		//s1 ist der Volle Pfad der Datei...diesen kann man wegspeichern, um
 		//später die .ps files in ein großes pdf zu packen
 		Spezfenst.m_Liste_der_Plot_Dateinamen.push_back(s1);
@@ -616,9 +934,12 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 			s_OrbNum = Datnam.substr(pos_suffix - 5, 5);
 		}
 		//Orbitnummer ermittelt///////
-		sprintf(buf, "Orbit %5s Limb TP: Lat: %G {/Symbol \\260}  Lon: %G {/Symbol \\260} Hoehe: %G km",
-				s_OrbNum.c_str(), m_Latitude_TP, m_Longitude_TP, m_Hoehe_TP);
-		s2 = buf;
+		buf.str(string());
+		buf << "Orbit " << s_OrbNum.c_str() << ", Limb TP:"
+			<< " Lat: " << m_Latitude_TP << " deg,"
+			<< " Lon: " << m_Longitude_TP << " deg,"
+			<< " Hoehe: " << m_Hoehe_TP << " km.";
+		string s2(buf.str());
 		//cout<<s1<<"\n";
 		Plot_Slantcoloumns_polyfit_MgI(Arbeitsverzeichnis.c_str(), s1.c_str(),
 									   s2.c_str(),
@@ -730,8 +1051,8 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 	// Proto:
 	// Fit_Linear(double* x,double* y, double& a0, double& a1,int Anfangsindex,
 	// int Endindex)
-	double a0, a1;
-	Fit_Linear(Basisfenster_WL, Basisfenster_Intensitaet, a0, a1, 0,
+	double a0, a1, rms_err_base;
+	Fit_Linear(Basisfenster_WL, Basisfenster_Intensitaet, a0, a1, rms_err_base, 0,
 			N_Basis - 1);
 	//Die beiden gefitteten Spektren dividieren Limb/Sonne
 	double *Messwerte_Quotient;
@@ -785,22 +1106,18 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 	//Plotroutine aufrufen
 	if (mache_Fit_Plots == "ja") {
 		// Dateinamenschnickschnack
-		string s1, s_OrbNum, s2;
-		int h = this->m_Hoehe_TP;
-		char buf[256];
+		string s_OrbNum;
+		stringstream buf;
 		//TODO immer prüfen, ob Dateienamenlänge noch stimmt
 		// ...falls / im Namen ist das schlecht
-		string Datnam = m_Dateiname_L1C.substr(m_Dateiname_L1C.size() - 39, 39);
+		string Datnam = sb_basename(m_Dateiname_L1C);
 		//TODO Pfad anpassen
-		sprintf(buf, "mkdir %s/Plots 2>/dev/null", Arbeitsverzeichnis.c_str());
-		string Befehl = buf;
-		system(Befehl.c_str());
-		sprintf(buf, "%s_%s_%i_%ikm.ps",
-				Datnam.c_str(), Spezfenst.m_Spezies_Name.c_str(), Index, h);
-		string new_datnam = buf;
-		sprintf(buf, "%s/Plots/%s",
-				Arbeitsverzeichnis.c_str(), new_datnam.c_str());
-		s1 = buf;
+		string plot_dir = Arbeitsverzeichnis + "/Plots";
+		mkdir(plot_dir.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
+			<< "_" << Index << "_" << m_Hoehe_TP << "km.ps";
+		string new_datnam(buf.str());
+		string s1(plot_dir + "/" + new_datnam);
 		//s1 ist der Volle Pfad der Datei...diesen kann man wegspeichern,
 		//um später die .ps files in ein großes pdf zu packen
 		Spezfenst.m_Liste_der_Plot_Dateinamen.push_back(s1);
@@ -815,9 +1132,12 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 			s_OrbNum = Datnam.substr(pos_suffix - 5, 5);
 		}
 		//Orbitnummer ermittelt///////
-		sprintf(buf, "Orbit %5s Limb TP: Lat: %G {/Symbol \\260}  Lon: %G {/Symbol \\260} Hoehe: %G km",
-				s_OrbNum.c_str(), m_Latitude_TP, m_Longitude_TP, m_Hoehe_TP);
-		s2 = buf;
+		buf.str(string());
+		buf << "Orbit " << s_OrbNum.c_str() << ", Limb TP:"
+			<< " Lat: " << m_Latitude_TP << " deg,"
+			<< " Lon: " << m_Longitude_TP << " deg,"
+			<< " Hoehe: " << m_Hoehe_TP << " km.";
+		string s2(buf.str());
 		//cout<<s1<<"\n";
 		Plot_Spektren_und_Quotient(Arbeitsverzeichnis.c_str(),
 								   s1.c_str(), s2.c_str(),
@@ -878,6 +1198,61 @@ int Messung_Limb::savitzky_golay(int window_size)
 {
 	return my_savitzky_golay(m_Intensitaeten, window_size);
 }
+
+double Messung_Limb::msise_temperature()
+{
+	struct nrlmsise_output output;
+	struct nrlmsise_input input;
+	struct nrlmsise_flags flags;
+
+	// set the flags
+	flags.switches[0] = 0;
+	for (int i = 1; i < 24; i++)
+		flags.switches[i] = 1;
+
+	// construct the input for the temperature calculation
+	input.year = m_Jahr; // year, but ignored
+
+	// get the day of the year
+	int days[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+	if (m_Jahr % 4 == 0 && !(m_Jahr % 100 == 0 && m_Jahr % 400 != 0))
+		days[1] = 29;
+
+	input.doy = 0;
+	for (int i = 0; i < (m_Monat - 1); i++) {
+		input.doy += days[i];
+	}
+	input.doy += m_Tag;
+
+	// ut seconds in day
+	input.sec = m_Stunde * 3600. + m_Minute * 60. + m_Sekunde;
+
+	// geo data
+	input.alt = m_Hoehe_TP;
+	input.g_lat = m_Latitude_TP;
+	input.g_long = m_Longitude_TP;
+	// local apparent solar time (quick default)
+	input.lst = input.sec / 3600. + input.g_long / 15.;
+
+	// solar data from spidr data files
+	double f107 = spidr_value_from_file(m_Jahr, m_Monat, m_Tag,
+			"DATA/spidr_f107_2000-2011.dat");
+	double ap = spidr_value_from_file(m_Jahr, m_Monat, m_Tag,
+			"DATA/spidr_ap_2000-2011.dat");
+	std::cout << "# msis parameters: f10.7 = " << f107
+		<< ", ap = " << ap << std::endl;
+	input.f107A = f107;
+	input.f107 = f107;
+	input.ap = ap;
+
+	gtd7(&input, &flags, &output);
+
+	total_number_density = output.d[0] + output.d[1] + output.d[2]
+		+ output.d[3] + output.d[4] + output.d[6] + output.d[7];
+
+	return output.t[1];
+}
+
 int Messung_Limb::Intensitaeten_normieren(vector<double> &Sonnen_Intensitaet)
 {
 	//Teiler wurde vorher interpoliert
@@ -896,21 +1271,21 @@ int Messung_Limb::Intensitaeten_normieren(vector<double> &Sonnen_Intensitaet)
 }
 //========================================
 //========================================
-int Messung_Limb::Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfenst, int Index)
+int Messung_Limb::Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfenst, double wl_gamma)
 {
 
 	//Auf dem ganzen Fenster...Verschwendung !!!!!...
 	for (int i = 0; i < m_Number_of_Wavelength; i++) { //langsam, optimierbar
 		this->m_Intensitaeten_durch_piF_Gamma[i]
 			= this->m_Intensitaeten_durch_piF[i]
-			  / Spezfenst.m_Liniendaten[Index].m_Gamma;
+			  / wl_gamma;
 		cerr << "i = " << i << ": I1 = " << m_Intensitaeten_durch_piF[i] << ", "
-			 << "Gamma = " << Spezfenst.m_Liniendaten[Index].m_Gamma << ", "
+			 << "Gamma = " << wl_gamma << ", "
 			 << "I2 := I1 / Gamma = " << m_Intensitaeten_durch_piF_Gamma[i] << endl;
 	}
 	return 0;
 }
-int Messung_Limb::Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Speziesfenster Spezfenst, int Index)
+int Messung_Limb::Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Speziesfenster Spezfenst)
 {
 
 	//Auf dem ganzen Fenster...Verschwendung !!!!!
@@ -919,8 +1294,9 @@ int Messung_Limb::Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Spez
 	// Am besten gleich bei der Wellenlänge des Übergangs....
 	// eigentlich reicht 0,11nm, falls es mal schneller gehn soll
 	// die Gitterabstände sind aber über große Bereiche doch schon nicht linear
-	int Ind = sb_Get_Index(Spezfenst.m_Wellenlaengen[Index]);
-	double Delta_WL = (m_Wellenlaengen[Ind + 1] - m_Wellenlaengen[Ind]);
+
+	// rough default to prevent it from being uninitialised.
+	double Delta_WL = 0.11;
 	// Nun alles damit multiplizieren....wie gesagt..das ist etwas langsam,
 	// da es sich um nen konstanten Faktor handelt
 	for (int i = 0; i < m_Number_of_Wavelength; i++) { //langsam, optimierbar
@@ -929,6 +1305,9 @@ int Messung_Limb::Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Spez
 		// Delta_Wl ist in nm gegeben...
 		// dann muss beim Peakfit nicht in nm umgerechnet werden
 		// wenn integriert wird
+		if (i + 1 < m_Number_of_Wavelength)
+			Delta_WL = m_Wellenlaengen[i + 1] - m_Wellenlaengen[i];
+
 		m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand[i]
 			= m_Intensitaeten_durch_piF_Gamma[i] / Delta_WL;
 
@@ -947,7 +1326,7 @@ int Messung_Limb::Deklinationswinkel_bestimmen()
 	// Formel nach der englischen Wikipedia
 	//theta=-23,45*cos(360° *(N+10)/365);
 	// dieser Winkel ändert sich nicht sehr stark von Tag zu Tag
-	int Monatstage[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	int Monatstage[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 	// reicht auch auf Tagesgenauigkeit
 	double Tage = 0;
 	for (int i = 0; i < (this->m_Monat - 1); i++) {
@@ -987,6 +1366,8 @@ Ausgewertete_Messung_Limb Messung_Limb::Ergebnis_Zusammenfassen()
 	//Ergebnisse
 	aus.m_Zeilendichte = this->m_Zeilendichte;
 	aus.m_Fehler_Zeilendichten = this->m_Fehler_Zeilendichten;
+	// total number density
+	aus.total_number_density = this->total_number_density;
 	//Zwischenergebnisse
 	aus.m_Deklination = this->m_Deklinationswinkel;
 	aus.m_Sonnen_Longitude = this->m_Sonnen_Longitude;
@@ -999,6 +1380,7 @@ Ausgewertete_Messung_Limb Messung_Limb::Ergebnis_Zusammenfassen()
 	aus.m_Tag = this->m_Tag;
 	aus.m_Stunde = this->m_Stunde;
 	aus.m_Minute = this->m_Minute;
+	aus.m_Sekunde = this->m_Sekunde;
 	// Geolocation
 	aus.m_Latitude_Sat = this->m_Latitude_Sat;
 	aus.m_Longitude_Sat = this->m_Longitude_Sat;
@@ -1007,6 +1389,10 @@ Ausgewertete_Messung_Limb Messung_Limb::Ergebnis_Zusammenfassen()
 	aus.m_Longitude_TP = this->m_Longitude_TP;
 	aus.m_Hoehe_TP = this->m_Hoehe_TP;
 	aus.m_Erdradius = this->m_Erdradius;
+	// phase of orbit (0...1)
+	aus.m_orbit_phase = this->m_orbit_phase;
+	aus.center_lat = this->center_lat;
+	aus.center_lon = this->center_lon;
 	return aus;
 }//Ausgewertete_Messung_Limb Ergebnis_Zusammenfassen() ende
 //========================================
@@ -1075,7 +1461,7 @@ int Messung_Limb::sb_Get_closest_index(double WL)
 }
 
 void Messung_Limb::Fit_Linear(double *x, double *y, double &a0, double &a1,
-		int Anfangsindex, int Endindex)
+		double &rms_err, int Anfangsindex, int Endindex)
 {
 	//fit der Funktion y=a0+a1x;
 	//Bestimmung von a und b im Intervall zwischen Anfangs und endindex
@@ -1104,8 +1490,17 @@ void Messung_Limb::Fit_Linear(double *x, double *y, double &a0, double &a1,
 	a1 = (xy_m - y_m * x_m) / (xx_m - x_m * x_m);
 	//Parameter a
 	a0 = y_m - a1 * x_m;
+
+	double err = 0.;
+	for (i = Anfangsindex; i <= Endindex; i++) {
+		double diff = y[i] - a0 - a1 * x[i];
+		err += diff * diff;
+	}
+	err /= N;
+	rms_err = std::sqrt(err);
 }
-void Messung_Limb::Fit_Linear(vector<double> &x, vector<double> &y, double &a0, double &a1,
+void Messung_Limb::Fit_Linear(vector<double> &x, vector<double> &y,
+		double &a0, double &a1, double &rms_err,
 		int Anfangsindex, int Endindex)
 {
 	//fit der Funktion y=a0+a1x;
@@ -1135,6 +1530,14 @@ void Messung_Limb::Fit_Linear(vector<double> &x, vector<double> &y, double &a0, 
 	a1 = (xy_m - y_m * x_m) / (xx_m - x_m * x_m);
 	//Parameter a
 	a0 = y_m - a1 * x_m;
+
+	double err = 0.;
+	for (i = Anfangsindex; i <= Endindex; i++) {
+		double diff = y[i] - a0 - a1 * x[i];
+		err += diff * diff;
+	}
+	err /= N;
+	rms_err = std::sqrt(err);
 }//Ende Fit_linear
 
 void Messung_Limb::Fit_Polynom_4ten_Grades(double *x, double *y, double x0,

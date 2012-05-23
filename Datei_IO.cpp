@@ -81,22 +81,26 @@ double average_over_wl_range(float *input, float *Wellenlaengen,
 vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 		Limb_Datensatz *Limbdaten, float *Wellenlaengen,
 		int no_of_pix, int no_of_alt, float orbit_phase, int Datum[6],
-		int no_of_heights, int offset, int direction)
+		float cent_lat_lon[10], int no_of_heights, int offset, int direction)
 {
 	bool has_straylight = false;
+	// dark signal and error
+	// constant dark signal (default and fall-back)
+	//dark_sig = 2.731e9;
+	double dark_sig = 3.9e9;
+	double dark_err = 0.0;
+	/*
 	// normal average or median for the dark signal correction
-	double dark_sig = average_over_wl_range(Limbdaten[no_of_alt - 1].m_radiance,
+	dark_sig = average_over_wl_range(Limbdaten[no_of_alt - 1].m_radiance,
 			Wellenlaengen, no_of_pix, 278.0, 282.0, false);
-	double dark_err = average_over_wl_range(Limbdaten[no_of_alt - 1].m_error,
+	dark_err = average_over_wl_range(Limbdaten[no_of_alt - 1].m_error,
 			Wellenlaengen, no_of_pix, 278.0, 282.0, false);
+	*/
 
 	/*
 	if (dark_sig > 6.e9)
 		has_straylight = true;
 	// */
-
-	// constant dark signal
-	dark_sig = 2.731e9;
 
 	// 4. Erstellung des Übergabevektors
 	vector<Messung_Limb> Ergebnisvektor;
@@ -109,7 +113,10 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 		ml.m_Tag = Datum[2];
 		ml.m_Stunde = Datum[3];
 		ml.m_Minute = Datum[4];
+		ml.m_Sekunde = Datum[5];
 		ml.m_orbit_phase = orbit_phase;
+		ml.center_lat = cent_lat_lon[0];
+		ml.center_lon = cent_lat_lon[1];
 		ml.m_Latitude_Sat = Limbdaten[offset + direction * i].m_Sub_Sat_Lat; //achtung geodätische Koordinaten
 		ml.m_Longitude_Sat = Limbdaten[offset + direction * i].m_Sub_Sat_Lon;
 		ml.m_Hoehe_Sat = Limbdaten[offset + direction * i].m_Sat_Hoehe;
@@ -192,7 +199,8 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
 	// 4. Erstellung des Übergabevektors
 	vector<Messung_Limb> Ergebnisvektor
 		= make_messung_limb_vector(Dateiname, Limbdaten, Wellenlaengen,
-				no_of_pix, no_of_alt, orbit_phase, Datum, 7, 23, 1);
+				no_of_pix, no_of_alt, orbit_phase, Datum, Center_Lat_Lon,
+				7, 23, 1);
 
 	//Teile von Schritt 4 nochmal für die Troposhärische Säule
 	//Eigentlich reichen Intensitäten
@@ -310,7 +318,7 @@ ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(string Dateiname,
 	// 4. Erstellung des Übergabevektors
 	vector<Messung_Limb> Ergebnisvektor
 		= make_messung_limb_vector(Dateiname, Limbdaten, Wellenlaengen,
-				no_of_pix, no_of_alt, orbit_phase, Datum,
+				no_of_pix, no_of_alt, orbit_phase, Datum, Center_Lat_Lon,
 				Anzahl_Hoehen, Anzahl_Hoehen - 1, -1);
 
 	//Teile von Schritt 4 nochmal für die niedrigste Höhe
@@ -368,6 +376,7 @@ vector<Messung_Nadir> make_messung_nadir_vector(string Dateiname,
 		mn.m_Tag = Nadirdaten[i].m_Tag;
 		mn.m_Stunde = Nadirdaten[i].m_Stunde;
 		mn.m_Minute = Nadirdaten[i].m_Minute;
+		mn.m_Sekunde = Nadirdaten[i].m_Sekunde;
 		//Geolokationen
 		mn.m_Latitude_Sat = Nadirdaten[i].m_Sat_Lat;
 		mn.m_Longitude_Sat = Nadirdaten[i].m_Sat_Lon;
@@ -517,6 +526,23 @@ int Ausgabe_Saeulendichten(string Dateiname,
 //Ende int Ausgabe_Zeilendichten_Limb(string Dateiname);
 //********************************************************************//
 ////////////////////////////////////////////////////////////////////////////////
+/* prints the back-inserted columns to a file */
+int Ausgabe_Saeulendichten_back(std::string Dateiname,
+		std::vector<Ausgewertete_Messung_Limb> &aml_vec, MPL_Matrix &y)
+{
+	std::vector<Ausgewertete_Messung_Limb> aml_vec_neu;
+	std::vector<Ausgewertete_Messung_Limb>::iterator aml_it;
+
+	/* build a new vector with the back-inserted columns
+	 * instead of the original ones */
+	for (aml_it = aml_vec.begin(); aml_it != aml_vec.end(); ++aml_it) {
+		int i = std::distance(aml_vec.begin(), aml_it);
+		aml_vec_neu.push_back(*aml_it);
+		aml_vec_neu.at(i).m_Zeilendichte = y(i);
+	}
+
+	return Ausgabe_Saeulendichten(Dateiname, aml_vec_neu);
+}
 ////////////////////////////////////////////////////////////////////////////////
 //********************************************************************//
 //START int Ausgabe_Zeilendichten_Nadir
@@ -530,12 +556,12 @@ int Ausgabe_Saeulendichten(string Dateiname,
 	//Datei öffnen
 	outfile = fopen(Dateiname.c_str(), "w");
 	//Überschrift
-	fprintf(outfile, "%4s %3s %5s "
+	fprintf(outfile, "%4s %5s %3s "
 			"%11s %11s "
 			"%11s %11s "
 			"%11s %11s %11s"
 			"%11s %11s \n",
-			"Jahr", "Tag", "Monat",
+			"Jahr", "Monat", "Tag",
 			"Lat_Sat", "Lon_Sat",
 			"Lat_Ground", "Long_Ground",
 			"Erdradius", "Deklination[°]", "Sonne_Lon[°]",
@@ -600,7 +626,8 @@ MPL_Matrix Read_Atmodatei(string Dateiname)
 // Funktionsstart Ausgabe_Dichten
 ////////////////////////////////////////////////////////////////////////////////
 int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
-		MPL_Matrix &Dichten, MPL_Matrix &S_x, MPL_Matrix &AKM)
+		MPL_Matrix &Dichten, MPL_Matrix &Dichten_tot, MPL_Matrix &apriori,
+		MPL_Matrix &S_x, MPL_Matrix &S_x_meas, MPL_Matrix &AKM)
 {
 	// Die Ausgabe erfolgt in 3 Dateien mit zusätzlichem Namen
 	// _Dichten.txt, _Sx.txt und  _AKM.txt
@@ -614,10 +641,11 @@ int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
 
 	//Formatierte Ausgabe
 	FILE *outfile1;
-	string Dateiname1, Dateiname2, Dateiname3;
+	string Dateiname1, Dateiname2, Dateiname2_meas, Dateiname3;
 	Dateiname1 = Dateiname_out + "_Dichten.txt";
-	Dateiname2 = Dateiname_out + "_Sx.txt";
-	Dateiname3 = Dateiname_out + "_AKM.txt";
+	Dateiname2 = Dateiname_out + "_Sx.txt.gz";
+	Dateiname2_meas = Dateiname_out + "_Sx_meas.txt.gz";
+	Dateiname3 = Dateiname_out + "_AKM.txt.gz";
 	int i;
 	double stabw = 0;
 	//Datei öffnen
@@ -627,22 +655,29 @@ int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
 	fprintf(outfile1, "%5s "
 			"%13s %12s %13s "
 			"%14s  %12s %14s "
-			"%12s %12s\n",
+			"  %12s  "
+			"%12s %12s %12s %12s %12s\n",
 			"GP_ID",
 			"Max_Hoehe[km]", "Hoehe[km]", "Min_Hoehe[km]",
 			"Max_Breite[°]", "Breite[°]", "Min_Breite[°]",
-			"Dichte[cm^-3]", " Standardabweichung[cm^-3]");
+			"Laenge[°]",
+			"Dichte[cm^-3]", "Fehler Mess[cm^-3]",
+			"Fehler tot[cm^-3]", "Gesamtdichte[cm^-3]",
+			"apriori[cm^-3]");
 	// Alle Zeilen bis auf die letzte
 	for (i = 0; i < Grid.m_Anzahl_Punkte; i++) {
 		stabw = sqrt(S_x(i, i));
+		double stdabw_meas = std::sqrt(S_x_meas(i, i));
 		fprintf(outfile1, "%5i  "
 				"%+1.5E %+1.5E  %+1.5E "
 				" %+1.5E %+1.5E  %+1.5E "
-				" %+1.5E               %+1.5E\n",
+				" %+1.5E  "
+				" %+1.5E       %+1.5E      %+1.5E        %+1.5E   %+1.5E\n",
 				i,
 				Grid.m_Gitter[i].m_Max_Hoehe, Grid.m_Gitter[i].m_Hoehe, Grid.m_Gitter[i].m_Min_Hoehe,
 				Grid.m_Gitter[i].m_Max_Breite, Grid.m_Gitter[i].m_Breite, Grid.m_Gitter[i].m_Min_Breite,
-				Dichten(i), stabw);
+				Grid.m_Gitter[i].longitude,
+				Dichten(i), stdabw_meas, stabw, Dichten_tot(i), apriori(i));
 	}
 	////////////////////////////////////////////////////////////////////////////
 	// Datei schließen
@@ -652,6 +687,7 @@ int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
 	//S_x
 	// Zeilenweise ausgeben
 	S_x.in_Datei_speichern(Dateiname2);
+	S_x_meas.in_Datei_speichern(Dateiname2_meas);
 
 	//AKM
 	// Zeilenweise ausgeben

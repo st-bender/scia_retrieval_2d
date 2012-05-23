@@ -4,14 +4,6 @@
  *  Created on: 30.04.2010
  *      Author: martin
  */
-//Macro SAVEDELETE
-#define SAVEDELETE(array)     \
-if(array!=0)                                 \
-{                                                \
-    delete[] array;                        \
-    array=0;                                 \
-}                                                \
-//Das Makro ist nur Save, falls die arrays alle mit 0 initialisiert werden
 
 #include <cstdio>
 #include "Messung_Nadir.h"
@@ -20,7 +12,11 @@ if(array!=0)                                 \
 #include "Ausgewertete_Messung_Nadir.h"
 #include <cstdio>
 #include <iostream>
+#include <sstream>
+#include <sys/stat.h>
 #include "Ausdrucke.h"
+#include "Speziesfenster.h"
+#include "Dateinamensteile_Bestimmen.h"
 
 using namespace std;
 //////////////////////////////////////////////////
@@ -245,22 +241,19 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 			Funktion.push_back(Peak + Basis);
 		}
 
-		string s1, s_OrbNum, s2;
-		char buf[256];
+		string s_OrbNum;
+		stringstream buf;
 		//TODO immer prüfen, ob Dateienamenlänge noch stimmt...
 		// falls / im Namen ist das schlecht
-		string Datnam = m_Dateiname_L1C.substr(m_Dateiname_L1C.size() - 39, 39);
+		string Datnam = sb_basename(m_Dateiname_L1C);
 
 		//TODO Pfad anpassen
-		sprintf(buf, "mkdir %s/Plots 2>/dev/null", Arbeitsverzeichnis.c_str());
-		string Befehl = buf;
-		system(Befehl.c_str());
-		sprintf(buf, "%s_%s_%i_%i.ps",
-				Datnam.c_str(), Spezfenst.m_Spezies_Name.c_str(), MessungsNr, Index);
-		string new_datnam = buf;
-		sprintf(buf, "%s/Plots/%s",
-				Arbeitsverzeichnis.c_str(), new_datnam.c_str());
-		s1 = buf;
+		string plot_dir = Arbeitsverzeichnis + "/Plots";
+		mkdir(plot_dir.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
+			<< "_" << MessungsNr << "_" << Index << ".ps";
+		string new_datnam(buf.str());
+		string s1(plot_dir + "/" + new_datnam);
 		//s1 ist der Volle Pfad der Datei...
 		//diesen kann man wegspeichern,
 		//um später die .ps files in ein großes pdf zu packen
@@ -277,10 +270,13 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 			s_OrbNum = Datnam.substr(pos_suffix - 5, 5);
 		}
 		//Orbitnummer ermittelt///////
-		sprintf(buf, "Orbit %5s Nadir GP: Lat: %G G(rad)  Lon: %G G Sat: Lat: %G G Lon: %G",
-				s_OrbNum.c_str(), m_Latitude_Ground, m_Longitude_Ground,
-				m_Latitude_Sat, m_Longitude_Sat);
-		s2 = buf;
+		buf.str(string());
+		buf << "Orbit " << s_OrbNum.c_str() << ", Nadir GP:"
+			<< " Lat: " << m_Latitude_Ground << " deg,"
+			<< " Lon: " << m_Longitude_Ground << " deg; Sat:"
+			<< " Lat: " << m_Latitude_Sat << " deg,"
+			<< " Lon: " << m_Longitude_Sat << " deg.";
+		string s2(buf.str());
 		//cout<<s1<<"\n";
 		//int Plot_2xy(string Dateiname,string title, string xlabel,
 		//  string ylabel,double* x1,double*y1, double* x2,double* y2,
@@ -346,7 +342,7 @@ int Messung_Nadir::Deklinationswinkel_bestimmen() // auch gleich wie bei Limb
 	//theta=-23,45*cos(360° *(N+10)/365);
 	// dieser Winkel ändert sich nicht sehr stark von Tag zu Tag
 	// reicht auch auf Tagesgenauigkeit
-	int Monatstage[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	int Monatstage[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 	double Tage = 0;
 	for (int i = 0; i < (this->m_Monat - 1); i++) {
 		Tage += Monatstage[i];

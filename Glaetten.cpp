@@ -9,6 +9,16 @@
 #include <vector>
 #include <iterator>
 #include <numeric>
+#include <algorithm>
+#include <cmath>
+#include <sstream>
+#include <iomanip>
+#include "MPL_Matrix.h"
+
+extern "C" {
+	void dgesv_(int *N, int *NRHS, double *A, int *LDA, int *IPIV, double *B,
+			int *LDB, int *INFO);
+}
 
 using namespace std;
 
@@ -185,12 +195,195 @@ int my_sciamachy_blur(vector<double> &y)
 	return my_convolution_1d(y, weights);
 }
 
-/* not really a smoothing function but this file seems to be the best place for now */
-double shift_wavelength(double wl)
+/* lowess smoothing, code inspired by the biopython module found in
+ * <biopython>/Bio/Statistics/lowess.py
+ *
+ * For more information, see
+ *
+ * William S. Cleveland: "Robust locally weighted regression and smoothing
+ * scatterplots", Journal of the American Statistical Association, Dec 1979,
+ * volume 74, number 368, pp. 829-836.
+
+ * William S. Cleveland and Susan J. Devlin: "Locally weighted regression: An
+ * approach to regression analysis by local fitting", Journal of the American
+ * Statistical Association, Sep 1988, volume 83, number 403, pp. 596-610.
+ */
+int my_lowess(vector<double> &x, vector<double> &y, double f)
+{
+	int n = x.size();
+	int r = ceil(f * n);
+	vector<double> y_neu;
+
+	for (int i = 0; i < n; i++) {
+		vector<double> dist, dist_sort, wgts;
+		// calculate the distances
+		for (int j = 0; j < n; j++) {
+			double d = abs(x.at(i) - x.at(j));
+			dist.push_back(d);
+			dist_sort.push_back(d);
+		}
+		// sort the distances
+		sort(dist_sort.begin(), dist_sort.end());
+
+		// calculate the weights
+		for (int j = 0; j < n; j++) {
+			double w = dist.at(j) / dist_sort.at(r);
+			if (w >= 0. && w < 1.) {
+				w = 1. - w * w * w;
+				w = w * w * w;
+			} else w = 0.;
+			wgts.push_back(w);
+		}
+
+		// sums for the weighted linear regression
+		double w_x_sum = 0., w_y_sum = 0.;
+		double w_xx_sum = 0., w_xy_sum = 0.;
+		double w_sum = 0.;
+
+		for (int j = 0; j < n; j++) {
+			double w = wgts.at(j), a = x.at(j), b = y.at(j);
+			w_sum += w;
+			w_x_sum += w * a;
+			w_y_sum += w * b;
+			w_xx_sum += w * a * a;
+			w_xy_sum += w * a * b;
+		}
+
+		double det = w_sum * w_xx_sum - w_x_sum * w_x_sum;
+		double beta1 = (w_xx_sum * w_y_sum - w_x_sum * w_xy_sum) / det;
+		double beta2 = (w_sum * w_xy_sum - w_x_sum * w_y_sum) / det;
+		double yval = beta1 + beta2 * x.at(i);
+
+		y_neu.push_back(yval);
+	}
+	y = y_neu;
+
+	return 0;
+}
+
+/* linear equation solver helper function
+ * LHS = Ax = b = RHS
+ * the original RHS is replaced by the solution x */
+int my_solve(MPL_Matrix &LHS, MPL_Matrix &RHS)
+{
+	// Fortran Matrizen sind zu C++ Matrizen transponiert
+	MPL_Matrix A = LHS.transponiert();
+	// N ist Anzahl der Gitterpunkte
+	int N = LHS.m_Zeilenzahl;
+	// array mit der Pivotisierungsmatrix sollte so groß wie N sein,
+	int *IPIV;
+	IPIV = new int[N];
+	// Spalten von RHS 1 nehmen, um keine C/Fortran Verwirrungen zu provozieren
+	int NRHS = 1;
+	int LDA = N;
+	int LDB = N;
+	int INFO;
+
+	// AUFRUF A ist LHS.transponiert und B ist RHS
+	dgesv_(&N, &NRHS, A.m_Elemente, &LDA, IPIV, RHS.m_Elemente, &LDB, &INFO);
+
+	delete[] IPIV;
+
+	return INFO;
+}
+
+/* Whittaker smoothing for background subtraction
+ * method described in Anal. Chem. 75, 3631--3636 (2003)
+ * returns the smoothed vector with the same length as the input vector (y),
+ * and takes a weight vector (w) (0 for points to be skipped, 1 otherwise). */
+std::vector<double> my_whittaker_smooth(std::vector<double> &y,
+		std::vector<double> &w, int order, double lambda, double &err)
+{
+	int m = y.size();
+	MPL_Matrix dummy(m, m);
+	MPL_Matrix E = dummy.unity();
+	MPL_Matrix D = E.row_diff();
+	MPL_Matrix Y(m, 1), Z(m, 1), W(m, m);
+	W.Null_Initialisierung();
+
+	while (--order > 0)
+		D = D.row_diff();
+
+	// prepare RHS and W
+	for (int i = 0; i < m; i++) {
+		Z(i) = Y(i) = w.at(i) * y.at(i);
+		W(i, i) = w.at(i);
+	}
+
+	// prepare LHS
+	MPL_Matrix A = W + lambda * D.transponiert() * D;
+	my_solve(A, Z);
+
+	// calculate the rms error of the smoothed points
+	double N = std::accumulate(w.begin(), w.end(), 0.);
+	MPL_Matrix R = Y - Z;
+	MPL_Matrix Res = R.transponiert() * W * R;
+	err = std::sqrt(Res(0, 0) / N);
+
+	// generate return vector
+	std::vector<double> z(Z.m_Elemente, Z.m_Elemente + Z.m_Elementanzahl);
+
+	return z;
+}
+
+/* not really smoothing functions but this file seems to be the best place for now */
+double interpolate(std::vector<double> &x, std::vector<double> &y, double x0)
+{
+	int i;
+	std::vector<double>::iterator x_it;
+	x_it = std::upper_bound(x.begin(), x.end(), x0);
+
+	if (x_it == x.begin()) return y.at(0);
+	if (x_it == x.end()) return *(y.end() - 1);
+
+	i = distance(x.begin(), x_it) - 1;
+
+	return y.at(i)
+		+ (x0 - x.at(i)) * (y.at(i) - y.at(i + 1)) / (x.at(i) - x.at(i + 1));
+}
+
+double n_air(double wl)
 {
 	double sigma = 1.e6 / (wl * wl);
-	double n_air = 1. + 0.000064328 + 0.0294981 / (146. - sigma)
+	return 1. + 0.000064328 + 0.0294981 / (146. - sigma)
 		+ 0.0002554 / (41. - sigma);
+}
+double shift_wavelength(double wl)
+{
+	return wl / n_air(wl);
+}
+double spidr_value_from_file(int year, int month, int day,
+		std::string filename)
+{
+	double ret;
+	std::string line, date;
+	std::stringstream ss;
+	std::ifstream f;
+	size_t pos;
 
-	return wl / n_air;
+	// construct the date string from the variables
+	ss << year
+		<< "-" << std::setw(2) << std::setfill('0') << month
+		<< "-" << std::setw(2) << std::setfill('0') << day;
+	ss >> date;
+
+	f.open(filename.c_str());
+	if (!f.is_open()) {
+		std::cerr << "Error opening `" << filename << "'." << std::endl;
+		return 0.;
+	}
+	while (std::getline(f, line)) {
+		pos = line.find(date);
+		if (pos != std::string::npos) {
+			std::istringstream iss(line);
+			std::string dummy1, dummy2;
+			// skip the first two items (date and time)
+			iss >> dummy1 >> dummy2;
+			// the third is what we need
+			iss >> ret;
+		}
+	}
+	f.close();
+
+	return ret;
 }

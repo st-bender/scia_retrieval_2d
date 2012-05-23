@@ -6,7 +6,8 @@
  */
 // In dieser Liste stehen alle Dateinamen, die zu einem Orbit gehören
 // Diese wird aus einer Datei geladen -> Die Orbitliste wird dort erzeugt
-
+#ifndef ORBITLISTE_HH_
+#define ORBITLISTE_HH_
 
 #include<fstream>
 #include<string>
@@ -14,25 +15,16 @@
 #include <cstdlib>
 #include<vector>
 
-
-using namespace std;
-
-
-
-#ifndef ORBITLISTE_HH_
-#define ORBITLISTE_HH_
-
-
 class Orbitliste
 {
 public:
-	int Liste_Laden(string Dateiname);
-	int Ist_Messung_Limbmessung(uint Index);   //0 ja alles andere nein
-	int Ist_Messung_Nadirmessung(uint Index);  //0 ja alles andere nein
-	vector<string> m_Dateinamen;
+	int Liste_Laden(std::string Dateiname);
+	bool Ist_Messung_Limbmessung(uint Index);
+	bool Ist_Messung_Nadirmessung(uint Index);
+	std::vector<std::string> m_Dateinamen;
 
 	//Wartungsfunktion
-	void In_Datei_Speichern(string Dateiname);
+	void In_Datei_Speichern(std::string Dateiname);
 };
 
 
