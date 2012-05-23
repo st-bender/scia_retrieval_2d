@@ -564,12 +564,14 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
 			<< "_" << index << "_"
 			<< std::setw(3) << std::setfill('0') << std::setprecision(0)
-			<< std::fixed << m_Hoehe_TP << "km.ps";
+			<< std::fixed << m_Hoehe_TP << "km";
 		std::string new_datnam(buf.str());
-		std::string s1(plot_dir + "/" + new_datnam);
+		std::string s1(plot_dir + "/" + new_datnam + "_a.ps");
+		std::string s1b(plot_dir + "/" + new_datnam + "_b.ps");
 		// s1 ist der Volle Pfad der Datei... diesen wegspeichern,
 		// um später die .ps files in ein großes pdf zu packen
 		Spezfenst.m_Liste_der_Plot_Dateinamen.push_back(s1);
+		Spezfenst.m_Liste_der_Plot_Dateinamen.push_back(s1b);
 		// Orbitnummer ermitteln
 		// die Orbitnummer sind die 5 Zeichen vor .dat
 		size_t pos_suffix = 0;
@@ -596,6 +598,15 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 				 wavelengths, spec_wo_rayleigh, wavelengths, NO_fit,
 				 0, wavelengths.size() - 1,
 				 m_Zeilendichte, m_Fehler_Zeilendichten);
+
+		std::vector<double> spec_orig(rad.begin() + i_basewin_l_min,
+				rad.begin() + i_basewin_l_min + wavelengths.size());
+		Plot_2xy(Arbeitsverzeichnis.c_str(), s1b.c_str(), s2.c_str(),
+				 "wavelength [nm]",
+				 "residual radiance [ph/cm^2/s/nm]",
+				 wavelengths, spec_orig, wavelengths, rayleigh_rad,
+				 0, wavelengths.size() - 1,
+				 f_sol_fit, 0.);
 	}
 
 	if (debug == true) {
