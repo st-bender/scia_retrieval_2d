@@ -61,7 +61,7 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 	Messung_Limb space; // intensities at ~ 360 km
 	Messung_Limb mean_10_20;
 	//Hier stecken NUR die Intensitäten der Säulen 10 bis 20 (ca 30-60km) drin
-	//cerr<<"Rohdaten einlesen\n";
+	cerr<<"Rohdaten einlesen\n";
 	if (limb_meso_thermo != "ja") {
 		Rohdaten =
 			ReadL1C_Limb_mpl_binary(Orbitlist.m_Dateinamen[l], Tropo, mean_10_20);
@@ -73,7 +73,7 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 			ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(Orbitlist.m_Dateinamen[l],
 					Tropo, space, Anzahl_Hoehen);
 	}
-	//cerr<<Orbitlist.m_Dateinamen[l]<<" wird bearbeitet\n";
+	cerr<<Orbitlist.m_Dateinamen[l]<<" wird bearbeitet\n";
 	//Testen, ob ReadL1C ordentlich gearbeitet hat
 	//Rohdaten[0].Ausgabe_in_Datei("CHECKDATA/Rohdaten_erste_Limb_Messung.txt");
 	//-> Das geht jetzt
@@ -101,19 +101,23 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 		return 1;  //Nachtmessung 1
 	}
 
+	cerr<<" NLC test...\n";
 	if (Test_auf_NLC_Limb(Rohdaten, Konf) == true) {
 		std::cout << "# NLC at lat = " << Rohdaten[0].m_Latitude_TP
 			<< ", alt = " << Rohdaten[0].m_Hoehe_TP << std::endl;
 		counter_NLC_detektiert++;
 		return 2;  //NLC 2
 	}
+	cerr<<" geoloc test...\n";
 	Test_auf_korrekte_geolocations_Limb(Rohdaten, counter_Richtungsvektor_nicht_ok);
+	cerr<<" SAA test...\n";
 	if (test_auf_SAA_limb(space) && test_auf_SAA_limb(*(Rohdaten.end() - 2))) {
 		std::cout << "# SAA at lat = " << Rohdaten[0].m_Latitude_TP
 			<< ", alt = " << Rohdaten[0].m_Hoehe_TP << std::endl;
 		return 1;
 	}
 
+	cerr<<" pole test...\n";
 	// skips before/after-pole points by requiring that the TP latitude
 	// increases with tangent altitude since MLT scans go from top to
 	// bottom and the satellite moves from north to south.
