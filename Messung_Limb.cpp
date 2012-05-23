@@ -395,6 +395,18 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	std::vector<double> sol_rad = sol_spec.m_Int_interpoliert;
 	std::vector<double> fit_spec, ones(N_base + N_peak, 1.);
 
+	if (1) {
+		std::cout << "i_basewin_l_min = " << i_basewin_l_min << std::endl;
+		std::cout << "i_basewin_l_max = " << i_basewin_l_max << std::endl;
+		std::cout << "i_basewin_r_min = " << i_basewin_r_min << std::endl;
+		std::cout << "i_basewin_r_max = " << i_basewin_r_max << std::endl;
+		std::cout << "i_peakwin_min = " << i_peakwin_min << std::endl;
+		std::cout << "i_peakwin_max = " << i_peakwin_max << std::endl;
+		std::cout << "base_l = " << base_l << std::endl;
+		std::cout << "base_r = " << base_r << std::endl;
+		std::cout << "N_base = " << N_base << std::endl;
+		std::cout << "N_peak = " << N_peak << std::endl;
+	}
 	/* prints the geolocation of the tangent point for later inspection */
 	if (debug == true) {
 		std::cout << "# TP: lat = " << m_Latitude_TP;
