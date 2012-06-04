@@ -39,14 +39,17 @@ bool Test_auf_Nachtmessung_Limb(Messung_Limb &Tropo, Konfiguration &Konf)
 	}
 	Troposignal /= (Index2 - Index1 + 1);
 	if (Troposignal < 1E10) {
-		//cout<<"Nachtmessung detektiert\n";
-		//cout<<"Troposignal:"<<Troposignal<<"\n";
+		cout<<"Nachtmessung detektiert\n";
+		cout<<"Troposignal:"<<Troposignal<<"\n";
 		ist_Nachtmessung = true;
 	}
 	if (Konf.m_Large_SZA == 1) {
 		// schaue nach Sonnenzenitwinkel < m_Maximaler_SZA
-		if (fabs(Tropo.m_TP_SZA) > Konf.m_Maximaler_SZA)
+		if (fabs(Tropo.m_TP_SZA) > Konf.m_Maximaler_SZA) {
+			cout<<"Nachtmessung detektiert\n";
+			cout<<"SZA: "<<Tropo.m_TP_SZA<<"\n";
 			ist_Nachtmessung = true;
+		}
 	}
 
 	return ist_Nachtmessung;
