@@ -564,7 +564,9 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
 			<< "_" << index << "_"
 			<< std::setw(3) << std::setfill('0') << std::setprecision(0)
-			<< std::fixed << m_Hoehe_TP << "km";
+			<< std::fixed << m_Hoehe_TP << "km_"
+			<< std::setw(3) << std::setfill('0') << std::setprecision(0)
+			<< std::fixed << m_Latitude_TP << "deg.ps";
 		std::string new_datnam(buf.str());
 		std::string s1(plot_dir + "/" + new_datnam + "_a.ps");
 		std::string s1b(plot_dir + "/" + new_datnam + "_b.ps");
