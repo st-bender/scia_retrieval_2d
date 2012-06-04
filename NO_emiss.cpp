@@ -872,6 +872,9 @@ int NO_emiss::print_line_emissivities()
 		}
 		std::cout << std::endl;
 	}
+	std::cout << "band emission rate factor of the " << v_u << "-" << v_l
+		<< " transition at " << Temp << " K, photons molec-1 s-1:" << std::endl;
+	std::cout << emiss_tot * M_1_PI << std::endl;
 
 	return 0;
 }
