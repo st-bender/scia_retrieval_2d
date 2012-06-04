@@ -650,10 +650,10 @@ int NO_emiss::calc_excitation()
 	f_FC_tot = 0.;
 	for (i = 0; i <= NO_const::l_vl; i++) {
 		double l_vib = 1.e8 / f_lam(v_u, i);
-		f_FC_tot += f_FC(v_u, i) * l_vib*l_vib*l_vib*l_vib*l_vib;
+		f_FC_tot += f_FC(v_u, i) * l_vib*l_vib*l_vib;
 	}
 	W_vib = 1.e8 / f_lam(v_u, v_l);
-	f_FC_v = f_FC(v_u, v_l) * W_vib*W_vib*W_vib*W_vib*W_vib / f_FC_tot;
+	f_FC_v = f_FC(v_u, v_l) * W_vib*W_vib*W_vib / f_FC_tot;
 
 	return 0;
 }
