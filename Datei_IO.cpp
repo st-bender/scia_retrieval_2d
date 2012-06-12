@@ -128,7 +128,7 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 		ml.m_Number_of_Wavelength = no_of_pix;
 
 		for (int j = 0; j < no_of_pix; j++) {
-			ml.m_Wellenlaengen.push_back(shift_wavelength(Wellenlaengen[j]));
+			ml.m_Wellenlaengen.push_back(Wellenlaengen[j]);
 			if (has_straylight) {
 				// the old corrections
 				dark_sig = Limbdaten[no_of_alt - 1].m_radiance[j];
@@ -325,7 +325,7 @@ ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(string Dateiname,
 	//Eigentlich reichen Intensitäten
 	for (int j = 0; j < no_of_pix; j++) {
 		niedrigste_Hoehe.m_Intensitaeten.push_back(Limbdaten[no_of_alt - 2].m_radiance[j]);
-		space.m_Wellenlaengen.push_back(shift_wavelength(Wellenlaengen[j]));
+		space.m_Wellenlaengen.push_back(Wellenlaengen[j]);
 		space.m_Intensitaeten.push_back(Limbdaten[no_of_alt - 1].m_radiance[j]);
 	}
 	niedrigste_Hoehe.m_TP_SZA = Limbdaten[no_of_alt - 2].m_TP_SZA;
@@ -391,7 +391,7 @@ vector<Messung_Nadir> make_messung_nadir_vector(string Dateiname,
 		//Felder allokieren
 		//Deep Copy der Wellenlängen und Intensitäten
 		for (int j = 0; j < No_of_Pix; j++) {
-			mn.m_Wellenlaengen.push_back(shift_wavelength(Wellenlaenge[j]));
+			mn.m_Wellenlaengen.push_back(Wellenlaenge[j]);
 			mn.m_Intensitaeten.push_back(Nadirdaten[i].m_radiance[j]);
 			mn.m_Intensitaeten_relativer_Fehler.push_back(Nadirdaten[i].m_error[j]);
 			mn.m_Intensitaeten_durch_piF.push_back(0.);
