@@ -353,7 +353,10 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	// Dichte n aus der rechten Seite
 
 	// threshold for peak detection in the NO wavelength range
-	const double peak_threshold = 6.e10;
+	// starting at 6*10^10 at 247 nm (NO(0, 2)) and increasing ~ lambda^4
+	// because of Rayleigh scattering
+	double NO_wl_max = NO.get_scia_wl_at_max();
+	const double peak_threshold = 6.e10 * pow(NO_wl_max / 247.0, 4);
 
 	//Zunächst Indizes der Wellenlaengen der Basisfenster bestimmen
 	int i, j;
