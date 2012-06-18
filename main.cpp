@@ -340,6 +340,7 @@ int main(int argc, char *argv[])
 	Nachricht_Schreiben("Bestimme Speziesdaten...", 3, Prioritylevel);
 	//Füllen z.B. für Magnesium+ *******************************************
 	Spez.m_Spezies_Name = "MgII"; //bitte zusammenhängend
+	Spez.plot_fit = false;
 	Spez.m_FWHM = Konf.m_FWHM;
 	//Wellenlaenge 1
 	wl = 279.553;
@@ -380,6 +381,7 @@ int main(int argc, char *argv[])
 	//weitere Spezies
 	// Magnesium ************************************************************
 	Spez.m_Spezies_Name = "MgI"; //bitte zusammenhängend
+	Spez.plot_fit = false;
 	Spez.m_FWHM = Konf.m_FWHM;
 	//Wellenlaenge 1
 	wl = 285.213;
@@ -411,6 +413,7 @@ int main(int argc, char *argv[])
 	Spez.clear();  // Instanz leeren
 	// Unbekannte Spezies ******************************************************
 	Spez.m_Spezies_Name = "unknown"; //bitte zusammenhängend
+	Spez.plot_fit = false;
 	Spez.m_FWHM = Konf.m_FWHM;
 	//Wellenlaenge 1
 	wl = 288.2;
@@ -451,6 +454,7 @@ int main(int argc, char *argv[])
 	Spez.clear();  // Instanz leeren
 	// FeI ************************************************************
 	Spez.m_Spezies_Name = "FeI"; //bitte zusammenhängend
+	Spez.plot_fit = false;
 	Spez.m_FWHM = Konf.m_FWHM;
 	//Wellenlaenge 1
 	wl = 248.32707;
@@ -491,6 +495,7 @@ int main(int argc, char *argv[])
 	// from config file
 	for (i = 0; i < Konf.no_NO_transitions; i++) {
 		Spez.m_Spezies_Name = "NO";
+		Spez.plot_fit = true;
 		NO_emiss NO(Konf.NO_v_u.at(i), Konf.NO_v_l.at(i),
 				Konf.NO_v_l_abs.at(i), Konf.atmo_Temp);
 		NO.get_solar_data(sol_ref);
