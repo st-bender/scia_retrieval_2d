@@ -57,7 +57,7 @@ void Matrizen_Aufbauen(MPL_Matrix &S_Breite, MPL_Matrix &S_Hoehe,
 	S_letzte_Hoehe *= Lambda_letzte_Hoehe;
 
 	//cerr<<"S_apriori\n";
-	S_apriori = Einheitsmatrix_aufbauen(S_apriori.m_Zeilenzahl);
+	S_apriori = Einheitsmatrix_aufbauen(Grid.m_Anzahl_Punkte);
 
 	// Fehlermatrizen mit konstanten Wichtungsfaktoren Multiplizieren
 	// nur bei apriori...die anderen erst in Normalgleichung
