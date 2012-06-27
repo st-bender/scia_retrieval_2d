@@ -10,6 +10,7 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+#include <numeric>
 
 #include "constants.h"
 #include "NO_emiss.h"
@@ -741,6 +742,12 @@ int NO_emiss::scia_convolve(Messung_Limb &ml)
 	spec_max = std::max_element(spec_scia_res.begin(), spec_scia_res.end());
 	i = std::distance(spec_scia_res.begin(), spec_max);
 	scia_wl_at_max = ml.m_Wellenlaengen.at(i);
+	/* integrated band emission,
+	 * corrects for the 1/(4.*pi) for the whole solid angle,
+	 * and the d(lambda) = 0.11 might not be fully accurate
+	 * but is close enough. */
+	scia_band_emiss = 4. * M_PI * 0.11 *
+		std::accumulate(spec_scia_res.begin(), spec_scia_res.end(), 0.);
 
 	return 0;
 }
@@ -916,4 +923,8 @@ double NO_emiss::get_spec_scia_max()
 double NO_emiss::get_scia_wl_at_max()
 {
 	return scia_wl_at_max;
+}
+double NO_emiss::get_scia_band_emiss()
+{
+	return scia_band_emiss;
 }
