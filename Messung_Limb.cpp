@@ -404,6 +404,8 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		std::cout << ", lon = " << m_Longitude_TP;
 		std::cout << ", height = " << m_Hoehe_TP << std::endl;
 		std::cout << "# orbit_phase = " << m_orbit_phase << std::endl;
+		std::cout << "# NO band emission = " << NO.get_scia_band_emiss()
+			<< std::endl;
 	}
 
 	for (i = 0; i < N_base + N_peak; i++) {
