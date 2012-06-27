@@ -641,8 +641,8 @@ int NO_emiss::calc_excitation()
 					}
 			}
 		}
-		sum1 *= M_PI * phys::flux * f_osc(v_u, 0);
-		sum2 *= M_PI * phys::flux * f_osc(v_u, 0);
+		sum1 *= phys::flux * f_osc(v_u, 0);
+		sum2 *= phys::flux * f_osc(v_u, 0);
 		excit(0, i) = sum1;
 		if (i < NJ) excit(1, i + 1) = sum2;
 	}
@@ -874,7 +874,7 @@ int NO_emiss::print_line_emissivities()
 	}
 	std::cout << "band emission rate factor of the " << v_u << "-" << v_l
 		<< " transition at " << Temp << " K, photons molec-1 s-1:" << std::endl;
-	std::cout << emiss_tot * M_1_PI << std::endl;
+	std::cout << emiss_tot << std::endl;
 
 	return 0;
 }
@@ -902,7 +902,8 @@ double NO_emiss::get_lambda_K(int i, int j)
 }
 double NO_emiss::get_gamma_j(int i, int j)
 {
-	return gamma_j(i, j);
+	// convert from 1/Å to 1/nm
+	return 10. * gamma_j(i, j);
 }
 double NO_emiss::get_spec_scia_res(int i)
 {
