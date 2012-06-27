@@ -243,7 +243,7 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 
 	////////////////////////////////////////////////////////////////////////////
 	// Hier kann man zur Testzwecken noch einen Plot machen  ///////////////////
-	if (mache_Fit_Plots == "ja") {
+	if (mache_Fit_Plots == "ja" && Spezfenst.plot_fit) {
 		//TODO das als Funktion implementieren
 		vector<double> Funktion(N_Peak);
 
@@ -404,6 +404,8 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		std::cout << ", lon = " << m_Longitude_TP;
 		std::cout << ", height = " << m_Hoehe_TP << std::endl;
 		std::cout << "# orbit_phase = " << m_orbit_phase << std::endl;
+		std::cout << "# NO band emission = " << NO.get_scia_band_emiss()
+			<< std::endl;
 	}
 
 	for (i = 0; i < N_base + N_peak; i++) {
@@ -520,7 +522,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		+ N_peak * rms_err_peak * rms_err_peak) / (N_base + N_peak));
 	m_Fehler_Zeilendichten = rms_err_tot / NO.get_spec_scia_max();
 
-	if (mache_Fit_Plots == "ja") {
+	if (mache_Fit_Plots == "ja" && Spezfenst.plot_fit) {
 		// prepare data to plot
 		std::vector<double> wavelengths, spec_wo_rayleigh = y, NO_fit;
 		for (i = 0; i < base_l; i++) {

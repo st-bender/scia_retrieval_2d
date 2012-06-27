@@ -86,6 +86,7 @@ class NO_emiss {
 	MPL_Matrix gamma_j;
 	std::vector<double> spec_scia_res;
 	double scia_wl_at_max;
+	double scia_band_emiss;
 
 	public:
 	// solar spectrum
@@ -117,6 +118,7 @@ class NO_emiss {
 	double get_spec_scia_res(int i);
 	double get_spec_scia_max();
 	double get_scia_wl_at_max();
+	double get_scia_band_emiss();
 };
 
 #endif /* NO_EMISS_H_ */

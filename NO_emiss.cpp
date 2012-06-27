@@ -10,6 +10,7 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+#include <numeric>
 
 #include "constants.h"
 #include "NO_emiss.h"
@@ -641,8 +642,8 @@ int NO_emiss::calc_excitation()
 					}
 			}
 		}
-		sum1 *= M_PI * phys::flux * f_osc(v_u, 0);
-		sum2 *= M_PI * phys::flux * f_osc(v_u, 0);
+		sum1 *= phys::flux * f_osc(v_u, 0);
+		sum2 *= phys::flux * f_osc(v_u, 0);
 		excit(0, i) = sum1;
 		if (i < NJ) excit(1, i + 1) = sum2;
 	}
@@ -741,6 +742,12 @@ int NO_emiss::scia_convolve(Messung_Limb &ml)
 	spec_max = std::max_element(spec_scia_res.begin(), spec_scia_res.end());
 	i = std::distance(spec_scia_res.begin(), spec_max);
 	scia_wl_at_max = ml.m_Wellenlaengen.at(i);
+	/* integrated band emission,
+	 * corrects for the 1/(4.*pi) for the whole solid angle,
+	 * and the d(lambda) = 0.11 might not be fully accurate
+	 * but is close enough. */
+	scia_band_emiss = 4. * M_PI * 0.11 *
+		std::accumulate(spec_scia_res.begin(), spec_scia_res.end(), 0.);
 
 	return 0;
 }
@@ -874,7 +881,7 @@ int NO_emiss::print_line_emissivities()
 	}
 	std::cout << "band emission rate factor of the " << v_u << "-" << v_l
 		<< " transition at " << Temp << " K, photons molec-1 s-1:" << std::endl;
-	std::cout << emiss_tot * M_1_PI << std::endl;
+	std::cout << emiss_tot << std::endl;
 
 	return 0;
 }
@@ -902,7 +909,8 @@ double NO_emiss::get_lambda_K(int i, int j)
 }
 double NO_emiss::get_gamma_j(int i, int j)
 {
-	return gamma_j(i, j);
+	// convert from 1/Å to 1/nm
+	return 10. * gamma_j(i, j);
 }
 double NO_emiss::get_spec_scia_res(int i)
 {
@@ -915,4 +923,8 @@ double NO_emiss::get_spec_scia_max()
 double NO_emiss::get_scia_wl_at_max()
 {
 	return scia_wl_at_max;
+}
+double NO_emiss::get_scia_band_emiss()
+{
+	return scia_band_emiss;
 }
