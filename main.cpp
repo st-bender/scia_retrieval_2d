@@ -879,9 +879,9 @@ int main(int argc, char *argv[])
 	// AMF_Matrix erstellen // Zeilen wie y spalten wie x
 	MPL_Matrix AMF_MgI;
 	// S_Breite, S_Hoehe, S_Apriori, S_y, AMF aufbauen
-	int IERR = 0;
 	//cerr<<"MgI Matrizen aufbaun\n";
 	if (mache_volles_Retrieval_MgI == "ja") {
+		int IERR = 0;
 		Matrizen_Aufbauen(S_Breite, S_Hoehe, S_letzte_Hoehe_MgI,
 						   MgI_Lambda_letzte_Hoehe,
 						   S_apriori_MgI, S_y_MgI,
@@ -977,9 +977,9 @@ int main(int argc, char *argv[])
 	// AMF_Matrix erstellen // Zeilen wie y spalten wie x
 	MPL_Matrix AMF_MgII;
 	// S_Breite, S_Hoehe, S_Apriori, S_y, AMF aufbauen
-	IERR = 0;
 	//cerr<<"MgII Matrizen aufbaun\n";
 	if (mache_volles_Retrieval_MgII == "ja") {
+		int IERR = 0;
 		Matrizen_Aufbauen(S_Breite, S_Hoehe, S_letzte_Hoehe_MgII,
 						   MgII_Lambda_letzte_Hoehe,
 						   S_apriori_MgII, S_y_MgII,
@@ -1070,9 +1070,9 @@ int main(int argc, char *argv[])
 	// AMF_Matrix erstellen // Zeilen wie y spalten wie x
 	MPL_Matrix AMF_unknown;
 	// S_Breite, S_Hoehe, S_Apriori, S_y, AMF aufbauen
-	IERR = 0;
 	//cerr<<"MgI Matrizen aufbaun\n";
 	if (mache_volles_Retrieval_unknown == "ja") {
+		int IERR = 0;
 		Matrizen_Aufbauen(S_Breite, S_Hoehe, S_letzte_Hoehe_unknown,
 						   unknown_Lambda_letzte_Hoehe,
 						   S_apriori_unknown, S_y_unknown,
@@ -1162,9 +1162,9 @@ int main(int argc, char *argv[])
 	// AMF_Matrix erstellen // Zeilen wie y spalten wie x
 	MPL_Matrix AMF_FeI;
 	// S_Breite, S_Hoehe, S_Apriori, S_y, AMF aufbauen
-	IERR = 0;
 	//cerr<<"MgI Matrizen aufbaun\n";
 	if (mache_volles_Retrieval_FeI == "ja") {
+		int IERR = 0;
 		Matrizen_Aufbauen(S_Breite, S_Hoehe, S_letzte_Hoehe_FeI,
 						   FeI_Lambda_letzte_Hoehe,
 						   S_apriori_FeI, S_y_FeI,
@@ -1253,9 +1253,9 @@ int main(int argc, char *argv[])
 	// Zeilen wie y spalten wie x
 	MPL_Matrix AMF_NO;
 	// S_Breite, S_Hoehe, S_Apriori, S_y, AMF aufbauen
-	IERR = 0;
 	// cerr << "NO Matrizen aufbauen" << endl;
 	if (mache_volles_Retrieval_NO == "ja") {
+		int IERR = 0;
 		Matrizen_Aufbauen(S_Breite, S_Hoehe, S_letzte_Hoehe_NO,
 						   NO_Lambda_letzte_Hoehe,
 						   S_apriori_NO, S_y_NO,
