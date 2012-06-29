@@ -821,17 +821,13 @@ int main(int argc, char *argv[])
 	// Spezies Mg I //
 	////////////////////////////////////////////////////////////////////////////
 	// einen Vektor der Dichte_n
-	MPL_Matrix Dichte_n_MgI(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
-	Dichte_n_MgI.Null_Initialisierung();
+	MPL_Matrix Dichte_n_MgI; //Spaltenvektor
 	//Dichte_n_MgI.in_Datei_speichern("/tmp/mlangowski/0/Dichte_n_MgI");
 	// einen Vektor x_a für die a-priori-Lösung der Dichte (oder Startwert usw)
-	MPL_Matrix Dichte_apriori_MgI(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
-	Dichte_apriori_MgI.Null_Initialisierung();  // Null als Startwert
+	MPL_Matrix Dichte_apriori_MgI; //Spaltenvektor
 	// Vektor mit Zeilendichten  für alle Messungen einer Spezies
-	MPL_Matrix Saeulendichten_MgI(Ausgewertete_Limbmessung_MgI.size()
-			+ Ausgewertete_Nadirmessung_MgI.size(), 1); //Spaltenvektor
-	MPL_Matrix Saeulendichten_Fehler_MgI(Ausgewertete_Limbmessung_MgI.size()
-			+ Ausgewertete_Nadirmessung_MgI.size(), 1); //Spaltenvektor
+	MPL_Matrix Saeulendichten_MgI;
+	MPL_Matrix Saeulendichten_Fehler_MgI;
 	// verwendete Konfiguration bis 20.1.2011
 	//double MgI_Lambda_Hoehe= 5E-7;//5E-6;//5E-6;//5E-6;     gute Werte 5 E-6 
 	// TODO das laden der Parameter eindeutiger machen
@@ -900,27 +896,37 @@ int main(int argc, char *argv[])
 			cerr << "Fehler bei Matrizen_Aufbauen\n";
 			return -1; //Hauptprogramm beenden
 		}
-	}
-	// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
-	// Limb MgI
-	//cerr<<"MgI Limb\n";
-	for (unsigned int i = 0; i < Ausgewertete_Limbmessung_MgI.size(); i++) {
-		Saeulendichten_MgI(i) = Ausgewertete_Limbmessung_MgI[i].m_Zeilendichte;
-		Saeulendichten_Fehler_MgI(i)
-			= Ausgewertete_Limbmessung_MgI[i].m_Fehler_Zeilendichten;
-	}
-	// Nadir MgI
-	//cerr<<"MgI Nadir\n";
-	for (unsigned int i = Ausgewertete_Limbmessung_MgI.size();
-			i < Ausgewertete_Limbmessung_MgI.size() + Ausgewertete_Nadirmessung_MgI.size(); i++) {
-		int Nadir_i = i - Ausgewertete_Limbmessung_MgI.size();
-		Saeulendichten_MgI(i)
-			= Ausgewertete_Nadirmessung_MgI[Nadir_i].m_Zeilendichte;
-		Saeulendichten_Fehler_MgI(i)
-			= Ausgewertete_Nadirmessung_MgI[Nadir_i].m_Fehler_Zeilendichten;
-	}
-	if (mache_volles_Retrieval_MgI == "ja")
+		/* memory allocation for the retrieval */
+		Dichte_n_MgI = MPL_Matrix(Grid.m_Anzahl_Punkte, 1);
+		Dichte_n_MgI.Null_Initialisierung();
+		Dichte_apriori_MgI = MPL_Matrix(Grid.m_Anzahl_Punkte, 1);
+		Dichte_apriori_MgI.Null_Initialisierung();  // Null als Startwert
+		// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
+		Saeulendichten_MgI = MPL_Matrix(Ausgewertete_Limbmessung_MgI.size()
+				+ Ausgewertete_Nadirmessung_MgI.size(), 1); //Spaltenvektor
+		Saeulendichten_Fehler_MgI =
+			MPL_Matrix(Ausgewertete_Limbmessung_MgI.size()
+				+ Ausgewertete_Nadirmessung_MgI.size(), 1); //Spaltenvektor
+		// Limb MgI
+		//cerr<<"MgI Limb\n";
+		for (unsigned int i = 0; i < Ausgewertete_Limbmessung_MgI.size(); i++) {
+			Saeulendichten_MgI(i) = Ausgewertete_Limbmessung_MgI[i].m_Zeilendichte;
+			Saeulendichten_Fehler_MgI(i)
+				= Ausgewertete_Limbmessung_MgI[i].m_Fehler_Zeilendichten;
+		}
+		// Nadir MgI
+		//cerr<<"MgI Nadir\n";
+		for (unsigned int i = Ausgewertete_Limbmessung_MgI.size();
+				i < Ausgewertete_Limbmessung_MgI.size()
+					+ Ausgewertete_Nadirmessung_MgI.size(); i++) {
+			int Nadir_i = i - Ausgewertete_Limbmessung_MgI.size();
+			Saeulendichten_MgI(i)
+				= Ausgewertete_Nadirmessung_MgI[Nadir_i].m_Zeilendichte;
+			Saeulendichten_Fehler_MgI(i)
+				= Ausgewertete_Nadirmessung_MgI[Nadir_i].m_Fehler_Zeilendichten;
+		}
 		generate_Sy(S_y_MgI, Saeulendichten_Fehler_MgI);
+	}
 	//Ende Säulendichten und Fehler auffüllen
 	////////////////////////////////////////////////////////////////////////////
 	// ENDE Spezies Mg I //
@@ -930,19 +936,15 @@ int main(int argc, char *argv[])
 	// Spezies Mg II //
 	////////////////////////////////////////////////////////////////////////////
 	// einen Vektor der Dichte_n
-	MPL_Matrix Dichte_n_MgII(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
-	Dichte_n_MgII.Null_Initialisierung();
+	MPL_Matrix Dichte_n_MgII; //Spaltenvektor
 	//Dichte_n_MgI.in_Datei_speichern("/tmp/mlangowski/0/Dichte_n_MgI");
 	// einen Vektor x_a für die a-priori-Lösung der Dichte (oder Startwert usw)
-	MPL_Matrix Dichte_apriori_MgII(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
-	Dichte_apriori_MgII.Null_Initialisierung();  // Null als Startwert
+	MPL_Matrix Dichte_apriori_MgII; //Spaltenvektor
 	// Vektor mit Zeilendichten  für alle Messungen einer Spezies
 	//quadratische matrix
 	MPL_Matrix S_letzte_Hoehe_MgII;
-	MPL_Matrix Saeulendichten_MgII(Ausgewertete_Limbmessung_MgII.size()
-			+ Ausgewertete_Nadirmessung_MgII.size(), 1); //Spaltenvektor
-	MPL_Matrix Saeulendichten_Fehler_MgII(Ausgewertete_Limbmessung_MgII.size()
-			+ Ausgewertete_Nadirmessung_MgII.size(), 1); //Spaltenvektor
+	MPL_Matrix Saeulendichten_MgII;
+	MPL_Matrix Saeulendichten_Fehler_MgII;
 	// Konfiguration bis januar 2011
 	//double MgII_Lambda_Hoehe= 5E-6;//5E-6;//5E-6;//5E-6;
 	//double MgII_Lambda_Breite= 1E-6;//1E-6;//1E-7;//1E-7;
@@ -992,27 +994,37 @@ int main(int argc, char *argv[])
 			cerr << "Fehler bei Matrizen_Aufbauen\n";
 			return -1; //Hauptprogramm beenden
 		}
-	}
-	// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
-	// Limb MgII
-	//cerr<<"MgII Limb\n";
-	for (unsigned int i = 0; i < Ausgewertete_Limbmessung_MgII.size(); i++) {
-		Saeulendichten_MgII(i) = Ausgewertete_Limbmessung_MgII[i].m_Zeilendichte;
-		Saeulendichten_Fehler_MgII(i)
-			= Ausgewertete_Limbmessung_MgII[i].m_Fehler_Zeilendichten;
-	}
-	// Nadir MgII
-	//cerr<<"MgII Nadir\n";
-	for (unsigned int i = Ausgewertete_Limbmessung_MgII.size();
-			i < Ausgewertete_Limbmessung_MgII.size() + Ausgewertete_Nadirmessung_MgII.size(); i++) {
-		int Nadir_i = i - Ausgewertete_Limbmessung_MgII.size();
-		Saeulendichten_MgII(i)
-			= Ausgewertete_Nadirmessung_MgII[Nadir_i].m_Zeilendichte;
-		Saeulendichten_Fehler_MgII(i)
-			= Ausgewertete_Nadirmessung_MgII[Nadir_i].m_Fehler_Zeilendichten;
-	}
-	if (mache_volles_Retrieval_MgII == "ja")
+		/* memory allocation for the retrieval */
+		Dichte_n_MgII = MPL_Matrix(Grid.m_Anzahl_Punkte, 1);
+		Dichte_n_MgII.Null_Initialisierung();
+		Dichte_apriori_MgII = MPL_Matrix(Grid.m_Anzahl_Punkte, 1);
+		Dichte_apriori_MgII.Null_Initialisierung();  // Null als Startwert
+		// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
+		Saeulendichten_MgII = MPL_Matrix(Ausgewertete_Limbmessung_MgII.size()
+				+ Ausgewertete_Nadirmessung_MgII.size(), 1); //Spaltenvektor
+		Saeulendichten_Fehler_MgII =
+			MPL_Matrix(Ausgewertete_Limbmessung_MgII.size()
+				+ Ausgewertete_Nadirmessung_MgII.size(), 1); //Spaltenvektor
+		// Limb MgII
+		//cerr<<"MgII Limb\n";
+		for (unsigned int i = 0; i < Ausgewertete_Limbmessung_MgII.size(); i++) {
+			Saeulendichten_MgII(i) = Ausgewertete_Limbmessung_MgII[i].m_Zeilendichte;
+			Saeulendichten_Fehler_MgII(i)
+				= Ausgewertete_Limbmessung_MgII[i].m_Fehler_Zeilendichten;
+		}
+		// Nadir MgII
+		//cerr<<"MgII Nadir\n";
+		for (unsigned int i = Ausgewertete_Limbmessung_MgII.size();
+				i < Ausgewertete_Limbmessung_MgII.size()
+					+ Ausgewertete_Nadirmessung_MgII.size(); i++) {
+			int Nadir_i = i - Ausgewertete_Limbmessung_MgII.size();
+			Saeulendichten_MgII(i)
+				= Ausgewertete_Nadirmessung_MgII[Nadir_i].m_Zeilendichte;
+			Saeulendichten_Fehler_MgII(i)
+				= Ausgewertete_Nadirmessung_MgII[Nadir_i].m_Fehler_Zeilendichten;
+		}
 		generate_Sy(S_y_MgII, Saeulendichten_Fehler_MgII);
+	}
 	//Ende Säulendichten und Fehler auffüllen
 	////////////////////////////////////////////////////////////////////////////
 	// ENDE Spezies Mg II //
@@ -1022,19 +1034,15 @@ int main(int argc, char *argv[])
 	// Spezies unbekannte //
 	////////////////////////////////////////////////////////////////////////////
 	// einen Vektor der Dichte_n
-	MPL_Matrix Dichte_n_unknown(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
-	Dichte_n_unknown.Null_Initialisierung();
+	MPL_Matrix Dichte_n_unknown; //Spaltenvektor
 	//Dichte_n_MgI.in_Datei_speichern("/tmp/mlangowski/0/Dichte_n_MgI");
 	// einen Vektor x_a für die a-priori-Lösung der Dichte (oder Startwert usw)
-	MPL_Matrix Dichte_apriori_unknown(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
-	Dichte_apriori_unknown.Null_Initialisierung();  // Null als Startwert
+	MPL_Matrix Dichte_apriori_unknown; //Spaltenvektor
 	//quadratische matrix
 	MPL_Matrix S_letzte_Hoehe_unknown;
 	// Vektor mit Zeilendichten  für alle Messungen einer Spezies
-	MPL_Matrix Saeulendichten_unknown(Ausgewertete_Limbmessung_unknown.size()
-			+ Ausgewertete_Nadirmessung_unknown.size(), 1); //Spaltenvektor
-	MPL_Matrix Saeulendichten_Fehler_unknown(Ausgewertete_Limbmessung_unknown.size()
-			+ Ausgewertete_Nadirmessung_unknown.size(), 1); //Spaltenvektor
+	MPL_Matrix Saeulendichten_unknown;
+	MPL_Matrix Saeulendichten_Fehler_unknown;
 
 	// Spezies Index for unknown
 	spez_index = 2;
@@ -1079,27 +1087,37 @@ int main(int argc, char *argv[])
 			cerr << "Fehler bei Matrizen_Aufbauen\n";
 			return -1; //Hauptprogramm beenden
 		}
-	}
-	// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
-	// Limb unknown
-	//cerr<<"unknown Limb\n";
-	for (unsigned int i = 0; i < Ausgewertete_Limbmessung_unknown.size(); i++) {
-		Saeulendichten_unknown(i) = Ausgewertete_Limbmessung_unknown[i].m_Zeilendichte;
-		Saeulendichten_Fehler_unknown(i)
-			= Ausgewertete_Limbmessung_unknown[i].m_Fehler_Zeilendichten;
-	}
-	// Nadir unknown
-	//cerr<<"unknown Nadir\n";
-	for (unsigned int i = Ausgewertete_Limbmessung_unknown.size();
-			i < Ausgewertete_Limbmessung_unknown.size() + Ausgewertete_Nadirmessung_unknown.size(); i++) {
-		int Nadir_i = i - Ausgewertete_Limbmessung_unknown.size();
-		Saeulendichten_unknown(i)
-			= Ausgewertete_Nadirmessung_unknown[Nadir_i].m_Zeilendichte;
-		Saeulendichten_Fehler_unknown(i)
-			= Ausgewertete_Nadirmessung_unknown[Nadir_i].m_Fehler_Zeilendichten;
-	}
-	if (mache_volles_Retrieval_unknown == "ja")
+		/* memory allocation for the retrieval */
+		Dichte_n_unknown = MPL_Matrix(Grid.m_Anzahl_Punkte, 1);
+		Dichte_n_unknown.Null_Initialisierung();
+		Dichte_apriori_unknown = MPL_Matrix(Grid.m_Anzahl_Punkte, 1);
+		Dichte_apriori_unknown.Null_Initialisierung();  // Null als Startwert
+		// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
+		Saeulendichten_unknown = MPL_Matrix(Ausgewertete_Limbmessung_unknown.size()
+				+ Ausgewertete_Nadirmessung_unknown.size(), 1); //Spaltenvektor
+		Saeulendichten_Fehler_unknown =
+			MPL_Matrix(Ausgewertete_Limbmessung_unknown.size()
+				+ Ausgewertete_Nadirmessung_unknown.size(), 1); //Spaltenvektor
+		// Limb unknown
+		//cerr<<"unknown Limb\n";
+		for (unsigned int i = 0; i < Ausgewertete_Limbmessung_unknown.size(); i++) {
+			Saeulendichten_unknown(i) = Ausgewertete_Limbmessung_unknown[i].m_Zeilendichte;
+			Saeulendichten_Fehler_unknown(i)
+				= Ausgewertete_Limbmessung_unknown[i].m_Fehler_Zeilendichten;
+		}
+		// Nadir unknown
+		//cerr<<"unknown Nadir\n";
+		for (unsigned int i = Ausgewertete_Limbmessung_unknown.size();
+				i < Ausgewertete_Limbmessung_unknown.size()
+					+ Ausgewertete_Nadirmessung_unknown.size(); i++) {
+			int Nadir_i = i - Ausgewertete_Limbmessung_unknown.size();
+			Saeulendichten_unknown(i)
+				= Ausgewertete_Nadirmessung_unknown[Nadir_i].m_Zeilendichte;
+			Saeulendichten_Fehler_unknown(i)
+				= Ausgewertete_Nadirmessung_unknown[Nadir_i].m_Fehler_Zeilendichten;
+		}
 		generate_Sy(S_y_unknown, Saeulendichten_Fehler_unknown);
+	}
 	////////////////////////////////////////////////////////////////////////////
 	// ENDE Spezies unknown
 	////////////////////////////////////////////////////////////////////////////
@@ -1108,19 +1126,15 @@ int main(int argc, char *argv[])
 	// Spezies FeI //
 	////////////////////////////////////////////////////////////////////////////
 	// einen Vektor der Dichte_n
-	MPL_Matrix Dichte_n_FeI(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
-	Dichte_n_FeI.Null_Initialisierung();
+	MPL_Matrix Dichte_n_FeI; //Spaltenvektor
 	//Dichte_n_MgI.in_Datei_speichern("/tmp/mlangowski/0/Dichte_n_MgI");
 	// einen Vektor x_a für die a-priori-Lösung der Dichte (oder Startwert usw)
-	MPL_Matrix Dichte_apriori_FeI(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
-	Dichte_apriori_FeI.Null_Initialisierung();  // Null als Startwert
+	MPL_Matrix Dichte_apriori_FeI; //Spaltenvektor
 	//quadratische matrix
 	MPL_Matrix S_letzte_Hoehe_FeI;
 	// Vektor mit Zeilendichten  für alle Messungen einer Spezies
-	MPL_Matrix Saeulendichten_FeI(Ausgewertete_Limbmessung_FeI.size()
-			+ Ausgewertete_Nadirmessung_FeI.size(), 1); //Spaltenvektor
-	MPL_Matrix Saeulendichten_Fehler_FeI(Ausgewertete_Limbmessung_FeI.size()
-			+ Ausgewertete_Nadirmessung_FeI.size(), 1); //Spaltenvektor
+	MPL_Matrix Saeulendichten_FeI;
+	MPL_Matrix Saeulendichten_Fehler_FeI;
 
 	// Spezies Index for FeI
 	spez_index = 3;
@@ -1164,23 +1178,33 @@ int main(int argc, char *argv[])
 			cerr << "Fehler bei Matrizen_Aufbauen\n";
 			return -1; //Hauptprogramm beenden
 		}
-	}
-	// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
-	for (unsigned int i = 0; i < Ausgewertete_Limbmessung_FeI.size(); i++) {
-		Saeulendichten_FeI(i) = Ausgewertete_Limbmessung_FeI[i].m_Zeilendichte;
-		Saeulendichten_Fehler_FeI(i)
-			= Ausgewertete_Limbmessung_FeI[i].m_Fehler_Zeilendichten;
-	}
-	for (unsigned int i = Ausgewertete_Limbmessung_FeI.size();
-			i < Ausgewertete_Limbmessung_FeI.size() + Ausgewertete_Nadirmessung_FeI.size(); i++) {
-		int Nadir_i = i - Ausgewertete_Limbmessung_FeI.size();
-		Saeulendichten_FeI(i)
-			= Ausgewertete_Nadirmessung_FeI[Nadir_i].m_Zeilendichte;
-		Saeulendichten_Fehler_FeI(i)
-			= Ausgewertete_Nadirmessung_FeI[Nadir_i].m_Fehler_Zeilendichten;
-	}
-	if (mache_volles_Retrieval_FeI == "ja")
+		/* memory allocation for the retrieval */
+		Dichte_n_FeI = MPL_Matrix(Grid.m_Anzahl_Punkte, 1);
+		Dichte_n_FeI.Null_Initialisierung();
+		Dichte_apriori_FeI = MPL_Matrix(Grid.m_Anzahl_Punkte, 1);
+		Dichte_apriori_FeI.Null_Initialisierung();  // Null als Startwert
+		// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
+		Saeulendichten_FeI = MPL_Matrix(Ausgewertete_Limbmessung_FeI.size()
+				+ Ausgewertete_Nadirmessung_FeI.size(), 1); //Spaltenvektor
+		Saeulendichten_Fehler_FeI =
+			MPL_Matrix(Ausgewertete_Limbmessung_FeI.size()
+				+ Ausgewertete_Nadirmessung_FeI.size(), 1); //Spaltenvektor
+		for (unsigned int i = 0; i < Ausgewertete_Limbmessung_FeI.size(); i++) {
+			Saeulendichten_FeI(i) = Ausgewertete_Limbmessung_FeI[i].m_Zeilendichte;
+			Saeulendichten_Fehler_FeI(i)
+				= Ausgewertete_Limbmessung_FeI[i].m_Fehler_Zeilendichten;
+		}
+		for (unsigned int i = Ausgewertete_Limbmessung_FeI.size();
+				i < Ausgewertete_Limbmessung_FeI.size()
+					+ Ausgewertete_Nadirmessung_FeI.size(); i++) {
+			int Nadir_i = i - Ausgewertete_Limbmessung_FeI.size();
+			Saeulendichten_FeI(i)
+				= Ausgewertete_Nadirmessung_FeI[Nadir_i].m_Zeilendichte;
+			Saeulendichten_Fehler_FeI(i)
+				= Ausgewertete_Nadirmessung_FeI[Nadir_i].m_Fehler_Zeilendichten;
+		}
 		generate_Sy(S_y_FeI, Saeulendichten_Fehler_FeI);
+	}
 	////////////////////////////////////////////////////////////////////////////
 	// ENDE Spezies FeI
 	////////////////////////////////////////////////////////////////////////////
@@ -1189,23 +1213,16 @@ int main(int argc, char *argv[])
 	// Spezies NO //
 	////////////////////////////////////////////////////////////////////////////
 	// einen Vektor der Dichte_n
-	MPL_Matrix Dichte_n_NO(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
-	Dichte_n_NO.Null_Initialisierung();
+	MPL_Matrix Dichte_n_NO; //Spaltenvektor
 
 	// einen Vektor x_a für die a-priori-Lösung der Dichte (oder Startwert usw)
-	MPL_Matrix Dichte_apriori_NO(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
-	Dichte_apriori_NO.Null_Initialisierung();  // Null als Startwert
-	if (Konf.NO_apriori)
-		SNOE_apriori_NO(Grid, Ausgewertete_Limbmessung_NO.front(),
-				Dichte_apriori_NO);
+	MPL_Matrix Dichte_apriori_NO; //Spaltenvektor
 
 	// Vektor mit Zeilendichten für alle Messungen einer Spezies
 	//quadratische matrix
 	MPL_Matrix S_letzte_Hoehe_NO;
-	MPL_Matrix Saeulendichten_NO(Ausgewertete_Limbmessung_NO.size()
-			+ Ausgewertete_Nadirmessung_NO.size(), 1); //Spaltenvektor
-	MPL_Matrix Saeulendichten_Fehler_NO(Ausgewertete_Limbmessung_NO.size()
-			+ Ausgewertete_Nadirmessung_NO.size(), 1); //Spaltenvektor
+	MPL_Matrix Saeulendichten_NO;
+	MPL_Matrix Saeulendichten_Fehler_NO;
 
 	// Spezies Index for NO
 	spez_index = 4;
@@ -1252,26 +1269,38 @@ int main(int argc, char *argv[])
 			cerr << "Fehler bei Matrizen_Aufbauen\n";
 			return -1; //Hauptprogramm beenden
 		}
-	}
+		/* memory allocation */
+		Dichte_n_NO = MPL_Matrix(Grid.m_Anzahl_Punkte, 1);
+		Dichte_n_NO.Null_Initialisierung();
+		Dichte_apriori_NO = MPL_Matrix(Grid.m_Anzahl_Punkte, 1);
+		Dichte_apriori_NO.Null_Initialisierung();  // Null als Startwert
+		if (Konf.NO_apriori)
+			SNOE_apriori_NO(Grid, Ausgewertete_Limbmessung_NO.front(),
+					Dichte_apriori_NO);
+		// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
+		Saeulendichten_NO = MPL_Matrix(Ausgewertete_Limbmessung_NO.size()
+				+ Ausgewertete_Nadirmessung_NO.size(), 1); //Spaltenvektor
+		Saeulendichten_Fehler_NO =
+			MPL_Matrix(Ausgewertete_Limbmessung_NO.size()
+				+ Ausgewertete_Nadirmessung_NO.size(), 1); //Spaltenvektor
 
-	// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
-	for (unsigned int i = 0; i < Ausgewertete_Limbmessung_NO.size(); i++) {
-		Saeulendichten_NO(i) = Ausgewertete_Limbmessung_NO[i].m_Zeilendichte;
-		Saeulendichten_Fehler_NO(i)
-			= Ausgewertete_Limbmessung_NO[i].m_Fehler_Zeilendichten;
-	}
-	// Nadir NO
-	for (unsigned int i = Ausgewertete_Limbmessung_NO.size();
-			i < Ausgewertete_Limbmessung_NO.size()
-				+ Ausgewertete_Nadirmessung_NO.size(); i++) {
-		int Nadir_i = i - Ausgewertete_Limbmessung_NO.size();
-		Saeulendichten_NO(i)
-			= Ausgewertete_Nadirmessung_NO[Nadir_i].m_Zeilendichte;
-		Saeulendichten_Fehler_NO(i)
-			= Ausgewertete_Nadirmessung_NO[Nadir_i].m_Fehler_Zeilendichten;
-	}
-	if (mache_volles_Retrieval_NO == "ja")
+		for (unsigned int i = 0; i < Ausgewertete_Limbmessung_NO.size(); i++) {
+			Saeulendichten_NO(i) = Ausgewertete_Limbmessung_NO[i].m_Zeilendichte;
+			Saeulendichten_Fehler_NO(i)
+				= Ausgewertete_Limbmessung_NO[i].m_Fehler_Zeilendichten;
+		}
+		// Nadir NO
+		for (unsigned int i = Ausgewertete_Limbmessung_NO.size();
+				i < Ausgewertete_Limbmessung_NO.size()
+					+ Ausgewertete_Nadirmessung_NO.size(); i++) {
+			int Nadir_i = i - Ausgewertete_Limbmessung_NO.size();
+			Saeulendichten_NO(i)
+				= Ausgewertete_Nadirmessung_NO[Nadir_i].m_Zeilendichte;
+			Saeulendichten_Fehler_NO(i)
+				= Ausgewertete_Nadirmessung_NO[Nadir_i].m_Fehler_Zeilendichten;
+		}
 		generate_Sy(S_y_NO, Saeulendichten_Fehler_NO);
+	}
 	////////////////////////////////////////////////////////////////////////////
 	// ENDE Spezies NO
 	////////////////////////////////////////////////////////////////////////////
