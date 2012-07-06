@@ -1240,41 +1240,32 @@ int interpolieren(MPL_Matrix &M, int x_Spalte, int y_Spalte,
 	int Index_Anfang = 0;
 	int Index_Ende = n - 1;
 
-	if ((M(0, x_Spalte) > x_Wert_des_gesuchten_Wertes)
-			|| (M(n - 1, x_Spalte) < x_Wert_des_gesuchten_Wertes)) {
-		cout << "M(0,x_Spalte): " << M(0, x_Spalte) << "\n";
-		cout << "M(n-1,x_Spalte): " << M(n - 1, x_Spalte) << "\n";
-		cout << "x_Wert_des_gesuchten_Wertes: " << x_Wert_des_gesuchten_Wertes << "\n";
-		cout << "GESUCHTES X LIEGT NICHT IM INTERPOLIERBAREN BEREICH! FEHLER!!\n";
-		gesuchter_Wert = 0; //unnützen dummywert ausgeben
+	/* constant at boundaries */
+	if (x_Wert_des_gesuchten_Wertes < M(Index_Anfang, x_Spalte)) {
+		gesuchter_Wert = M(Index_Anfang, y_Spalte);
+		return 1;
+	}
+	if (x_Wert_des_gesuchten_Wertes > M(Index_Ende, x_Spalte)) {
+		gesuchter_Wert = M(Index_Ende, y_Spalte);
 		return 1;
 	}
 	//cout<<"M(0,x_Spalte): "<<M(0,x_Spalte)<<"\n";
 	//cout<<"M(n-1,x_Spalte): "<<M(n-1,x_Spalte)<<"\n";
 	//cout<<"x_Wert_des_gesuchten_Wertes: "<<x_Wert_des_gesuchten_Wertes<<"\n";
-	while (true) { //Wir springen mit break raus
+	while (Index_Anfang + 1 < Index_Ende) {
 
 		int Index = (Index_Anfang + Index_Ende) / 2;
 		//cout<<"Index:"<<Index<<"\n";
 		//cout<<"Index_anfang:"<<Index_Anfang<<"\n";
 		//cout<<"Index_ende:"<<Index_Ende<<"\n";
 
-		if (M(Index, x_Spalte) == x_Wert_des_gesuchten_Wertes) {
-			// Element Teil des Rasters
-			// keine Interpolation nötig
-			gesuchter_Wert = M(Index, 1);
-			return 0;
-		}
 		if (M(Index, x_Spalte) > x_Wert_des_gesuchten_Wertes) {
-			if (Index_Ende == Index) {
-				break; //Abbruch, falls es keine Änderung mehr gibt
-			}
 			Index_Ende = Index;
-		} else {
-			if (Index_Anfang == Index) {
-				break; //Abbruch, falls es keine Änderung mehr gibt
-			}
+		} else if (M(Index, x_Spalte) < x_Wert_des_gesuchten_Wertes) {
 			Index_Anfang = Index;
+		} else {
+			gesuchter_Wert = M(Index, y_Spalte);
+			return 0;
 		}
 	}// while(true)
 
@@ -1285,6 +1276,7 @@ int interpolieren(MPL_Matrix &M, int x_Spalte, int y_Spalte,
 				/ ((double)(M(Index_Ende, x_Spalte) - M(Index_Anfang, x_Spalte)));
 	double I1 = 1.0 - I2;
 	//cout<<"Index_Anfang:"<<Index_Anfang<<"   Index_Ende:"<<Index_Ende<<"\n";
+	//cout<<"x_Anfang:"<<M(Index_Anfang, x_Spalte)<<"   x_Ende:"<<M(Index_Ende, x_Spalte)<<"\n";
 	//cout<<"I2: "<<I2<<"   I1: "<<I1<<"\n";
 	//Bsp x_ges=5,1 ,x_A=5 x_E=6  ->I2=0,1, I1=0,9
 
