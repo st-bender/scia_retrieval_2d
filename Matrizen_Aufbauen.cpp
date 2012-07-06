@@ -1240,13 +1240,13 @@ int interpolieren(MPL_Matrix &M, int x_Spalte, int y_Spalte,
 	int Index_Anfang = 0;
 	int Index_Ende = n - 1;
 
-	if ((M(0, x_Spalte) > x_Wert_des_gesuchten_Wertes)
-			|| (M(n - 1, x_Spalte) < x_Wert_des_gesuchten_Wertes)) {
-		cout << "M(0,x_Spalte): " << M(0, x_Spalte) << "\n";
-		cout << "M(n-1,x_Spalte): " << M(n - 1, x_Spalte) << "\n";
-		cout << "x_Wert_des_gesuchten_Wertes: " << x_Wert_des_gesuchten_Wertes << "\n";
-		cout << "GESUCHTES X LIEGT NICHT IM INTERPOLIERBAREN BEREICH! FEHLER!!\n";
-		gesuchter_Wert = 0; //unnützen dummywert ausgeben
+	/* constant at boundaries */
+	if (x_Wert_des_gesuchten_Wertes < M(Index_Anfang, x_Spalte)) {
+		gesuchter_Wert = M(Index_Anfang, y_Spalte);
+		return 1;
+	}
+	if (x_Wert_des_gesuchten_Wertes > M(Index_Ende, x_Spalte)) {
+		gesuchter_Wert = M(Index_Ende, y_Spalte);
 		return 1;
 	}
 	//cout<<"M(0,x_Spalte): "<<M(0,x_Spalte)<<"\n";
