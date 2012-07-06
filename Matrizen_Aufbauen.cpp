@@ -1276,6 +1276,7 @@ int interpolieren(MPL_Matrix &M, int x_Spalte, int y_Spalte,
 				/ ((double)(M(Index_Ende, x_Spalte) - M(Index_Anfang, x_Spalte)));
 	double I1 = 1.0 - I2;
 	//cout<<"Index_Anfang:"<<Index_Anfang<<"   Index_Ende:"<<Index_Ende<<"\n";
+	//cout<<"x_Anfang:"<<M(Index_Anfang, x_Spalte)<<"   x_Ende:"<<M(Index_Ende, x_Spalte)<<"\n";
 	//cout<<"I2: "<<I2<<"   I1: "<<I1<<"\n";
 	//Bsp x_ges=5,1 ,x_A=5 x_E=6  ->I2=0,1, I1=0,9
 
