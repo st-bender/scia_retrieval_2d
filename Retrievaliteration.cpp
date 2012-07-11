@@ -43,17 +43,18 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	// kann von da aber hier rein kopiert werden
 
 	//linke Seite der Gleichung(anzuwenden auf Dichten, um RHS zu erhalten)
-	MPL_Matrix LHS;
+	MPL_Matrix LHS, R;
 	MPL_Matrix AMF_trans = AMF.transponiert();
 	MPL_Matrix S_Breite_trans = S_Breite.transponiert();
 	MPL_Matrix S_Hoehe_trans = S_Hoehe.transponiert();
 
 	// Solange man die lambdas für die constraints nicht ändern will,
 	// sieht die LHS immer gleich aus
+	R = (Lambda_Breite * (S_Breite_trans * S_Breite));  // Breitenglattung
+	R += (Lambda_Hoehe * (S_Hoehe_trans * S_Hoehe)); // Hoehenglattung
+	R += (S_apriori);
 	LHS = (AMF_trans * (S_y * AMF));
-	LHS += (S_apriori);
-	LHS += (Lambda_Breite * (S_Breite_trans * S_Breite));  // Breitenglattung
-	LHS += (Lambda_Hoehe * (S_Hoehe_trans * S_Hoehe)); // Hoehenglattung
+	LHS += R;
 //    cout<<"LHS: "<<LHS.m_Zeilenzahl<<"\t"<<LHS.m_Spaltenzahl<<"\n";
 	////////////////////////////////////////////////////////////////////////////
 	// TODO Der Absatz muss neu geschrieben werden, weil stimmt nichtmehr
@@ -155,7 +156,8 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	// erster Schritt
 	///////////////////////////////////////
 	//RHS sollte ein Spaltenvektor sein
-	RHS = AMF_trans * (S_y * Saeulendichten) + S_apriori * Dichten_apriori;
+	RHS = AMF_trans * S_y * (Saeulendichten - AMF * Dichten_apriori)
+		  + R * Dichten_apriori;
 	// Lösungen durch Rückeinsetzen finden
 	dgetrs_(&textflag, &N, &NRHS, A.m_Elemente, &LDA, IPIV, RHS.m_Elemente,
 			&LDB, &INFO);
@@ -197,7 +199,7 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 		residual_prev = Residual;
 		//RHS sollte ein Spaltenvektor sein
 		RHS = AMF_trans * (S_y * Saeulendichten_rest)
-			  + S_apriori * Dichten_apriori_rest;
+			  + R * Dichten_apriori_rest;
 		// Lösungen durch Rückeinsetzen finden
 		dgetrs_(&textflag, &N, &NRHS, A.m_Elemente, &LDA, IPIV, RHS.m_Elemente,
 				&LDB, &INFO);
