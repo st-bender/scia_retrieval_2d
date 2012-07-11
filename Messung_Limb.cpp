@@ -457,7 +457,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	std::vector<double> rad_sort(basewin_rad);
 	std::vector<double> bwin_wl, bwin_rad;
 	std::sort(rad_sort.begin(), rad_sort.end());
-	int offset = rad_sort.size() * 0.10;
+	size_t offset = rad_sort.size() / 10;
 	double rad0 = rad_sort.at(offset);
 	double rad1 = rad_sort.at(rad_sort.size() - offset - 1);
 
