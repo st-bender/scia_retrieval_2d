@@ -161,7 +161,8 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 //
 ////////////////////////////////////////////////////////////////////////////////
 vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
-		Messung_Limb &Troposphaerische_Saeule, Messung_Limb &mean_10_20)
+		Messung_Limb &Troposphaerische_Saeule, Messung_Limb &mean_10_20,
+		int Anzahl_Hoehen)
 {
 	//binärdateien sind nicht gepackt(das wär einfach nicht effizient)...
 	//ansonsten hier packen und später entpacken
@@ -200,7 +201,7 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
 	vector<Messung_Limb> Ergebnisvektor
 		= make_messung_limb_vector(Dateiname, Limbdaten, Wellenlaengen,
 				no_of_pix, no_of_alt, orbit_phase, Datum, Center_Lat_Lon,
-				7, 23, 1);
+				Anzahl_Hoehen, 30 - Anzahl_Hoehen, 1);
 
 	//Teile von Schritt 4 nochmal für die Troposhärische Säule
 	//Eigentlich reichen Intensitäten

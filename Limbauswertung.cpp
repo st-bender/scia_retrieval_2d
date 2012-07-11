@@ -63,8 +63,10 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 	//Hier stecken NUR die Intensitäten der Säulen 10 bis 20 (ca 30-60km) drin
 	//cerr<<"Rohdaten einlesen\n";
 	if (limb_meso_thermo != "ja") {
+		int Anzahl_Hoehen = 13;
 		Rohdaten =
-			ReadL1C_Limb_mpl_binary(Orbitlist.m_Dateinamen[l], Tropo, mean_10_20);
+			ReadL1C_Limb_mpl_binary(Orbitlist.m_Dateinamen[l], Tropo, mean_10_20,
+					Anzahl_Hoehen);
 	} else {
 		//Rohdaten =
 		//ReadL1C_Limb_meso_thermo_mpl_binary(Orbitlist.m_Dateinamen[l], Tropo);

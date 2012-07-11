@@ -22,7 +22,8 @@
 // unterschiedlich aus (vektor vs array) zeittechnisch ist die nadirvariante
 // günstiger...kann später mal gefixt werden...erstmal programm fertig kriegen
 std::vector<class Messung_Limb> ReadL1C_Limb_mpl_binary(std::string Dateiname,
-		class Messung_Limb &Troposphaerische_Saeule, class Messung_Limb &mean_10_20);
+		class Messung_Limb &Troposphaerische_Saeule, class Messung_Limb &mean_10_20,
+		int Anzahl_Hoehen);
 std::vector<Messung_Limb> ReadL1C_Limb_meso_thermo_mpl_binary(std::string Dateiname,
 		class Messung_Limb &niedrigste_Hoehe, class Messung_Limb &space);
 std::vector<class Messung_Limb>
