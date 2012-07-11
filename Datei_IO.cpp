@@ -148,7 +148,7 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 
 		// Der Pixel 552 (282,03nm zeigt bei nadir( und nur dort, einen Peak)
 		// ....interpretation dead pixel
-		ml.m_Intensitaeten.at(536) = 0.5 * (ml.m_Intensitaeten.at(535) + ml.m_Intensitaeten.at(537));
+		//ml.m_Intensitaeten.at(536) = 0.5 * (ml.m_Intensitaeten.at(535) + ml.m_Intensitaeten.at(537));
 		Ergebnisvektor.push_back(ml);
 	}
 
