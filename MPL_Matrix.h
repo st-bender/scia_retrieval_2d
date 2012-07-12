@@ -62,8 +62,14 @@ class MPL_Matrix
 {
 public:
 	//Konstruktoren //////////////////////////////////
-	MPL_Matrix();
-	MPL_Matrix(int Zeilenzahl, int Spaltenzahl);
+	MPL_Matrix() : m_Zeilenzahl(0), m_Spaltenzahl(0),
+		m_Elementanzahl(0), m_Elemente(0) {}
+	MPL_Matrix(int Zeilenzahl, int Spaltenzahl) :
+		m_Zeilenzahl(Zeilenzahl), m_Spaltenzahl(Spaltenzahl),
+		m_Elementanzahl(Zeilenzahl * Spaltenzahl)
+		{
+			m_Elemente = new double[Zeilenzahl * Spaltenzahl];
+		}
 	MPL_Matrix(const MPL_Matrix &rhs);
 	// Hier ist nochmehr denkbar z.b. einheitzsmatrix 0 matrix usw
 	/////////////////////////////////////////////////////////
@@ -144,26 +150,6 @@ public:
 //////////////////////////////////////////////////////
 //Deklaration fertig...nun Operatoren als inline Funktionen überladen
 //Konstruktoren //////////////////////////////////
-/////////////////////////////////////////////////////////
-// Methodenstart MPL_Matrix Konstruktor
-/////////////////////////////////////////////////////////
-inline MPL_Matrix::MPL_Matrix()
-{
-	m_Zeilenzahl = 0;
-	m_Spaltenzahl = 0;
-	m_Elementanzahl = 0;
-	m_Elemente = 0;
-}
-/////////////////////////////////////////////////////////
-// Methodenstart MPL_Matrix Konstruktor
-/////////////////////////////////////////////////////////
-inline MPL_Matrix::MPL_Matrix(int Zeilenzahl, int Spaltenzahl)
-{
-	this->m_Spaltenzahl = Spaltenzahl;
-	this->m_Zeilenzahl = Zeilenzahl;
-	this->m_Elementanzahl = Zeilenzahl * Spaltenzahl;
-	this->m_Elemente = new double[Zeilenzahl * Spaltenzahl];
-}
 /////////////////////////////////////////////////////////
 // Methodenstart MPL_Matrix Konstruktor
 /////////////////////////////////////////////////////////
