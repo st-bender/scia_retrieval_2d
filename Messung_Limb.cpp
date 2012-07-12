@@ -494,7 +494,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		double radi = rad.at(idx) - rayleigh_rad.back();
 		y.push_back(radi);
 		// exclude the peak window and outliers by zeroing the weights
-		if ((idx > i_peakwin_min && idx < i_peakwin_max)
+		if ((idx >= i_peakwin_min && idx <= i_peakwin_max)
 			|| radi < rad0 || radi > rad1)
 			y_weights.push_back(0.);
 		else
