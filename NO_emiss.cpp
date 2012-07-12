@@ -705,29 +705,25 @@ int NO_emiss::calc_line_emissivities()
 
 int NO_emiss::scia_convolve(Messung_Limb &ml)
 {
-	int NO_NJ = get_NJ();
 	int i, j;
 	int npix = 50;
 
 	std::vector<double> x = ml.m_Wellenlaengen;
 	std::vector<double>::iterator x_it;
 	std::vector<double>::iterator spec_max;
-	spec_scia_res.resize(0);
 	spec_scia_res.resize(x.size());
-	double xdiff = x.at(1) - x.at(0);
 
-	for (i = 0; i <= NO_NJ; i++) {
+	for (i = 0; i <= NJ; i++) {
 		for (j = 0; j < 12; j++) {
 			double NO_wl = get_lambda_K(j, i);
 			// divide by 4*pi to get [gamma]/sr = ph/s/sr
 			double NO_rad = get_gamma_j(j, i) * 0.25 * M_1_PI;
-			for (x_it = x.begin(); x_it != x.end(); ++x_it) {
-				int l = std::distance(x.begin(), x_it);
+			int l = 0;
+			for (x_it = x.begin(); x_it != x.end() - 1; ++x_it, l++) {
 				double dl_i = std::abs(NO_wl - *x_it);
 				double w = 0.;
-				if (x_it + 1 != x.end())
-					xdiff = *(x_it + 1) - *x_it;
 				if (dl_i < 1.5) {
+					double xdiff = *(x_it + 1) - *x_it;
 					// integrate over the pixel width (npix points)
 					for (int jj = 0; jj < npix; jj++) {
 						double wl = *x_it
@@ -739,6 +735,8 @@ int NO_emiss::scia_convolve(Messung_Limb &ml)
 			}
 		}
 	}
+	// set the last element to zero, just to be sure.
+	spec_scia_res.back() = 0.;
 	spec_max = std::max_element(spec_scia_res.begin(), spec_scia_res.end());
 	i = std::distance(spec_scia_res.begin(), spec_max);
 	scia_wl_at_max = ml.m_Wellenlaengen.at(i);
