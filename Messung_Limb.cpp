@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <iterator>
 #include <algorithm>
+#include <numeric>
 
 #include <fstream>  //für Ausgabe
 #include <iostream>//für Ausgabe
@@ -455,29 +456,10 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	 * This currently discards 20% (10% left and 10% right)
 	 * of the baseline points. */
 	std::vector<double> rad_sort(basewin_rad);
-	std::vector<double> bwin_wl, bwin_rad;
 	std::sort(rad_sort.begin(), rad_sort.end());
 	size_t offset = rad_sort.size() / 10;
 	double rad0 = rad_sort.at(offset);
 	double rad1 = rad_sort.at(rad_sort.size() - offset - 1);
-
-	for (int i = 0; i < N_base; i++) {
-		double rad = basewin_rad.at(i);
-		// push back only if in valid range
-		if (rad >= rad0 && rad <= rad1) {
-			bwin_wl.push_back(basewin_wl.at(i));
-			bwin_rad.push_back(rad);
-		}
-	}
-	// reset N_base
-	N_base = bwin_rad.size();
-
-	// linearen Fit des Basisfensters durchführen
-	// Proto: Fit_Linear(double* x,double* y, double& a0, double& a1,int
-	// Anfangsindex, int Endindex)
-	double a0, a1, rms_err_base;
-	// use the modified base window for the linear fit
-	Fit_Linear(bwin_wl, bwin_rad, a0, a1, rms_err_base, 0, N_base - 1);
 
 	// prepare baseline and rayleigh data
 	std::vector<double> baseline_wl, baseline_rad, rayleigh_rad;
@@ -486,7 +468,6 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		int idx = i_basewin_l_min + i;
 		wl = m_Wellenlaengen.at(idx);
 		baseline_wl.push_back(wl);
-		baseline_rad.push_back(a0 + a1 * wl);
 		rayleigh_rad.push_back(f_sol_fit * sigma_rayleigh(wl)
 				* sol_rad.at(idx));
 
@@ -500,12 +481,15 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		else
 			y_weights.push_back(1.);
 	}
+	// reset N_base
+	N_base = std::accumulate(y_weights.begin(), y_weights.end(), 0);
 
 	// replace the linear baseline by the Whittaker smoothed radiances
 	// excluding the peak window and outliers as in the linear case.
 	// the original (linear) baseline behaviour can be obtained by commenting
 	// this line or by setting lambda (the 4th argument) to something large,
-	// e.g. ~ 1.e9.
+	// e.g. ~ 1.e9. (quick test showed that 3.e5 is quite close)
+	double rms_err_base;
 	baseline_rad = my_whittaker_smooth(y, y_weights, 2, 1.e4, rms_err_base);
 
 	//Peakfenster WL und I auffüllen
