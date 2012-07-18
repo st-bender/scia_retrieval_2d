@@ -922,6 +922,21 @@ double NO_emiss::get_scia_wl_at_max()
 {
 	return scia_wl_at_max;
 }
+double NO_emiss::get_wl_abs_median()
+{
+	// convert the lambdas (MPL_Matrix elements) to a std::vector
+	std::vector<double> lambda_abs(lambda_K_abs.m_Elemente,
+			lambda_K_abs.m_Elemente + (NJ + 1) * 12);
+	// remove all entries equal to zero
+	lambda_abs.erase(std::remove_if(lambda_abs.begin(), lambda_abs.end(),
+				std::bind2nd(std::equal_to<double>(), 0.)),
+			lambda_abs.end());
+	// sort the vector from the shortest to the longest absorption wavelength
+	std::sort(lambda_abs.begin(), lambda_abs.end());
+
+	// return the median in nm
+	return 0.1 * lambda_abs.at(lambda_abs.size() / 2);
+}
 double NO_emiss::get_scia_band_emiss()
 {
 	return scia_band_emiss;
