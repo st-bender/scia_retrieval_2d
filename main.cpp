@@ -909,14 +909,14 @@ int main(int argc, char *argv[])
 				+ Ausgewertete_Nadirmessung_MgI.size(), 1); //Spaltenvektor
 		// Limb MgI
 		//cerr<<"MgI Limb\n";
-		for (unsigned int i = 0; i < Ausgewertete_Limbmessung_MgI.size(); i++) {
+		for (i = 0; i < Ausgewertete_Limbmessung_MgI.size(); i++) {
 			Saeulendichten_MgI(i) = Ausgewertete_Limbmessung_MgI[i].m_Zeilendichte;
 			Saeulendichten_Fehler_MgI(i)
 				= Ausgewertete_Limbmessung_MgI[i].m_Fehler_Zeilendichten;
 		}
 		// Nadir MgI
 		//cerr<<"MgI Nadir\n";
-		for (unsigned int i = Ausgewertete_Limbmessung_MgI.size();
+		for (i = Ausgewertete_Limbmessung_MgI.size();
 				i < Ausgewertete_Limbmessung_MgI.size()
 					+ Ausgewertete_Nadirmessung_MgI.size(); i++) {
 			int Nadir_i = i - Ausgewertete_Limbmessung_MgI.size();
@@ -1007,14 +1007,14 @@ int main(int argc, char *argv[])
 				+ Ausgewertete_Nadirmessung_MgII.size(), 1); //Spaltenvektor
 		// Limb MgII
 		//cerr<<"MgII Limb\n";
-		for (unsigned int i = 0; i < Ausgewertete_Limbmessung_MgII.size(); i++) {
+		for (i = 0; i < Ausgewertete_Limbmessung_MgII.size(); i++) {
 			Saeulendichten_MgII(i) = Ausgewertete_Limbmessung_MgII[i].m_Zeilendichte;
 			Saeulendichten_Fehler_MgII(i)
 				= Ausgewertete_Limbmessung_MgII[i].m_Fehler_Zeilendichten;
 		}
 		// Nadir MgII
 		//cerr<<"MgII Nadir\n";
-		for (unsigned int i = Ausgewertete_Limbmessung_MgII.size();
+		for (i = Ausgewertete_Limbmessung_MgII.size();
 				i < Ausgewertete_Limbmessung_MgII.size()
 					+ Ausgewertete_Nadirmessung_MgII.size(); i++) {
 			int Nadir_i = i - Ausgewertete_Limbmessung_MgII.size();
@@ -1100,14 +1100,14 @@ int main(int argc, char *argv[])
 				+ Ausgewertete_Nadirmessung_unknown.size(), 1); //Spaltenvektor
 		// Limb unknown
 		//cerr<<"unknown Limb\n";
-		for (unsigned int i = 0; i < Ausgewertete_Limbmessung_unknown.size(); i++) {
+		for (i = 0; i < Ausgewertete_Limbmessung_unknown.size(); i++) {
 			Saeulendichten_unknown(i) = Ausgewertete_Limbmessung_unknown[i].m_Zeilendichte;
 			Saeulendichten_Fehler_unknown(i)
 				= Ausgewertete_Limbmessung_unknown[i].m_Fehler_Zeilendichten;
 		}
 		// Nadir unknown
 		//cerr<<"unknown Nadir\n";
-		for (unsigned int i = Ausgewertete_Limbmessung_unknown.size();
+		for (i = Ausgewertete_Limbmessung_unknown.size();
 				i < Ausgewertete_Limbmessung_unknown.size()
 					+ Ausgewertete_Nadirmessung_unknown.size(); i++) {
 			int Nadir_i = i - Ausgewertete_Limbmessung_unknown.size();
@@ -1189,12 +1189,12 @@ int main(int argc, char *argv[])
 		Saeulendichten_Fehler_FeI =
 			MPL_Matrix(Ausgewertete_Limbmessung_FeI.size()
 				+ Ausgewertete_Nadirmessung_FeI.size(), 1); //Spaltenvektor
-		for (unsigned int i = 0; i < Ausgewertete_Limbmessung_FeI.size(); i++) {
+		for (i = 0; i < Ausgewertete_Limbmessung_FeI.size(); i++) {
 			Saeulendichten_FeI(i) = Ausgewertete_Limbmessung_FeI[i].m_Zeilendichte;
 			Saeulendichten_Fehler_FeI(i)
 				= Ausgewertete_Limbmessung_FeI[i].m_Fehler_Zeilendichten;
 		}
-		for (unsigned int i = Ausgewertete_Limbmessung_FeI.size();
+		for (i = Ausgewertete_Limbmessung_FeI.size();
 				i < Ausgewertete_Limbmessung_FeI.size()
 					+ Ausgewertete_Nadirmessung_FeI.size(); i++) {
 			int Nadir_i = i - Ausgewertete_Limbmessung_FeI.size();
@@ -1284,13 +1284,13 @@ int main(int argc, char *argv[])
 			MPL_Matrix(Ausgewertete_Limbmessung_NO.size()
 				+ Ausgewertete_Nadirmessung_NO.size(), 1); //Spaltenvektor
 
-		for (unsigned int i = 0; i < Ausgewertete_Limbmessung_NO.size(); i++) {
+		for (i = 0; i < Ausgewertete_Limbmessung_NO.size(); i++) {
 			Saeulendichten_NO(i) = Ausgewertete_Limbmessung_NO[i].m_Zeilendichte;
 			Saeulendichten_Fehler_NO(i)
 				= Ausgewertete_Limbmessung_NO[i].m_Fehler_Zeilendichten;
 		}
 		// Nadir NO
-		for (unsigned int i = Ausgewertete_Limbmessung_NO.size();
+		for (i = Ausgewertete_Limbmessung_NO.size();
 				i < Ausgewertete_Limbmessung_NO.size()
 					+ Ausgewertete_Nadirmessung_NO.size(); i++) {
 			int Nadir_i = i - Ausgewertete_Limbmessung_NO.size();

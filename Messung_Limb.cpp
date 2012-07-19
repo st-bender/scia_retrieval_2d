@@ -438,14 +438,14 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		std::cout << "# solar fit factor = " << f_sol_fit << std::endl;
 	if (f_sol_fit < 0.) f_sol_fit = 0.;
 	// Basisfenster WL und I auffüllen
-	for (int i = 0; i < base_l; i++) {
+	for (i = 0; i < base_l; i++) {
 		wl = m_Wellenlaengen.at(i_basewin_l_min + i);
 		basewin_wl.at(i) = wl;
 		basewin_rad.at(i) = rad.at(i_basewin_l_min + i)
 			- f_sol_fit * sigma_rayleigh(wl)
 			  * sol_rad.at(i_basewin_l_min + i);
 	}
-	for (int i = 0; i < base_r; i++) {
+	for (i = 0; i < base_r; i++) {
 		wl = m_Wellenlaengen.at(i_basewin_r_min + i);
 		basewin_wl.at(base_l + i) = wl;
 		basewin_rad.at(base_l + i) = rad.at(i_basewin_r_min + i)
@@ -464,7 +464,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	// prepare baseline and rayleigh data
 	std::vector<double> baseline_wl, baseline_rad, rayleigh_rad;
 	std::vector<double> y, y_weights;
-	for (int i = 0; i < N_fit_tot; i++) {
+	for (i = 0; i < N_fit_tot; i++) {
 		int idx = i_basewin_l_min + i;
 		wl = m_Wellenlaengen.at(idx);
 		baseline_wl.push_back(wl);
@@ -494,7 +494,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 
 	//Peakfenster WL und I auffüllen
 	// lineare Funktion von Intensitäten des Peakfenster abziehen
-	for (int i = 0; i < N_peak; i++) {
+	for (i = 0; i < N_peak; i++) {
 		peakwin_wl.at(i) = m_Wellenlaengen.at(i_peakwin_min + i);
 		peakwin_rad.at(i) = y.at(i_peakwin_min - i_basewin_l_min + i)
 			- baseline_rad.at(i_peakwin_min - i_basewin_l_min + i);
