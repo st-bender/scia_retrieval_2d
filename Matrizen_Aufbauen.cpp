@@ -280,6 +280,8 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		// Atmosphärengase zu bestimmen
 		MPL_Vektor V_Atmo_Wirkungsquerschnitte(2);
 		V_Atmo_Wirkungsquerschnitte.Null_Initialisierung();
+		MPL_Vektor V_Atmo_Wqs_abs(2);
+		V_Atmo_Wqs_abs.Null_Initialisierung();
 		//Dichten sind Höhenabhängig, Bestimmung dort
 		MPL_Vektor V_Atmo_Dichten(2);
 
@@ -291,6 +293,11 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 				aml_it->m_Wellenlaenge, V_Atmo_Wirkungsquerschnitte(0));
 		interpolieren(M_Atmo_Wirkungsquerschnitte, 0, 2,
 				aml_it->m_Wellenlaenge, V_Atmo_Wirkungsquerschnitte(1));
+		// absorption cross section, might be different from the emission
+		interpolieren(M_Atmo_Wirkungsquerschnitte, 0, 1,
+				aml_it->m_Wellenlaenge_abs, V_Atmo_Wqs_abs(0));
+		interpolieren(M_Atmo_Wirkungsquerschnitte, 0, 2,
+				aml_it->m_Wellenlaenge_abs, V_Atmo_Wqs_abs(1));
 		//zwei Wege müssen betrachtet werden:
 		//Satellit-Punkt
 		//Punkt-Sonne
@@ -804,7 +811,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 				//Skalarprodukt beider Vektoren
 
 				Tau_LFS += Schrittlaenge * 100000.0
-					* (V_Atmo_Dichten * V_Atmo_Wirkungsquerschnitte);
+					* (V_Atmo_Dichten * V_Atmo_Wqs_abs);
 			} // Ende for Schritt
 			// ENDE RAYTRACINGSCHLEIFE LIMB LFS /////////////////////////////
 			// Multipliziere AMF mit exp(-Tau)
