@@ -186,6 +186,7 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 
 				// Die braucht man später für die Luftmassenmatrix
 				Ergebnis.m_Wellenlaenge
+					= Ergebnis.m_Wellenlaenge_abs
 					= ldit->m_Wellenlaenge;
 				//Ergebnis.Ausgabe_auf_Bildschirm();
 				// Zusammenfassung der Zwischenresultate dem Vektor für die
@@ -223,6 +224,7 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 					NO_new.calc_line_emissivities();
 					NO_new.scia_convolve(Rohdaten.at(0));
 					double wl = NO_new.get_scia_wl_at_max();
+					double wl_abs = NO_new.get_wl_abs_median();
 					mlit->slant_column_NO(NO_new, mache_Fit_Plots, Solspec, k,
 							*sfit, Arbeitsverzeichnis);
 					Ergebnis = mlit->Ergebnis_Zusammenfassen();
@@ -230,6 +232,7 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 						= ldit->m_Wellenlaenge
 						= sfit->m_Wellenlaengen.at(k)
 						= wl;
+					Ergebnis.m_Wellenlaenge_abs = wl_abs;
 					Ausgewertete_Limbmessung_NO.push_back(Ergebnis);
 				}
 
