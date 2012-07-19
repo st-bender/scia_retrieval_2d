@@ -410,9 +410,9 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	}
 
 	for (i = 0; i < N_base + N_peak; i++) {
-		double wl = m_Wellenlaengen.at(i_basewin_l_min + i);
 		double sol_i = sol_rad.at(i_basewin_l_min + i);
 		double rad_i = rad.at(i_basewin_l_min + i);
+		wl = m_Wellenlaengen.at(i_basewin_l_min + i);
 		// peak detection: unusual high radiance
 		// make sure, that the surrounding points are lower
 		if (rad_i > peak_threshold
