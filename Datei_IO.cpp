@@ -404,8 +404,8 @@ vector<Messung_Nadir> make_messung_nadir_vector(string Dateiname,
 		//mn.m_Intensitaeten[536]=(mn.m_Intensitaeten[535]+mn.m_Intensitaeten[537])/2;
 		//mn.m_Intensitaeten_relativer_Fehler[536]=(mn.m_Intensitaeten_relativer_Fehler[535]+mn.m_Intensitaeten_relativer_Fehler[537])/2;
 		double f1 = 0.9, f2 = 0.1;
-		for (int i = 536; i < 545; i++) {
-			mn.m_Intensitaeten[i]
+		for (int j = 536; j < 545; j++) {
+			mn.m_Intensitaeten[j]
 				= f1 * mn.m_Intensitaeten[535] + f2 * mn.m_Intensitaeten[545];
 			mn.m_Intensitaeten_relativer_Fehler[536]
 				= f1 * mn.m_Intensitaeten_relativer_Fehler[535]

@@ -739,17 +739,17 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			double Sehnenlaenge_LFS = sqrt(b * b + c * c + 2.0 * b * c * Cos_SZA_LFS);
 			////////////////////////////////////////////////////////////////////
 			// GESCHWINDIGKEITS/GENAUIGKEITSBESTIMMENDER PARAMETER
-			int Schrittzahl = 1000;
+			int Schrittzahl2 = 1000;
 			// bei TOA_LFS=100.0 und 1000 Schritten ist der
 			// Höhenunterschied zweier Punkte etwa 300m
 			////////////////////////////////////////////////////////////////////
-			double Schrittlaenge = Sehnenlaenge_LFS / ((double)Schrittzahl);
+			double Schrittlaenge = Sehnenlaenge_LFS / ((double)Schrittzahl2);
 			//cout<<"Schrittlaenge_LFS_LIMB: "<<Schrittlaenge<<"\n";
 			double Tau_LFS = 0.0;
 			// RAYTRACINGSCHLEIFE LIMB LFS        /////////////////////////////
 
 			// SPEED Diese Schleife ist ein erheblicher Zeitschritt des Programms
-			for (int Schritt = 0; Schritt < Schrittzahl; Schritt++) {
+			for (int Schritt = 0; Schritt < Schrittzahl2; Schritt++) {
 				MPL_Vektor aktueller_Punkt(3);  //Bei Schrittzahl 10000 3s
 
 				//Bei Schrittzahl 10000 11s
@@ -1146,12 +1146,12 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			double Sehnenlaenge_LFS = sqrt(b * b + c * c + 2.0 * b * c * Cos_SZA_LFS);
 			////////////////////////////////////////////////////////////////////
 			// GESCHWINDIGKEITS/GENAUIGKEITSBESTIMMENDER PARAMETER
-			int Schrittzahl = 1000;
+			int Schrittzahl2 = 1000;
 			////////////////////////////////////////////////////////////////////
-			double Schrittlaenge = Sehnenlaenge_LFS / ((double)Schrittzahl);
+			double Schrittlaenge = Sehnenlaenge_LFS / ((double)Schrittzahl2);
 			double Tau_LFS = 0.0;
 			// RAYTRACINGSCHLEIFE NADIR LFS          ///////////////////////////
-			for (int Schritt = 0; Schritt < Schrittzahl; Schritt++) {
+			for (int Schritt = 0; Schritt < Schrittzahl2; Schritt++) {
 				MPL_Vektor aktueller_Punkt(3);
 				aktueller_Punkt = Start_Punkt
 					+ Sonne_normal * Schrittlaenge * (double) Schritt;
