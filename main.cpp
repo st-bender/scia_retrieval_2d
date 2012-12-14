@@ -236,11 +236,16 @@ int main(int argc, char *argv[])
 	//for (int i=0;i<Anzahl_zusaetzlicher_Orbits;i++) {
 	//	Zusaetzliche_Orbits.push_back(argv[i+7]);
 	//}
+	Konfiguration Konf;
+	Konf.Konfiguration_einlesen(config_file);
+	Konf.Konfiguration_anzeigen();  //-> Test erfolgreich
 
 	//TODO ACHTUNG ACHUTNG
 	// Falls ja läuft das Laden der Limbdaten anders ab und
 	// die Ausschlusskriterien müssen anders angewendet werden;
-	string untersuche_limb_mesothermo_states = "ja";
+	string untersuche_limb_mesothermo_states = "nein";
+	if (Konf.MLT == true)
+		untersuche_limb_mesothermo_states = "ja";
 
 	string mache_Fit_Plots_limb = "nein";
 	string mache_Fit_Plots_nadir = "nein";
@@ -294,9 +299,6 @@ int main(int argc, char *argv[])
 	j = 0;
 	k = 0;
 	l = 0;
-	Konfiguration Konf;
-	Konf.Konfiguration_einlesen(config_file);
-	Konf.Konfiguration_anzeigen();  //-> Test erfolgreich
 	//Konf mit argv Argumenten
 	Konf.m_Pfad_Datei_mit_Dateinamen_fuer_Messungen_eines_Orbits = Orbitlistenpfad;
 	Konf.m_Pfad_Solar_Spektrum = Solarpfad;
