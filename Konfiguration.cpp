@@ -24,7 +24,7 @@ using namespace std;
 template <class T> vector<T> string_to_vector(string zeile);
 
 // Konfiguration_einlesen /////////////////////////////////////////////
-int Konfiguration::Konfiguration_einlesen()
+int Konfiguration::Konfiguration_einlesen(std::string file)
 {
 	/***************************************************
 	In dieser Funktion werden alle Parameter aus Scia2d.conf
@@ -37,11 +37,11 @@ int Konfiguration::Konfiguration_einlesen()
 	// default retrieval algortihm
 	retrieval_algo = 1;
 	//Datei Öffnen
-	ifstream infile;
+	ifstream infile(file.c_str());
 	//cout<<"Datei einlesen\n";
-	infile.open("SCIA2D.conf");
 	if (!infile.is_open()) {
-		cerr << "Konfigurationsdatei SCIA2D.conf fehlt....Programm stürzt ab\n";
+		cerr << "Konfigurationsdatei " << file.c_str()
+			 << " fehlt....Programm stürzt ab\n";
 		exit(1);
 	}
 	//cout<<"Datei geöffnet\n";

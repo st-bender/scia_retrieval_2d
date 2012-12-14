@@ -196,7 +196,7 @@ int main(int argc, char *argv[])
 	//////////////////////////////////////////////////////////////////////////
 	// Übernahme der Kommandozeilenargumente
 
-	if (argc != 7) {
+	if (argc < 7) {
 		cout << "Falscher Programmaufruf von SCIA_RETRIEVAL_2D\n";
 		cout << "Aufruf: SCIA_RETRIEVAL_2D Orbitlistenpfad "
 			 << "Pfad_temporäres_Arbeitsverzeichnis "
@@ -219,6 +219,9 @@ int main(int argc, char *argv[])
 	string sol_refname = argv[4];    // solar ref for NO emission calculation
 	string Pfad_multips2pdf = argv[5];
 	string Pfad_multips2ps = argv[6];
+	string config_file = "SCIA2D.conf";
+	if (argc == 8)
+		config_file = argv[7];
 
 
 	cerr << "Orbitlistenpfad: " << Orbitlistenpfad << "\n";
@@ -227,6 +230,7 @@ int main(int argc, char *argv[])
 	cerr << "Solarreferenzpfad: " << sol_refname << "\n";
 	cerr << "Pfad_multips2pdf: " << Pfad_multips2pdf << "\n";
 	cerr << "Pfad_multips2ps: " << Pfad_multips2ps << "\n";
+	cerr << "config_file: " << config_file << "\n";
 
 	//vector<string> Zusaetzliche_Orbits;
 	//for (int i=0;i<Anzahl_zusaetzlicher_Orbits;i++) {
@@ -291,7 +295,7 @@ int main(int argc, char *argv[])
 	k = 0;
 	l = 0;
 	Konfiguration Konf;
-	Konf.Konfiguration_einlesen();
+	Konf.Konfiguration_einlesen(config_file);
 	Konf.Konfiguration_anzeigen();  //-> Test erfolgreich
 	//Konf mit argv Argumenten
 	Konf.m_Pfad_Datei_mit_Dateinamen_fuer_Messungen_eines_Orbits = Orbitlistenpfad;
