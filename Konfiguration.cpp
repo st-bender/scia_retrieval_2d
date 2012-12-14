@@ -333,6 +333,15 @@ int Konfiguration::Konfiguration_einlesen(std::string file)
 			ss >> retrieval_algo;
 			continue;
 		}
+		if (Zeile == "MLT") {
+			int mlt = 0;
+			getline(infile, Zeile);
+			ss << Zeile;
+			ss >> mlt;
+			if (mlt == 0) MLT = false;
+			else MLT = true;
+			continue;
+		}
 	} //ende while !eof
 
 	//Datei Schließen
@@ -444,6 +453,10 @@ int Konfiguration::Konfiguration_anzeigen()
 		cout << "new";
 	}
 	cout << "\n";
+	cout << "MLT: ";
+	if (MLT) cout << "true";
+	else cout << "false";
+	cout << endl;
 	return 0;
 }//ende Konfiguration_anzeigen
 

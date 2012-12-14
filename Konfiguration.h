@@ -63,6 +63,7 @@ public:
 	std::vector<int> NO_v_u, NO_v_l, NO_v_l_abs;
 	bool NO_apriori;
 	int retrieval_algo;
+	bool MLT;
 };
 
 
