@@ -43,18 +43,20 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	// kann von da aber hier rein kopiert werden
 
 	//linke Seite der Gleichung(anzuwenden auf Dichten, um RHS zu erhalten)
-	MPL_Matrix LHS, R;
+	MPL_Matrix LHS, R, Rl, Ra;
 	MPL_Matrix AMF_trans = AMF.transponiert();
 	MPL_Matrix S_Breite_trans = S_Breite.transponiert();
 	MPL_Matrix S_Hoehe_trans = S_Hoehe.transponiert();
 
 	// Solange man die lambdas für die constraints nicht ändern will,
 	// sieht die LHS immer gleich aus
-	R = (Lambda_Breite * (S_Breite_trans * S_Breite));  // Breitenglattung
-	R += (Lambda_Hoehe * (S_Hoehe_trans * S_Hoehe)); // Hoehenglattung
-	R += (S_apriori);
+	R = (S_apriori);
+	Rl = (Lambda_Breite * (S_Breite_trans * S_Breite));  // Breitenglattung
+	Ra = (Lambda_Hoehe * (S_Hoehe_trans * S_Hoehe)); // Hoehenglattung
+	R += Rl + Ra;
 	LHS = (AMF_trans * (S_y * AMF));
 	LHS += R;
+	// LHS += Rl + Ra;
 //    cout<<"LHS: "<<LHS.m_Zeilenzahl<<"\t"<<LHS.m_Spaltenzahl<<"\n";
 	////////////////////////////////////////////////////////////////////////////
 	// TODO Der Absatz muss neu geschrieben werden, weil stimmt nichtmehr
