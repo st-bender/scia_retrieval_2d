@@ -204,9 +204,9 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
 	//Teile von Schritt 4 nochmal für die Troposhärische Säule
 	//Eigentlich reichen Intensitäten
 	for (int j = 0; j < no_of_pix; j++) {
-		Troposphaerische_Saeule.m_Intensitaeten.push_back(Limbdaten[2].m_radiance[j]);
+		Troposphaerische_Saeule.m_Intensitaeten.push_back(Limbdaten[1].m_radiance[j]);
 	}
-	Troposphaerische_Saeule.m_TP_SZA = Limbdaten[2].m_TP_SZA;
+	Troposphaerische_Saeule.m_TP_SZA = Limbdaten[1].m_TP_SZA;
 	// und für den Mittelwert, der Höhen 10 bis 20
 	for (int j = 0; j < no_of_pix; j++) {
 		double mean = 0.;
