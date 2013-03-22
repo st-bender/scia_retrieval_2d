@@ -580,6 +580,9 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	if (debug == true) {
 		std::cout << "# slant column = " << m_Zeilendichte;
 		std::cout << ", error = " << m_Fehler_Zeilendichten << std::endl;
+		std::cout << "# emissivity = "
+			<< std::accumulate(peakwin_rad.begin(), peakwin_rad.end(), 0.)*0.11
+			<< std::endl;
 	}
 
 	return 0;
