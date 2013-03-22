@@ -187,12 +187,12 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 			Residual_1 = Residual;
 		}
 		if (Residual < Threshold * Residual_1) {
-			cout << "Konvergenz bei Iterationsschritt: " << Iterationsschritt << endl;
+			cout << "Konvergenz 1 bei Iterationsschritt: " << Iterationsschritt << endl;
 			cout << "Residual: " << Residual << endl;
 			break;
 		}
 		if (abs(residual_prev - Residual) / residual_prev < Threshold) {
-			cout << "Konvergenz bei Iterationsschritt: " << Iterationsschritt << endl;
+			cout << "Konvergenz 2 bei Iterationsschritt: " << Iterationsschritt << endl;
 			cout << "Residual: " << Residual << endl;
 			break;
 		}
