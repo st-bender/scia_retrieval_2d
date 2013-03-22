@@ -39,7 +39,6 @@ double average_over_wl_range(float *input, float *Wellenlaengen,
 	// copy to a vector for <algorithm>
 	vector<float> wl(Wellenlaengen, Wellenlaengen + N_wl);
 	vector<float>::iterator wl_low, wl_up;
-	vector<float> rad;
 
 	if (wl_start > wl_end) {
 		// swap
@@ -60,8 +59,7 @@ double average_over_wl_range(float *input, float *Wellenlaengen,
 	end = distance(wl.begin(), wl_up);
 
 	// copy the intensities to a vector
-	for (i = start; i < end; i++)
-		rad.push_back(input[i]);
+	vector<float> rad(input + start, input + end);
 
 	if (median == false) {
 		// build the arithmetic mean
