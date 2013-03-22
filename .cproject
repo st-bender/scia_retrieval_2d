@@ -66,6 +66,9 @@
 </tool>
 </toolChain>
 </folderInfo>
+<sourceEntries>
+<entry excluding="cmake" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+</sourceEntries>
 </configuration>
 </storageModule>
 <storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
@@ -852,6 +855,9 @@
 <tool id="cdt.managedbuild.tool.gnu.c.linker.base.1093478957" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base"/>
 </toolChain>
 </folderInfo>
+<sourceEntries>
+<entry excluding="cmake" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+</sourceEntries>
 </configuration>
 </storageModule>
 <storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
@@ -1636,6 +1642,9 @@
 <tool id="cdt.managedbuild.tool.gnu.c.linker.base.490504164" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base"/>
 </toolChain>
 </folderInfo>
+<sourceEntries>
+<entry excluding="cmake" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+</sourceEntries>
 </configuration>
 </storageModule>
 <storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
