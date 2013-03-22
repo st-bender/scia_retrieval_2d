@@ -870,7 +870,7 @@ int NO_emiss::print_line_emissivities()
 	std::cout << "Gamma-factor at " << Temp << " K, by lower state K"
 			  << std::endl;
 
-	for (i = 0; i < NJ - 1; i++) {
+	for (i = 0; i <= NJ; i++) {
 		std::cout << i;
 		for (j = 0; j < 12; j++) {
 			std::cout << "\t" << gamma_j(j, i);
