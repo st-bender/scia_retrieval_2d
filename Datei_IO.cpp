@@ -211,7 +211,7 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
 	for (int j = 0; j < no_of_pix; j++) {
 		double mean = 0.;
 		for (int k = 10; k < 21; k++) {
-			mean += Limbdaten[k].m_error[j];
+			mean += Limbdaten[k].m_radiance[j];
 		}
 		mean /= 11.0;
 		mean_10_20.m_Intensitaeten.push_back(mean);
