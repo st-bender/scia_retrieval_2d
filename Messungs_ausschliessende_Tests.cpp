@@ -39,8 +39,9 @@ bool Test_auf_Nachtmessung_Limb(Messung_Limb &Tropo, Konfiguration &Konf)
 	}
 	Troposignal /= (Index2 - Index1 + 1);
 	if (Troposignal < 1E10) {
-		//cout<<"Nachtmessung detektiert\n";
-		//cout<<"Troposignal:"<<Troposignal<<"\n";
+		cerr<<"Nachtmessung detektiert\n";
+		cerr<<"Troposignal:"<<Troposignal<<"\n";
+		cerr<<"skipping...\n";
 		ist_Nachtmessung = true;
 	}
 	if (Konf.m_Large_SZA == 1) {
@@ -73,14 +74,18 @@ bool Test_auf_Nachtmessung_Limb_meso_thermo(Messung_Limb &niedrigste_hoehe,
 	//cerr<<"Signal 290nm-295nm 53km:"<<Signal<<"\n";
 	double threshold = 5E10; // ist doch fast gleich
 	if (Signal < threshold) {
-		//cerr<<"Nachtmessung detektiert\n";
-		//cerr<<"Signal 290nm-295nm 53km:"<<Signal<<"\n";
+		cerr<<"Nachtmessung detektiert\n";
+		cerr<<"Signal 290nm-295nm 53km:"<<Signal<<"\n";
+		cerr<<"skipping...\n";
 		ist_Nachtmessung = true;
 	}
 	if (Konf.m_Large_SZA == 1) {
 		// schaue nach Sonnenzenitwinkel < m_Maximaler_SZA
-		if (fabs(niedrigste_hoehe.m_TP_SZA) > Konf.m_Maximaler_SZA)
+		if (fabs(niedrigste_hoehe.m_TP_SZA) > Konf.m_Maximaler_SZA) {
+			std::cerr << "SZA too large: " << niedrigste_hoehe.m_TP_SZA
+				<< std::endl;
 			ist_Nachtmessung = true;
+		}
 	}
 
 	return ist_Nachtmessung;
