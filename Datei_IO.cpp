@@ -33,8 +33,7 @@ extern int Prioritylevel;
 double average_over_wl_range(float *input, float *Wellenlaengen,
 		int N_wl, double wl_start, double wl_end, bool median = false)
 {
-	int i;
-	int start, end;
+	long start, end;
 	double avg = 0.;
 	// copy to a vector for <algorithm>
 	vector<float> wl(Wellenlaengen, Wellenlaengen + N_wl);
@@ -496,9 +495,9 @@ int Ausgabe_Saeulendichten(string Dateiname,
 			"Lat_Sat[°]", "Lon_Sat[°]", "Lat_TP[°]", "Lon_TP[°]",
 			"Hoehe_TP[km]", "Erdradius[km]", "Deklinationswinkel[°]",
 			"Sonne_Lon[°]", "Zeilendichte[cm^-2]", "Fehler_Zeilendichte[cm^-2]");
-	int lang = A_Messung_L.size();
+	size_t lang = A_Messung_L.size();
 	//cerr<<"Matrix schreiben\n";
-	for (int i = 0; i < lang; i++) {
+	for (size_t i = 0; i < lang; i++) {
 		//die letzte Zeile der Datei ist leer, da \n in der Vorletzten steht
 		fprintf(outfile, "%4i %5i %3i"
 				" %1.5E %1.5E %1.5E %1.5E"
@@ -535,7 +534,7 @@ int Ausgabe_Saeulendichten_back(std::string Dateiname,
 	/* build a new vector with the back-inserted columns
 	 * instead of the original ones */
 	for (aml_it = aml_vec.begin(); aml_it != aml_vec.end(); ++aml_it) {
-		int i = std::distance(aml_vec.begin(), aml_it);
+		long i = std::distance(aml_vec.begin(), aml_it);
 		aml_vec_neu.push_back(*aml_it);
 		aml_vec_neu.at(i).m_Zeilendichte = y(i);
 	}
@@ -565,9 +564,9 @@ int Ausgabe_Saeulendichten(string Dateiname,
 			"Lat_Ground", "Long_Ground",
 			"Erdradius", "Deklination[°]", "Sonne_Lon[°]",
 			"Säulendichte[cm^2]", "Fehler_Säulendichte[cm^2]");
-	int lang = A_Messung_N.size();
+	size_t lang = A_Messung_N.size();
 
-	for (int i = 0; i < lang; i++) {
+	for (size_t i = 0; i < lang; i++) {
 		//die letzte Zeile der Datei ist leer, da \n in der Vorletzten steht
 		fprintf(outfile, "%4i %3i %5i "
 				"%1.5E %1.5E "
