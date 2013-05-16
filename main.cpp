@@ -126,6 +126,7 @@ irgendetwas nicht funktioniert, mich kontaktieren
 #include <iostream>      // cout
 #include <cstdlib>        // für atoi
 #include <sstream>
+#include <iomanip>
 //eigene
 #include "Konfiguration.h"
 #include "Liniendaten.h"
@@ -1637,6 +1638,18 @@ int main(int argc, char *argv[])
 	buf << "Dauer Teilprozess 6 Ausgabe:\t\t\t " << T6_Dauer;
 	Nachricht_Schreiben(buf.str(), 10, Prioritylevel);
 	////////////////////////////////////////////////////////////////////////////
+	std::cout << Ausgewertete_Limbmessung_NO.at(0).m_Jahr << "-"
+		<< std::setw(2) << std::setfill('0')
+		<< Ausgewertete_Limbmessung_NO.at(0).m_Monat << "-"
+		<< std::setw(2) << std::setfill('0')
+		<< Ausgewertete_Limbmessung_NO.at(0).m_Tag << " "
+		<< std::setw(2) << std::setfill('0')
+		<< Ausgewertete_Limbmessung_NO.at(0).m_Stunde << ":"
+		<< std::setw(2) << std::setfill('0')
+		<< Ausgewertete_Limbmessung_NO.at(0).m_Minute << ":"
+		<< std::setw(2) << std::setfill('0')
+		<< Ausgewertete_Limbmessung_NO.at(0).m_Sekunde
+		<< std::endl;
 	Nachricht_Schreiben("Beende Programm regulär...", 3, Prioritylevel);
 	return 0;
 } // Ende Hauptprogramm
