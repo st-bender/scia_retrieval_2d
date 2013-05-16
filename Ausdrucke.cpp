@@ -525,11 +525,11 @@ int Plots_Zusammenfassen(string Pfad_multips2pdf, string Pfad_multips2ps,
 	// Kommandozeilenparameter übergeben werden...also probieren wir mal 512=2^8
 	// Da noch noch die exe und der aufruf als parameter da sind muss weniger
 	// als 2^8 genommen werden
-	unsigned int M = 200;
+	size_t M = 200;
 	vector<string> Liste_der_grossen_pdf;
 	vector<string>::iterator sit;
 	string Befehlszeile;
-	unsigned int Max_Zahl_grosse_pdf = Liste_der_ps_Dateinamen.size() / M;
+	size_t Max_Zahl_grosse_pdf = Liste_der_ps_Dateinamen.size() / M;
 	//Achtung integerdivision ist absicht
 	if ((Liste_der_ps_Dateinamen.size() % M) != 0) {
 		Max_Zahl_grosse_pdf++;
@@ -539,14 +539,14 @@ int Plots_Zusammenfassen(string Pfad_multips2pdf, string Pfad_multips2ps,
 		 << Liste_der_ps_Dateinamen.size() << "\n";
 	cout << "Max_Zahl_grosse_pdf: " << Max_Zahl_grosse_pdf << "\n";
 	cout << "Erzeuge_große_PDF\n";
-	for (unsigned int k = 0; k < Max_Zahl_grosse_pdf; k++) {
+	for (size_t k = 0; k < Max_Zahl_grosse_pdf; k++) {
 		cout << k << "te große ps Datei\n";
 		stringstream buf;
 		buf << Name_pdf_Datei << k << ".pdf";
 		string Name_grosse_pdf(buf.str());
 		Liste_der_grossen_pdf.push_back(Name_grosse_pdf);
 		Befehlszeile = Pfad_multips2pdf + " " + Name_grosse_pdf;
-		for (unsigned int i = 0;
+		for (size_t i = 0;
 			  (i < M) && ((i + k * M) < Liste_der_ps_Dateinamen.size()); i++) {
 			//statt size mal potenzen von 2 Probieren
 			Befehlszeile += " " + Liste_der_ps_Dateinamen[i + k * M];
