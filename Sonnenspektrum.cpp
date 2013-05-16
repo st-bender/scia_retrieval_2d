@@ -155,7 +155,7 @@ int Sonnenspektrum::Interpolieren(Messung_Limb &Messung_Erdschein)
 
 	double kleine_WL, grosse_WL;
 	double int_interp, wl_interp;
-	int Index_kleine_WL = 0, Index_grosse_WL = 1;
+	long Index_kleine_WL = 0, Index_grosse_WL = 1;
 	vector<double>::iterator low, me_wl_it;
 	// cout<<Messung_Erdschein.m_Wellenlaengen[0]<<"\n";
 	//cout<<Messung_Erdschein.m_Intensitaeten[0]<<"\n";
