@@ -95,12 +95,14 @@ bool test_auf_SAA_limb(Messung_Limb &space)
 {
 	bool SAA = false;
 	double wl_start = 230., wl_end = 291.;
-	int i;
-	int i0 = distance(space.m_Wellenlaengen.begin(),
-			lower_bound(space.m_Wellenlaengen.begin(), space.m_Wellenlaengen.end(), wl_start));
-	int i1 = distance(space.m_Wellenlaengen.begin(),
-			upper_bound(space.m_Wellenlaengen.begin(), space.m_Wellenlaengen.end(), wl_end));
-	int Ni = i1 - i0;
+	long i;
+	long i0 = std::distance(space.m_Wellenlaengen.begin(),
+			std::lower_bound(space.m_Wellenlaengen.begin(),
+				space.m_Wellenlaengen.end(), wl_start));
+	long i1 = std::distance(space.m_Wellenlaengen.begin(),
+			std::upper_bound(space.m_Wellenlaengen.begin(),
+				space.m_Wellenlaengen.end(), wl_end));
+	long Ni = i1 - i0;
 
 	/* checks for the usability of the spectrum and sets
 	 * SAA to true (= unusable) if there are no points in
