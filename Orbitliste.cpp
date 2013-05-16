@@ -46,9 +46,9 @@ bool Orbitliste::Ist_Messung_Limbmessung(uint Index)
 		return false;
 	}
 	// charakteristische Zeichenkette suchen
-	int Stringindex = m_Dateinamen[Index].find("SCIA_limb");
+	size_t Stringindex = m_Dateinamen[Index].find("SCIA_limb");
 	// Überprüfen, ob Zeichenkette überhaupt vorhanden
-	if (Stringindex == -1) {
+	if (Stringindex == std::string::npos) {
 		return false; //nicht gefunden
 	}
 	return true; //gefunden
@@ -67,9 +67,9 @@ bool Orbitliste::Ist_Messung_Nadirmessung(uint Index)
 		return false;
 	}
 	// charakteristische Zeichenkette suchen
-	int Stringindex = m_Dateinamen[Index].find("SCIA_nadir");
+	size_t Stringindex = m_Dateinamen[Index].find("SCIA_nadir");
 	// Überprüfen, ob Zeichenkette überhaupt vorhanden
-	if (Stringindex == -1) {
+	if (Stringindex == std::string::npos) {
 		return false;//nicht gefunden
 	}
 	return true;  //gefunden
