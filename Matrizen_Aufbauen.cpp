@@ -57,7 +57,7 @@ void Matrizen_Aufbauen(MPL_Matrix &S_Breite, MPL_Matrix &S_Hoehe,
 	S_letzte_Hoehe *= Lambda_letzte_Hoehe;
 
 	//cerr<<"S_apriori\n";
-	S_apriori = Einheitsmatrix_aufbauen(S_apriori.m_Zeilenzahl);
+	S_apriori = Einheitsmatrix_aufbauen(Grid.m_Anzahl_Punkte);
 
 	// Fehlermatrizen mit konstanten Wichtungsfaktoren Multiplizieren
 	// nur bei apriori...die anderen erst in Normalgleichung
@@ -280,6 +280,8 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		// Atmosphärengase zu bestimmen
 		MPL_Vektor V_Atmo_Wirkungsquerschnitte(2);
 		V_Atmo_Wirkungsquerschnitte.Null_Initialisierung();
+		MPL_Vektor V_Atmo_Wqs_abs(2);
+		V_Atmo_Wqs_abs.Null_Initialisierung();
 		//Dichten sind Höhenabhängig, Bestimmung dort
 		MPL_Vektor V_Atmo_Dichten(2);
 
@@ -291,6 +293,11 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 				aml_it->m_Wellenlaenge, V_Atmo_Wirkungsquerschnitte(0));
 		interpolieren(M_Atmo_Wirkungsquerschnitte, 0, 2,
 				aml_it->m_Wellenlaenge, V_Atmo_Wirkungsquerschnitte(1));
+		// absorption cross section, might be different from the emission
+		interpolieren(M_Atmo_Wirkungsquerschnitte, 0, 1,
+				aml_it->m_Wellenlaenge_abs, V_Atmo_Wqs_abs(0));
+		interpolieren(M_Atmo_Wirkungsquerschnitte, 0, 2,
+				aml_it->m_Wellenlaenge_abs, V_Atmo_Wqs_abs(1));
 		//zwei Wege müssen betrachtet werden:
 		//Satellit-Punkt
 		//Punkt-Sonne
@@ -732,17 +739,17 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			double Sehnenlaenge_LFS = sqrt(b * b + c * c + 2.0 * b * c * Cos_SZA_LFS);
 			////////////////////////////////////////////////////////////////////
 			// GESCHWINDIGKEITS/GENAUIGKEITSBESTIMMENDER PARAMETER
-			int Schrittzahl = 1000;
+			int Schrittzahl2 = 1000;
 			// bei TOA_LFS=100.0 und 1000 Schritten ist der
 			// Höhenunterschied zweier Punkte etwa 300m
 			////////////////////////////////////////////////////////////////////
-			double Schrittlaenge = Sehnenlaenge_LFS / ((double)Schrittzahl);
+			double Schrittlaenge = Sehnenlaenge_LFS / ((double)Schrittzahl2);
 			//cout<<"Schrittlaenge_LFS_LIMB: "<<Schrittlaenge<<"\n";
 			double Tau_LFS = 0.0;
 			// RAYTRACINGSCHLEIFE LIMB LFS        /////////////////////////////
 
 			// SPEED Diese Schleife ist ein erheblicher Zeitschritt des Programms
-			for (int Schritt = 0; Schritt < Schrittzahl; Schritt++) {
+			for (int Schritt = 0; Schritt < Schrittzahl2; Schritt++) {
 				MPL_Vektor aktueller_Punkt(3);  //Bei Schrittzahl 10000 3s
 
 				//Bei Schrittzahl 10000 11s
@@ -804,7 +811,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 				//Skalarprodukt beider Vektoren
 
 				Tau_LFS += Schrittlaenge * 100000.0
-					* (V_Atmo_Dichten * V_Atmo_Wirkungsquerschnitte);
+					* (V_Atmo_Dichten * V_Atmo_Wqs_abs);
 			} // Ende for Schritt
 			// ENDE RAYTRACINGSCHLEIFE LIMB LFS /////////////////////////////
 			// Multipliziere AMF mit exp(-Tau)
@@ -1139,12 +1146,12 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			double Sehnenlaenge_LFS = sqrt(b * b + c * c + 2.0 * b * c * Cos_SZA_LFS);
 			////////////////////////////////////////////////////////////////////
 			// GESCHWINDIGKEITS/GENAUIGKEITSBESTIMMENDER PARAMETER
-			int Schrittzahl = 1000;
+			int Schrittzahl2 = 1000;
 			////////////////////////////////////////////////////////////////////
-			double Schrittlaenge = Sehnenlaenge_LFS / ((double)Schrittzahl);
+			double Schrittlaenge = Sehnenlaenge_LFS / ((double)Schrittzahl2);
 			double Tau_LFS = 0.0;
 			// RAYTRACINGSCHLEIFE NADIR LFS          ///////////////////////////
-			for (int Schritt = 0; Schritt < Schrittzahl; Schritt++) {
+			for (int Schritt = 0; Schritt < Schrittzahl2; Schritt++) {
 				MPL_Vektor aktueller_Punkt(3);
 				aktueller_Punkt = Start_Punkt
 					+ Sonne_normal * Schrittlaenge * (double) Schritt;
@@ -1240,41 +1247,32 @@ int interpolieren(MPL_Matrix &M, int x_Spalte, int y_Spalte,
 	int Index_Anfang = 0;
 	int Index_Ende = n - 1;
 
-	if ((M(0, x_Spalte) > x_Wert_des_gesuchten_Wertes)
-			|| (M(n - 1, x_Spalte) < x_Wert_des_gesuchten_Wertes)) {
-		cout << "M(0,x_Spalte): " << M(0, x_Spalte) << "\n";
-		cout << "M(n-1,x_Spalte): " << M(n - 1, x_Spalte) << "\n";
-		cout << "x_Wert_des_gesuchten_Wertes: " << x_Wert_des_gesuchten_Wertes << "\n";
-		cout << "GESUCHTES X LIEGT NICHT IM INTERPOLIERBAREN BEREICH! FEHLER!!\n";
-		gesuchter_Wert = 0; //unnützen dummywert ausgeben
+	/* constant at boundaries */
+	if (x_Wert_des_gesuchten_Wertes < M(Index_Anfang, x_Spalte)) {
+		gesuchter_Wert = M(Index_Anfang, y_Spalte);
+		return 1;
+	}
+	if (x_Wert_des_gesuchten_Wertes > M(Index_Ende, x_Spalte)) {
+		gesuchter_Wert = M(Index_Ende, y_Spalte);
 		return 1;
 	}
 	//cout<<"M(0,x_Spalte): "<<M(0,x_Spalte)<<"\n";
 	//cout<<"M(n-1,x_Spalte): "<<M(n-1,x_Spalte)<<"\n";
 	//cout<<"x_Wert_des_gesuchten_Wertes: "<<x_Wert_des_gesuchten_Wertes<<"\n";
-	while (true) { //Wir springen mit break raus
+	while (Index_Anfang + 1 < Index_Ende) {
 
 		int Index = (Index_Anfang + Index_Ende) / 2;
 		//cout<<"Index:"<<Index<<"\n";
 		//cout<<"Index_anfang:"<<Index_Anfang<<"\n";
 		//cout<<"Index_ende:"<<Index_Ende<<"\n";
 
-		if (M(Index, x_Spalte) == x_Wert_des_gesuchten_Wertes) {
-			// Element Teil des Rasters
-			// keine Interpolation nötig
-			gesuchter_Wert = M(Index, 1);
-			return 0;
-		}
 		if (M(Index, x_Spalte) > x_Wert_des_gesuchten_Wertes) {
-			if (Index_Ende == Index) {
-				break; //Abbruch, falls es keine Änderung mehr gibt
-			}
 			Index_Ende = Index;
-		} else {
-			if (Index_Anfang == Index) {
-				break; //Abbruch, falls es keine Änderung mehr gibt
-			}
+		} else if (M(Index, x_Spalte) < x_Wert_des_gesuchten_Wertes) {
 			Index_Anfang = Index;
+		} else {
+			gesuchter_Wert = M(Index, y_Spalte);
+			return 0;
 		}
 	}// while(true)
 
@@ -1285,6 +1283,7 @@ int interpolieren(MPL_Matrix &M, int x_Spalte, int y_Spalte,
 				/ ((double)(M(Index_Ende, x_Spalte) - M(Index_Anfang, x_Spalte)));
 	double I1 = 1.0 - I2;
 	//cout<<"Index_Anfang:"<<Index_Anfang<<"   Index_Ende:"<<Index_Ende<<"\n";
+	//cout<<"x_Anfang:"<<M(Index_Anfang, x_Spalte)<<"   x_Ende:"<<M(Index_Ende, x_Spalte)<<"\n";
 	//cout<<"I2: "<<I2<<"   I1: "<<I1<<"\n";
 	//Bsp x_ges=5,1 ,x_A=5 x_E=6  ->I2=0,1, I1=0,9
 

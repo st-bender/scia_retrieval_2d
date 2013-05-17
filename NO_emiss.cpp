@@ -10,6 +10,7 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+#include <numeric>
 
 #include "constants.h"
 #include "NO_emiss.h"
@@ -641,8 +642,8 @@ int NO_emiss::calc_excitation()
 					}
 			}
 		}
-		sum1 *= M_PI * phys::flux * f_osc(v_u, 0);
-		sum2 *= M_PI * phys::flux * f_osc(v_u, 0);
+		sum1 *= phys::flux * f_osc(v_u, 0);
+		sum2 *= phys::flux * f_osc(v_u, 0);
 		excit(0, i) = sum1;
 		if (i < NJ) excit(1, i + 1) = sum2;
 	}
@@ -704,29 +705,25 @@ int NO_emiss::calc_line_emissivities()
 
 int NO_emiss::scia_convolve(Messung_Limb &ml)
 {
-	int NO_NJ = get_NJ();
 	int i, j;
 	int npix = 50;
 
 	std::vector<double> x = ml.m_Wellenlaengen;
 	std::vector<double>::iterator x_it;
 	std::vector<double>::iterator spec_max;
-	spec_scia_res.resize(0);
 	spec_scia_res.resize(x.size());
-	double xdiff = x.at(1) - x.at(0);
 
-	for (i = 0; i <= NO_NJ; i++) {
+	for (i = 0; i <= NJ; i++) {
 		for (j = 0; j < 12; j++) {
 			double NO_wl = get_lambda_K(j, i);
 			// divide by 4*pi to get [gamma]/sr = ph/s/sr
 			double NO_rad = get_gamma_j(j, i) * 0.25 * M_1_PI;
-			for (x_it = x.begin(); x_it != x.end(); ++x_it) {
-				int l = std::distance(x.begin(), x_it);
+			int l = 0;
+			for (x_it = x.begin(); x_it != x.end() - 1; ++x_it, l++) {
 				double dl_i = std::abs(NO_wl - *x_it);
 				double w = 0.;
-				if (x_it + 1 != x.end())
-					xdiff = *(x_it + 1) - *x_it;
 				if (dl_i < 1.5) {
+					double xdiff = *(x_it + 1) - *x_it;
 					// integrate over the pixel width (npix points)
 					for (int jj = 0; jj < npix; jj++) {
 						double wl = *x_it
@@ -738,9 +735,17 @@ int NO_emiss::scia_convolve(Messung_Limb &ml)
 			}
 		}
 	}
+	// set the last element to zero, just to be sure.
+	spec_scia_res.back() = 0.;
 	spec_max = std::max_element(spec_scia_res.begin(), spec_scia_res.end());
 	i = std::distance(spec_scia_res.begin(), spec_max);
 	scia_wl_at_max = ml.m_Wellenlaengen.at(i);
+	/* integrated band emission,
+	 * corrects for the 1/(4.*pi) for the whole solid angle,
+	 * and the d(lambda) = 0.11 might not be fully accurate
+	 * but is close enough. */
+	scia_band_emiss = 4. * M_PI * 0.11 *
+		std::accumulate(spec_scia_res.begin(), spec_scia_res.end(), 0.);
 
 	return 0;
 }
@@ -865,7 +870,7 @@ int NO_emiss::print_line_emissivities()
 	std::cout << "Gamma-factor at " << Temp << " K, by lower state K"
 			  << std::endl;
 
-	for (i = 0; i < NJ - 1; i++) {
+	for (i = 0; i <= NJ; i++) {
 		std::cout << i;
 		for (j = 0; j < 12; j++) {
 			std::cout << "\t" << gamma_j(j, i);
@@ -874,7 +879,7 @@ int NO_emiss::print_line_emissivities()
 	}
 	std::cout << "band emission rate factor of the " << v_u << "-" << v_l
 		<< " transition at " << Temp << " K, photons molec-1 s-1:" << std::endl;
-	std::cout << emiss_tot * M_1_PI << std::endl;
+	std::cout << emiss_tot << std::endl;
 
 	return 0;
 }
@@ -902,7 +907,8 @@ double NO_emiss::get_lambda_K(int i, int j)
 }
 double NO_emiss::get_gamma_j(int i, int j)
 {
-	return gamma_j(i, j);
+	// convert from 1/Å to 1/nm
+	return 10. * gamma_j(i, j);
 }
 double NO_emiss::get_spec_scia_res(int i)
 {
@@ -915,4 +921,23 @@ double NO_emiss::get_spec_scia_max()
 double NO_emiss::get_scia_wl_at_max()
 {
 	return scia_wl_at_max;
+}
+double NO_emiss::get_wl_abs_median()
+{
+	// convert the lambdas (MPL_Matrix elements) to a std::vector
+	std::vector<double> lambda_abs(lambda_K_abs.m_Elemente,
+			lambda_K_abs.m_Elemente + (NJ + 1) * 12);
+	// remove all entries equal to zero
+	lambda_abs.erase(std::remove_if(lambda_abs.begin(), lambda_abs.end(),
+				std::bind2nd(std::equal_to<double>(), 0.)),
+			lambda_abs.end());
+	// sort the vector from the shortest to the longest absorption wavelength
+	std::sort(lambda_abs.begin(), lambda_abs.end());
+
+	// return the median in nm
+	return 0.1 * lambda_abs.at(lambda_abs.size() / 2);
+}
+double NO_emiss::get_scia_band_emiss()
+{
+	return scia_band_emiss;
 }

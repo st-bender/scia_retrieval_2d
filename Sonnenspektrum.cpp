@@ -94,6 +94,25 @@ int Sonnenspektrum::Laden_SCIA(string Dateiname, string Fallback_Dateiname)
 		m_Wellenlaengen.push_back(read_wl);
 		m_Intensitaeten.push_back(read_int);
 	}
+	std::vector<double>::iterator wl1, wl2;
+	wl1 = std::lower_bound(m_Wellenlaengen.begin(),
+			m_Wellenlaengen.end(), 228.6);
+	wl2 = std::lower_bound(m_Wellenlaengen.begin(),
+			m_Wellenlaengen.end(), 240.2);
+	ptrdiff_t i1 = std::distance(m_Wellenlaengen.begin(), wl1);
+	ptrdiff_t i2 = std::distance(m_Wellenlaengen.begin(), wl2);
+	double int_wl1 = interpolate(m_Wellenlaengen, m_Intensitaeten, 228.6);
+	double int_wl2 = interpolate(m_Wellenlaengen, m_Intensitaeten, 240.2);
+	std::cerr << "wl1 = " << m_Wellenlaengen.at(i1 - 1)
+		<< ", " << m_Wellenlaengen.at(i1) << std::endl;
+	std::cerr << "wl2 = " << m_Wellenlaengen.at(i2 - 1)
+		<< ", " << m_Wellenlaengen.at(i2) << std::endl;
+	std::cerr << "int1 = " << m_Intensitaeten.at(i1 - 1)
+		<< ", " << m_Intensitaeten.at(i1)
+		<< " -> " << int_wl1 << std::endl;
+	std::cerr << "int2 = " << m_Intensitaeten.at(i2 - 1)
+		<< ", " << m_Intensitaeten.at(i2)
+		<< " -> " << int_wl2 << std::endl;
 
 	infile.close();
 	return 0;
@@ -136,7 +155,7 @@ int Sonnenspektrum::Interpolieren(Messung_Limb &Messung_Erdschein)
 
 	double kleine_WL, grosse_WL;
 	double int_interp, wl_interp;
-	int Index_kleine_WL = 0, Index_grosse_WL = 1;
+	long Index_kleine_WL = 0, Index_grosse_WL = 1;
 	vector<double>::iterator low, me_wl_it;
 	// cout<<Messung_Erdschein.m_Wellenlaengen[0]<<"\n";
 	//cout<<Messung_Erdschein.m_Intensitaeten[0]<<"\n";

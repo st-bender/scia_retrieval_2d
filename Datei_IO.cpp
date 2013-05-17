@@ -33,13 +33,11 @@ extern int Prioritylevel;
 double average_over_wl_range(float *input, float *Wellenlaengen,
 		int N_wl, double wl_start, double wl_end, bool median = false)
 {
-	int i;
-	int start, end;
+	long start, end;
 	double avg = 0.;
 	// copy to a vector for <algorithm>
 	vector<float> wl(Wellenlaengen, Wellenlaengen + N_wl);
 	vector<float>::iterator wl_low, wl_up;
-	vector<float> rad;
 
 	if (wl_start > wl_end) {
 		// swap
@@ -60,8 +58,7 @@ double average_over_wl_range(float *input, float *Wellenlaengen,
 	end = distance(wl.begin(), wl_up);
 
 	// copy the intensities to a vector
-	for (i = start; i < end; i++)
-		rad.push_back(input[i]);
+	vector<float> rad(input + start, input + end);
 
 	if (median == false) {
 		// build the arithmetic mean
@@ -148,7 +145,7 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 
 		// Der Pixel 552 (282,03nm zeigt bei nadir( und nur dort, einen Peak)
 		// ....interpretation dead pixel
-		ml.m_Intensitaeten.at(536) = 0.5 * (ml.m_Intensitaeten.at(535) + ml.m_Intensitaeten.at(537));
+		//ml.m_Intensitaeten.at(536) = 0.5 * (ml.m_Intensitaeten.at(535) + ml.m_Intensitaeten.at(537));
 		Ergebnisvektor.push_back(ml);
 	}
 
@@ -161,7 +158,8 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 //
 ////////////////////////////////////////////////////////////////////////////////
 vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
-		Messung_Limb &Troposphaerische_Saeule, Messung_Limb &mean_10_20)
+		Messung_Limb &Troposphaerische_Saeule, Messung_Limb &mean_10_20,
+		int Anzahl_Hoehen)
 {
 	//binärdateien sind nicht gepackt(das wär einfach nicht effizient)...
 	//ansonsten hier packen und später entpacken
@@ -200,19 +198,19 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
 	vector<Messung_Limb> Ergebnisvektor
 		= make_messung_limb_vector(Dateiname, Limbdaten, Wellenlaengen,
 				no_of_pix, no_of_alt, orbit_phase, Datum, Center_Lat_Lon,
-				7, 23, 1);
+				Anzahl_Hoehen, 30 - Anzahl_Hoehen, 1);
 
 	//Teile von Schritt 4 nochmal für die Troposhärische Säule
 	//Eigentlich reichen Intensitäten
 	for (int j = 0; j < no_of_pix; j++) {
-		Troposphaerische_Saeule.m_Intensitaeten.push_back(Limbdaten[2].m_radiance[j]);
+		Troposphaerische_Saeule.m_Intensitaeten.push_back(Limbdaten[1].m_radiance[j]);
 	}
-	Troposphaerische_Saeule.m_TP_SZA = Limbdaten[2].m_TP_SZA;
+	Troposphaerische_Saeule.m_TP_SZA = Limbdaten[1].m_TP_SZA;
 	// und für den Mittelwert, der Höhen 10 bis 20
 	for (int j = 0; j < no_of_pix; j++) {
 		double mean = 0.;
 		for (int k = 10; k < 21; k++) {
-			mean += Limbdaten[k].m_error[j];
+			mean += Limbdaten[k].m_radiance[j];
 		}
 		mean /= 11.0;
 		mean_10_20.m_Intensitaeten.push_back(mean);
@@ -403,8 +401,8 @@ vector<Messung_Nadir> make_messung_nadir_vector(string Dateiname,
 		//mn.m_Intensitaeten[536]=(mn.m_Intensitaeten[535]+mn.m_Intensitaeten[537])/2;
 		//mn.m_Intensitaeten_relativer_Fehler[536]=(mn.m_Intensitaeten_relativer_Fehler[535]+mn.m_Intensitaeten_relativer_Fehler[537])/2;
 		double f1 = 0.9, f2 = 0.1;
-		for (int i = 536; i < 545; i++) {
-			mn.m_Intensitaeten[i]
+		for (int j = 536; j < 545; j++) {
+			mn.m_Intensitaeten[j]
 				= f1 * mn.m_Intensitaeten[535] + f2 * mn.m_Intensitaeten[545];
 			mn.m_Intensitaeten_relativer_Fehler[536]
 				= f1 * mn.m_Intensitaeten_relativer_Fehler[535]
@@ -497,9 +495,9 @@ int Ausgabe_Saeulendichten(string Dateiname,
 			"Lat_Sat[°]", "Lon_Sat[°]", "Lat_TP[°]", "Lon_TP[°]",
 			"Hoehe_TP[km]", "Erdradius[km]", "Deklinationswinkel[°]",
 			"Sonne_Lon[°]", "Zeilendichte[cm^-2]", "Fehler_Zeilendichte[cm^-2]");
-	int lang = A_Messung_L.size();
+	size_t lang = A_Messung_L.size();
 	//cerr<<"Matrix schreiben\n";
-	for (int i = 0; i < lang; i++) {
+	for (size_t i = 0; i < lang; i++) {
 		//die letzte Zeile der Datei ist leer, da \n in der Vorletzten steht
 		fprintf(outfile, "%4i %5i %3i"
 				" %1.5E %1.5E %1.5E %1.5E"
@@ -536,7 +534,7 @@ int Ausgabe_Saeulendichten_back(std::string Dateiname,
 	/* build a new vector with the back-inserted columns
 	 * instead of the original ones */
 	for (aml_it = aml_vec.begin(); aml_it != aml_vec.end(); ++aml_it) {
-		int i = std::distance(aml_vec.begin(), aml_it);
+		long i = std::distance(aml_vec.begin(), aml_it);
 		aml_vec_neu.push_back(*aml_it);
 		aml_vec_neu.at(i).m_Zeilendichte = y(i);
 	}
@@ -566,9 +564,9 @@ int Ausgabe_Saeulendichten(string Dateiname,
 			"Lat_Ground", "Long_Ground",
 			"Erdradius", "Deklination[°]", "Sonne_Lon[°]",
 			"Säulendichte[cm^2]", "Fehler_Säulendichte[cm^2]");
-	int lang = A_Messung_N.size();
+	size_t lang = A_Messung_N.size();
 
-	for (int i = 0; i < lang; i++) {
+	for (size_t i = 0; i < lang; i++) {
 		//die letzte Zeile der Datei ist leer, da \n in der Vorletzten steht
 		fprintf(outfile, "%4i %3i %5i "
 				"%1.5E %1.5E "

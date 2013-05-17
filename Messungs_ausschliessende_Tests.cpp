@@ -39,8 +39,9 @@ bool Test_auf_Nachtmessung_Limb(Messung_Limb &Tropo, Konfiguration &Konf)
 	}
 	Troposignal /= (Index2 - Index1 + 1);
 	if (Troposignal < 1E10) {
-		cout<<"Nachtmessung detektiert\n";
-		cout<<"Troposignal:"<<Troposignal<<"\n";
+		cerr<<"Nachtmessung detektiert\n";
+		cerr<<"Troposignal:"<<Troposignal<<"\n";
+		cerr<<"skipping...\n";
 		ist_Nachtmessung = true;
 	}
 	if (Konf.m_Large_SZA == 1) {
@@ -76,14 +77,18 @@ bool Test_auf_Nachtmessung_Limb_meso_thermo(Messung_Limb &niedrigste_hoehe,
 	//cerr<<"Signal 290nm-295nm 53km:"<<Signal<<"\n";
 	double threshold = 5E10; // ist doch fast gleich
 	if (Signal < threshold) {
-		//cerr<<"Nachtmessung detektiert\n";
-		//cerr<<"Signal 290nm-295nm 53km:"<<Signal<<"\n";
+		cerr<<"Nachtmessung detektiert\n";
+		cerr<<"Signal 290nm-295nm 53km:"<<Signal<<"\n";
+		cerr<<"skipping...\n";
 		ist_Nachtmessung = true;
 	}
 	if (Konf.m_Large_SZA == 1) {
 		// schaue nach Sonnenzenitwinkel < m_Maximaler_SZA
-		if (fabs(niedrigste_hoehe.m_TP_SZA) > Konf.m_Maximaler_SZA)
+		if (fabs(niedrigste_hoehe.m_TP_SZA) > Konf.m_Maximaler_SZA) {
+			std::cerr << "SZA too large: " << niedrigste_hoehe.m_TP_SZA
+				<< std::endl;
 			ist_Nachtmessung = true;
+		}
 	}
 
 	return ist_Nachtmessung;
@@ -93,12 +98,14 @@ bool test_auf_SAA_limb(Messung_Limb &space)
 {
 	bool SAA = false;
 	double wl_start = 230., wl_end = 291.;
-	int i;
-	int i0 = distance(space.m_Wellenlaengen.begin(),
-			lower_bound(space.m_Wellenlaengen.begin(), space.m_Wellenlaengen.end(), wl_start));
-	int i1 = distance(space.m_Wellenlaengen.begin(),
-			upper_bound(space.m_Wellenlaengen.begin(), space.m_Wellenlaengen.end(), wl_end));
-	int Ni = i1 - i0;
+	long i;
+	long i0 = std::distance(space.m_Wellenlaengen.begin(),
+			std::lower_bound(space.m_Wellenlaengen.begin(),
+				space.m_Wellenlaengen.end(), wl_start));
+	long i1 = std::distance(space.m_Wellenlaengen.begin(),
+			std::upper_bound(space.m_Wellenlaengen.begin(),
+				space.m_Wellenlaengen.end(), wl_end));
+	long Ni = i1 - i0;
 
 	/* checks for the usability of the spectrum and sets
 	 * SAA to true (= unusable) if there are no points in

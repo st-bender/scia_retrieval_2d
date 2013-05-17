@@ -86,8 +86,8 @@ int my_moving_average(vector<double> &y, int ws)
 
 int my_convolution_1d(vector<double> &y, vector<double> &weights)
 {
-	int i;
-	const int ws = weights.size(), wsh = ws / 2;
+	size_t i;
+	const size_t ws = weights.size(), wsh = ws / 2;
 
 	vector<double> y_neu;
 	vector<double>::iterator y_it;
@@ -95,7 +95,7 @@ int my_convolution_1d(vector<double> &y, vector<double> &weights)
 	for (y_it = y.begin(); y_it != y.end(); ++y_it) {
 		double avg = 0.;
 		double wnorm = 0.;
-		int start_shift = 0, end_shift = 0;
+		size_t start_shift = 0, end_shift = 0;
 
 		if (y_it < y.begin() + wsh)
 			start_shift = distance(y_it, y.begin() + wsh);
@@ -210,14 +210,14 @@ int my_sciamachy_blur(vector<double> &y)
  */
 int my_lowess(vector<double> &x, vector<double> &y, double f)
 {
-	int n = x.size();
-	int r = ceil(f * n);
+	size_t n = x.size();
+	size_t r = ceil(f * n);
 	vector<double> y_neu;
 
-	for (int i = 0; i < n; i++) {
+	for (size_t i = 0; i < n; i++) {
 		vector<double> dist, dist_sort, wgts;
 		// calculate the distances
-		for (int j = 0; j < n; j++) {
+		for (size_t j = 0; j < n; j++) {
 			double d = abs(x.at(i) - x.at(j));
 			dist.push_back(d);
 			dist_sort.push_back(d);
@@ -226,7 +226,7 @@ int my_lowess(vector<double> &x, vector<double> &y, double f)
 		sort(dist_sort.begin(), dist_sort.end());
 
 		// calculate the weights
-		for (int j = 0; j < n; j++) {
+		for (size_t j = 0; j < n; j++) {
 			double w = dist.at(j) / dist_sort.at(r);
 			if (w >= 0. && w < 1.) {
 				w = 1. - w * w * w;
@@ -240,7 +240,7 @@ int my_lowess(vector<double> &x, vector<double> &y, double f)
 		double w_xx_sum = 0., w_xy_sum = 0.;
 		double w_sum = 0.;
 
-		for (int j = 0; j < n; j++) {
+		for (size_t j = 0; j < n; j++) {
 			double w = wgts.at(j), a = x.at(j), b = y.at(j);
 			w_sum += w;
 			w_x_sum += w * a;
@@ -329,7 +329,7 @@ std::vector<double> my_whittaker_smooth(std::vector<double> &y,
 /* not really smoothing functions but this file seems to be the best place for now */
 double interpolate(std::vector<double> &x, std::vector<double> &y, double x0)
 {
-	int i;
+	long i;
 	std::vector<double>::iterator x_it;
 	x_it = std::upper_bound(x.begin(), x.end(), x0);
 

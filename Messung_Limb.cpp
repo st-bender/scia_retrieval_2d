@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <iterator>
 #include <algorithm>
+#include <numeric>
 
 #include <fstream>  //für Ausgabe
 #include <iostream>//für Ausgabe
@@ -243,7 +244,7 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 
 	////////////////////////////////////////////////////////////////////////////
 	// Hier kann man zur Testzwecken noch einen Plot machen  ///////////////////
-	if (mache_Fit_Plots == "ja") {
+	if (mache_Fit_Plots == "ja" && Spezfenst.plot_fit) {
 		//TODO das als Funktion implementieren
 		vector<double> Funktion(N_Peak);
 
@@ -353,7 +354,10 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	// Dichte n aus der rechten Seite
 
 	// threshold for peak detection in the NO wavelength range
-	const double peak_threshold = 6.e10;
+	// starting at 6*10^10 at 247 nm (NO(0, 2)) and increasing ~ lambda^4
+	// because of Rayleigh scattering
+	double NO_wl_max = NO.get_scia_wl_at_max();
+	const double peak_threshold = 6.e10 * pow(NO_wl_max / 247.0, 4);
 
 	//Zunächst Indizes der Wellenlaengen der Basisfenster bestimmen
 	int i, j;
@@ -413,12 +417,14 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		std::cout << ", lon = " << m_Longitude_TP;
 		std::cout << ", height = " << m_Hoehe_TP << std::endl;
 		std::cout << "# orbit_phase = " << m_orbit_phase << std::endl;
+		std::cout << "# NO band emission = " << NO.get_scia_band_emiss()
+			<< std::endl;
 	}
 
 	for (i = 0; i < N_base + N_peak; i++) {
-		double wl = m_Wellenlaengen.at(i_basewin_l_min + i);
 		double sol_i = sol_rad.at(i_basewin_l_min + i);
 		double rad_i = rad.at(i_basewin_l_min + i);
+		wl = m_Wellenlaengen.at(i_basewin_l_min + i);
 		// peak detection: unusual high radiance
 		// make sure, that the surrounding points are lower
 		if (rad_i > peak_threshold
@@ -444,14 +450,14 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		std::cout << "# solar fit factor = " << f_sol_fit << std::endl;
 	if (f_sol_fit < 0.) f_sol_fit = 0.;
 	// Basisfenster WL und I auffüllen
-	for (int i = 0; i < base_l; i++) {
+	for (i = 0; i < base_l; i++) {
 		wl = m_Wellenlaengen.at(i_basewin_l_min + i);
 		basewin_wl.at(i) = wl;
 		basewin_rad.at(i) = rad.at(i_basewin_l_min + i)
 			- f_sol_fit * sigma_rayleigh(wl)
 			  * sol_rad.at(i_basewin_l_min + i);
 	}
-	for (int i = 0; i < base_r; i++) {
+	for (i = 0; i < base_r; i++) {
 		wl = m_Wellenlaengen.at(i_basewin_r_min + i);
 		basewin_wl.at(base_l + i) = wl;
 		basewin_rad.at(base_l + i) = rad.at(i_basewin_r_min + i)
@@ -462,62 +468,45 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	 * This currently discards 20% (10% left and 10% right)
 	 * of the baseline points. */
 	std::vector<double> rad_sort(basewin_rad);
-	std::vector<double> bwin_wl, bwin_rad;
 	std::sort(rad_sort.begin(), rad_sort.end());
-	int offset = rad_sort.size() * 0.10;
+	size_t offset = rad_sort.size() / 10;
 	double rad0 = rad_sort.at(offset);
 	double rad1 = rad_sort.at(rad_sort.size() - offset - 1);
-
-	for (int i = 0; i < N_base; i++) {
-		double rad = basewin_rad.at(i);
-		// push back only if in valid range
-		if (rad >= rad0 && rad <= rad1) {
-			bwin_wl.push_back(basewin_wl.at(i));
-			bwin_rad.push_back(rad);
-		}
-	}
-	// reset N_base
-	N_base = bwin_rad.size();
-
-	// linearen Fit des Basisfensters durchführen
-	// Proto: Fit_Linear(double* x,double* y, double& a0, double& a1,int
-	// Anfangsindex, int Endindex)
-	double a0, a1, rms_err_base;
-	// use the modified base window for the linear fit
-	Fit_Linear(bwin_wl, bwin_rad, a0, a1, rms_err_base, 0, N_base - 1);
 
 	// prepare baseline and rayleigh data
 	std::vector<double> baseline_wl, baseline_rad, rayleigh_rad;
 	std::vector<double> y, y_weights;
-	for (int i = 0; i < N_fit_tot; i++) {
+	for (i = 0; i < N_fit_tot; i++) {
 		int idx = i_basewin_l_min + i;
 		wl = m_Wellenlaengen.at(idx);
 		baseline_wl.push_back(wl);
-		baseline_rad.push_back(a0 + a1 * wl);
 		rayleigh_rad.push_back(f_sol_fit * sigma_rayleigh(wl)
 				* sol_rad.at(idx));
 
 		// prepare radiances and weights for the Whittaker smoother
-		y.push_back(rad.at(idx) - rayleigh_rad.back());
-		double rad = y.back();
+		double radi = rad.at(idx) - rayleigh_rad.back();
+		y.push_back(radi);
 		// exclude the peak window and outliers by zeroing the weights
-		if ((idx > i_peakwin_min && idx < i_peakwin_max)
-			|| rad < rad0 || rad > rad1)
+		if ((idx >= i_peakwin_min && idx <= i_peakwin_max)
+			|| radi < rad0 || radi > rad1)
 			y_weights.push_back(0.);
 		else
 			y_weights.push_back(1.);
 	}
+	// reset N_base
+	N_base = std::accumulate(y_weights.begin(), y_weights.end(), 0);
 
 	// replace the linear baseline by the Whittaker smoothed radiances
 	// excluding the peak window and outliers as in the linear case.
 	// the original (linear) baseline behaviour can be obtained by commenting
 	// this line or by setting lambda (the 4th argument) to something large,
-	// e.g. ~ 1.e9.
+	// e.g. ~ 1.e9. (quick test showed that 3.e5 is quite close)
+	double rms_err_base;
 	baseline_rad = my_whittaker_smooth(y, y_weights, 2, 1.e4, rms_err_base);
 
 	//Peakfenster WL und I auffüllen
 	// lineare Funktion von Intensitäten des Peakfenster abziehen
-	for (int i = 0; i < N_peak; i++) {
+	for (i = 0; i < N_peak; i++) {
 		peakwin_wl.at(i) = m_Wellenlaengen.at(i_peakwin_min + i);
 		peakwin_rad.at(i) = y.at(i_peakwin_min - i_basewin_l_min + i)
 			- baseline_rad.at(i_peakwin_min - i_basewin_l_min + i);
@@ -529,7 +518,7 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		+ N_peak * rms_err_peak * rms_err_peak) / (N_base + N_peak));
 	m_Fehler_Zeilendichten = rms_err_tot / NO.get_spec_scia_max();
 
-	if (mache_Fit_Plots == "ja") {
+	if (mache_Fit_Plots == "ja" && Spezfenst.plot_fit) {
 		// prepare data to plot
 		std::vector<double> wavelengths, spec_wo_rayleigh = y, NO_fit;
 		for (i = 0; i < base_l; i++) {
@@ -614,6 +603,9 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	if (debug == true) {
 		std::cout << "# slant column = " << m_Zeilendichte;
 		std::cout << ", error = " << m_Fehler_Zeilendichten << std::endl;
+		std::cout << "# emissivity = "
+			<< std::accumulate(peakwin_rad.begin(), peakwin_rad.end(), 0.)*0.11
+			<< std::endl;
 	}
 
 	return 0;

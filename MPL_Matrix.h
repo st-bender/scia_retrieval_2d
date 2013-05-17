@@ -62,8 +62,14 @@ class MPL_Matrix
 {
 public:
 	//Konstruktoren //////////////////////////////////
-	MPL_Matrix();
-	MPL_Matrix(int Zeilenzahl, int Spaltenzahl);
+	MPL_Matrix() : m_Zeilenzahl(0), m_Spaltenzahl(0),
+		m_Elementanzahl(0), m_Elemente(0) {}
+	MPL_Matrix(int Zeilenzahl, int Spaltenzahl) :
+		m_Zeilenzahl(Zeilenzahl), m_Spaltenzahl(Spaltenzahl),
+		m_Elementanzahl(Zeilenzahl * Spaltenzahl)
+		{
+			m_Elemente = new double[Zeilenzahl * Spaltenzahl];
+		}
 	MPL_Matrix(const MPL_Matrix &rhs);
 	// Hier ist nochmehr denkbar z.b. einheitzsmatrix 0 matrix usw
 	/////////////////////////////////////////////////////////
@@ -117,8 +123,8 @@ public:
 
 	// Methoden
 	void Null_Initialisierung();
-	MPL_Matrix Zeile(int Zeilennummer); // gibt eine Zeile als Spaltenvektor aus
-	MPL_Matrix Spalte(int Spaltennummer); // gibt eine Spalte als Spaltenvektor aus
+	MPL_Matrix get_Zeile(int Zeilennummer); // gibt eine Zeile als Spaltenvektor aus
+	MPL_Matrix get_Spalte(int Spaltennummer); // gibt eine Spalte als Spaltenvektor aus
 	MPL_Matrix transponiert(); //transponierte Matrix
 //    MPLMatrix  invertiert();
 //    //inverse Matrix, falls existent...
@@ -144,26 +150,6 @@ public:
 //////////////////////////////////////////////////////
 //Deklaration fertig...nun Operatoren als inline Funktionen überladen
 //Konstruktoren //////////////////////////////////
-/////////////////////////////////////////////////////////
-// Methodenstart MPL_Matrix Konstruktor
-/////////////////////////////////////////////////////////
-inline MPL_Matrix::MPL_Matrix()
-{
-	m_Zeilenzahl = 0;
-	m_Spaltenzahl = 0;
-	m_Elementanzahl = 0;
-	m_Elemente = 0;
-}
-/////////////////////////////////////////////////////////
-// Methodenstart MPL_Matrix Konstruktor
-/////////////////////////////////////////////////////////
-inline MPL_Matrix::MPL_Matrix(int Zeilenzahl, int Spaltenzahl)
-{
-	this->m_Spaltenzahl = Spaltenzahl;
-	this->m_Zeilenzahl = Zeilenzahl;
-	this->m_Elementanzahl = Zeilenzahl * Spaltenzahl;
-	this->m_Elemente = new double[Zeilenzahl * Spaltenzahl];
-}
 /////////////////////////////////////////////////////////
 // Methodenstart MPL_Matrix Konstruktor
 /////////////////////////////////////////////////////////
@@ -577,7 +563,7 @@ inline void MPL_Matrix::Null_Initialisierung()
 // Methodenstart
 /////////////////////////////////////////////////////////
 // gibt eine Zeile   als Spaltenvektor aus
-inline MPL_Matrix MPL_Matrix::Zeile(int Zeilennummer)
+inline MPL_Matrix MPL_Matrix::get_Zeile(int Zeilennummer)
 {
 	MPL_Matrix aus(this->m_Spaltenzahl, 1);
 	for (int i = 0; i < m_Spaltenzahl; i++) {
@@ -589,7 +575,7 @@ inline MPL_Matrix MPL_Matrix::Zeile(int Zeilennummer)
 // Methodenstart
 /////////////////////////////////////////////////////////
 // gibt eine Spalte als Spaltenvektor aus
-inline MPL_Matrix MPL_Matrix::Spalte(int Spaltennummer)
+inline MPL_Matrix MPL_Matrix::get_Spalte(int Spaltennummer)
 {
 	MPL_Matrix aus(this->m_Zeilenzahl, 1);
 	for (int i = 0; i < m_Zeilenzahl; i++) {

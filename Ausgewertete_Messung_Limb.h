@@ -40,6 +40,7 @@ public:
 	double m_Sonnen_Longitude;
 	// Wellenlänge des Übergangs
 	double m_Wellenlaenge;
+	double m_Wellenlaenge_abs;
 	//Datum
 	int m_Jahr;
 	int m_Monat;

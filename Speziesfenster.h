@@ -28,6 +28,7 @@ public:
 
 	//Membervariablen *********************************************************/
 	std::string m_Spezies_Name;                        // z.B. Eisen I oder Eisen II
+	bool plot_fit;
 	// Teile für Zeilendichte Berechnung
 	std::vector<double> m_Wellenlaengen;  // Vektor mit allen zugehörigen Linien
 	std::vector<Liniendaten> m_Liniendaten;

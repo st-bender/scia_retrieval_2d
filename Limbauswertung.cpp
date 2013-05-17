@@ -63,8 +63,10 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 	//Hier stecken NUR die Intensitäten der Säulen 10 bis 20 (ca 30-60km) drin
 	cerr<<"Rohdaten einlesen\n";
 	if (limb_meso_thermo != "ja") {
+		int Anzahl_Hoehen = 13;
 		Rohdaten =
-			ReadL1C_Limb_mpl_binary(Orbitlist.m_Dateinamen[l], Tropo, mean_10_20);
+			ReadL1C_Limb_mpl_binary(Orbitlist.m_Dateinamen[l], Tropo, mean_10_20,
+					Anzahl_Hoehen);
 	} else {
 		//Rohdaten =
 		//ReadL1C_Limb_meso_thermo_mpl_binary(Orbitlist.m_Dateinamen[l], Tropo);
@@ -188,6 +190,7 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 
 				// Die braucht man später für die Luftmassenmatrix
 				Ergebnis.m_Wellenlaenge
+					= Ergebnis.m_Wellenlaenge_abs
 					= ldit->m_Wellenlaenge;
 				//Ergebnis.Ausgabe_auf_Bildschirm();
 				// Zusammenfassung der Zwischenresultate dem Vektor für die
@@ -225,6 +228,7 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 					NO_new.calc_line_emissivities();
 					NO_new.scia_convolve(Rohdaten.at(0));
 					double wl = NO_new.get_scia_wl_at_max();
+					double wl_abs = NO_new.get_wl_abs_median();
 					mlit->slant_column_NO(NO_new, mache_Fit_Plots, Solspec, k,
 							*sfit, Arbeitsverzeichnis);
 					Ergebnis = mlit->Ergebnis_Zusammenfassen();
@@ -232,6 +236,7 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 						= ldit->m_Wellenlaenge
 						= sfit->m_Wellenlaengen.at(k)
 						= wl;
+					Ergebnis.m_Wellenlaenge_abs = wl_abs;
 					Ausgewertete_Limbmessung_NO.push_back(Ergebnis);
 				}
 

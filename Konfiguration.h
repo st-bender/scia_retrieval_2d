@@ -9,7 +9,7 @@ class Konfiguration
 	//alles public machen
 public:
 	// Methoden
-	int Konfiguration_einlesen();  // die ist in Scia.conf drin
+	int Konfiguration_einlesen(std::string file);  // die ist in Scia.conf drin
 	int Konfiguration_anzeigen();  // gucken obs geklappt hat
 	// Member_Variablen
 	// Directory Structures //////////////////////////////////////////
@@ -63,6 +63,7 @@ public:
 	std::vector<int> NO_v_u, NO_v_l, NO_v_l_abs;
 	bool NO_apriori;
 	int retrieval_algo;
+	bool MLT;
 };
 
 
