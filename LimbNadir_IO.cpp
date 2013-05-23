@@ -128,6 +128,7 @@ int Load_Limb_Ascii(string Datei_in, string textheader[31], int &no_of_alt,
 		// Fehlermeldung und Funktion verlassen
 		cout << "errortext: " << errortext << "\n";
 		cout << "Da sollte ERRORS stehen, sonst ist was falsch\n";
+		delete[] Big_Array;
 		return 3;
 	}
 	float *Big_Array2;  // Feld mit Fehlern
