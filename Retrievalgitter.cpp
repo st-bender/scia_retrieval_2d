@@ -92,10 +92,10 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	vector<Ausgewertete_Messung_Limb>::iterator aml_it;
 
 	std::cout << "# measurement geolocations begin" << std::endl;
-	for (aml_it = AM_Limb.begin(); aml_it != AM_Limb.end(); aml_it++) {
+	for (aml_it = AM_Limb.begin(); aml_it != AM_Limb.end(); ++aml_it) {
 		bool doppelt = false;
 
-		for (lat_it = Lats_Messung.begin(); lat_it != Lats_Messung.end(); lat_it++) {
+		for (lat_it = Lats_Messung.begin(); lat_it != Lats_Messung.end(); ++lat_it) {
 			if (abs(aml_it->center_lat - (*lat_it)) < Epsilon) {
 				doppelt = true;
 				break;
