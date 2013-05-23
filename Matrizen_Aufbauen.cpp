@@ -260,11 +260,10 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 	//cerr<<"Limb Raytracing\n";
 	////////////////////////////////////////////////////////////////////////////
 	// Zunächst die Limbmessungen in Eintragen  ////////////////////////////////
-	time_t t_Limb_LOS_start, t_Limb_LOS_ende, t_Limb_LOS_delta;
+	time_t t_Limb_LOS_start, t_Limb_LOS_ende, t_Limb_LOS_delta = 0;
 	time_t t_interpolieren_start, t_interpolieren_ende, t_interpolieren_delta_gesamt;
 	t_interpolieren_delta_gesamt = 0;
 	time(&t_Limb_LOS_start);
-	t_Limb_LOS_delta = t_Limb_LOS_start - t_Limb_LOS_start;
 	Winkelstatistik Wstat;  //kleine Winkelstatistik initialisieren
 	//TODO früher im Programm anbringen
 
