@@ -112,6 +112,8 @@ inline MPL_Vektor::~MPL_Vektor()
 //= Zuweisung
 inline MPL_Vektor &MPL_Vektor::operator =(const MPL_Vektor &rhs)
 {
+	if (this == &rhs)
+		return *this;
 	m_Elementanzahl = rhs.m_Elementanzahl;
 	if (m_Elemente != 0) {
 		delete[] m_Elemente;
