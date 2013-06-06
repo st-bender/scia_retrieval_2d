@@ -91,7 +91,7 @@ bool Test_auf_Nachtmessung_Limb_meso_thermo(Messung_Limb &niedrigste_hoehe,
 	return ist_Nachtmessung;
 }
 
-bool test_auf_SAA_limb(Messung_Limb &space)
+bool test_auf_SAA_limb(Messung_Limb &space, Konfiguration &konf)
 {
 	bool SAA = false;
 	double wl_start = 230., wl_end = 291.;
@@ -125,7 +125,7 @@ bool test_auf_SAA_limb(Messung_Limb &space)
 
 	/* the threshold is a rule of thumb from one day (2010-02-18) */
 	/* TODO: replace by a more sophisticated/reliable approach */
-	if (I_max > 8.8e10) {
+	if (I_max > konf.SAA_cutoff) {
 		cerr << "SAA or peak detected:" << endl;
 		cerr << space.m_Longitude_Sat << "\t" << space.m_Latitude_Sat << "\t";
 		cerr << I_max << "\t" << I_avg << "\t";

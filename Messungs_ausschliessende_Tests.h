@@ -17,7 +17,7 @@
 bool Test_auf_Nachtmessung_Limb(class Messung_Limb &Tropo, class Konfiguration &Konf);
 bool Test_auf_Nachtmessung_Limb_meso_thermo(class Messung_Limb &niedrigste_hoehe,
 		class Konfiguration &Konf);
-bool test_auf_SAA_limb(class Messung_Limb &space);
+bool test_auf_SAA_limb(class Messung_Limb &space, Konfiguration &konf);
 bool Test_auf_NLC_Limb(std::vector<class Messung_Limb> &Rohdaten,
 		class Konfiguration &Konf);
 int Test_auf_korrekte_geolocations_Limb(std::vector<class Messung_Limb> &Rohdaten,

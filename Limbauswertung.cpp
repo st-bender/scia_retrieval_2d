@@ -28,6 +28,7 @@
 #include "Datei_IO.h"  //ReadL1C_Limb
 #include "Messungs_ausschliessende_Tests.h"
 #include "NO_emiss.h"
+#include "Konfiguration.h"
 
 using namespace std;
 
@@ -110,7 +111,8 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 		return 2;  //NLC 2
 	}
 	Test_auf_korrekte_geolocations_Limb(Rohdaten, counter_Richtungsvektor_nicht_ok);
-	if (test_auf_SAA_limb(space) && test_auf_SAA_limb(*(Rohdaten.end() - 2))) {
+	if (Konf.skip_SAA && test_auf_SAA_limb(space, Konf)
+			&& test_auf_SAA_limb(*(Rohdaten.end() - 2), Konf)) {
 		std::cout << "# SAA at lat = " << Rohdaten[0].m_Latitude_TP
 			<< ", alt = " << Rohdaten[0].m_Hoehe_TP << std::endl;
 		return 1;

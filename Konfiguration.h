@@ -36,7 +36,9 @@ public:
 	int m_Geolocation; // switch 0 ja 1 nein
 	int m_Large_SZA;   // switch 0 ja 1 nein //SZA Sonnenwinkel zum Zenit
 	int m_NLC;         // switch 0 ja 1 nein
+	bool skip_SAA;
 	double m_Maximaler_SZA;         // falls Auswahlkriterium Large_SZA aktiv ist dies die Grenze
+	double SAA_cutoff;
 	std::vector<double> m_Geolocation_Grenzen;//LonMin,LonMax,LatMin,LatMax
 	// Baseline Fitparameters ////////////////////////////////////////
 	int m_Anzahl_Baseline_Intervalle;

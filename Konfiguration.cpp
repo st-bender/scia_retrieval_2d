@@ -36,6 +36,9 @@ int Konfiguration::Konfiguration_einlesen(std::string file)
 	NO_apriori = false;
 	// default retrieval algortihm
 	retrieval_algo = 1;
+	// default skip values
+	skip_SAA = true;
+	SAA_cutoff = 8.8e10;
 	//Datei Öffnen
 	ifstream infile(file.c_str());
 	//cout<<"Datei einlesen\n";
@@ -174,6 +177,21 @@ int Konfiguration::Konfiguration_einlesen(std::string file)
 			getline(infile, Zeile);
 			ss << Zeile;
 			ss >> this->m_NLC;
+			continue;
+		}
+		if (Zeile == "Skip SAA") {
+			int saa = 0;
+			getline(infile, Zeile);
+			ss << Zeile;
+			ss >> saa;
+			if (saa == 0) skip_SAA = false;
+			else skip_SAA = true;
+			continue;
+		}
+		if (Zeile == "SAA cut-off value") {
+			getline(infile, Zeile);
+			ss << Zeile;
+			ss >> SAA_cutoff;
 			continue;
 		}
 		if (Zeile == "Maximal SZA") {
@@ -379,7 +397,12 @@ int Konfiguration::Konfiguration_anzeigen()
 	cout << "Geolocation: " << this->m_Geolocation << "\n";
 	cout << "Large SZA: " << this->m_Large_SZA << "\n";
 	cout << "Mesosphärische Wolken: " << this->m_NLC << "\n";
+	cout << "Skip SAA: ";
+	if (skip_SAA) cout << "yes";
+	else cout << "no";
+	cout << endl;
 	cout << "Max SZA: " << this->m_Maximaler_SZA << "\n";
+	cout << "SAA cut-off: " << SAA_cutoff << "\n";
 	cout << "Geolocation Boundaries: ";
 	for (int i = 0; i < 4; i++) {
 		cout << this->m_Geolocation_Grenzen[i] << "\t";
