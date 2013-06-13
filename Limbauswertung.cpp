@@ -29,6 +29,7 @@
 #include "Messungs_ausschliessende_Tests.h"
 #include "NO_emiss.h"
 #include "Konfiguration.h"
+#include "Glaetten.h"
 
 using namespace std;
 
@@ -214,13 +215,17 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 					Ausgewertete_Limbmessung_FeI.push_back(Ergebnis);
 				}
 				if (sfit->m_Spezies_Name == "NO") {
+					double sol_fac = spidr_value_from_file(mlit->m_Jahr,
+							mlit->m_Monat, mlit->m_Tag,
+							"DATA/sol_mltfac3_2008-2011.dat", 1.0);
+					std::cerr << "# solar factor = " << sol_fac << std::endl;
 					// create new object, same transition but modelled temperature
 					double temp = mlit->msise_temperature();
 					NO_emiss NO_new(sfit->NO_vec.at(k).get_vu(),
 							sfit->NO_vec.at(k).get_vl(),
 							sfit->NO_vec.at(k).get_vl_abs(),
 							temp);
-					NO_new.solar = sfit->NO_vec.at(k).solar;
+					NO_new.solar = sfit->NO_vec.at(k).solar * sol_fac;
 					NO_new.read_luque_data_from_file("DATA/Luqueetal.dat");
 					NO_new.calc_excitation();
 					NO_new.calc_line_emissivities();
