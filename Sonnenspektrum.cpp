@@ -94,26 +94,9 @@ int Sonnenspektrum::Laden_SCIA(string Dateiname, string Fallback_Dateiname)
 		m_Wellenlaengen.push_back(read_wl);
 		m_Intensitaeten.push_back(read_int);
 	}
-	std::vector<double>::iterator wl1, wl2;
-	wl1 = std::lower_bound(m_Wellenlaengen.begin(),
-			m_Wellenlaengen.end(), 228.6);
-	wl2 = std::lower_bound(m_Wellenlaengen.begin(),
-			m_Wellenlaengen.end(), 240.2);
-	ptrdiff_t i1 = std::distance(m_Wellenlaengen.begin(), wl1);
-	ptrdiff_t i2 = std::distance(m_Wellenlaengen.begin(), wl2);
-	double int_wl1 = interpolate(m_Wellenlaengen, m_Intensitaeten, 228.6);
-	double int_wl2 = interpolate(m_Wellenlaengen, m_Intensitaeten, 240.2);
-	std::cerr << "wl1 = " << m_Wellenlaengen.at(i1 - 1)
-		<< ", " << m_Wellenlaengen.at(i1) << std::endl;
-	std::cerr << "wl2 = " << m_Wellenlaengen.at(i2 - 1)
-		<< ", " << m_Wellenlaengen.at(i2) << std::endl;
-	std::cerr << "int1 = " << m_Intensitaeten.at(i1 - 1)
-		<< ", " << m_Intensitaeten.at(i1)
-		<< " -> " << int_wl1 << std::endl;
-	std::cerr << "int2 = " << m_Intensitaeten.at(i2 - 1)
-		<< ", " << m_Intensitaeten.at(i2)
-		<< " -> " << int_wl2 << std::endl;
 
+	int_ref1 = get_rad_at_wl(228.6);
+	int_ref2 = get_rad_at_wl(240.2);
 	infile.close();
 	return 0;
 }
@@ -132,6 +115,21 @@ int Sonnenspektrum::savitzky_golay(int window_size)
 int Sonnenspektrum::saoref_to_sciamachy()
 {
 	return my_sciamachy_blur(m_Intensitaeten);
+}
+double Sonnenspektrum::get_rad_at_wl(double wl)
+{
+	std::vector<double>::iterator wlit =
+		std::lower_bound(m_Wellenlaengen.begin(),
+			m_Wellenlaengen.end(), wl);
+	ptrdiff_t i = std::distance(m_Wellenlaengen.begin(), wlit);
+	double rad = interpolate(m_Wellenlaengen, m_Intensitaeten, wl);
+	std::cerr << "wls = " << m_Wellenlaengen.at(i - 1)
+		<< ", " << m_Wellenlaengen.at(i) << std::endl;
+	std::cerr << "int0 = " << m_Intensitaeten.at(i - 1)
+		<< ", " << m_Intensitaeten.at(i)
+		<< " -> " << rad << std::endl;
+
+	return rad;
 }
 
 int Sonnenspektrum::Interpolieren(Messung_Limb &Messung_Erdschein)

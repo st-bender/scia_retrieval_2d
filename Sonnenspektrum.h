@@ -23,6 +23,7 @@ public:
 	int moving_average(int window_size);
 	int savitzky_golay(int window_size);
 	int saoref_to_sciamachy();
+	double get_rad_at_wl(double wl);
 	int Interpolieren(class Messung_Limb &Messung_Erdschein);
 	int nicht_interpolieren();
 	std::vector<double> m_Wellenlaengen; // wie lang sind die eigentlich
@@ -32,6 +33,7 @@ public:
 	std::vector<double> m_Int_interpoliert;
 	std::vector<double> m_WL_interpoliert; //für Ausgabe
 	int m_Anzahl_WL;
+	double int_ref1, int_ref2;
 	//Wartungsfunktion
 	int Speichern(std::string Dateiname);  //zur Kontrolle
 	int Speichern_was_geladen_wurde(std::string Dateiname);
