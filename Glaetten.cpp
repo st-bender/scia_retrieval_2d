@@ -353,9 +353,9 @@ double shift_wavelength(double wl)
 	return wl / n_air(wl);
 }
 double spidr_value_from_file(int year, int month, int day,
-		std::string filename)
+		std::string filename, double defvalue)
 {
-	double ret;
+	double ret = defvalue;
 	std::string line, date;
 	std::stringstream ss;
 	std::ifstream f;
@@ -370,7 +370,7 @@ double spidr_value_from_file(int year, int month, int day,
 	f.open(filename.c_str());
 	if (!f.is_open()) {
 		std::cerr << "Error opening `" << filename << "'." << std::endl;
-		return 0.;
+		return ret;
 	}
 	while (std::getline(f, line)) {
 		pos = line.find(date);
