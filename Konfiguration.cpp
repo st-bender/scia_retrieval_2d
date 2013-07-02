@@ -438,12 +438,12 @@ int Konfiguration::Konfiguration_anzeigen()
 		cout << m_Retrieval_Kovarianzen[i + 1 * m_Anzahl_der_Emitter] << "\t";
 	}
 	cout << "\n";
-	cout << "S_lon: ";
+	cout << "S_alt: ";
 	for (int i = 0; i < this->m_Anzahl_der_Emitter; i++) {
 		cout << m_Retrieval_Kovarianzen[i + 2 * m_Anzahl_der_Emitter] << "\t";
 	}
 	cout << "\n";
-	cout << "error tresholds: ";
+	cout << "error thresholds: ";
 	for (uint i = 0; i < this->m_Fehlergrenzen.size(); i++) {
 		cout << this->m_Fehlergrenzen[i] << "\t";
 	}
