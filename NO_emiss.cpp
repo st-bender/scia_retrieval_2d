@@ -570,9 +570,7 @@ int NO_emiss::read_luque_data_from_file(std::string filename)
 	int vu, vl;
 	double d_dum;
 	std::string s_dum;
-	std::ifstream lfile;
-
-	lfile.open(filename.c_str());
+	std::ifstream lfile(filename.c_str());
 
 	if (!(lfile.is_open())) {
 		std::cerr << "Failed to open Luque et al. data from `"
