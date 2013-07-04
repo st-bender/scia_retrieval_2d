@@ -144,12 +144,18 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	// selbst gesetzt.....
 	MaxLat = 88.75;
 	MinLat = -88.75;
+	//MaxLat = 0.0;
+	//MinLat = -0.0;
 	//MinLat=0.0;
 	std::cout << "# grid: maxlat = " << MaxLat << ", minlat = " << MinLat << std::endl;
 	std::cout << "# lon0 = " << lon0 << std::endl;
 	Breitenzahl = 72; //20
 	//Breitenzahl=10;
-	const double Gitterkonstante = (MaxLat - MinLat) / (double)(Breitenzahl - 1);
+	double Gitterkonstante;
+	if (Breitenzahl > 1)
+		Gitterkonstante = (MaxLat - MinLat) / (double)(Breitenzahl - 1);
+	else
+		Gitterkonstante = 180.0;
 	// Hoeheneinteilung
 	// Bisherige Werte für: (mehr Höhen, mehr Rechenzeit,
 	// mehr unterbestimmtheit der Gelichungssysteme
