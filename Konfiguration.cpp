@@ -23,6 +23,14 @@ using namespace std;
 //Protos für Hilfsfunktionen
 template <class T> vector<T> string_to_vector(string zeile);
 
+// default constructor to initialise the config default values
+Konfiguration::Konfiguration() :
+	skip_SAA(true), SAA_cutoff(8.8e10),
+	atmo_Temp(200.), NO_apriori(false),
+	retrieval_algo(1)
+{
+}
+
 // Konfiguration_einlesen /////////////////////////////////////////////
 int Konfiguration::Konfiguration_einlesen(std::string file)
 {
@@ -31,14 +39,6 @@ int Konfiguration::Konfiguration_einlesen(std::string file)
 	eingelesen.
 	***************************************************/
 
-	// default NO values
-	atmo_Temp = 200.;
-	NO_apriori = false;
-	// default retrieval algortihm
-	retrieval_algo = 1;
-	// default skip values
-	skip_SAA = true;
-	SAA_cutoff = 8.8e10;
 	//Datei Öffnen
 	ifstream infile(file.c_str());
 	//cout<<"Datei einlesen\n";
