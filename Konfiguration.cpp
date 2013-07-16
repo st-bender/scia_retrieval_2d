@@ -25,6 +25,7 @@ template <class T> vector<T> string_to_vector(string zeile);
 
 // default constructor to initialise the config default values
 Konfiguration::Konfiguration() :
+	m_MinLat(-88.75), m_MaxLat(88.75), m_NLat(72),
 	skip_SAA(true), SAA_cutoff(8.8e10),
 	atmo_Temp(200.), NO_apriori(false),
 	retrieval_algo(1)
@@ -120,6 +121,19 @@ int Konfiguration::Konfiguration_einlesen(std::string file)
 			vector<double> dummy = string_to_vector<double>(Zeile);
 			this->m_MinAlt = dummy[0];
 			this->m_MaxAlt = dummy[1];
+			continue;
+		}
+		if (Zeile == "MinLat and MaxLat") {
+			getline(infile, Zeile);
+			vector<double> dummy = string_to_vector<double>(Zeile);
+			this->m_MinLat = dummy[0];
+			this->m_MaxLat = dummy[1];
+			continue;
+		}
+		if (Zeile == "NLat") {
+			getline(infile, Zeile);
+			ss << Zeile;
+			ss >> this->m_NLat;
 			continue;
 		}
 		if (Zeile == "Altitude grid extensions") {

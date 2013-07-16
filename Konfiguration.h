@@ -28,6 +28,9 @@ public:
 	// Altitude Grid /////////////////////////////////////////////////
 	double m_MinAlt;  // höhen für retrieval 71
 	double m_MaxAlt;  // 93
+	double m_MinLat;
+	double m_MaxLat;
+	int m_NLat;
 	int m_Anzahl_zusaetzliche_Hoehengitterpunkte;
 	std::vector<double> m_Grid_ext_low;
 	std::vector<double> m_Grid_ext_high;
