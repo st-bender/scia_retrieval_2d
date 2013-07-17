@@ -230,15 +230,17 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 					NO_new.calc_excitation();
 					NO_new.calc_line_emissivities();
 					NO_new.scia_convolve(Rohdaten.at(0));
-					double wl = NO_new.get_scia_wl_at_max();
-					double wl_abs = NO_new.get_wl_abs_median();
+					double wl_abs = NO_new.get_wl_abs_vu_0();
+					double wl_emiss = NO_new.get_wl_emiss_vu_vl();
+					std::cerr << "# wls: abs = " << wl_abs << ", emiss = "
+						<< wl_emiss << std::endl;
 					mlit->slant_column_NO(NO_new, mache_Fit_Plots, Solspec, k,
 							*sfit, Arbeitsverzeichnis);
 					Ergebnis = mlit->Ergebnis_Zusammenfassen();
 					Ergebnis.m_Wellenlaenge
 						= ldit->m_Wellenlaenge
 						= sfit->m_Wellenlaengen.at(k)
-						= wl;
+						= wl_emiss;
 					Ergebnis.m_Wellenlaenge_abs = wl_abs;
 					Ausgewertete_Limbmessung_NO.push_back(Ergebnis);
 				}

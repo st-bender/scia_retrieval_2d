@@ -930,6 +930,14 @@ double NO_emiss::get_wl_abs_median()
 	// return the median in nm
 	return 0.1 * lambda_abs.at(lambda_abs.size() / 2);
 }
+double NO_emiss::get_wl_abs_vu_0()
+{
+	return 0.1 * f_lam(v_u, 0);
+}
+double NO_emiss::get_wl_emiss_vu_vl()
+{
+	return 0.1 * f_lam(v_u, v_l);
+}
 double NO_emiss::get_scia_band_emiss()
 {
 	return scia_band_emiss;
