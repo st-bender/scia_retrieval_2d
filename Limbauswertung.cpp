@@ -163,6 +163,10 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 		//Schleife über alle Spezies wie z.b. Mg oder Mg+
 		for (sfit = Spezies_Fenster.begin(); sfit != Spezies_Fenster.end(); ++sfit) {
 			//Schleife über alle Linien dieser Spezies
+			// indicate whether or not to skip tangent point
+			bool skip = false;
+			// skip if tangent point is too high
+			if (mlit->m_Hoehe_TP > 200.0) skip = true;
 			for (k = 0, ldit = sfit->m_Liniendaten.begin();
 					ldit != sfit->m_Liniendaten.end(); k++, ++ldit) {
 				// Aus SZA_TP und SAA_TP lässt sich die Polararisation in den
@@ -242,7 +246,8 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 						= sfit->m_Wellenlaengen.at(k)
 						= wl_emiss;
 					Ergebnis.m_Wellenlaenge_abs = wl_abs;
-					Ausgewertete_Limbmessung_NO.push_back(Ergebnis);
+					if (!skip)
+						Ausgewertete_Limbmessung_NO.push_back(Ergebnis);
 				}
 
 			}//ende k Linie
