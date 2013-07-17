@@ -25,7 +25,7 @@ template <class T> vector<T> string_to_vector(string zeile);
 
 // default constructor to initialise the config default values
 Konfiguration::Konfiguration() :
-	m_MinLat(-88.75), m_MaxLat(88.75), m_NLat(72),
+	m_MinLat(-90.0), m_MaxLat(90.0), m_NLat(72),
 	skip_SAA(true), SAA_cutoff(8.8e10),
 	atmo_Temp(200.), NO_apriori(false),
 	retrieval_algo(1)
