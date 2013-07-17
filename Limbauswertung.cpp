@@ -217,7 +217,7 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 				if (sfit->m_Spezies_Name == "NO") {
 					double sol_fac = spidr_value_from_file(mlit->m_Jahr,
 							mlit->m_Monat, mlit->m_Tag,
-							"DATA/sol_mltfac3_2008-2011.dat", 1.0);
+							"DATA/sol_corrfac_sao-scia.dat", 1.0);
 					std::cerr << "# solar factor = " << sol_fac << std::endl;
 					// create new object, same transition but modelled temperature
 					double temp = mlit->msise_temperature();
