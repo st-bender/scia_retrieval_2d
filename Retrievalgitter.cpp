@@ -22,49 +22,6 @@
 
 using namespace std;
 
-//Konstruktoren  ////////////////////////////////////
-//
-Retrievalgitter::Retrievalgitter()
-{
-	this->m_Gitter = 0;
-}
-Retrievalgitter::Retrievalgitter(const Retrievalgitter &rhs)
-{
-	this->m_Gitter = 0;
-	*this = rhs;
-}
-// Überladene Operatoren
-Retrievalgitter &Retrievalgitter::operator =(const Retrievalgitter &rhs)
-{
-	if (this == &rhs)
-		return *this;
-	//statische Variablen übergeben
-	this->m_Anzahl_Breiten = rhs.m_Anzahl_Breiten;
-	this->m_Anzahl_Hoehen = rhs.m_Anzahl_Hoehen;
-	this->m_Anzahl_Punkte = rhs.m_Anzahl_Punkte;
-
-	//Dynamische Arrays Sicher löschen
-	if (m_Gitter != 0) {
-		delete[] m_Gitter;
-		m_Gitter = 0;
-
-	}
-	// Neuen Speicher allokieren
-	m_Gitter = new Gitterpunkt[rhs.m_Anzahl_Punkte];
-	for (int i = 0; i < m_Anzahl_Punkte; i++) {
-		this->m_Gitter[i] = rhs.m_Gitter[i];
-	}
-	return *this;
-} //Ende Operator=
-//Destruktor
-Retrievalgitter::~Retrievalgitter()
-{
-	//Sicher löschen
-	if (m_Gitter != 0) {
-		delete[] m_Gitter;
-		m_Gitter = 0;
-	}
-}// Ende Destruktor
 //Methoden
 //////////////////////////////////////////////////////////
 //
@@ -173,16 +130,13 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	}
 	/////////////////////////////
 
-	// Es muss noch Speicherplatz für das Gitter reserviert werden ////////
-	if (m_Gitter != 0) {
-		delete[] m_Gitter;       //Evtl vorhandenes Gitter löschen
-	}
 	this->m_Anzahl_Hoehen = Anzahl_Hoehen;
 	this->m_Anzahl_Breiten = Breitenzahl;
 	cout << "m_Anzahl_Breiten: " << m_Anzahl_Breiten << "\n";
 	cout << "m_Anzahl_Hoehen: " << m_Anzahl_Hoehen << "\n";
 	this->m_Anzahl_Punkte = m_Anzahl_Breiten * m_Anzahl_Hoehen;
-	m_Gitter = new Gitterpunkt[m_Anzahl_Punkte];
+	// Es muss noch Speicherplatz für das Gitter reserviert werden ////////
+	m_Gitter.resize(m_Anzahl_Punkte);
 	Gitterpunkt GP;
 	//Gitterpunkte des Gitters erzeugen sortiert nach Höhen und Breiten
 	//cout<<"Anfang for i\n";
@@ -271,9 +225,10 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 //////////////////////////////////////////////////////////
 void Retrievalgitter::Alle_Durchstosspunkte_Null_setzen()
 {
-	for (int i = 0; i < this->m_Anzahl_Punkte; i++) {
-		m_Gitter[i].m_vorderer_Durchstosspunkt.Null_Initialisierung();
-		m_Gitter[i].m_hinterer_Durchstosspunkt.Null_Initialisierung();
+	std::vector<Gitterpunkt>::iterator gp;
+	for (gp = m_Gitter.begin(); gp != m_Gitter.end(); ++gp) {
+		gp->m_vorderer_Durchstosspunkt.Null_Initialisierung();
+		gp->m_hinterer_Durchstosspunkt.Null_Initialisierung();
 	}
 }
 //////////////////////////////////////////////////////////

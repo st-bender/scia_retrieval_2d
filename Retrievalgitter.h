@@ -14,13 +14,6 @@
 class Retrievalgitter
 {
 public:
-	//Konstruktoren
-	Retrievalgitter();
-	Retrievalgitter(const Retrievalgitter &rhs);
-	// Überladene Operatoren
-	Retrievalgitter &operator =(const Retrievalgitter &rhs);
-	//Destruktor
-	~Retrievalgitter();
 	//Methoden
 	void Retrievalgitter_erzeugen(std::vector<class Ausgewertete_Messung_Limb> &AM_Limb,
 			double Epsilon, class Konfiguration &Konf);
@@ -46,7 +39,7 @@ public:
 	int m_Anzahl_Hoehen;
 	int m_Anzahl_Breiten;
 	int m_Anzahl_Punkte;
-	Gitterpunkt *m_Gitter;
+	std::vector<Gitterpunkt> m_Gitter;
 };
 //Hilfsfunktionen
 int Get_Index_of_Maximum(std::vector<double> A);
