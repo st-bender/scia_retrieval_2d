@@ -1760,43 +1760,42 @@ MPL_Vektor Punkt_auf_Strecke_bei_Radius(MPL_Vektor &Streckenstartpunkt,
 int prepare_total_density(Retrievalgitter &grid, MPL_Matrix &dens,
 		std::vector<Ausgewertete_Messung_Limb> &aml_vec)
 {
-	int i;
-	std::vector<Ausgewertete_Messung_Limb>::iterator aml_it;
+	std::vector<Gitterpunkt> zero_dens_pts;
+	std::vector<Gitterpunkt>::iterator gp;
 
-	for (i = 0; i < grid.m_Anzahl_Punkte; i++) {
-		Gitterpunkt gp = grid.m_Gitter[i];
+	for (gp = grid.m_Gitter.begin(); gp != grid.m_Gitter.end(); ++gp) {
+		int i = std::distance(grid.m_Gitter.begin(), gp);
 		std::vector<double> densities;
+		std::vector<Ausgewertete_Messung_Limb>::iterator aml_it;
 		/*
 		 * finds measurement points that fall into the grid point
 		 * and averages their already calculated number densities.
 		 */
 		for (aml_it = aml_vec.begin(); aml_it != aml_vec.end(); ++aml_it) {
-			if (aml_it->m_Latitude_TP > gp.m_Min_Breite &&
-				aml_it->m_Latitude_TP <= gp.m_Max_Breite &&
-				aml_it->m_Hoehe_TP > gp.m_Min_Hoehe &&
-				aml_it->m_Hoehe_TP <= gp.m_Max_Hoehe) {
+			if (gp->Punkt_in_Gitterpunkt(aml_it->m_Latitude_TP,
+						aml_it->m_Hoehe_TP)) {
 				densities.push_back(aml_it->total_number_density);
 			}
 		}
 		dens(i) = std::accumulate(densities.begin(), densities.end(), 0.);
 		if (densities.size() > 0)
 			dens(i) /= densities.size();
+		else
+			zero_dens_pts.push_back(*gp);
 	}
 
-	for (i = 0; i < grid.m_Anzahl_Punkte; i++) {
-		Gitterpunkt gp = grid.m_Gitter[i];
-		if (dens(i) == 0) {
+	for (gp = zero_dens_pts.begin(); gp != zero_dens_pts.end(); ++gp) {
 			int N_d = 0;
 			double dd = 0., d[8];
 			// neighbourhood indices
 			// closest neighbours
-			int idx1[4] = { gp.m_Index_unterer_Nachbar,
-				gp.m_Index_oberer_Nachbar, gp.m_Index_Nord_Nachbar,
-				gp.m_Index_Sued_Nachbar };
+			int idx1[4] = { gp->m_Index_unterer_Nachbar,
+				gp->m_Index_oberer_Nachbar, gp->m_Index_Nord_Nachbar,
+				gp->m_Index_Sued_Nachbar };
 			// diagonal neighbours
-			int idx2[4] = { gp.m_Index_unterer_Nord_Nachbar,
-				gp.m_Index_unterer_Sued_Nachbar,
-				gp.m_Index_oberer_Nord_Nachbar, gp.m_Index_oberer_Sued_Nachbar};
+			int idx2[4] = { gp->m_Index_unterer_Nord_Nachbar,
+				gp->m_Index_unterer_Sued_Nachbar,
+				gp->m_Index_oberer_Nord_Nachbar, gp->m_Index_oberer_Sued_Nachbar};
 
 			// save neighbourhood densities...
 			for (int j = 0; j < 4; j++) {
@@ -1819,12 +1818,11 @@ int prepare_total_density(Retrievalgitter &grid, MPL_Matrix &dens,
 					N_d++;
 				}
 			if (N_d > 0)
-				dens(i) = dd / N_d;
+				dens(gp->m_eigener_Index) = dd / N_d;
 			else
 				// default if no other data is available
 				// sensible for low altitudes
-				dens(i) = 2.e16;
-		}
+				dens(gp->m_eigener_Index) = 2.e16;
 	}
 
 	return 0;
