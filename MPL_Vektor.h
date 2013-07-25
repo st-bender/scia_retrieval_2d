@@ -42,12 +42,6 @@ public:
 	MPL_Vektor &operator *=(const double &rhs);  // skalare Multiplikation
 	MPL_Vektor &operator /=(const double &rhs);          // skalare Division
 
-	//unäre Operatoren
-	// + und - Matrix A   was ist dann +A, was ist -A,
-	// +A ist trivial +A=A, -A ist elementweises -
-	MPL_Vektor operator + () const;
-	MPL_Vektor operator - () const;
-
 	// Zugriff auf Elemente
 	double &operator()(int Element);
 
@@ -174,25 +168,6 @@ inline MPL_Vektor &MPL_Vektor::operator /=(const double &rhs)
 	}
 	return *this;
 }//Ende /=
-
-//unäre Operatoren
-// + und - Matrix A   was ist dann +A, was ist -A,
-// +A ist trivial +A=A, -A ist elementweises -
-inline MPL_Vektor MPL_Vektor::operator + () const
-{
-	MPL_Vektor aus(this->m_Elementanzahl);
-	aus = *this;
-	return aus;
-} // Ende +()
-inline MPL_Vektor MPL_Vektor::operator - () const
-{
-	MPL_Vektor aus(this->m_Elementanzahl);
-	aus.m_Elementanzahl = this->m_Elementanzahl;
-	for (int i = 0; i < m_Elementanzahl; i++) {
-		aus.m_Elemente[i] = -this->m_Elemente[i];
-	}
-	return aus;
-} // Ende - ()
 
 // Zugriff auf Elemente
 // Die braucht man aus obskuren Gründen 2mal
