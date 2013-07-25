@@ -24,16 +24,19 @@
 
 #include <cmath>
 #include <iostream>
+#include <vector>
+#include <functional>
+#include <algorithm>
+#include <numeric>
+#include <iterator>
 
 class MPL_Vektor
 {
 public:
 	// Konstruktoren ////////
-	MPL_Vektor();
-	MPL_Vektor(int Elementzahl);
+	MPL_Vektor() : m_Elemente(0) {}
+	MPL_Vektor(unsigned long Elementzahl);
 	MPL_Vektor(const MPL_Vektor &rhs);  //copyconstructor
-	// Destruktor /////////////
-	~MPL_Vektor();
 	// Überladene Operatoren //////
 	MPL_Vektor &operator =(const MPL_Vektor &rhs);     //= Zuweisung
 	MPL_Vektor &operator +=(const MPL_Vektor &rhs);   // Vektoraddition
@@ -65,40 +68,20 @@ public:
 	//MPL_Vektor Kreuzprodukt(const MPL_Vektor& rhs);
 	// nur für 3er Vektoren sinnvoll
 	//Membervariablen
-	int m_Elementanzahl;
-	double *m_Elemente;
+	std::vector<double> m_Elemente;
 };
 
 //Implementation der Inlinefunktionen
 
-// Konstruktoren ////////
-inline MPL_Vektor::MPL_Vektor()
-{
-	m_Elementanzahl = 0;
-	m_Elemente = 0;
-}// Ende defaultkonstruktor
-inline MPL_Vektor::MPL_Vektor(int Elementzahl)
-{
-	m_Elementanzahl = Elementzahl;
-	m_Elemente = new double[Elementzahl];
-	for (int i = 0; i < Elementzahl; i++) {
-		m_Elemente[i] = 0;
-	}
-} //Ende MPL_Vektor::MPL_Vektor(int Elementzahl)
+inline MPL_Vektor::MPL_Vektor(unsigned long Elementzahl) :
+	m_Elemente(Elementzahl, 0.0)
+{ } //Ende MPL_Vektor::MPL_Vektor(int Elementzahl)
 
 inline MPL_Vektor::MPL_Vektor(const MPL_Vektor &rhs)  //copyconstructor
 {
-	m_Elementanzahl = 0;
-	m_Elemente = 0;
+	m_Elemente.resize(rhs.m_Elemente.size());
 	*this = rhs;
 }
-// Destruktor /////////////
-inline MPL_Vektor::~MPL_Vektor()
-{
-	if (m_Elemente != 0) {
-		delete[] m_Elemente;
-	}
-}// Ende Destruktor
 
 // Überladene Operatoren //////
 //= Zuweisung
@@ -106,51 +89,52 @@ inline MPL_Vektor &MPL_Vektor::operator =(const MPL_Vektor &rhs)
 {
 	if (this == &rhs)
 		return *this;
-	m_Elementanzahl = rhs.m_Elementanzahl;
-	if (m_Elemente != 0) {
-		delete[] m_Elemente;
-	}
-	m_Elemente = new double[this->m_Elementanzahl];
-	for (int i = 0; i < m_Elementanzahl; i++) {
-		m_Elemente[i] = rhs.m_Elemente[i];
-	}
+
+	std::copy(rhs.m_Elemente.begin(), rhs.m_Elemente.end(),
+			m_Elemente.begin());
+
 	return *this;
 }// Ende =
 
 // Vektoraddition
 inline MPL_Vektor &MPL_Vektor::operator +=(const MPL_Vektor &rhs)
 {
-	if (this->m_Elementanzahl != rhs.m_Elementanzahl) {
+	if (this->m_Elemente.size() != rhs.m_Elemente.size()) {
 		std::cerr << "Vektoraddition verschieden langer Vektoren ist unsinnig!!!!"
 				  << std::endl;
 		return *this;
 	}
-	for (int i = 0; i < m_Elementanzahl; i++) {
-		this->m_Elemente[i] += rhs.m_Elemente[i];
-	}
+
+	std::transform(m_Elemente.begin(), m_Elemente.end(),
+			rhs.m_Elemente.begin(), m_Elemente.begin(),
+			std::plus<double>());
+
 	return *this;
 }// Ende +=
 
 // Vektorsubtraktion
 inline MPL_Vektor &MPL_Vektor::operator -=(const MPL_Vektor &rhs)
 {
-	if (this->m_Elementanzahl != rhs.m_Elementanzahl) {
+	if (this->m_Elemente.size() != rhs.m_Elemente.size()) {
 		std::cerr << "Vektorsubtraktion verschieden langer Vektoren ist unsinnig!!!!"
 				  << std::endl;
 		return *this;
 	}
-	for (int i = 0; i < m_Elementanzahl; i++) {
-		this->m_Elemente[i] -= rhs.m_Elemente[i];
-	}
+
+	std::transform(m_Elemente.begin(), m_Elemente.end(),
+			rhs.m_Elemente.begin(), m_Elemente.begin(),
+			std::minus<double>());
+
 	return *this;
 }// Ende -=
 
 // skalare Multiplikation
 inline MPL_Vektor &MPL_Vektor::operator *=(const double &rhs)
 {
-	for (int i = 0; i < this->m_Elementanzahl; i++) {
-		m_Elemente[i] *= rhs;
-	}
+	std::transform(m_Elemente.begin(), m_Elemente.end(),
+			m_Elemente.begin(),
+			std::bind2nd(std::multiplies<double>(), rhs));
+
 	return *this;
 }//Ende *=
 
@@ -163,9 +147,10 @@ inline MPL_Vektor &MPL_Vektor::operator /=(const double &rhs)
 		return *this;
 	}
 
-	for (int i = 0; i < this->m_Elementanzahl; i++) {
-		m_Elemente[i] /= rhs;
-	}
+	std::transform(m_Elemente.begin(), m_Elemente.end(),
+			m_Elemente.begin(),
+			std::bind2nd(std::divides<double>(), rhs));
+
 	return *this;
 }//Ende /=
 
@@ -173,58 +158,56 @@ inline MPL_Vektor &MPL_Vektor::operator /=(const double &rhs)
 // Die braucht man aus obskuren Gründen 2mal
 inline double &MPL_Vektor::operator()(int Element)
 {
-	if ((Element >= 0) && (Element < m_Elementanzahl))
-		return this->m_Elemente[Element];
-	else {
-		std::cerr << "Achtung!!! Zugriff auf Elemente ausserhalb des Vektors"
-				  << std::endl;
-		return m_Elemente[0];//auch schlecht, aber wenigstens nicht ausserhalb
-	}
+	return m_Elemente.at(Element);
 }
 
 //binäre Operationen
 //Vektoraddition
 inline MPL_Vektor MPL_Vektor::operator +(const MPL_Vektor &rhs)
 {
-	if (this->m_Elementanzahl != rhs.m_Elementanzahl) {
+	if (this->m_Elemente.size() != rhs.m_Elemente.size()) {
 		std::cerr << "Vektoraddition verschieden langer Vektoren ist unsinnig!!!!"
 				  << std::endl;
 		return *this;
 	}
-	MPL_Vektor aus(m_Elementanzahl);
-	for (int i = 0; i < m_Elementanzahl; i++) {
-		aus.m_Elemente[i] = this->m_Elemente[i] + rhs.m_Elemente[i];
-	}
+
+	MPL_Vektor aus(m_Elemente.size());
+
+	std::transform(m_Elemente.begin(), m_Elemente.end(),
+			rhs.m_Elemente.begin(), aus.m_Elemente.begin(),
+			std::plus<double>());
+
 	return aus;
 }// Ende +
 //Vektorsubtraktion
 inline MPL_Vektor MPL_Vektor::operator -(const MPL_Vektor &rhs)
 {
-	if (this->m_Elementanzahl != rhs.m_Elementanzahl) {
+	if (this->m_Elemente.size() != rhs.m_Elemente.size()) {
 		std::cerr << "Vektorsubtraktion verschieden langer Vektoren ist unsinnig!!!!"
 				  << std::endl;
 		return *this;
 	}
-	MPL_Vektor aus(m_Elementanzahl);
-	for (int i = 0; i < m_Elementanzahl; i++) {
-		aus.m_Elemente[i] = this->m_Elemente[i] - rhs.m_Elemente[i];
-	}
+
+	MPL_Vektor aus(m_Elemente.size());
+
+	std::transform(m_Elemente.begin(), m_Elemente.end(),
+			rhs.m_Elemente.begin(), aus.m_Elemente.begin(),
+			std::minus<double>());
+
 	return aus;
 }//Ende -
 
 //Skalarprodukt
 inline double MPL_Vektor::operator *(const MPL_Vektor &rhs)
 {
-	if (this->m_Elementanzahl != rhs.m_Elementanzahl) {
+	if (this->m_Elemente.size() != rhs.m_Elemente.size()) {
 		std::cerr << "Skalarprodukt verschieden langer Vektoren ist unsinnig!!!!"
 				  << std::endl;
 		return 0;
 	}
-	double aus = 0;
-	for (int i = 0; i < this->m_Elementanzahl; i++) {
-		aus += this->m_Elemente[i] * rhs.m_Elemente[i];
-	}
-	return aus;
+
+	return std::inner_product(m_Elemente.begin(), m_Elemente.end(),
+			rhs.m_Elemente.begin(), 0.0);
 }// Ende Skalarprodukt
 // skalare Division
 inline MPL_Vektor MPL_Vektor::operator /(const double &rhs)
@@ -233,107 +216,69 @@ inline MPL_Vektor MPL_Vektor::operator /(const double &rhs)
 		std::cerr << "Achtung Division durch 0!!!!!" << std::endl;
 		return *this;
 	}
-	MPL_Vektor aus(m_Elementanzahl);
-	for (int i = 0; i < this->m_Elementanzahl; i++) {
-		aus.m_Elemente[i] = this->m_Elemente[i] / rhs;
-	}
-	return aus;
 
+	MPL_Vektor aus(m_Elemente.size());
+
+	std::transform(m_Elemente.begin(), m_Elemente.end(),
+			aus.m_Elemente.begin(),
+			std::bind2nd(std::divides<double>(), rhs));
+
+	return aus;
 }
 // skalare Multiplikation von skalar rechts
 inline MPL_Vektor MPL_Vektor::operator *(const double &rhs)
 {
-	MPL_Vektor aus(m_Elementanzahl);
-	for (int i = 0; i < this->m_Elementanzahl; i++) {
-		aus.m_Elemente[i] = this->m_Elemente[i] * rhs;
-	}
+	MPL_Vektor aus(m_Elemente.size());
+
+	std::transform(m_Elemente.begin(), m_Elemente.end(),
+			aus.m_Elemente.begin(),
+			std::bind2nd(std::multiplies<double>(), rhs));
+
 	return aus;
 }
 
 // skalare Multiplikation von skalar links
 inline MPL_Vektor operator * (const double &lhs, const MPL_Vektor &rhs)
 {
-	MPL_Vektor aus(rhs.m_Elementanzahl);
-	for (int i = 0; i < rhs.m_Elementanzahl; i++) {
-		aus.m_Elemente[i] = rhs.m_Elemente[i] * lhs;
-	}
+	MPL_Vektor aus(rhs);
+
+	std::transform(rhs.m_Elemente.begin(), rhs.m_Elemente.end(),
+			aus.m_Elemente.begin(),
+			std::bind2nd(std::multiplies<double>(), lhs));
+
 	return aus;
 }
 
 inline bool MPL_Vektor::operator == (const MPL_Vektor &rhs) const
 {
 	//Zwei Vektoren sind gleich, wenn alle ihre Elemente gleich sind
-	if (this->m_Elementanzahl != rhs.m_Elementanzahl)
+	if (this->m_Elemente.size() != rhs.m_Elemente.size())
 		return false;
-	for (int i = 0; i < this->m_Elementanzahl; i++) {
-		if (this->m_Elemente[i] != rhs.m_Elemente[i])
-			return false;
-	}
-	return true;
+
+	return std::equal(m_Elemente.begin(), m_Elemente.end(),
+			rhs.m_Elemente.begin());
 }// Ende ==
 inline bool MPL_Vektor::operator != (const MPL_Vektor &rhs) const
 {
-	if (*this == rhs)
-		return false;
-	return true;
+	return !(*this == rhs);
 }// Ende !=
 
 // Methoden
 
 inline void MPL_Vektor::Elementzahl_festlegen(int E)
 {
-	// Falls Vektor reduziert wird, die ersten Einträge behalten
-	double *altes_Feld = 0;
-	int altes_Feld_Elementzahl = m_Elementanzahl;
-	//altes Feld für Dreieckstauch zwischenkopieren
-	if (m_Elementanzahl != 0) {
-		altes_Feld = new double[m_Elementanzahl];
-		for (int i = 0; i < m_Elementanzahl; i++) {
-			altes_Feld[i] = m_Elemente[i];
-		}
-		//Altes Feld löschen
-		delete[] m_Elemente;
-		m_Elemente = 0;        //Zeile eigentlich überflüssig
-		m_Elementanzahl = 0; //Zeile eigentlich überflüssig
-	}
-	//neuen Speicher allokieren
-	m_Elementanzahl = E;
-	m_Elemente = new double[m_Elementanzahl];
-	//neues Feld mit altem so weit es geht von vorne auffüllen...
-	//falls Rest, mit 0 auffüllen
-	int Grenze;
-	if (m_Elementanzahl < altes_Feld_Elementzahl) {
-		Grenze = m_Elementanzahl;
-	} else {
-		Grenze = altes_Feld_Elementzahl;
-	}
-	for (int i = 0; i < Grenze; i++) {
-		m_Elemente[i] = altes_Feld[i];
-	}
-	for (int i = Grenze; i < m_Elementanzahl; i++) {
-		m_Elemente[i] = 0;
-	}
-	//altes Feld löschen
-	if (altes_Feld != 0) {
-		delete[] altes_Feld;
-	}
+	m_Elemente.resize(E, 0.0);
 }
 
 inline void MPL_Vektor::Null_Initialisierung()
 {
-	for (int i = 0; i < this->m_Elementanzahl; i++) {
-		this->m_Elemente[i] = 0;
-
-	}
+	std::fill(m_Elemente.begin(), m_Elemente.end(), 0.0);
 }// Ende Nullinitialisierung
+
 inline double MPL_Vektor::Betrag_ausgeben()
 {
-	double d_Betrag = 0;
-	for (int i = 0; i < this->m_Elementanzahl; i++) {
-		d_Betrag += m_Elemente[i] * m_Elemente[i];
-	}
-	d_Betrag = sqrt(d_Betrag);
-	return d_Betrag;
+	return std::sqrt(std::inner_product(m_Elemente.begin(),
+				m_Elemente.end(), m_Elemente.begin(), 0.0));
 }
 
 inline void MPL_Vektor::Normieren()
@@ -345,9 +290,10 @@ inline void MPL_Vektor::Normieren()
 			 << std::endl;
 		return; // Nullvektor abbbruch
 	}
-	for (int i = 0; i < this->m_Elementanzahl; i++) {
-		m_Elemente[i] /= d_Betrag;
-	}
+
+	std::transform(m_Elemente.begin(), m_Elemente.end(),
+			m_Elemente.begin(),
+			std::bind2nd(std::divides<double>(), d_Betrag));
 }
 
 #endif /* MPL_VEKTOR_HH_ */
