@@ -15,9 +15,6 @@ class Gitterpunkt
 public:
 	// Konstruktoren
 	Gitterpunkt();
-	Gitterpunkt(const Gitterpunkt &rhs);
-	// Überladene Operatoren
-	Gitterpunkt &operator =(const Gitterpunkt &rhs);
 	// Methoden
 	bool Punkt_in_Gitterpunkt(double Lat, double Hoehe); //liefert true falls ja, false falls nein
 	//int Sonnenzenitwinkel_der_Gitterpunkte_berechnen( diverse andere Winkel);
