@@ -84,13 +84,13 @@ class NO_emiss {
 	// line emissivities by upper state k
 	double emiss_tot;
 	MPL_Matrix gamma_j;
-	std::vector<double> spec_scia_res;
 	double scia_wl_at_max;
 	double scia_band_emiss;
 
 	public:
 	// solar spectrum
 	MPL_Matrix solar;
+	std::vector<double> spec_scia_res;
 	NO_emiss(int vu = 2, int vl = 4, int vl_abs = 0, double T = 200.);
 	int alloc_memory();
 	int set_constants();

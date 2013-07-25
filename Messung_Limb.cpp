@@ -335,14 +335,27 @@ double sigma_rayleigh(double wl)
 }
 double fit_spectra(std::vector<double> &x, std::vector<double> &y)
 {
-	double sum_gy = 0., sum_gg = 0.;
-	for (size_t i = 0; i < x.size(); i++) {
-		double g = x.at(i);
-		sum_gy += g * y.at(i);
-		sum_gg += g * g;
-	}
+	double sum_gy = std::inner_product(x.begin(), x.end(), y.begin(), 0.);
+	double sum_gg = std::inner_product(x.begin(), x.end(), x.begin(), 0.);
+
 	return sum_gy / sum_gg;
 }
+class lin_x {
+	public:
+	lin_x(double a0) : a(a0) {}
+	double operator()(double x, double y) { return x + a*y; }
+	private:
+	double a;
+};
+class rayl {
+	public:
+	rayl(double f) : f_sol(f) {}
+	double operator()(double x, double sol) {
+		return f_sol * sigma_rayleigh(x) * sol;
+	}
+	private:
+	double f_sol;
+};
 //========================================
 int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		Sonnenspektrum &sol_spec, int index,
@@ -391,7 +404,6 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	int N_base = base_l + base_r;
 	int N_peak = i_peakwin_max - i_peakwin_min + 1;
 	// Speicher anfordern
-	std::vector<double> basewin_wl(N_base);
 	std::vector<double> basewin_rad(N_base);
 	std::vector<double> peakwin_wl(N_peak);
 	std::vector<double> peakwin_rad(N_peak);
@@ -437,21 +449,29 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	if (debug == true)
 		std::cout << "# solar fit factor = " << f_sol_fit << std::endl;
 	if (f_sol_fit < 0.) f_sol_fit = 0.;
+
+	// prepare baseline and rayleigh data
+	std::vector<double> baseline_wl, baseline_rad, rayleigh_rad;
+	std::vector<double> y, y_weights(N_fit_tot, 1.);
+	std::copy(m_Wellenlaengen.begin() + i_basewin_l_min,
+			m_Wellenlaengen.begin() + i_basewin_l_min + N_fit_tot,
+			std::back_inserter(baseline_wl));
+	std::transform(m_Wellenlaengen.begin() + i_basewin_l_min,
+			m_Wellenlaengen.begin() + i_basewin_l_min + N_fit_tot,
+			sol_rad.begin() + i_basewin_l_min,
+			std::back_inserter(rayleigh_rad),
+			rayl(f_sol_fit));
+	std::transform(rad.begin() + i_basewin_l_min,
+			rad.begin() + i_basewin_l_min + N_fit_tot,
+			rayleigh_rad.begin(),
+			std::back_inserter(y),
+			std::minus<double>());
+
 	// Basisfenster WL und I auffüllen
-	for (i = 0; i < base_l; i++) {
-		wl = m_Wellenlaengen.at(i_basewin_l_min + i);
-		basewin_wl.at(i) = wl;
-		basewin_rad.at(i) = rad.at(i_basewin_l_min + i)
-			- f_sol_fit * sigma_rayleigh(wl)
-			  * sol_rad.at(i_basewin_l_min + i);
-	}
-	for (i = 0; i < base_r; i++) {
-		wl = m_Wellenlaengen.at(i_basewin_r_min + i);
-		basewin_wl.at(base_l + i) = wl;
-		basewin_rad.at(base_l + i) = rad.at(i_basewin_r_min + i)
-			- f_sol_fit * sigma_rayleigh(wl)
-			  * sol_rad.at(i_basewin_r_min + i);
-	}
+	std::copy(y.begin(), y.begin() + base_l,
+			basewin_rad.begin());
+	std::copy(y.begin() + base_l + N_peak, y.end(),
+			basewin_rad.begin() + base_l);
 	/* construct new baseline vectors by removing outliers
 	 * This currently discards 20% (10% left and 10% right)
 	 * of the baseline points. */
@@ -461,25 +481,15 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	double rad0 = rad_sort.at(offset);
 	double rad1 = rad_sort.at(rad_sort.size() - offset - 1);
 
-	// prepare baseline and rayleigh data
-	std::vector<double> baseline_wl, baseline_rad, rayleigh_rad;
-	std::vector<double> y, y_weights;
 	for (i = 0; i < N_fit_tot; i++) {
 		int idx = i_basewin_l_min + i;
-		wl = m_Wellenlaengen.at(idx);
-		baseline_wl.push_back(wl);
-		rayleigh_rad.push_back(f_sol_fit * sigma_rayleigh(wl)
-				* sol_rad.at(idx));
 
 		// prepare radiances and weights for the Whittaker smoother
-		double radi = rad.at(idx) - rayleigh_rad.back();
-		y.push_back(radi);
+		double radi = y.at(i);
 		// exclude the peak window and outliers by zeroing the weights
 		if ((idx >= i_peakwin_min && idx <= i_peakwin_max)
 			|| radi < rad0 || radi > rad1)
-			y_weights.push_back(0.);
-		else
-			y_weights.push_back(1.);
+			y_weights.at(i) = 0.;
 	}
 	// reset N_base
 	N_base = std::accumulate(y_weights.begin(), y_weights.end(), 0);
@@ -494,11 +504,13 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 
 	//Peakfenster WL und I auffüllen
 	// lineare Funktion von Intensitäten des Peakfenster abziehen
-	for (i = 0; i < N_peak; i++) {
-		peakwin_wl.at(i) = m_Wellenlaengen.at(i_peakwin_min + i);
-		peakwin_rad.at(i) = y.at(i_peakwin_min - i_basewin_l_min + i)
-			- baseline_rad.at(i_peakwin_min - i_basewin_l_min + i);
-	}
+	std::copy(m_Wellenlaengen.begin() + i_peakwin_min,
+			m_Wellenlaengen.begin() + i_peakwin_min + N_peak,
+			peakwin_wl.begin());
+	std::transform(y.begin() + i_peakwin_min - i_basewin_l_min,
+			y.begin() + i_peakwin_min - i_basewin_l_min + N_peak,
+			baseline_rad.begin() + i_peakwin_min - i_basewin_l_min,
+			peakwin_rad.begin(), std::minus<double>());
 	double rms_err_peak, rms_err_tot;
 	m_Zeilendichte = fit_NO_spec(NO, peakwin_wl, peakwin_rad,
 			rms_err_peak);
@@ -592,28 +604,21 @@ double Messung_Limb::fit_NO_spec(NO_emiss &NO,
 		std::vector<double> &x, std::vector<double> &y,
 		double &rms_err)
 {
-	double A;
 	int l0 = sb_Get_Index(x.at(0)) + 1;
 
-	std::vector<double>::iterator x_it;
+	double sum_gy = std::inner_product(y.begin(), y.end(),
+			NO.spec_scia_res.begin() + l0, 0.0);
+	double sum_gg = std::inner_product(NO.spec_scia_res.begin() + l0,
+			NO.spec_scia_res.begin() + l0 + x.size(),
+			NO.spec_scia_res.begin() + l0, 0.0);
+	double A = sum_gy / sum_gg;
 
-	double sum_gg = 0., sum_gy = 0.;
-	for (x_it = x.begin(); x_it != x.end(); ++x_it) {
-		int l = std::distance(x.begin(), x_it);
-		double g = NO.get_spec_scia_res(l0 + l);
-		double yl = y.at(l);
-		sum_gy += g * yl;
-		sum_gg += g * g;
-	}
-	A = sum_gy / sum_gg;
+	std::vector<double> diffs;
+	std::transform(y.begin(), y.end(), NO.spec_scia_res.begin() + l0,
+			std::back_inserter(diffs), lin_x(-A));
 
-	double err = 0.;
-	for (x_it = x.begin(); x_it != x.end(); ++x_it) {
-		int l = std::distance(x.begin(), x_it);
-		double diff = (y.at(l) - A * NO.get_spec_scia_res(l0 + l));
-		err += diff * diff;
-	}
-	err /= x.size();
+	double err = std::inner_product(diffs.begin(), diffs.end(),
+			diffs.begin(), 0.0) / diffs.size();
 	rms_err = std::sqrt(err);
 
 	return A;
@@ -1252,10 +1257,9 @@ int Messung_Limb::Intensitaeten_normieren(vector<double> &Sonnen_Intensitaet)
 	//Teiler wurde vorher interpoliert
 	//todo prüfen
 	// der Teiler ist das interpolierte Sonnenspektrum
-	for (int i = 0; i < m_Number_of_Wavelength; i++) {
-		this->m_Intensitaeten_durch_piF[i]
-			= this->m_Intensitaeten[i] / Sonnen_Intensitaet[i];
-	}
+	std::transform(m_Intensitaeten.begin(), m_Intensitaeten.end(),
+			Sonnen_Intensitaet.begin(), m_Intensitaeten_durch_piF.begin(),
+			std::divides<double>());
 	m_Sonne = Sonnen_Intensitaet;
 
 	return 0;
@@ -1266,11 +1270,9 @@ int Messung_Limb::Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfen
 {
 
 	//Auf dem ganzen Fenster...Verschwendung !!!!!...
-	for (int i = 0; i < m_Number_of_Wavelength; i++) { //langsam, optimierbar
-		this->m_Intensitaeten_durch_piF_Gamma[i]
-			= this->m_Intensitaeten_durch_piF[i]
-			  / wl_gamma;
-	}
+	std::transform(m_Intensitaeten_durch_piF.begin(), m_Intensitaeten_durch_piF.end(),
+			m_Intensitaeten_durch_piF_Gamma.begin(),
+			std::bind2nd(std::divides<double>(), wl_gamma));
 	return 0;
 }
 int Messung_Limb::Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Speziesfenster Spezfenst)
