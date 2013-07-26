@@ -58,7 +58,6 @@ public:
 	friend MPL_Vektor operator * (const double &lhs, const MPL_Vektor &rhs);
 
 	bool operator == (const MPL_Vektor &rhs) const;
-	bool operator != (const MPL_Vektor &rhs) const;
 
 	// Methoden
 	void Elementzahl_festlegen(int E);
@@ -258,10 +257,6 @@ inline bool MPL_Vektor::operator == (const MPL_Vektor &rhs) const
 	return std::equal(m_Elemente.begin(), m_Elemente.end(),
 			rhs.m_Elemente.begin());
 }// Ende ==
-inline bool MPL_Vektor::operator != (const MPL_Vektor &rhs) const
-{
-	return !(*this == rhs);
-}// Ende !=
 
 // Methoden
 

@@ -105,7 +105,6 @@ public:
 	friend MPL_Matrix operator * (const double &lhs, const MPL_Matrix &rhs);
 
 	bool operator == (const MPL_Matrix &rhs) const;
-	bool operator != (const MPL_Matrix &rhs) const;
 	////////////////////////////////////////////////////////////////
 
 	// Methoden
@@ -468,18 +467,6 @@ inline bool MPL_Matrix::operator == (const MPL_Matrix &rhs) const
 	//wenns jetzt nicht foalsch war, muss es wohl richtig sein
 	return true;
 }
-/////////////////////////////////////////////////////////
-// Methodenstart
-/////////////////////////////////////////////////////////
-inline bool MPL_Matrix::operator != (const MPL_Matrix &rhs) const
-{
-	if (*this == rhs)
-		return false;
-	else
-		return true;
-}
-////////////////////////////////////////////////////////////////
-
 
 //Methoden
 /////////////////////////////////////////////////////////
