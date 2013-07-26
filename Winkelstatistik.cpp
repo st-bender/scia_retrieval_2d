@@ -52,9 +52,9 @@ int Winkelstatistik::Winkel_berechnen_und_einordnen(
 	// Der Tangentenpunkt ist so definiert,
 	// dass dort die LOS des Satelliten dort senkrecht zum Zenit steht,
 	// Die Abweichungen davon werden hier berechnet
-	MPL_Vektor V_Norm, TP_Norm;
-	V_Norm = Verbindungsvektor / Verbindungsvektor.Betrag_ausgeben();
-	TP_Norm = Tangentenpunkt / Tangentenpunkt.Betrag_ausgeben();
+	MPL_Vektor V_Norm(Verbindungsvektor), TP_Norm(Tangentenpunkt);
+	V_Norm.Normieren();
+	TP_Norm.Normieren();
 	double COS_Winkel = TP_Norm * V_Norm;
 	double W = 180.0 / pi * acos(COS_Winkel) - 90.0;
 	double W_Abs = sqrt(W * W);
