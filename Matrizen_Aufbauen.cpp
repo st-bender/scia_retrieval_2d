@@ -278,9 +278,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		// des Übergangs sind die (beiden) Wirkungsquerschnitte für die beiden
 		// Atmosphärengase zu bestimmen
 		MPL_Vektor V_Atmo_Wirkungsquerschnitte(2);
-		V_Atmo_Wirkungsquerschnitte.Null_Initialisierung();
 		MPL_Vektor V_Atmo_Wqs_abs(2);
-		V_Atmo_Wqs_abs.Null_Initialisierung();
 		//Dichten sind Höhenabhängig, Bestimmung dort
 		MPL_Vektor V_Atmo_Dichten(2);
 
@@ -840,10 +838,8 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		// des Übergangs sind die (beiden) Wirkungsquerschnitte für die beiden
 		// Atmosphärengase zu bestimmen
 		MPL_Vektor V_Atmo_Wirkungsquerschnitte(2);
-		V_Atmo_Wirkungsquerschnitte.Null_Initialisierung();
 		//Dichten sind Höhenabhängig, Bestimmung dort
 		MPL_Vektor V_Atmo_Dichten(2);
-		V_Atmo_Dichten.Null_Initialisierung();
 		// Wellenlängen sind in Atmo-Datei monoton ansteigend
 		// -> Quicksearch Algorithmus für Interpolation(schnell)
 		//int interpolieren(MPL_Matrix M,int x_Spalte,int y_Spalte,
