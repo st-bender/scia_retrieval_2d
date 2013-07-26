@@ -329,11 +329,9 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 										aml_it->m_Latitude_TP,
 										TP_Pos(0), TP_Pos(1), TP_Pos(2));
 		// Verbindungsvektor Sat-TP startend vom Satelliten
-		MPL_Vektor Verbindungsvektor(3);
-		Verbindungsvektor = TP_Pos - Sat_Pos;
-		MPL_Vektor Verbindungsvektor_normal(3);
-		Verbindungsvektor_normal = Verbindungsvektor /
-					Verbindungsvektor.Betrag_ausgeben();
+		MPL_Vektor Verbindungsvektor(TP_Pos - Sat_Pos);
+		MPL_Vektor Verbindungsvektor_normal(Verbindungsvektor);
+		Verbindungsvektor_normal.Normieren();
 		//START kleine Statistik für Winkelabweichungen bei Limb   /////////////
 		int Winkel_OK = 3;
 		Wstat.Winkel_berechnen_und_einordnen(Verbindungsvektor,
@@ -476,12 +474,10 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 				// gibts auch keine Verwirrungen, ob der Stumpfe oder der
 				// Spitze Winkel gemeint ist
 				//
-				MPL_Vektor Verbindung(3), Verbindung_normal(3);
-				MPL_Vektor LOS_normal(3);
-				Verbindung = Sonne_Pos - aktueller_Punkt;
-				Verbindung_normal = Verbindung / Verbindung.Betrag_ausgeben();
-				LOS_normal = Verbindungsvektor_normal;
-				Cos_Streuwinkel = -1 * (Verbindung_normal * LOS_normal); //skalarprodukt
+				MPL_Vektor Verbindung(Sonne_Pos - aktueller_Punkt);
+				MPL_Vektor LOS_normal(Verbindungsvektor_normal);
+				Verbindung.Normieren();
+				Cos_Streuwinkel = -1 * (Verbindung * LOS_normal); //skalarprodukt
 				//cerr<<"Streuwinkel berechnet\n";
 			}
 
@@ -714,8 +710,8 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			//Einmal den Sonnenzenitwinkel ausrechnen. ist dieser größer als
 			//90°, so liegt der Gitterpunkt im Dunkeln, und muss 0 Gesetzt
 			//werden
-			MPL_Vektor Startpunkt_normiert(3);
-			Startpunkt_normiert = Start_Punkt / Start_Punkt.Betrag_ausgeben();
+			MPL_Vektor Startpunkt_normiert(Start_Punkt);
+			Startpunkt_normiert.Normieren();
 			double Cos_SZA_LFS = Startpunkt_normiert * Sonne_normal;
 			if (Cos_SZA_LFS < 0) {
 				//cout<<"Limb LFS Gitterpunkt im Dunkeln (SZA>90°)\n";
@@ -885,9 +881,8 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		//Satellit-Punkt  //
 		/////////////////////////
 		//Raytracing LOS-Vom Satelliten bis zum tiefsten Boxenpunkt
-		MPL_Vektor Nadir_LOS(3);
 		// Zunächst die ganze LOS
-		Nadir_LOS = GP_POS - Sat_POS;
+		MPL_Vektor Nadir_LOS(GP_POS - Sat_POS);
 		// Startpunkt des Strahls finden
 
 		// Der Startpunkt liegt bei der höchsten Boxenhoehe, somit wird AMF für
@@ -908,8 +903,8 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		Endpunkt = Punkt_auf_Strecke_bei_Radius(Sat_POS, Nadir_LOS, R_Min, 0.1);
 		//LOS anpassen auf relevantes Höhenintervall
 		Nadir_LOS = Endpunkt - Startpunkt;
-		MPL_Vektor Nadir_LOS_Einheitsvektor(3);
-		Nadir_LOS_Einheitsvektor = Nadir_LOS / Nadir_LOS.Betrag_ausgeben();
+		MPL_Vektor Nadir_LOS_Einheitsvektor(Nadir_LOS);
+		Nadir_LOS_Einheitsvektor.Normieren();
 		// Distanz zwischen Start und Endpunkt bestimmen
 		double Distanz_in_Atmosphaere = Nadir_LOS.Betrag_ausgeben();
 		// Schrittzahl festlegen
@@ -946,8 +941,8 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			// Prüfen ob Streuwinkel berechnet sollen...und falls ja Berechnen
 			if (aktueller_Schritt % Winkelberechnungsfrequenz == 0) {
 				//Erklärung siehe Limb
-				MPL_Vektor Sonne_normal(3);
-				Sonne_normal = Sonne_POS / Sonne_POS.Betrag_ausgeben();
+				MPL_Vektor Sonne_normal(Sonne_POS);
+				Sonne_normal.Normieren();
 				Cos_Streuwinkel = -1 * Sonne_normal * Nadir_LOS_Einheitsvektor;
 			}
 
@@ -1121,13 +1116,13 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			Umwandlung_Kugel_in_Karthesisch(
 					Start_Punkt_Polar(0), Start_Punkt_Polar(1), Start_Punkt_Polar(2),
 					Start_Punkt(0), Start_Punkt(1), Start_Punkt(2));
-			MPL_Vektor Sonne_normal(3); //wie bei LOS
-			Sonne_normal = Sonne_POS / Sonne_POS.Betrag_ausgeben();
+			MPL_Vektor Sonne_normal(Sonne_POS); //wie bei LOS
+			Sonne_normal.Normieren();
 			//Einmal den Sonnenzenitwinkel ausrechnen. ist dieser größer als
 			//90° so liegt der Gitterpunkt im Dunkeln, und muss 0 Gesetzt
 			//werden
-			MPL_Vektor Startpunkt_normiert(3);
-			Startpunkt_normiert = Start_Punkt / Start_Punkt.Betrag_ausgeben();
+			MPL_Vektor Startpunkt_normiert(Start_Punkt);
+			Startpunkt_normiert.Normieren();
 			double Cos_SZA_LFS = Startpunkt_normiert * Sonne_normal;
 			//if(MessungNR<500)
 			//{cout<<Cos_SZA_LFS<<"\n";}
