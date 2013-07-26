@@ -214,9 +214,8 @@ int Test_auf_korrekte_geolocations_Limb(vector<Messung_Limb> &Rohdaten,
 										Ort_TP(0), Ort_TP(1), Ort_TP(2));
 
 		//Verbindungsvektor
-		MPL_Vektor Verbindung(3);
+		MPL_Vektor Verbindung(Ort_TP - Ort_Sat);
 		MPL_Vektor TP_normiert(Ort_TP);
-		Verbindung = Ort_TP - Ort_Sat;
 		//normieren
 		Verbindung.Normieren();
 		TP_normiert.Normieren();
