@@ -89,23 +89,10 @@ public:
 	MPL_Matrix &operator *= (double rhs);  // Skalare Multiplikation
 	MPL_Matrix &operator /= (double rhs);  // Skalare Division
 	// Beachte...es gibt keine Division, da nicht jede Matrix eine Inverse hat
-	//unäre Operatoren
-	// + und - Matrix A   was ist dann +A, was ist -A,
-	// +A ist trivial +A=A, -A ist elementweises -
-	// auch + sollte überladen werden, für tiefe Kopie der Matrix
-	MPL_Matrix operator + () const;
-	// für was auch immer const steht->  siehe auch Inspektoren und Mutatoren
-	MPL_Matrix operator - () const;
-	//Interpretation:
-	//  const verändert das lhs Objekt nicht, sondern erzeugt ein echtes neues
 
 	//() Überladung -> Direkter Zugriff auf Das Elemente Array
-	//Die braucht man aus obskuren Gründen 2mal
 	double &operator()(int Zeile, int Spalte);
-	double operator()(int Zeile, int Spalte) const;
 	double &operator()(int Elementindex);
-	double operator()(int Elementindex) const;
-
 
 	// binary operators
 	//TODO mit DGEMM
@@ -310,30 +297,6 @@ inline MPL_Matrix &MPL_Matrix::operator /= (double rhs)
 	return *this;
 }// ende /=
 
-//unäre Operatoren
-// + und - Matrix A   was ist dann +A, was ist -A,
-// +A ist trivial +A=A, -A ist elementweises -
-/////////////////////////////////////////////////////////
-// Methodenstart
-/////////////////////////////////////////////////////////
-inline MPL_Matrix MPL_Matrix::operator + () const
-{
-	MPL_Matrix aus;
-	aus = *this; // nutze deepcopy in =
-	return aus;
-}
-/////////////////////////////////////////////////////////
-// Methodenstart
-/////////////////////////////////////////////////////////
-inline MPL_Matrix MPL_Matrix::operator - () const
-{
-	MPL_Matrix aus;
-	aus = *this; // nutze deepcopy in =
-	for (int i = 0; i < aus.m_Elementanzahl; i++)
-		aus.m_Elemente[i] = -aus.m_Elemente[i];
-	return aus;
-}
-
 //() Überladung -> Direkter Zugriff auf Das Elemente Array
 /////////////////////////////////////////////////////////
 // Methodenstart
@@ -353,21 +316,6 @@ inline double &MPL_Matrix::operator()(int Zeile, int Spalte)
 /////////////////////////////////////////////////////////
 // Methodenstart
 /////////////////////////////////////////////////////////
-inline double MPL_Matrix::operator()(int Zeile, int Spalte) const
-{
-	//b=A(1,2)
-	if ((Spalte >= 0) && (Spalte < m_Spaltenzahl)
-			&& (Zeile >= 0) && (Zeile < m_Zeilenzahl))
-		return this->m_Elemente[Spalte + Zeile * this->m_Spaltenzahl];
-	else {
-		std::cerr << "Achtung!!! Zugriff auf Elemente ausserhalb der Matrix"
-				  << std::endl;
-		return -1;
-	}
-}
-/////////////////////////////////////////////////////////
-// Methodenstart
-/////////////////////////////////////////////////////////
 inline double &MPL_Matrix::operator()(int Elementindex)
 {
 	if ((Elementindex >= 0) && (Elementindex < m_Elementanzahl))
@@ -377,20 +325,6 @@ inline double &MPL_Matrix::operator()(int Elementindex)
 				  << std::endl;
 		return m_Elemente[0];//auch schlecht, aber wenigstens nicht ausserhalb
 	}
-}
-/////////////////////////////////////////////////////////
-// Methodenstart
-/////////////////////////////////////////////////////////
-inline double MPL_Matrix::operator()(int Elementindex) const
-{
-	if ((Elementindex >= 0) && (Elementindex < m_Elementanzahl))
-		return this->m_Elemente[Elementindex];
-	else {
-		std::cerr << "Achtung!!! Zugriff auf Elemente ausserhalb der Matrix"
-				  << std::endl;
-		return m_Elemente[0];//auch schlecht, aber wenigstens nicht ausserhalb
-	}
-
 }
 
 // binary operators
