@@ -215,11 +215,11 @@ int Test_auf_korrekte_geolocations_Limb(vector<Messung_Limb> &Rohdaten,
 
 		//Verbindungsvektor
 		MPL_Vektor Verbindung(3);
+		MPL_Vektor TP_normiert(Ort_TP);
 		Verbindung = Ort_TP - Ort_Sat;
 		//normieren
-		MPL_Vektor TP_normiert(3);
-		Verbindung = Verbindung / Verbindung.Betrag_ausgeben();
-		TP_normiert = Ort_TP / Ort_TP.Betrag_ausgeben();
+		Verbindung.Normieren();
+		TP_normiert.Normieren();
 		//Skalarprodukt bilden
 		double SIN_Winkel = Verbindung * TP_normiert;
 		double Winkel = 180.0 / pi * asin(SIN_Winkel);
