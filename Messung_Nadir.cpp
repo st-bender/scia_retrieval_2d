@@ -40,6 +40,7 @@ Messung_Nadir::Messung_Nadir()
 	m_Tag = 0;
 	m_Stunde = 0;
 	m_Minute = 0;
+	m_Sekunde = 0;
 	// Geolokationen für Raytrace
 	m_Latitude_Sat = 0;
 	m_Longitude_Sat = 0;
@@ -47,6 +48,7 @@ Messung_Nadir::Messung_Nadir()
 	m_Latitude_Ground = 0;
 	m_Longitude_Ground = 0;
 	m_Erdradius = 0;
+	m_orbit_phase = 0.;
 	m_Number_of_Wavelength = 0;
 }
 //////////////////////////////////////////////////
@@ -88,6 +90,7 @@ Messung_Nadir &Messung_Nadir::operator =(const Messung_Nadir &rhs)
 	m_Tag = rhs.m_Tag;
 	m_Stunde = rhs.m_Stunde;
 	m_Minute = rhs.m_Minute;
+	m_Sekunde = rhs.m_Sekunde;
 	//Geolocations
 	m_Latitude_Sat = rhs.m_Latitude_Sat;
 	m_Longitude_Sat = rhs.m_Longitude_Sat;
