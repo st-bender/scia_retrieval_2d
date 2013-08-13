@@ -20,7 +20,7 @@ class Messung_Nadir
 	 dass ich bei Limb noch Vektors verwendet hab
 	 ****************************************************/
 public:
-	Messung_Nadir();
+	explicit Messung_Nadir(std::string filename = "dummy");
 	// copyconstructor
 	Messung_Nadir(const Messung_Nadir &rhs);
 	// Assignmentoperator Overload

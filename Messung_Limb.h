@@ -14,7 +14,7 @@
 class Messung_Limb
 {
 public:
-	Messung_Limb();
+	explicit Messung_Limb(std::string filename = "dummy");
 	// copyconstructor
 	Messung_Limb(const Messung_Limb &rhs);
 	// Assignmentoperator Overload

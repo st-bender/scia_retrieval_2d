@@ -103,8 +103,7 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 	vector<Messung_Limb> Ergebnisvektor;
 
 	for (int i = 0; i < no_of_heights; i++) {
-		Messung_Limb ml;
-		ml.m_Dateiname_L1C = Dateiname;
+		Messung_Limb ml(Dateiname);
 		ml.m_Jahr = Datum[0];
 		ml.m_Monat = Datum[1];
 		ml.m_Tag = Datum[2];
@@ -364,9 +363,8 @@ vector<Messung_Nadir> make_messung_nadir_vector(string Dateiname,
 	vector<Messung_Nadir> mn_vec;
 
 	for (int i = 0; i < No_of_Messungen; i++) {
-		Messung_Nadir mn;
+		Messung_Nadir mn(Dateiname);
 		//Herkunftsmerkmale
-		mn.m_Dateiname_L1C = Dateiname;
 		mn.m_Messung_ID = Nadirdaten[i].m_Messung_ID;
 		//Datum
 		mn.m_Jahr = Nadirdaten[i].m_Jahr;

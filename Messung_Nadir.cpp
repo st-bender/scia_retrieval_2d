@@ -22,7 +22,8 @@ using namespace std;
 //////////////////////////////////////////////////
 //constructor
 //////////////////////////////////////////////////
-Messung_Nadir::Messung_Nadir()
+Messung_Nadir::Messung_Nadir(std::string filename) :
+	m_Dateiname_L1C(filename)
 {
 	//initialisierung
 	// Ergebnisse
@@ -32,7 +33,6 @@ Messung_Nadir::Messung_Nadir()
 	m_Deklinationswinkel = 0;
 	m_Sonnen_Longitude = 0;
 	// Herkunftsmerkmale
-	m_Dateiname_L1C = "dummy";
 	m_Messung_ID = 0;
 	//Datum
 	m_Jahr = 0;

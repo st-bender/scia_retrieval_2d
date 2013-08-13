@@ -35,13 +35,13 @@ extern "C" {
 
 using namespace std;
 
-Messung_Limb::Messung_Limb()
+Messung_Limb::Messung_Limb(std::string filename) :
+	m_Dateiname_L1C(filename)
 {
 	//initialisierung
 	m_Zeilendichte = 0;
 	m_Fehler_Zeilendichten = 0;
 	total_number_density = 0.;
-	m_Dateiname_L1C = "dummy";
 	m_Number_of_Wavelength = 0;
 	m_Jahr = 0;
 	m_Monat = 0;
