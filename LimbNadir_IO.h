@@ -31,16 +31,6 @@
 class Nadir_Datensatz
 {
 public:
-	Nadir_Datensatz() {
-		m_radiance = 0;
-		m_error = 0;
-	}
-	~Nadir_Datensatz() {
-		if (m_radiance != 0) delete[] m_radiance;
-		m_radiance = 0;
-		if (m_error != 0) delete[] m_error;
-		m_error = 0;
-	}
 	//Zuweisungsoperator
 	Nadir_Datensatz &operator=(const Nadir_Datensatz &RHS);
 	int m_Messung_ID; //das was hinter # steht
@@ -69,10 +59,10 @@ public:
 	// float m_no_of_pix;                   wird einmal Zentral gespeichert
 	// float* m_Pixelnummer             wird einmal Zentral gespeichert
 	// float* m_Wellenlaengen           wird einmal Zentral gespeichert
-	float *m_radiance; // eher Teilchen/(cm^2nm)
+	std::vector<float> m_radiance; // eher Teilchen/(cm^2nm)
 					   // der für dieses Feld allokierte Speicher muss wieder
 					   // gelöscht werden
-	float *m_error;
+	std::vector<float> m_error;
 
 };
 //implementation der Übergabe
@@ -108,20 +98,12 @@ inline Nadir_Datensatz &Nadir_Datensatz::operator=(const Nadir_Datensatz &RHS)
 	m_geo_nadir_center_lon = RHS.m_geo_nadir_center_lon;
 	m_Integrationszeit = RHS.m_Integrationszeit;
 	m_N_radiances = RHS.m_N_radiances;
-	if (m_radiance != 0) {
-		delete[] m_radiance;
-		m_radiance = 0;
-	}
-	m_radiance = new float[m_N_radiances];
-	if (m_error != 0) {
-		delete[] m_error;
-		m_error = 0;
-	}
-	m_error = new float[m_N_radiances];
-	for (int i = 0; i < m_N_radiances; i++) {
-		m_radiance[i] = RHS.m_radiance[i];
-		m_error[i] = RHS.m_error[i];
-	}
+
+	std::copy(RHS.m_radiance.begin(), RHS.m_radiance.end(),
+			m_radiance.begin());
+	std::copy(RHS.m_error.begin(), RHS.m_error.end(),
+			m_error.begin());
+
 	return *this;
 }
 

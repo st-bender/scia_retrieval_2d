@@ -425,16 +425,6 @@ vector<Messung_Nadir> ReadL1C_Nadir_mpl_binary(string Dateiname, int &Anzahl_Mes
 	// 5. Speicherfreigabe
 	delete[] Kanal_Nr;
 	delete[] Wellenlaenge;
-	for (int i = 0; i < No_of_Messungen; i++) {
-		if (Nadirdaten[i].m_radiance != 0) {
-			delete[] Nadirdaten[i].m_radiance;
-			Nadirdaten[i].m_radiance = 0;
-		}
-		if (Nadirdaten[i].m_error != 0) {
-			delete[] Nadirdaten[i].m_error;
-			Nadirdaten[i].m_error = 0;
-		}
-	}
 	delete[] Nadirdaten;
 	// 6. Rückgabe
 	return aus;

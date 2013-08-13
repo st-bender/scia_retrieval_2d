@@ -326,8 +326,8 @@ int Load_Nadir_Ascii(string Datei_in,
 	}
 	for (int i = 0; i < No_of_Messungen; i++) {
 		Nadirdaten[i].m_N_radiances = No_of_Pix;
-		Nadirdaten[i].m_radiance = new float[No_of_Pix];
-		Nadirdaten[i].m_error = new float[No_of_Pix];
+		Nadirdaten[i].m_radiance.resize(No_of_Pix);
+		Nadirdaten[i].m_error.resize(No_of_Pix);
 		//Zeile mit Messungsnummer...von 0 an durchnummeriert
 		infile >> s_dummy >> Nadirdaten[i].m_Messung_ID;
 		infile >> Nadirdaten[i].m_state_ID;
@@ -414,8 +414,8 @@ int Load_Nadir_n_mpl_binary(string Datei_in,
 	// Datensätze lesen
 	for (int i = 0; i < No_of_Messungen; i++) {
 		Nadirdaten[i].m_N_radiances = No_of_Pix;
-		Nadirdaten[i].m_radiance = new float[No_of_Pix];
-		Nadirdaten[i].m_error = new float[No_of_Pix];
+		Nadirdaten[i].m_radiance.resize(No_of_Pix);
+		Nadirdaten[i].m_error.resize(No_of_Pix);
 	}
 	infile.read((char *) Kanal_Nr, sizeof(int)*No_of_Pix);
 	infile.read((char *) Wellenlaenge, sizeof(float)*No_of_Pix);
@@ -443,8 +443,8 @@ int Load_Nadir_n_mpl_binary(string Datei_in,
 		infile.read((char *) &Nadirdaten[i].m_geo_nadir_center_lat, sizeof(float));
 		infile.read((char *) &Nadirdaten[i].m_geo_nadir_center_lon, sizeof(float));
 		infile.read((char *) &Nadirdaten[i].m_Integrationszeit, sizeof(float));
-		infile.read((char *) Nadirdaten[i].m_radiance, sizeof(float)*No_of_Pix);
-		infile.read((char *) Nadirdaten[i].m_error, sizeof(float)*No_of_Pix);
+		infile.read((char *) &Nadirdaten[i].m_radiance[0], sizeof(float)*No_of_Pix);
+		infile.read((char *) &Nadirdaten[i].m_error[0], sizeof(float)*No_of_Pix);
 	}
 	infile.close();
 	infile.clear();
@@ -797,8 +797,8 @@ int Save_Nadir_n_mpl_binary(string Datei_out,
 		outfile.write((char *) &Nadirdaten[i].m_geo_nadir_center_lat, sizeof(float));
 		outfile.write((char *) &Nadirdaten[i].m_geo_nadir_center_lon, sizeof(float));
 		outfile.write((char *) &Nadirdaten[i].m_Integrationszeit, sizeof(float));
-		outfile.write((char *) Nadirdaten[i].m_radiance, sizeof(float)*No_of_Pix);
-		outfile.write((char *) Nadirdaten[i].m_error, sizeof(float)*No_of_Pix);
+		outfile.write((char *) &Nadirdaten[i].m_radiance[0], sizeof(float)*No_of_Pix);
+		outfile.write((char *) &Nadirdaten[i].m_error[0], sizeof(float)*No_of_Pix);
 	}
 	outfile.close();
 	outfile.clear();
@@ -904,16 +904,6 @@ int Nadir_Ascii_2_n_mpl_binary(string Datei_in, string Datei_out)
 	//sleep(1);
 	delete[] Kanal_Nr;
 	delete[] Wellenlaenge;
-	for (int i = 0; i < No_of_Messungen; i++) {
-		if (Nadirdaten[i].m_radiance != 0) {
-			delete[] Nadirdaten[i].m_radiance;
-			Nadirdaten[i].m_radiance = 0;
-		}
-		if (Nadirdaten[i].m_error != 0) {
-			delete[] Nadirdaten[i].m_error;
-			Nadirdaten[i].m_error = 0;
-		}
-	}
 	delete[] Nadirdaten;
 	//cout<<"Umwandlung fertig Nadir\n";
 	//sleep(1);
@@ -1002,16 +992,6 @@ int Nadir_n_mpl_binary_2_Ascii(string Datei_in, string Datei_out)
 	//cout<<"Räume auf\n";
 	delete[] Kanal_Nr;
 	delete[] Wellenlaenge;
-	for (int i = 0; i < No_of_Messungen; i++) {
-		if (Nadirdaten[i].m_radiance != 0) {
-			delete[] Nadirdaten[i].m_radiance;
-			Nadirdaten[i].m_radiance = 0;
-		}
-		if (Nadirdaten[i].m_error != 0) {
-			delete[] Nadirdaten[i].m_error;
-			Nadirdaten[i].m_error = 0;
-		}
-	}
 	delete[] Nadirdaten;
 	//cout<<"Umwandlung abgeschlossen\n";
 	return 0;
