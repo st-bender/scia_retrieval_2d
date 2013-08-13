@@ -22,6 +22,32 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 
 
+inline void Limb_Datensatz::read_from_mpl_binary(std::ifstream *stream,
+		int no_of_pix)
+{
+	m_N_radiances = no_of_pix;
+	m_radiance.resize(no_of_pix);
+	m_error.resize(no_of_pix);
+	binary_read(stream, m_Sub_Sat_Lat);
+	binary_read(stream, m_Sub_Sat_Lon);
+	binary_read(stream, m_TP_Lat);
+	binary_read(stream, m_TP_Lon);
+	binary_read(stream, m_Tangentenhoehe);
+	binary_read(stream, m_TP_SZA);
+	binary_read(stream, m_TP_SAA);
+	binary_read(stream, m_TP_LOS_Zenit);
+	binary_read(stream, m_TOA_SZA);
+	binary_read(stream, m_TOA_SAA);
+	binary_read(stream, m_TOA_LOS_Zenit);
+	binary_read(stream, m_Sat_SZA);
+	binary_read(stream, m_Sat_SAA);
+	binary_read(stream, m_Sat_LOS_Zenit);
+	binary_read(stream, m_Sat_Hoehe);
+	binary_read(stream, m_Erdradius);
+	//cout<<"Lese feld\n";
+	binary_read(stream, m_radiance[0], no_of_pix);
+	binary_read(stream, m_error[0], no_of_pix);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 //int Load_Limb_Ascii Funktionsstart
@@ -255,6 +281,38 @@ int Load_Limb_l_mpl_binary(string Datei_in,
 // ENDE Load_Limb_l_mpl_binary
 ////////////////////////////////////////////////////////////////////////////////
 
+inline void Nadir_Datensatz::read_from_mpl_binary(std::ifstream *stream,
+		int no_of_pix)
+{
+	m_N_radiances = no_of_pix;
+	m_radiance.resize(no_of_pix);
+	m_error.resize(no_of_pix);
+	//cout<<"Les
+	binary_read(stream, m_Messung_ID);
+	binary_read(stream, m_state_ID);
+	binary_read(stream, m_Jahr);
+	binary_read(stream, m_Monat);
+	binary_read(stream, m_Tag);
+	binary_read(stream, m_Stunde);
+	binary_read(stream, m_Minute);
+	binary_read(stream, m_Sekunde);
+	binary_read(stream, m_SZA_TOA, 3);
+	binary_read(stream, m_SAA_TOA, 3);
+	binary_read(stream, m_LOS_Zenit_Winkel, 3);
+	binary_read(stream, m_LOS_Azimut_Winkel, 3);
+	binary_read(stream, m_Hoehe);
+	binary_read(stream, m_Sat_Lat);
+	binary_read(stream, m_Sat_Lon);
+	binary_read(stream, m_Sat_Erdradius);
+	binary_read(stream, m_orbit_phase);
+	binary_read(stream, m_geo_nadir_corner_lat, 4);
+	binary_read(stream, m_geo_nadir_corner_lon, 4);
+	binary_read(stream, m_geo_nadir_center_lat);
+	binary_read(stream, m_geo_nadir_center_lon);
+	binary_read(stream, m_Integrationszeit);
+	binary_read(stream, m_radiance[0], no_of_pix);
+	binary_read(stream, m_error[0], no_of_pix);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 //int Load_Nadir_Ascii();Funktionsstart

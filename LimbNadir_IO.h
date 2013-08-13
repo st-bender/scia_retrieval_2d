@@ -21,6 +21,7 @@
 
 #include <string>
 #include <vector>
+#include <fstream>
 
 #ifndef NADIR_DATENSATZ_HH_
 #define NADIR_DATENSATZ_HH_
@@ -33,6 +34,7 @@ class Nadir_Datensatz
 public:
 	//Zuweisungsoperator
 	Nadir_Datensatz &operator=(const Nadir_Datensatz &RHS);
+	void read_from_mpl_binary(std::ifstream *stream, int no_of_pix);
 	int m_Messung_ID; //das was hinter # steht
 	int m_state_ID;       //Art des Messungszustands, steht. z.b. im Sciabuch
 	int m_Jahr;
@@ -114,6 +116,7 @@ class Limb_Datensatz
 public:
 	//Zuweisungsoperator
 	Limb_Datensatz &operator=(const Limb_Datensatz &RHS);
+	void read_from_mpl_binary(std::ifstream *stream, int no_of_pix);
 	float m_Sub_Sat_Lat;
 	float m_Sub_Sat_Lon;
 	float m_TP_Lat;
@@ -166,6 +169,11 @@ inline Limb_Datensatz &Limb_Datensatz::operator=(const Limb_Datensatz &RHS)
 	return *this;
 }
 #endif /* NADIR_DATENSATZ_HH_ */
+
+template<typename T>
+std::istream& binary_read(std::istream* stream, T& value, size_t N = 1) {
+	return stream->read(reinterpret_cast<char *>(&value), N * sizeof(T));
+}
 
 // Laden
 int Load_Limb_Ascii(std::string Datei_in,
