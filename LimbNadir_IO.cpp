@@ -412,15 +412,13 @@ int Load_Nadir_n_mpl_binary(string Datei_in,
 	Nadirdaten = new Nadir_Datensatz[No_of_Messungen];
 	////////////////////////////////////////////////////////////////////////////
 	// Datensätze lesen
-	for (int i = 0; i < No_of_Messungen; i++) {
-		Nadirdaten[i].m_N_radiances = No_of_Pix;
-		Nadirdaten[i].m_radiance.resize(No_of_Pix);
-		Nadirdaten[i].m_error.resize(No_of_Pix);
-	}
 	infile.read((char *) Kanal_Nr, sizeof(int)*No_of_Pix);
 	infile.read((char *) Wellenlaenge, sizeof(float)*No_of_Pix);
 	// Messungsspezifische Daten hinschreiben
 	for (int i = 0; i < No_of_Messungen; i++) {
+		Nadirdaten[i].m_N_radiances = No_of_Pix;
+		Nadirdaten[i].m_radiance.resize(No_of_Pix);
+		Nadirdaten[i].m_error.resize(No_of_Pix);
 		infile.read((char *) &Nadirdaten[i].m_Messung_ID, sizeof(int));
 		infile.read((char *) &Nadirdaten[i].m_state_ID, sizeof(int));
 		infile.read((char *) &Nadirdaten[i].m_Jahr, sizeof(int));
