@@ -20,6 +20,7 @@
 // FUNKTIONDEKLARATIONEN WEITER UNTEN
 
 #include <string>
+#include <vector>
 
 #ifndef NADIR_DATENSATZ_HH_
 #define NADIR_DATENSATZ_HH_
@@ -129,16 +130,6 @@ inline Nadir_Datensatz &Nadir_Datensatz::operator=(const Nadir_Datensatz &RHS)
 class Limb_Datensatz
 {
 public:
-	Limb_Datensatz() {
-		m_radiance = 0;
-		m_error = 0;
-	}
-	~Limb_Datensatz() {
-		if (m_radiance != 0) delete[] m_radiance;
-		m_radiance = 0;
-		if (m_error != 0) delete[] m_error;
-		m_error = 0;
-	}
 	//Zuweisungsoperator
 	Limb_Datensatz &operator=(const Limb_Datensatz &RHS);
 	float m_Sub_Sat_Lat;
@@ -158,8 +149,8 @@ public:
 	float m_Sat_Hoehe;
 	float m_Erdradius;
 	int m_N_radiances;
-	float *m_radiance;
-	float *m_error;
+	std::vector<float> m_radiance;
+	std::vector<float> m_error;
 };
 
 inline Limb_Datensatz &Limb_Datensatz::operator=(const Limb_Datensatz &RHS)
@@ -185,20 +176,11 @@ inline Limb_Datensatz &Limb_Datensatz::operator=(const Limb_Datensatz &RHS)
 	m_Erdradius = RHS.m_Erdradius;
 	m_N_radiances = RHS.m_N_radiances;
 
-	if (m_radiance != 0) {
-		delete[] m_radiance;
-		m_radiance = 0;
-	}
-	m_radiance = new float[m_N_radiances];
-	if (m_error != 0) {
-		delete[] m_error;
-		m_error = 0;
-	}
-	m_error = new float[m_N_radiances];
-	for (int i = 0; i < m_N_radiances; i++) {
-		m_radiance[i] = RHS.m_radiance[i];
-		m_error[i] = RHS.m_error[i];
-	}
+	std::copy(RHS.m_radiance.begin(), RHS.m_radiance.end(),
+			m_radiance.begin());
+	std::copy(RHS.m_error.begin(), RHS.m_error.end(),
+			m_error.begin());
+
 	return *this;
 }
 #endif /* NADIR_DATENSATZ_HH_ */
@@ -214,7 +196,8 @@ int Load_Limb_l_mpl_binary(std::string Datei_in,
 						   std::string textheader[31], int &no_of_alt,
 						   int &no_of_pix, int Orbitstate[5], int Datum[6],
 						   float Center_Lat_Lon[10], float &orbit_phase,
-						   float*& Wellenlaengen, Limb_Datensatz*& Limbdaten);
+						   std::vector<float> &Wellenlaengen,
+						   std::vector<Limb_Datensatz> &Limbdaten);
 
 int Load_Nadir_Ascii(std::string Datei_in,
 					 std::string textheader[7], int &No_of_Messungen, int &No_of_Pix,
@@ -228,8 +211,8 @@ int Load_Nadir_n_mpl_binary(std::string Datei_in,
 int Save_Limb_Ascii(std::string Datei_out,
 					std::string textheader[31], int &no_of_alt, int &no_of_pix,
 					int Orbitstate[5], int Datum[6], float Center_Lat_Lon[10],
-					float &orbit_phase, float*& Wellenlaengen,
-					Limb_Datensatz*& Limbdaten);
+					float &orbit_phase, std::vector<float> Wellenlaengen,
+					std::vector<Limb_Datensatz> &Limbdaten);
 
 int Save_Limb_l_mpl_binary(std::string Datei_out,
 						   std::string textheader[31], int &no_of_alt,

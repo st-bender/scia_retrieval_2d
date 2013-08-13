@@ -150,8 +150,8 @@ int Load_Limb_Ascii(string Datei_in, string textheader[31], int &no_of_alt,
 	Wellenlaengen = new float[no_of_pix];
 	for (int i = 0; i < no_of_alt; i++) {
 		Limbdaten[i].m_N_radiances = no_of_pix;
-		Limbdaten[i].m_radiance = new float[no_of_pix];
-		Limbdaten[i].m_error = new float[no_of_pix];
+		Limbdaten[i].m_radiance.resize(no_of_pix);
+		Limbdaten[i].m_error.resize(no_of_pix);
 	}
 	for (int i = 0; i < no_of_pix; i++) {
 		Wellenlaengen[i] = Big_Array[i * (no_of_alt + 1)];
@@ -179,7 +179,8 @@ int Load_Limb_l_mpl_binary(string Datei_in,
 						   string textheader[31], int &no_of_alt,
 						   int &no_of_pix, int Orbitstate[5], int Datum[6],
 						   float Center_Lat_Lon[10], float &orbit_phase,
-						   float*& Wellenlaengen, Limb_Datensatz*& Limbdaten)
+						   std::vector<float> &Wellenlaengen,
+						   std::vector<Limb_Datensatz> &Limbdaten)
 {
 	int lang_textheader = 31;
 	////////////////////////////////////////////////////////////////////////////
@@ -214,15 +215,15 @@ int Load_Limb_l_mpl_binary(string Datei_in,
 	if (lang_textheader > 29)
 		infile.read((char *) &orbit_phase, sizeof(float));
 	// no of pixrel bekannt....speicher reservieren
-	Wellenlaengen = new float[no_of_pix];
+	Wellenlaengen.resize(no_of_pix);
 	//cout<<"Lese Wellenlängen\n";
-	infile.read((char *) Wellenlaengen, sizeof(float)*no_of_pix);
-	Limbdaten = new Limb_Datensatz[no_of_alt];
+	infile.read((char *) &Wellenlaengen[0], sizeof(float)*no_of_pix);
+	Limbdaten.resize(no_of_alt);
 	for (int i = 0; i < no_of_alt; i++) {
 		//cout<<"Header2.2\n";
 		Limbdaten[i].m_N_radiances = no_of_pix;
-		Limbdaten[i].m_radiance = new float[no_of_pix];
-		Limbdaten[i].m_error = new float[no_of_pix];
+		Limbdaten[i].m_radiance.resize(no_of_pix);
+		Limbdaten[i].m_error.resize(no_of_pix);
 		infile.read((char *) &Limbdaten[i].m_Sub_Sat_Lat, sizeof(float));
 		infile.read((char *) &Limbdaten[i].m_Sub_Sat_Lon, sizeof(float));
 		infile.read((char *) &Limbdaten[i].m_TP_Lat, sizeof(float));
@@ -240,8 +241,8 @@ int Load_Limb_l_mpl_binary(string Datei_in,
 		infile.read((char *) &Limbdaten[i].m_Sat_Hoehe, sizeof(float));
 		infile.read((char *) &Limbdaten[i].m_Erdradius, sizeof(float));
 		//cout<<"Lese feld\n";
-		infile.read((char *) Limbdaten[i].m_radiance, sizeof(float)*no_of_pix);
-		infile.read((char *) Limbdaten[i].m_error, sizeof(float)*no_of_pix);
+		infile.read((char *) &Limbdaten[i].m_radiance[0], sizeof(float)*no_of_pix);
+		infile.read((char *) &Limbdaten[i].m_error[0], sizeof(float)*no_of_pix);
 	}
 	//cout<<"Lese feld ende\n";
 	infile.close();
@@ -467,7 +468,8 @@ int Save_Limb_Ascii(string Datei_out,
 					string textheader[31], int &no_of_alt, int &no_of_pix,
 					int Orbitstate[5], int Datum[6],
 					float Center_Lat_Lon[10], float &orbit_phase,
-					float*& Wellenlaengen, Limb_Datensatz*& Limbdaten)
+					std::vector<float> Wellenlaengen,
+					std::vector<Limb_Datensatz> &Limbdaten)
 {
 	int lang_textheader = 31;
 	////////////////////////////////////////////////////////////////////////////
@@ -666,8 +668,8 @@ int Save_Limb_l_mpl_binary(string Datei_out,
 		outfile.write((char *) &Limbdaten[i].m_Sat_LOS_Zenit, sizeof(float));
 		outfile.write((char *) &Limbdaten[i].m_Sat_Hoehe, sizeof(float));
 		outfile.write((char *) &Limbdaten[i].m_Erdradius, sizeof(float));
-		outfile.write((char *) Limbdaten[i].m_radiance, sizeof(float)*no_of_pix);
-		outfile.write((char *) Limbdaten[i].m_error, sizeof(float)*no_of_pix);
+		outfile.write((char *) &Limbdaten[i].m_radiance[0], sizeof(float)*no_of_pix);
+		outfile.write((char *) &Limbdaten[i].m_error[0], sizeof(float)*no_of_pix);
 	}
 	outfile.close();
 	outfile.clear();
@@ -858,16 +860,6 @@ int Limb_Ascii_2_l_mpl_binary(string Datei_in, string Datei_out)
 	// AUFRÄUMEN
 	//////////////////////////////////////////////////////////////
 	delete[] Wellenlaengen;
-	for (int i = 0; i < no_of_alt; i++) {
-		if (Limbdaten[i].m_radiance != 0) {
-			delete[] Limbdaten[i].m_radiance;
-			Limbdaten[i].m_radiance = 0;
-		}
-		if (Limbdaten[i].m_error != 0) {
-			delete[] Limbdaten[i].m_error;
-			Limbdaten[i].m_error = 0;
-		}
-	}
 	delete[] Limbdaten;
 	return 0;
 }
@@ -945,8 +937,8 @@ int Limb_l_mpl_binary_2_Ascii(string Datei_in, string Datei_out)
 	int Datum[6];
 	float Center_Lat_Lon[10];
 	float orbit_phase;
-	float *Wellenlaengen = 0;
-	Limb_Datensatz *Limbdaten = 0;
+	std::vector<float> Wellenlaengen;
+	std::vector<Limb_Datensatz> Limbdaten;
 	/////////////////////////////////////////////////////////////
 	// LADEN
 	//////////////////////////////////////////////////////////////
@@ -969,21 +961,7 @@ int Limb_l_mpl_binary_2_Ascii(string Datei_in, string Datei_out)
 					orbit_phase,
 					Wellenlaengen,
 					Limbdaten);
-	/////////////////////////////////////////////////////////////
-	// AUFRÄUMEN
-	//////////////////////////////////////////////////////////////
-	delete[] Wellenlaengen;
-	for (int i = 0; i < no_of_alt; i++) {
-		if (Limbdaten[i].m_radiance != 0) {
-			delete[] Limbdaten[i].m_radiance;
-			Limbdaten[i].m_radiance = 0;
-		}
-		if (Limbdaten[i].m_error != 0) {
-			delete[] Limbdaten[i].m_error;
-			Limbdaten[i].m_error = 0;
-		}
-	}
-	delete[] Limbdaten;
+
 	return 0;
 }
 ////////////////////////////////////////////////////////////////////////////////

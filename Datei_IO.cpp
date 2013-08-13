@@ -76,7 +76,7 @@ double average_over_wl_range(float *input, float *Wellenlaengen,
 // helper function to copy Limb_Datensatz *Limbdaten and
 // float *Wellenlaengen into a vector<Messung_Limb>
 vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
-		Limb_Datensatz *Limbdaten, float *Wellenlaengen,
+		std::vector<Limb_Datensatz> &Limbdaten, std::vector<float> &Wellenlaengen,
 		int no_of_pix, int no_of_alt, float orbit_phase, int Datum[6],
 		float cent_lat_lon[10], int no_of_heights, int offset, int direction)
 {
@@ -183,8 +183,8 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
 	int Datum[6];
 	float Center_Lat_Lon[10];
 	float orbit_phase;
-	float *Wellenlaengen;
-	Limb_Datensatz *Limbdaten;
+	std::vector<float> Wellenlaengen;
+	std::vector<Limb_Datensatz> Limbdaten;
 	// 2. Laden der Datei
 	//cerr<<" 2. Laden der Datei\n";
 	Load_Limb_l_mpl_binary(Dateiname,
@@ -215,20 +215,6 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
 		mean_10_20.m_Intensitaeten.push_back(mean);
 	}
 
-	// 5. Speicherfreigabe
-	delete[] Wellenlaengen;
-	for (int i = 0; i < no_of_alt; i++) {
-		if (Limbdaten[i].m_radiance != 0) {
-			delete[] Limbdaten[i].m_radiance;
-			Limbdaten[i].m_radiance = 0;
-		}
-		if (Limbdaten[i].m_error != 0) {
-			delete[] Limbdaten[i].m_error;
-			Limbdaten[i].m_error = 0;
-		}
-	}
-	delete[] Limbdaten;
-	// 6. Rückgabe
 	return Ergebnisvektor;
 }
 ////////////////////////////////////////////////////////////////////////////////
@@ -302,8 +288,8 @@ ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(string Dateiname,
 	int Datum[6];
 	float Center_Lat_Lon[10];
 	float orbit_phase;
-	float *Wellenlaengen;
-	Limb_Datensatz *Limbdaten;
+	std::vector<float> Wellenlaengen;
+	std::vector<Limb_Datensatz> Limbdaten;
 	// 2. Laden der Datei
 	//cerr<<" 2. Laden der Datei\n";
 	Load_Limb_l_mpl_binary(Dateiname,
@@ -330,20 +316,7 @@ ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(string Dateiname,
 	space.m_Latitude_Sat = Limbdaten[no_of_alt - 1].m_Sub_Sat_Lat;
 	space.m_Longitude_Sat = Limbdaten[no_of_alt - 1].m_Sub_Sat_Lon;
 	space.m_Hoehe_Sat = Limbdaten[no_of_alt - 1].m_Sat_Hoehe;
-	// 5. Speicherfreigabe
-	delete[] Wellenlaengen;
-	for (int i = 0; i < no_of_alt; i++) {
-		if (Limbdaten[i].m_radiance != 0) {
-			delete[] Limbdaten[i].m_radiance;
-			Limbdaten[i].m_radiance = 0;
-		}
-		if (Limbdaten[i].m_error != 0) {
-			delete[] Limbdaten[i].m_error;
-			Limbdaten[i].m_error = 0;
-		}
-	}
-	delete[] Limbdaten;
-	// 6. Rückgabe
+
 	return Ergebnisvektor;
 }
 ////////////////////////////////////////////////////////////////////////////////
