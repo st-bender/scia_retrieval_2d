@@ -244,31 +244,11 @@ int Load_Limb_l_mpl_binary(string Datei_in,
 	Wellenlaengen.resize(no_of_pix);
 	//cout<<"Lese Wellenlängen\n";
 	infile.read((char *) &Wellenlaengen[0], sizeof(float)*no_of_pix);
-	Limbdaten.resize(no_of_alt);
 	for (int i = 0; i < no_of_alt; i++) {
 		//cout<<"Header2.2\n";
-		Limbdaten[i].m_N_radiances = no_of_pix;
-		Limbdaten[i].m_radiance.resize(no_of_pix);
-		Limbdaten[i].m_error.resize(no_of_pix);
-		infile.read((char *) &Limbdaten[i].m_Sub_Sat_Lat, sizeof(float));
-		infile.read((char *) &Limbdaten[i].m_Sub_Sat_Lon, sizeof(float));
-		infile.read((char *) &Limbdaten[i].m_TP_Lat, sizeof(float));
-		infile.read((char *) &Limbdaten[i].m_TP_Lon, sizeof(float));
-		infile.read((char *) &Limbdaten[i].m_Tangentenhoehe, sizeof(float));
-		infile.read((char *) &Limbdaten[i].m_TP_SZA, sizeof(float));
-		infile.read((char *) &Limbdaten[i].m_TP_SAA, sizeof(float));
-		infile.read((char *) &Limbdaten[i].m_TP_LOS_Zenit, sizeof(float));
-		infile.read((char *) &Limbdaten[i].m_TOA_SZA, sizeof(float));
-		infile.read((char *) &Limbdaten[i].m_TOA_SAA, sizeof(float));
-		infile.read((char *) &Limbdaten[i].m_TOA_LOS_Zenit, sizeof(float));
-		infile.read((char *) &Limbdaten[i].m_Sat_SZA, sizeof(float));
-		infile.read((char *) &Limbdaten[i].m_Sat_SAA, sizeof(float));
-		infile.read((char *) &Limbdaten[i].m_Sat_LOS_Zenit, sizeof(float));
-		infile.read((char *) &Limbdaten[i].m_Sat_Hoehe, sizeof(float));
-		infile.read((char *) &Limbdaten[i].m_Erdradius, sizeof(float));
-		//cout<<"Lese feld\n";
-		infile.read((char *) &Limbdaten[i].m_radiance[0], sizeof(float)*no_of_pix);
-		infile.read((char *) &Limbdaten[i].m_error[0], sizeof(float)*no_of_pix);
+		Limb_Datensatz lds;
+		lds.read_from_mpl_binary(&infile, no_of_pix);
+		Limbdaten.push_back(lds);
 	}
 	//cout<<"Lese feld ende\n";
 	infile.close();
