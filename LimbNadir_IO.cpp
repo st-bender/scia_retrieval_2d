@@ -243,6 +243,7 @@ int Load_Limb_l_mpl_binary(string Datei_in,
 	Wellenlaengen.resize(no_of_pix);
 	//cout<<"Lese Wellenlängen\n";
 	infile.read((char *) &Wellenlaengen[0], sizeof(float)*no_of_pix);
+	Limbdaten.reserve(no_of_alt);
 	for (int i = 0; i < no_of_alt; i++) {
 		//cout<<"Header2.2\n";
 		Limb_Datensatz lds;
@@ -447,6 +448,7 @@ int Load_Nadir_n_mpl_binary(string Datei_in,
 	infile.read((char *) Kanal_Nr, sizeof(int)*No_of_Pix);
 	infile.read((char *) Wellenlaenge, sizeof(float)*No_of_Pix);
 	// Messungsspezifische Daten hinschreiben
+	Nadirdaten.reserve(No_of_Messungen);
 	for (int i = 0; i < No_of_Messungen; i++) {
 		Nadir_Datensatz nds;
 		nds.read_from_mpl_binary(&infile, No_of_Pix);
