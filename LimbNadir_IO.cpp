@@ -421,7 +421,8 @@ int Load_Nadir_Ascii(string Datei_in,
 int Load_Nadir_n_mpl_binary(string Datei_in,
 							string textheader[7], int &No_of_Messungen,
 							int &No_of_Pix, int*& Kanal_Nr,
-							float*& Wellenlaenge, Nadir_Datensatz*& Nadirdaten)
+							float*& Wellenlaenge,
+							std::vector<Nadir_Datensatz> &Nadirdaten)
 {
 	int Anzahl_Textheaderzeilen = 7;
 	string s_dummy;
@@ -447,40 +448,15 @@ int Load_Nadir_n_mpl_binary(string Datei_in,
 	// speicher allokieren
 	Kanal_Nr = new int[No_of_Pix];
 	Wellenlaenge = new float[No_of_Pix];
-	Nadirdaten = new Nadir_Datensatz[No_of_Messungen];
 	////////////////////////////////////////////////////////////////////////////
 	// Datensätze lesen
 	infile.read((char *) Kanal_Nr, sizeof(int)*No_of_Pix);
 	infile.read((char *) Wellenlaenge, sizeof(float)*No_of_Pix);
 	// Messungsspezifische Daten hinschreiben
 	for (int i = 0; i < No_of_Messungen; i++) {
-		Nadirdaten[i].m_N_radiances = No_of_Pix;
-		Nadirdaten[i].m_radiance.resize(No_of_Pix);
-		Nadirdaten[i].m_error.resize(No_of_Pix);
-		infile.read((char *) &Nadirdaten[i].m_Messung_ID, sizeof(int));
-		infile.read((char *) &Nadirdaten[i].m_state_ID, sizeof(int));
-		infile.read((char *) &Nadirdaten[i].m_Jahr, sizeof(int));
-		infile.read((char *) &Nadirdaten[i].m_Monat, sizeof(int));
-		infile.read((char *) &Nadirdaten[i].m_Tag, sizeof(int));
-		infile.read((char *) &Nadirdaten[i].m_Stunde, sizeof(int));
-		infile.read((char *) &Nadirdaten[i].m_Minute, sizeof(int));
-		infile.read((char *) &Nadirdaten[i].m_Sekunde, sizeof(float));
-		infile.read((char *) Nadirdaten[i].m_SZA_TOA, sizeof(float) * 3);
-		infile.read((char *) Nadirdaten[i].m_SAA_TOA, sizeof(float) * 3);
-		infile.read((char *) Nadirdaten[i].m_LOS_Zenit_Winkel, sizeof(float) * 3);
-		infile.read((char *) Nadirdaten[i].m_LOS_Azimut_Winkel, sizeof(float) * 3);
-		infile.read((char *) &Nadirdaten[i].m_Hoehe, sizeof(float));
-		infile.read((char *) &Nadirdaten[i].m_Sat_Lat, sizeof(float));
-		infile.read((char *) &Nadirdaten[i].m_Sat_Lon, sizeof(float));
-		infile.read((char *) &Nadirdaten[i].m_Sat_Erdradius, sizeof(float));
-		infile.read((char *) &Nadirdaten[i].m_orbit_phase, sizeof(float));
-		infile.read((char *) Nadirdaten[i].m_geo_nadir_corner_lat, sizeof(float) * 4);
-		infile.read((char *) Nadirdaten[i].m_geo_nadir_corner_lon, sizeof(float) * 4);
-		infile.read((char *) &Nadirdaten[i].m_geo_nadir_center_lat, sizeof(float));
-		infile.read((char *) &Nadirdaten[i].m_geo_nadir_center_lon, sizeof(float));
-		infile.read((char *) &Nadirdaten[i].m_Integrationszeit, sizeof(float));
-		infile.read((char *) &Nadirdaten[i].m_radiance[0], sizeof(float)*No_of_Pix);
-		infile.read((char *) &Nadirdaten[i].m_error[0], sizeof(float)*No_of_Pix);
+		Nadir_Datensatz nds;
+		nds.read_from_mpl_binary(&infile, No_of_Pix);
+		Nadirdaten.push_back(nds);
 	}
 	infile.close();
 	infile.clear();
@@ -504,7 +480,7 @@ int Save_Limb_Ascii(string Datei_out,
 					string textheader[31], int &no_of_alt, int &no_of_pix,
 					int Orbitstate[5], int Datum[6],
 					float Center_Lat_Lon[10], float &orbit_phase,
-					std::vector<float> Wellenlaengen,
+					std::vector<float> &Wellenlaengen,
 					std::vector<Limb_Datensatz> &Limbdaten)
 {
 	int lang_textheader = 31;
@@ -722,7 +698,7 @@ int Save_Limb_l_mpl_binary(string Datei_out,
 int Save_Nadir_Ascii(string Datei_out,
 					 string textheader[7], int No_of_Messungen, int No_of_Pix,
 					 int *Kanal_Nr, float *Wellenlaenge,
-					 Nadir_Datensatz *Nadirdaten)
+					 std::vector<Nadir_Datensatz> &Nadirdaten)
 {
 	int Anzahl_Textheaderzeilen = 7;
 	////////////////////////////////////////////////////////////
@@ -1007,7 +983,7 @@ int Nadir_n_mpl_binary_2_Ascii(string Datei_in, string Datei_out)
 	int No_of_Pix;
 	int *Kanal_Nr = 0;
 	float *Wellenlaenge = 0;
-	Nadir_Datensatz *Nadirdaten = 0;
+	std::vector<Nadir_Datensatz> Nadirdaten;
 	/////////////////////////////////////////////////////////////
 	// LADEN
 	//////////////////////////////////////////////////////////////
@@ -1028,7 +1004,6 @@ int Nadir_n_mpl_binary_2_Ascii(string Datei_in, string Datei_out)
 	//cout<<"Räume auf\n";
 	delete[] Kanal_Nr;
 	delete[] Wellenlaenge;
-	delete[] Nadirdaten;
 	//cout<<"Umwandlung abgeschlossen\n";
 	return 0;
 }

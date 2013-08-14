@@ -329,7 +329,7 @@ ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(string Dateiname,
 // helper function to copy Limb_Datensatz *Limbdaten and
 // float *Wellenlaengen into a vector<Messung_Limb>
 vector<Messung_Nadir> make_messung_nadir_vector(string Dateiname,
-		Nadir_Datensatz *Nadirdaten, float *Wellenlaenge,
+		std::vector<Nadir_Datensatz> &Nadirdaten, float *Wellenlaenge,
 		int No_of_Messungen, int No_of_Pix, int *Kanal_Nr)
 {
 	// 4. Erstellung des Übergabevektors
@@ -409,7 +409,7 @@ vector<Messung_Nadir> ReadL1C_Nadir_mpl_binary(string Dateiname, int &Anzahl_Mes
 	int No_of_Pix;
 	int *Kanal_Nr = 0;
 	float *Wellenlaenge = 0;
-	Nadir_Datensatz *Nadirdaten = 0;
+	std::vector<Nadir_Datensatz> Nadirdaten;
 	// 2. Laden der Datei
 	Load_Nadir_n_mpl_binary(Dateiname,
 							textheader, No_of_Messungen, No_of_Pix,
@@ -425,7 +425,6 @@ vector<Messung_Nadir> ReadL1C_Nadir_mpl_binary(string Dateiname, int &Anzahl_Mes
 	// 5. Speicherfreigabe
 	delete[] Kanal_Nr;
 	delete[] Wellenlaenge;
-	delete[] Nadirdaten;
 	// 6. Rückgabe
 	return aus;
 }
