@@ -214,8 +214,7 @@ int Load_Limb_l_mpl_binary(string Datei_in,
 	//Schritt 1 Laden der Datei in Datenstrukturen
 	//
 	////////////////////////////////////////////////////////////////////////////
-	ifstream infile;
-	infile.open(Datei_in.c_str(), ios_base::binary);
+	ifstream infile(Datei_in.c_str(), ios_base::binary);
 	if (!infile.is_open()) {
 		cout << Datei_in << " konnte nicht zum lesen geöffnet werden\n";
 		return 1;
@@ -250,10 +249,6 @@ int Load_Limb_l_mpl_binary(string Datei_in,
 		lds.read_from_mpl_binary(&infile, no_of_pix);
 		Limbdaten.push_back(lds);
 	}
-	//cout<<"Lese feld ende\n";
-	infile.close();
-	//cout<<"infile geschlossen\n";
-	infile.clear();
 	//cout<<"Laden fertig\n";
 	return 0;
 }
@@ -429,8 +424,7 @@ int Load_Nadir_n_mpl_binary(string Datei_in,
 	////////////////////////////////////////////////////////////////
 	// Binäre Datei Laden
 	////////////////////////////////////////////////////////////////
-	ifstream infile;
-	infile.open(Datei_in.c_str(), ios_base::binary);
+	ifstream infile(Datei_in.c_str(), ios_base::binary);
 	if (!infile.is_open()) {
 		cout << Datei_in
 			 << "kann nicht zur Umwandlung in ASCII geöffnet werden\n";
@@ -458,8 +452,6 @@ int Load_Nadir_n_mpl_binary(string Datei_in,
 		nds.read_from_mpl_binary(&infile, No_of_Pix);
 		Nadirdaten.push_back(nds);
 	}
-	infile.close();
-	infile.clear();
 	//cout<<"Laden fertig\n";
 	return 0;
 }
