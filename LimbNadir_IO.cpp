@@ -421,7 +421,6 @@ int Load_Nadir_n_mpl_binary(string Datei_in,
 							std::vector<Nadir_Datensatz> &Nadirdaten)
 {
 	int Anzahl_Textheaderzeilen = 7;
-	string s_dummy;
 	////////////////////////////////////////////////////////////////
 	// Binäre Datei Laden
 	////////////////////////////////////////////////////////////////
