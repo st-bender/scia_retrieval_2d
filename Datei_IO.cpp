@@ -185,16 +185,19 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
 	float orbit_phase;
 	std::vector<float> Wellenlaengen;
 	std::vector<Limb_Datensatz> Limbdaten;
+	std::vector<Messung_Limb> Ergebnisvektor;
 	// 2. Laden der Datei
 	//cerr<<" 2. Laden der Datei\n";
-	Load_Limb_l_mpl_binary(Dateiname,
+	int err = Load_Limb_l_mpl_binary(Dateiname,
 						   textheader, no_of_alt, no_of_pix, Orbitstate, Datum,
 						   Center_Lat_Lon, orbit_phase, Wellenlaengen,
 						   Limbdaten);
+	// return empty vector on error
+	if (err) return Ergebnisvektor;
 	// 3. Nachbearbeitung/Ausschlusskriterien
 	// Wird jetzt nach dem Laden durchgeführt
 	// 4. Erstellung des Übergabevektors
-	vector<Messung_Limb> Ergebnisvektor
+	Ergebnisvektor
 		= make_messung_limb_vector(Dateiname, Limbdaten, Wellenlaengen,
 				no_of_pix, no_of_alt, orbit_phase, Datum, Center_Lat_Lon,
 				Anzahl_Hoehen, 30 - Anzahl_Hoehen, 1);
@@ -290,16 +293,19 @@ ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(string Dateiname,
 	float orbit_phase;
 	std::vector<float> Wellenlaengen;
 	std::vector<Limb_Datensatz> Limbdaten;
+	std::vector<Messung_Limb> Ergebnisvektor;
 	// 2. Laden der Datei
 	//cerr<<" 2. Laden der Datei\n";
-	Load_Limb_l_mpl_binary(Dateiname,
+	int err = Load_Limb_l_mpl_binary(Dateiname,
 						   textheader, no_of_alt, no_of_pix, Orbitstate, Datum,
 						   Center_Lat_Lon, orbit_phase, Wellenlaengen,
 						   Limbdaten);
+	// return empty vector on error
+	if (err) return Ergebnisvektor;
 	// 3. Nachbearbeitung/Ausschlusskriterien
 	// Wird jetzt nach dem Laden durchgeführt
 	// 4. Erstellung des Übergabevektors
-	vector<Messung_Limb> Ergebnisvektor
+	Ergebnisvektor
 		= make_messung_limb_vector(Dateiname, Limbdaten, Wellenlaengen,
 				no_of_pix, no_of_alt, orbit_phase, Datum, Center_Lat_Lon,
 				Anzahl_Hoehen, Anzahl_Hoehen - 1, -1);
@@ -410,15 +416,23 @@ vector<Messung_Nadir> ReadL1C_Nadir_mpl_binary(string Dateiname, int &Anzahl_Mes
 	int *Kanal_Nr = 0;
 	float *Wellenlaenge = 0;
 	std::vector<Nadir_Datensatz> Nadirdaten;
+	std::vector<Messung_Nadir> aus;
 	// 2. Laden der Datei
-	Load_Nadir_n_mpl_binary(Dateiname,
+	int err = Load_Nadir_n_mpl_binary(Dateiname,
 							textheader, No_of_Messungen, No_of_Pix,
 							Kanal_Nr, Wellenlaenge, Nadirdaten);
+	// return empty vector on error
+	if (err) {
+		Anzahl_Messungen = 0;
+		delete[] Kanal_Nr;
+		delete[] Wellenlaenge;
+		return aus;
+	}
 	// 3. Nachbearbeitung/Ausschlusskriterien
 	// Dieser Schritt wird erst nach dem Laden aufgerufen
 	// 4. Erstellung des Übergabefelds
 	Anzahl_Messungen = No_of_Messungen;
-	vector<Messung_Nadir> aus
+	aus
 		= make_messung_nadir_vector(Dateiname, Nadirdaten, Wellenlaenge,
 				No_of_Messungen, No_of_Pix, Kanal_Nr);
 
