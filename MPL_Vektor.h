@@ -35,7 +35,7 @@ class MPL_Vektor
 public:
 	// Konstruktoren ////////
 	MPL_Vektor() : m_Elemente(0) {}
-	MPL_Vektor(unsigned long Elementzahl);
+	explicit MPL_Vektor(unsigned long Elementzahl);
 	MPL_Vektor(const MPL_Vektor &rhs);  //copyconstructor
 	// Überladene Operatoren //////
 	MPL_Vektor &operator =(const MPL_Vektor &rhs);     //= Zuweisung
