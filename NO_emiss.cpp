@@ -674,11 +674,23 @@ int NO_emiss::calc_line_emissivities()
 	return 0;
 }
 
+// integral of the slit function, using Bronstein formula 87.
+double int_slit_func(double fwhm, double x)
+{
+	const double cnorm_inv = fwhm*fwhm*fwhm * 0.25 * M_1_PI * M_SQRT1_2;
+	const double a = 0.5 * fwhm;
+	const double f1 = 0.25 / (M_SQRT2 * a*a*a);
+	const double num = x*x + M_SQRT2*a*x + a*a;
+	const double den = num - 2. * M_SQRT2*a*x;
+	const double y = M_SQRT2 * x/a;
+
+	return cnorm_inv * f1 * (std::log(num / den)
+		+ 2. * (std::atan(y + 1.) + std::atan(y - 1.)));
+}
+
 int NO_emiss::scia_convolve(Messung_Limb &ml)
 {
 	int i, j;
-	int npix = 50;
-
 	std::vector<double> x = ml.m_Wellenlaengen;
 	std::vector<double>::iterator x_it;
 	std::vector<double>::iterator spec_max;
@@ -687,21 +699,17 @@ int NO_emiss::scia_convolve(Messung_Limb &ml)
 	for (i = 0; i <= NJ; i++) {
 		for (j = 0; j < 12; j++) {
 			double NO_wl = get_lambda_K(j, i);
-			// divide by 4*pi to get [gamma]/sr = ph/s/sr
-			double NO_rad = get_gamma_j(j, i) * 0.25 * M_1_PI;
-			int l = 0;
-			for (x_it = x.begin(); x_it != x.end() - 1; ++x_it, l++) {
+			for (x_it = x.begin(); x_it != x.end() - 1; ++x_it) {
 				double dl_i = std::abs(NO_wl - *x_it);
-				double w = 0.;
 				if (dl_i < 1.5) {
+					ptrdiff_t l = std::distance(x.begin(), x_it);
+					// divide by 4*pi to get [gamma]/sr = ph/s/sr
+					double NO_rad = get_gamma_j(j, i) * 0.25 * M_1_PI;
 					double xdiff = *(x_it + 1) - *x_it;
-					// integrate over the pixel width (npix points)
-					for (int jj = 0; jj < npix; jj++) {
-						double wl = *x_it
-							- 0.5 * xdiff + jj * xdiff / (npix - 1);
-						w += slit_func(0.22, NO_wl, wl);
-					}
-					spec_scia_res.at(l) += w * NO_rad * xdiff / npix;
+					double x0i = *x_it - 0.5 * xdiff;
+					double w = int_slit_func(0.22, NO_wl - x0i)
+						- int_slit_func(0.22, NO_wl - x0i - xdiff);
+					spec_scia_res.at(l) += w * NO_rad; // * xdiff / npix;
 				}
 			}
 		}
