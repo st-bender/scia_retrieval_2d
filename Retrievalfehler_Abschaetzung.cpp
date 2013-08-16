@@ -14,9 +14,6 @@ using namespace std;
 extern "C" {
 	void dgesv_(int *N, int *NRHS, double *A, int *LDA, int *IPIV, double *B,
 				int *LDB, int *INFO);
-	void dgemm_(char *TRANSA, char *TRANSB, int *M, int *N, int *K,
-				double *ALPHA, double *A, int *LDA, double *B, int *LDB,
-				double *BETA, double *C, int *LDC);
 }
 
 int Retrievalfehler_Abschaetzung(MPL_Matrix &S_x,
