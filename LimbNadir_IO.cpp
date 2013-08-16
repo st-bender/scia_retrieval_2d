@@ -242,7 +242,7 @@ int Load_Limb_l_mpl_binary(string Datei_in,
 	// no of pixrel bekannt....speicher reservieren
 	Wellenlaengen.resize(no_of_pix);
 	//cout<<"Lese Wellenlängen\n";
-	infile.read((char *) &Wellenlaengen[0], sizeof(float)*no_of_pix);
+	infile.read((char *) Wellenlaengen.data(), sizeof(float)*no_of_pix);
 	Limbdaten.reserve(no_of_alt);
 	for (int i = 0; i < no_of_alt; i++) {
 		//cout<<"Header2.2\n";
