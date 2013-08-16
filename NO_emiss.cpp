@@ -731,8 +731,8 @@ int NO_emiss::scia_convolve(Messung_Limb &ml)
 	// set the last element to zero, just to be sure.
 	spec_scia_res.back() = 0.;
 	spec_max = std::max_element(spec_scia_res.begin(), spec_scia_res.end());
-	i = std::distance(spec_scia_res.begin(), spec_max);
-	scia_wl_at_max = ml.m_Wellenlaengen.at(i);
+	ptrdiff_t midx = std::distance(spec_scia_res.begin(), spec_max);
+	scia_wl_at_max = x.at(midx);
 	/* integrated band emission,
 	 * corrects for the 1/(4.*pi) for the whole solid angle,
 	 * and the d(lambda) = 0.11 might not be fully accurate
