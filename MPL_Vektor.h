@@ -36,7 +36,6 @@ public:
 	// Konstruktoren ////////
 	MPL_Vektor() : m_Elemente(0) {}
 	explicit MPL_Vektor(unsigned long Elementzahl);
-	MPL_Vektor(const MPL_Vektor &rhs);  //copyconstructor
 	// Überladene Operatoren //////
 	MPL_Vektor &operator =(const MPL_Vektor &rhs);     //= Zuweisung
 	MPL_Vektor &operator +=(const MPL_Vektor &rhs);   // Vektoraddition
@@ -76,12 +75,6 @@ inline MPL_Vektor::MPL_Vektor(unsigned long Elementzahl) :
 	m_Elemente(Elementzahl, 0.0)
 { } //Ende MPL_Vektor::MPL_Vektor(int Elementzahl)
 
-inline MPL_Vektor::MPL_Vektor(const MPL_Vektor &rhs)  //copyconstructor
-{
-	m_Elemente.resize(rhs.m_Elemente.size());
-	*this = rhs;
-}
-
 // Überladene Operatoren //////
 //= Zuweisung
 inline MPL_Vektor &MPL_Vektor::operator =(const MPL_Vektor &rhs)
@@ -89,6 +82,7 @@ inline MPL_Vektor &MPL_Vektor::operator =(const MPL_Vektor &rhs)
 	if (this == &rhs)
 		return *this;
 
+	m_Elemente.resize(rhs.m_Elemente.size());
 	std::copy(rhs.m_Elemente.begin(), rhs.m_Elemente.end(),
 			m_Elemente.begin());
 
