@@ -141,9 +141,6 @@ public:
 /////////////////////////////////////////////////////////
 inline MPL_Matrix::MPL_Matrix(const MPL_Matrix &rhs)
 {
-	m_Zeilenzahl = 0;
-	m_Spaltenzahl = 0;
-	m_Elementanzahl = 0;
 	m_Elemente = 0;
 	*this = rhs;
 }
@@ -303,9 +300,9 @@ inline MPL_Matrix &MPL_Matrix::operator /= (double rhs)
 inline double &MPL_Matrix::operator()(int Zeile, int Spalte)
 {
 	//A(1,2)=b;
-	if ((Spalte >= 0) && (Spalte < m_Spaltenzahl)
-			&& (Zeile >= 0) && (Zeile < m_Zeilenzahl))
-		return this->m_Elemente[Spalte + Zeile * this->m_Spaltenzahl];
+	int idx = Zeile * m_Spaltenzahl + Spalte;
+	if (idx >= 0 && idx < m_Elementanzahl)
+		return m_Elemente[idx];
 	else {
 		std::cerr << "Achtung!!! Zugriff auf Elemente ausserhalb der Matrix"
 				  << std::endl;
