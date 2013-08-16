@@ -260,10 +260,6 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 	//cerr<<"Limb Raytracing\n";
 	////////////////////////////////////////////////////////////////////////////
 	// Zunächst die Limbmessungen in Eintragen  ////////////////////////////////
-	time_t t_Limb_LOS_start, t_Limb_LOS_ende, t_Limb_LOS_delta = 0;
-	time_t t_interpolieren_start, t_interpolieren_ende, t_interpolieren_delta_gesamt;
-	t_interpolieren_delta_gesamt = 0;
-	time(&t_Limb_LOS_start);
 	Winkelstatistik Wstat;  //kleine Winkelstatistik initialisieren
 	//TODO früher im Programm anbringen
 
@@ -271,7 +267,6 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 
 	for (aml_it = AM_L.begin(); aml_it != AM_L.end(); ++aml_it) {
 		unsigned int MessungNR = distance(AM_L.begin(), aml_it);
-		time(&t_Limb_LOS_start);
 
 		// Für jede Teilchensorte können mehrere Linien ausgewertet werden.
 		// Welche gerade verwendet wird, wird ermittelt, Aus der Wellenlänge
@@ -491,13 +486,9 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 				//cout<<"Punkt_Radius:"<<Punkt_Radius<<"\n";
 				//verhindert dass interpolation fehler ausgibt...
 				//über 200km eh keine Absorption mehr
-				time(&t_interpolieren_start);
 				// SPEEDUP!!!!
 				interpolieren(M_Atmo_Dichten, 0, 1, Punkt_Hoehe, V_Atmo_Dichten(0));
 				interpolieren(M_Atmo_Dichten, 0, 2, Punkt_Hoehe, V_Atmo_Dichten(1));
-				time(&t_interpolieren_ende);
-				t_interpolieren_delta_gesamt +=
-					t_interpolieren_ende - t_interpolieren_start;
 				// SPEED Die Funktion hier braucht fast 10 Sekunden...
 				// und das 2 mal
 				//Eventuell interpolierte Datei erzeugen und den nächsten Punkt
@@ -633,8 +624,6 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 		//cout<<"Raytracing Limb LOS zu Ende.\n";
 		// RAYTRACINGSCHLEIFE LOS ENDE /////////////////////////////////////////
 
-		time(&t_Limb_LOS_ende);
-		t_Limb_LOS_delta += t_Limb_LOS_ende - t_Limb_LOS_start;
 		//cout<<t_Limb_LOS_delta<<"\n";
 
 		////////////////////////////////////////////////////////////////////////
@@ -956,12 +945,8 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 
 			if (AP_Hoehe <= Max_Hoehe_Absorption) {
 				// Dichten der Atmosphärengase bestimmen
-				time(&t_interpolieren_start);
 				interpolieren(M_Atmo_Dichten, 0, 1, AP_Hoehe, V_Atmo_Dichten(0));
 				interpolieren(M_Atmo_Dichten, 0, 2, AP_Hoehe, V_Atmo_Dichten(1));
-				time(&t_interpolieren_ende);
-				t_interpolieren_delta_gesamt +=
-					t_interpolieren_ende - t_interpolieren_start;
 			}
 			// Tau erhoehen (Tau ist Einheitenlos)  (100000 aus Umwandlung km zu cm)
 			Tau_Nadir_LOS += Schrittweite * 100000
