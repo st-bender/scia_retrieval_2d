@@ -98,12 +98,6 @@ inline MPL_Vektor &MPL_Vektor::operator =(const MPL_Vektor &rhs)
 // Vektoraddition
 inline MPL_Vektor &MPL_Vektor::operator +=(const MPL_Vektor &rhs)
 {
-	if (this->m_Elemente.size() != rhs.m_Elemente.size()) {
-		std::cerr << "Vektoraddition verschieden langer Vektoren ist unsinnig!!!!"
-				  << std::endl;
-		return *this;
-	}
-
 	std::transform(m_Elemente.begin(), m_Elemente.end(),
 			rhs.m_Elemente.begin(), m_Elemente.begin(),
 			std::plus<double>());
@@ -114,12 +108,6 @@ inline MPL_Vektor &MPL_Vektor::operator +=(const MPL_Vektor &rhs)
 // Vektorsubtraktion
 inline MPL_Vektor &MPL_Vektor::operator -=(const MPL_Vektor &rhs)
 {
-	if (this->m_Elemente.size() != rhs.m_Elemente.size()) {
-		std::cerr << "Vektorsubtraktion verschieden langer Vektoren ist unsinnig!!!!"
-				  << std::endl;
-		return *this;
-	}
-
 	std::transform(m_Elemente.begin(), m_Elemente.end(),
 			rhs.m_Elemente.begin(), m_Elemente.begin(),
 			std::minus<double>());
@@ -164,12 +152,6 @@ inline double &MPL_Vektor::operator()(int Element)
 //Vektoraddition
 inline MPL_Vektor MPL_Vektor::operator +(const MPL_Vektor &rhs)
 {
-	if (this->m_Elemente.size() != rhs.m_Elemente.size()) {
-		std::cerr << "Vektoraddition verschieden langer Vektoren ist unsinnig!!!!"
-				  << std::endl;
-		return *this;
-	}
-
 	MPL_Vektor aus(m_Elemente.size());
 
 	std::transform(m_Elemente.begin(), m_Elemente.end(),
@@ -181,12 +163,6 @@ inline MPL_Vektor MPL_Vektor::operator +(const MPL_Vektor &rhs)
 //Vektorsubtraktion
 inline MPL_Vektor MPL_Vektor::operator -(const MPL_Vektor &rhs)
 {
-	if (this->m_Elemente.size() != rhs.m_Elemente.size()) {
-		std::cerr << "Vektorsubtraktion verschieden langer Vektoren ist unsinnig!!!!"
-				  << std::endl;
-		return *this;
-	}
-
 	MPL_Vektor aus(m_Elemente.size());
 
 	std::transform(m_Elemente.begin(), m_Elemente.end(),
@@ -199,12 +175,6 @@ inline MPL_Vektor MPL_Vektor::operator -(const MPL_Vektor &rhs)
 //Skalarprodukt
 inline double MPL_Vektor::operator *(const MPL_Vektor &rhs)
 {
-	if (this->m_Elemente.size() != rhs.m_Elemente.size()) {
-		std::cerr << "Skalarprodukt verschieden langer Vektoren ist unsinnig!!!!"
-				  << std::endl;
-		return 0;
-	}
-
 	return std::inner_product(m_Elemente.begin(), m_Elemente.end(),
 			rhs.m_Elemente.begin(), 0.0);
 }// Ende Skalarprodukt
