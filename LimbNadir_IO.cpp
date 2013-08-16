@@ -416,8 +416,8 @@ int Load_Nadir_Ascii(string Datei_in,
 ////////////////////////////////////////////////////////////////////////////////
 int Load_Nadir_n_mpl_binary(string Datei_in,
 							string textheader[7], int &No_of_Messungen,
-							int &No_of_Pix, int*& Kanal_Nr,
-							float*& Wellenlaenge,
+							int &No_of_Pix, std::vector<int> &Kanal_Nr,
+							std::vector<float> &Wellenlaenge,
 							std::vector<Nadir_Datensatz> &Nadirdaten)
 {
 	int Anzahl_Textheaderzeilen = 7;
@@ -440,12 +440,12 @@ int Load_Nadir_n_mpl_binary(string Datei_in,
 	infile.read((char *) &No_of_Pix, sizeof(int));
 	// Die wichtigsten Dimensionen der Felder sind bekannt....
 	// speicher allokieren
-	Kanal_Nr = new int[No_of_Pix];
-	Wellenlaenge = new float[No_of_Pix];
+	Kanal_Nr.resize(No_of_Pix);
+	Wellenlaenge.resize(No_of_Pix);
 	////////////////////////////////////////////////////////////////////////////
 	// Datensätze lesen
-	infile.read((char *) Kanal_Nr, sizeof(int)*No_of_Pix);
-	infile.read((char *) Wellenlaenge, sizeof(float)*No_of_Pix);
+	infile.read((char *) Kanal_Nr.data(), sizeof(int)*No_of_Pix);
+	infile.read((char *) Wellenlaenge.data(), sizeof(float)*No_of_Pix);
 	// Messungsspezifische Daten hinschreiben
 	Nadirdaten.reserve(No_of_Messungen);
 	for (int i = 0; i < No_of_Messungen; i++) {
@@ -690,7 +690,7 @@ int Save_Limb_l_mpl_binary(string Datei_out,
 ////////////////////////////////////////////////////////////////////////////////
 int Save_Nadir_Ascii(string Datei_out,
 					 string textheader[7], int No_of_Messungen, int No_of_Pix,
-					 int *Kanal_Nr, float *Wellenlaenge,
+					 std::vector<int> &Kanal_Nr, std::vector<float> &Wellenlaenge,
 					 std::vector<Nadir_Datensatz> &Nadirdaten)
 {
 	int Anzahl_Textheaderzeilen = 7;
@@ -974,8 +974,8 @@ int Nadir_n_mpl_binary_2_Ascii(string Datei_in, string Datei_out)
 	string textheader[7];
 	int No_of_Messungen;  // Das variiert bei nadir doch...standard ist 65
 	int No_of_Pix;
-	int *Kanal_Nr = 0;
-	float *Wellenlaenge = 0;
+	std::vector<int> Kanal_Nr;
+	std::vector<float> Wellenlaenge;
 	std::vector<Nadir_Datensatz> Nadirdaten;
 	/////////////////////////////////////////////////////////////
 	// LADEN
@@ -991,12 +991,6 @@ int Nadir_n_mpl_binary_2_Ascii(string Datei_in, string Datei_out)
 	Save_Nadir_Ascii(Datei_out,
 					 textheader, No_of_Messungen, No_of_Pix,
 					 Kanal_Nr, Wellenlaenge, Nadirdaten);
-	/////////////////////////////////////////////////////////////
-	// AUFRÄUMEN
-	//////////////////////////////////////////////////////////////
-	//cout<<"Räume auf\n";
-	delete[] Kanal_Nr;
-	delete[] Wellenlaenge;
 	//cout<<"Umwandlung abgeschlossen\n";
 	return 0;
 }

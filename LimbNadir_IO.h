@@ -195,8 +195,8 @@ int Load_Nadir_Ascii(std::string Datei_in,
 					 float*& Wellenlaenge, Nadir_Datensatz*& Nadirdaten);
 int Load_Nadir_n_mpl_binary(std::string Datei_in,
 							std::string textheader[7], int &No_of_Messungen,
-							int &No_of_Pix, int*& Kanal_Nr,
-							float*& Wellenlaenge,
+							int &No_of_Pix, std::vector<int> &Kanal_Nr,
+							std::vector<float> &Wellenlaenge,
 							std::vector<Nadir_Datensatz> &Nadirdaten);
 //Speichern
 int Save_Limb_Ascii(std::string Datei_out,
@@ -213,7 +213,7 @@ int Save_Limb_l_mpl_binary(std::string Datei_out,
 
 int Save_Nadir_Ascii(std::string Datei_out,
 					 std::string textheader[7], int No_of_Messungen, int No_of_Pix,
-					 int *Kanal_Nr, float &orbit_phase, float *Wellenlaenge,
+					 std::vector<int> &Kanal_Nr, std::vector<float> &Wellenlaenge,
 					 std::vector<Nadir_Datensatz> &Nadirdaten);
 
 int Save_Nadir_n_mpl_binary(std::string Datei_out,
