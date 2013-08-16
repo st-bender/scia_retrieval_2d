@@ -176,11 +176,11 @@ int Prioritylevel = 0;
 double slit_func(double fwhm, double x0, double x)
 {
 	const double fwhm2 = fwhm * fwhm;
-	const double cnorm = 4. * M_PI * M_SQRT2 / (fwhm2 * fwhm);
+	const double cnorm_inv = fwhm2 * fwhm * 0.25 * M_1_PI * M_SQRT1_2;
 	// (0.5 * FWHM)^4
 	const double fwhm2to4 = 0.0625 * fwhm2 * fwhm2;
 
-	return 1. / (cnorm * (fwhm2to4 + pow(x0 - x, 4)));
+	return cnorm_inv / (fwhm2to4 + std::pow(x0 - x, 4));
 }
 double slit_func_gauss(double fwhm, double x0, double x)
 {
