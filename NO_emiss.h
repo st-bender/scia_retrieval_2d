@@ -91,7 +91,7 @@ class NO_emiss {
 	// solar spectrum
 	MPL_Matrix solar;
 	std::vector<double> spec_scia_res;
-	NO_emiss(int vu = 2, int vl = 4, int vl_abs = 0, double T = 200.);
+	explicit NO_emiss(int vu = 2, int vl = 4, int vl_abs = 0, double T = 200.);
 	int alloc_memory();
 	int set_constants();
 	int populate_Fs();
