@@ -200,7 +200,7 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
 	Ergebnisvektor
 		= make_messung_limb_vector(Dateiname, Limbdaten, Wellenlaengen,
 				no_of_pix, no_of_alt, orbit_phase, Datum, Center_Lat_Lon,
-				Anzahl_Hoehen, 30 - Anzahl_Hoehen, 1);
+				Anzahl_Hoehen, no_of_alt - Anzahl_Hoehen - 1, 1);
 
 	//Teile von Schritt 4 nochmal für die Troposhärische Säule
 	//Eigentlich reichen Intensitäten
