@@ -61,10 +61,11 @@ public:
 	// Methoden
 	void Elementzahl_festlegen(int E);
 	void Null_Initialisierung();
-	double Betrag_ausgeben();
+	double Betrag_ausgeben() const;
 	void Normieren();
 	//MPL_Vektor Kreuzprodukt(const MPL_Vektor& rhs);
 	// nur für 3er Vektoren sinnvoll
+private:
 	//Membervariablen
 	std::vector<double> m_Elemente;
 };
@@ -72,7 +73,7 @@ public:
 //Implementation der Inlinefunktionen
 
 inline MPL_Vektor::MPL_Vektor(unsigned long Elementzahl) :
-	m_Elemente(Elementzahl, 0.0)
+	m_Elemente(Elementzahl)
 { } //Ende MPL_Vektor::MPL_Vektor(int Elementzahl)
 
 // Überladene Operatoren //////
@@ -226,7 +227,7 @@ inline bool MPL_Vektor::operator == (const MPL_Vektor &rhs) const
 
 inline void MPL_Vektor::Elementzahl_festlegen(int E)
 {
-	m_Elemente.resize(E, 0.0);
+	m_Elemente.resize(E);
 }
 
 inline void MPL_Vektor::Null_Initialisierung()
@@ -234,7 +235,7 @@ inline void MPL_Vektor::Null_Initialisierung()
 	std::fill(m_Elemente.begin(), m_Elemente.end(), 0.0);
 }// Ende Nullinitialisierung
 
-inline double MPL_Vektor::Betrag_ausgeben()
+inline double MPL_Vektor::Betrag_ausgeben() const
 {
 	return std::sqrt(std::inner_product(m_Elemente.begin(),
 				m_Elemente.end(), m_Elemente.begin(), 0.0));
