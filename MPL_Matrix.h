@@ -120,10 +120,10 @@ public:
 	void Zeile_Multiplizieren(int Zeile, double Faktor);
 	void Vielfaches_einer_Zeile_addieren(int Summenzeile, int Additionszeile, double Faktor);
 	MPL_Matrix row_diff();
-	MPL_Matrix unity();
+	MPL_Matrix unity() const;
 	//int simple_Gaussdiagonalisierung(); siehe ganz oben
 	int Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor();
-	void in_Datei_speichern(std::string Dateiname);
+	void in_Datei_speichern(std::string Dateiname) const;
 
 	//Membervariablen
 	int m_Zeilenzahl;
@@ -577,7 +577,7 @@ inline MPL_Matrix MPL_Matrix::row_diff()
 
 	return diff;
 }
-inline MPL_Matrix MPL_Matrix::unity()
+inline MPL_Matrix MPL_Matrix::unity() const
 {
 	int m = m_Zeilenzahl;
 	MPL_Matrix E(m, m);
@@ -733,7 +733,7 @@ inline int MPL_Matrix::Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor(
 ////////////////////////////////////////////////////////////////////////////////
 // Methodenstart in_Datei_speichern
 ////////////////////////////////////////////////////////////////////////////////
-inline void MPL_Matrix::in_Datei_speichern(std::string Dateiname)
+inline void MPL_Matrix::in_Datei_speichern(std::string Dateiname) const
 {
 	ogzstream outfile;
 	outfile.open(Dateiname.c_str());
