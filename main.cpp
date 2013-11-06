@@ -295,11 +295,7 @@ int main(int argc, char *argv[])
 	cerr << "Teil1\n";
 	time(&Teil1_Start);
 	double wl; // central peak position wavelength
-	unsigned int i, j, k, l; // Meine Zählvariablen
-	i = 0;
-	j = 0;
-	k = 0;
-	l = 0;
+	unsigned int i = 0, l = 0; // Meine Zählvariablen
 	//Konf mit argv Argumenten
 	Konf.m_Pfad_Datei_mit_Dateinamen_fuer_Messungen_eines_Orbits = Orbitlistenpfad;
 	Konf.m_Pfad_Solar_Spektrum = Solarpfad;

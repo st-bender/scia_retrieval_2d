@@ -595,13 +595,13 @@ int NO_emiss::read_luque_data_from_file(std::string filename)
 int NO_emiss::calc_excitation()
 {
 	int i, l, k_l, k_u;
-	double j, j_l = 0., j_u = 0., nj_frac, sum1, sum2;
+	double j_l = 0., j_u = 0., nj_frac, sum1, sum2;
 	double f_FC_tot;
 
 	excit.Null_Initialisierung();
 
 	for (i = 0; i <= NJ; i++) {
-		j = j_u = i + 0.5;
+		j_u = i + 0.5;
 		sum1 = sum2 = 0.0;
 		for (l = 0; l <= 11; l++) {
 			if (l == 0 || l == 3 || l == 6 || l == 9) j_l = j_u + 1.;
