@@ -111,6 +111,7 @@ public:
 	void Null_Initialisierung();
 	MPL_Matrix get_Zeile(int Zeilennummer); // gibt eine Zeile als Spaltenvektor aus
 	MPL_Matrix get_Spalte(int Spaltennummer); // gibt eine Spalte als Spaltenvektor aus
+	void transpose();
 	MPL_Matrix transponiert(); //transponierte Matrix
 //    MPLMatrix  invertiert();
 //    //inverse Matrix, falls existent...
@@ -504,6 +505,14 @@ inline MPL_Matrix MPL_Matrix::get_Spalte(int Spaltennummer)
 /////////////////////////////////////////////////////////
 // Methodenstart
 /////////////////////////////////////////////////////////
+inline void MPL_Matrix::transpose()
+{
+	for (int i = 0; i < m_Spaltenzahl; i++)
+		for (int j = 0; j < i; j++)
+			std::swap(m_Elemente[i + j * m_Spaltenzahl],
+					m_Elemente[j + i * m_Spaltenzahl]);
+	std::swap(m_Spaltenzahl, m_Zeilenzahl);
+}
 inline MPL_Matrix MPL_Matrix::transponiert() //transponierte Matrix
 {
 	//Zeilen und Spalten tauschen
