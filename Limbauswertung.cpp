@@ -225,10 +225,10 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 					std::cerr << "# solar factor = " << sol_fac << std::endl;
 					// create new object, same transition but modelled temperature
 					double temp = mlit->msise_temperature();
-					NO_emiss NO_new(sfit->NO_vec.at(k).get_vu(),
-							sfit->NO_vec.at(k).get_vl(),
-							sfit->NO_vec.at(k).get_vl_abs(),
-							temp);
+					int vu = sfit->NO_vec.at(k).get_vu();
+					int vl = sfit->NO_vec.at(k).get_vl();
+					int vl_abs = sfit->NO_vec.at(k).get_vl_abs();
+					NO_emiss NO_new(vu, vl, vl_abs, temp);
 					NO_new.solar = sfit->NO_vec.at(k).solar * sol_fac;
 					NO_new.read_luque_data_from_file("DATA/Luqueetal.dat");
 					NO_new.calc_excitation();
