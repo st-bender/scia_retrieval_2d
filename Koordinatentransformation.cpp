@@ -58,13 +58,6 @@ void Umwandlung_Karthesisch_in_Kugel(double x, double y, double z, double &r,
 		return;
 	}
 
-	if (((x - epsilon < 0)) && ((x + epsilon) > 0)) {
-		if (y > 0)
-			phi = 90.0;
-		else
-			phi = -90.0;
-		return;
-	}
 	phi = 180.0 / pi * atan2(y, x);
 }
 ////////////////////////////////////////////////
