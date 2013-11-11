@@ -41,24 +41,24 @@ void Umwandlung_Karthesisch_in_Kugel(double x, double y, double z, double &r,
 {
 	// Winkel in Grad
 	// Der Punkt 0,0,0 ist ausgeschlossen
-	const double pi = M_PI;
+	const double rad = 180.0 * M_1_PI;
 	const double epsilon = 0.001; //
 
 	r = sqrt(x * x + y * y + z * z);
-	if (r == 0) {
+	if (r == 0.0) {
 		cout << " Umwandlung in Kugelkoordinaten von (0,0,0) nicht sinnvoll\n";
 		phi = 0;
 		theta = 0;
 		return;
 	}
-	theta = 180.0 / pi * asin(z / r);
+	theta = rad * asin(z / r);
 	if ((theta + epsilon > 90.0) || (theta - epsilon < -90.0)) {
 		// Phi quasi beliebig
 		phi = 0;
 		return;
 	}
 
-	phi = 180.0 / pi * atan2(y, x);
+	phi = rad * atan2(y, x);
 }
 ////////////////////////////////////////////////
 // ENDE int Umwandlung_Karthesisch_in_Kugel
