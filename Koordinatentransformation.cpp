@@ -52,7 +52,7 @@ void Umwandlung_Karthesisch_in_Kugel(double x, double y, double z, double &r,
 		return;
 	}
 	theta = 180.0 / pi * asin(z / r);
-	if ((theta + epsilon > 180.0) || (theta - epsilon < -180.0)) {
+	if ((theta + epsilon > 90.0) || (theta - epsilon < -90.0)) {
 		// Phi quasi beliebig
 		phi = 0;
 		return;
