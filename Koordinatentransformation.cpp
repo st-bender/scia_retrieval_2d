@@ -22,11 +22,13 @@ void Umwandlung_Kugel_in_Karthesisch(double r, double phi, double theta,
 		double &x, double &y, double &z)
 {
 	// Winkel in Grad
-	const double pi = M_PI;
+	const double deg = M_PI / 180.0;
+	const double cth = cos(deg * theta), sth = sin(deg * theta);
+	const double cph = cos(deg * phi), sph = sin(deg * phi);
 
-	x = r * cos(theta * pi / 180.0) * cos(phi * pi / 180.0);
-	y = r * cos(theta * pi / 180.0) * sin(phi * pi / 180.0);
-	z = r * sin(theta * pi / 180.0);
+	x = r * cth * cph;
+	y = r * cth * sph;
+	z = r * sth;
 }
 ////////////////////////////////////////////////
 // ENDE int  Umwandlung_Kugel_in_Karthesisch
