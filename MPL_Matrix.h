@@ -64,11 +64,12 @@ public:
 	//Konstruktoren //////////////////////////////////
 	MPL_Matrix() : m_Zeilenzahl(0), m_Spaltenzahl(0),
 		m_Elementanzahl(0), m_Elemente(0) {}
-	MPL_Matrix(int Zeilenzahl, int Spaltenzahl) :
+	MPL_Matrix(int Zeilenzahl, int Spaltenzahl, double value = 0.0) :
 		m_Zeilenzahl(Zeilenzahl), m_Spaltenzahl(Spaltenzahl),
 		m_Elementanzahl(Zeilenzahl * Spaltenzahl)
 		{
-			m_Elemente = new double[Zeilenzahl * Spaltenzahl];
+			m_Elemente = new double[m_Elementanzahl];
+			std::fill_n(m_Elemente, m_Elementanzahl, value);
 		}
 	MPL_Matrix(const MPL_Matrix &rhs);
 	// Hier ist nochmehr denkbar z.b. einheitzsmatrix 0 matrix usw
@@ -472,11 +473,6 @@ inline bool MPL_Matrix::operator == (const MPL_Matrix &rhs) const
 /////////////////////////////////////////////////////////
 inline void MPL_Matrix::Null_Initialisierung()
 {
-	if (m_Elemente == 0) //keine Elemente da
-		return;
-	for (int i = 0; i < this->m_Elementanzahl; i++) {
-		m_Elemente[i] = 0;
-	}
 }//ende Nullinitialisierung
 /////////////////////////////////////////////////////////
 // Methodenstart
