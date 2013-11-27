@@ -818,7 +818,6 @@ int main(int argc, char *argv[])
 
 	// ein Vektor der totalen Anzahldichte
 	MPL_Matrix Dichte_n_tot(Grid.m_Anzahl_Punkte, 1); //Spaltenvektor
-	Dichte_n_tot.Null_Initialisierung();
 	prepare_total_density(Grid, Dichte_n_tot, Ausgewertete_Limbmessung_NO);
 	////////////////////////////////////////////////////////////////////////////
 	// Spezies Mg I //
@@ -901,9 +900,7 @@ int main(int argc, char *argv[])
 		}
 		/* memory allocation for the retrieval */
 		Dichte_n_MgI = MPL_Matrix(Grid.m_Anzahl_Punkte, 1);
-		Dichte_n_MgI.Null_Initialisierung();
 		Dichte_apriori_MgI = MPL_Matrix(Grid.m_Anzahl_Punkte, 1);
-		Dichte_apriori_MgI.Null_Initialisierung();  // Null als Startwert
 		// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
 		Saeulendichten_MgI = MPL_Matrix(Ausgewertete_Limbmessung_MgI.size()
 				+ Ausgewertete_Nadirmessung_MgI.size(), 1); //Spaltenvektor
@@ -999,9 +996,7 @@ int main(int argc, char *argv[])
 		}
 		/* memory allocation for the retrieval */
 		Dichte_n_MgII = MPL_Matrix(Grid.m_Anzahl_Punkte, 1);
-		Dichte_n_MgII.Null_Initialisierung();
 		Dichte_apriori_MgII = MPL_Matrix(Grid.m_Anzahl_Punkte, 1);
-		Dichte_apriori_MgII.Null_Initialisierung();  // Null als Startwert
 		// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
 		Saeulendichten_MgII = MPL_Matrix(Ausgewertete_Limbmessung_MgII.size()
 				+ Ausgewertete_Nadirmessung_MgII.size(), 1); //Spaltenvektor
@@ -1092,9 +1087,7 @@ int main(int argc, char *argv[])
 		}
 		/* memory allocation for the retrieval */
 		Dichte_n_unknown = MPL_Matrix(Grid.m_Anzahl_Punkte, 1);
-		Dichte_n_unknown.Null_Initialisierung();
 		Dichte_apriori_unknown = MPL_Matrix(Grid.m_Anzahl_Punkte, 1);
-		Dichte_apriori_unknown.Null_Initialisierung();  // Null als Startwert
 		// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
 		Saeulendichten_unknown = MPL_Matrix(Ausgewertete_Limbmessung_unknown.size()
 				+ Ausgewertete_Nadirmessung_unknown.size(), 1); //Spaltenvektor
@@ -1183,9 +1176,7 @@ int main(int argc, char *argv[])
 		}
 		/* memory allocation for the retrieval */
 		Dichte_n_FeI = MPL_Matrix(Grid.m_Anzahl_Punkte, 1);
-		Dichte_n_FeI.Null_Initialisierung();
 		Dichte_apriori_FeI = MPL_Matrix(Grid.m_Anzahl_Punkte, 1);
-		Dichte_apriori_FeI.Null_Initialisierung();  // Null als Startwert
 		// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
 		Saeulendichten_FeI = MPL_Matrix(Ausgewertete_Limbmessung_FeI.size()
 				+ Ausgewertete_Nadirmessung_FeI.size(), 1); //Spaltenvektor
@@ -1274,9 +1265,7 @@ int main(int argc, char *argv[])
 		}
 		/* memory allocation */
 		Dichte_n_NO = MPL_Matrix(Grid.m_Anzahl_Punkte, 1);
-		Dichte_n_NO.Null_Initialisierung();
 		Dichte_apriori_NO = MPL_Matrix(Grid.m_Anzahl_Punkte, 1);
-		Dichte_apriori_NO.Null_Initialisierung();  // Null als Startwert
 		if (Konf.NO_apriori)
 			SNOE_apriori_NO(Grid, Ausgewertete_Limbmessung_NO.front(),
 					Dichte_apriori_NO);

@@ -299,7 +299,6 @@ std::vector<double> my_whittaker_smooth(std::vector<double> &y,
 	MPL_Matrix E = dummy.unity();
 	MPL_Matrix D = E.row_diff();
 	MPL_Matrix Y(m, 1), Z(m, 1), W(m, m);
-	W.Null_Initialisierung();
 
 	while (--order > 0)
 		D = D.row_diff();

@@ -193,11 +193,6 @@ int NO_emiss::set_constants()
 }
 int NO_emiss::populate_Fs()
 {
-	NJ_to_N.Null_Initialisierung();
-	F_l.Null_Initialisierung();
-	F_l_abs.Null_Initialisierung();
-	F_u.Null_Initialisierung();
-
 	for (int i = 0; i <= NJ + 2; i++) {
 		double j = i + 0.5;
 		double flow = B_Vl_abs * j * (j + 0.5);
@@ -229,11 +224,6 @@ int NO_emiss::calc_lines_emiss_absorp()
 {
 	int i, j, l;
 	double E_rot, E_rot_abs;
-
-	xlines_K.Null_Initialisierung();
-	xlines_K_abs.Null_Initialisierung();
-	lambda_K.Null_Initialisierung();
-	lambda_K_abs.Null_Initialisierung();
 
 	for (i = 0; i <= NJ; i++) {
 		double k_l = i;
@@ -301,9 +291,6 @@ int NO_emiss::set_Hoenl_London_abs()
 {
 	int i;
 	double j, u, d1, d2, d3;
-
-	vf_HL_J.Null_Initialisierung();
-	vf_HL_K.Null_Initialisierung();
 
 	// j = 0.5
 	// P1
@@ -416,9 +403,6 @@ int NO_emiss::set_Hoenl_London_emiss()
 {
 	int i;
 	double j, u, d1, d2, d3;
-
-	vf_HL_emiss.Null_Initialisierung();
-	vf_HL_emiss_K.Null_Initialisierung();
 
 	// j' = 0.5
 	// Q11
@@ -545,8 +529,6 @@ int NO_emiss::get_solar_data(Sonnenspektrum &sol_spec)
 {
 	int i, j;
 
-	solar.Null_Initialisierung();
-
 	for (i = 0; i <= NJ; i++)
 		for (j = 0; j <= 11; j++)
 			if (lambda_K_abs(j, i) != 0.) {
@@ -597,8 +579,6 @@ int NO_emiss::calc_excitation()
 	int i, l, k_l, k_u;
 	double j_l = 0., j_u = 0., nj_frac, sum1, sum2;
 	double f_FC_tot;
-
-	excit.Null_Initialisierung();
 
 	for (i = 0; i <= NJ; i++) {
 		j_u = i + 0.5;
@@ -656,8 +636,6 @@ int NO_emiss::calc_line_emissivities()
 {
 	int i, l, k_l, k_u;
 	double j_l = 0., j_u = 0.;
-
-	gamma_j.Null_Initialisierung();
 
 	emiss_tot = 0.;
 	for (i = 0; i <= NJ; i++) {

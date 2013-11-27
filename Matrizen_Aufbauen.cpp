@@ -95,7 +95,7 @@ MPL_Matrix Einheitsmatrix_aufbauen(int Dimension)
 	//Einheitsmatrix muss quadratisch sein
 	MPL_Matrix Eins(Dimension, Dimension);
 	// Diagonalelemente 1 setzen
-	Eins.Null_Initialisierung();
+
 	for (int i = 0; i < Dimension; i++) {
 		Eins(i, i) = 1;
 	}
@@ -110,9 +110,6 @@ MPL_Matrix Einheitsmatrix_aufbauen(int Dimension)
 MPL_Matrix Werte_bei_maximaler_Hoehe_Flagmatrix_Aufbauen(Retrievalgitter &Grid)
 {
 	MPL_Matrix Flagmatrix(Grid.m_Anzahl_Punkte, Grid.m_Anzahl_Punkte);
-	// Matrix mit 0 initialisieren
-	//for (int i=0;i<Flagmatrix.m_Elementanzahl;i++) { Flagmatrix.m_Elemente=0;}
-	Flagmatrix.Null_Initialisierung();
 	// Auf den Diagonalen dort eine 1 schreiben, wo die höchste Höhe liegt....
 	// das sollten die letzten Punkte der Matrix sein
 	//cerr<<"Grid.m_Anzahl_Punkte: "<<Grid.m_Anzahl_Punkte<<"\n";
@@ -147,7 +144,6 @@ MPL_Matrix Differenz_von_benachbarten_Zeilenelementen_Matrix_aufbauen(
 	// Quadratische Matrix mit der 2Dimensionen der Länge des Vektors
 	MPL_Matrix Mat(Elementzahl, Elementzahl);
 
-	Mat.Null_Initialisierung();
 	// Matrix wird Zeilenweise in einen Vektor gepackt, d.h. aus x1 x2 x3 x4
 	//                                                           x5 x6 x7 x8
 	//                                      wird x1 x2 x3 x4 x5 x6 x7 x8 gemacht
@@ -181,7 +177,6 @@ MPL_Matrix Differenz_von_benachbarten_Spaltenelementen_Matrix_aufbauen(
 	int Elementzahl = Zeilenzahl * Spaltenzahl;
 	// Quadratische Matrix mit der 2Dimensionen der Länge des Vektors
 	MPL_Matrix Mat(Elementzahl, Elementzahl);
-	Mat.Null_Initialisierung();
 	// Matrix wird Zeilenweise in einen Vektor gepackt, d.h. aus x1 x2 x3 x4
 	//                                                           x5 x6 x7 x8
 	//                                      wird x1 x2 x3 x4 x5 x6 x7 x8 gemacht
@@ -219,9 +214,6 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 	//Die Anzahl der Zeilen entspricht der Anzahl der Messungen
 	//Luftmassenfaktormatrix
 	MPL_Matrix AMF(AM_L.size() + AM_N.size(), Grid.m_Anzahl_Punkte);
-	//cerr<<"AMF.Null_Initialisierung\n";
-	//Das ist sinnvoll, da es sowieso gemacht werden muss
-	AMF.Null_Initialisierung();
 
 	////////////////////////////////////////////////////////////////////////////
 	//Zum Test wird noch die Tau_LOS_Limb Matrix eingeführt, die später mal
@@ -232,7 +224,6 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 	// Kann später entfernt werden...(ist aber auch nicht langsam)
 	//cerr<<"TAU.Null_Initialisierung\n";
 	MPL_Matrix Tau_LOS_Matrix(AM_L.size() + AM_N.size(), Grid.m_Anzahl_Punkte);
-	Tau_LOS_Matrix.Null_Initialisierung();
 	////////////////////////////////////////////////////////////////////////////
 
 	//Zunächst müssen die Athmosphärendaten eingelesen werden

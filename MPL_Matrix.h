@@ -573,7 +573,6 @@ inline MPL_Matrix MPL_Matrix::row_diff()
 {
 	int m = m_Zeilenzahl, n = m_Spaltenzahl;
 	MPL_Matrix diff(m - 1, n);
-	diff.Null_Initialisierung();
 
 	for (int i = 0; i < m - 1; i++)
 		for (int j = 0; j < n; j++)
@@ -586,7 +585,6 @@ inline MPL_Matrix MPL_Matrix::unity() const
 {
 	int m = m_Zeilenzahl;
 	MPL_Matrix E(m, m);
-	E.Null_Initialisierung();
 
 	for (int i = 0; i < m; i++)
 		E.m_Elemente[i * m + i] = 1.;
