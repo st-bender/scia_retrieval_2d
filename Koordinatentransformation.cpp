@@ -44,7 +44,6 @@ void Umwandlung_Karthesisch_in_Kugel(double x, double y, double z, double &r,
 	// Winkel in Grad
 	// Der Punkt 0,0,0 ist ausgeschlossen
 	const double rad = 180.0 * M_1_PI;
-	const double epsilon = 0.001; //
 
 	r = sqrt(x * x + y * y + z * z);
 	if (r == 0.0) {
@@ -54,7 +53,7 @@ void Umwandlung_Karthesisch_in_Kugel(double x, double y, double z, double &r,
 		return;
 	}
 	theta = rad * asin(z / r);
-	if ((theta + epsilon > 90.0) || (theta - epsilon < -90.0)) {
+	if ((theta >= 90.0) || (theta <= -90.0)) {
 		// Phi quasi beliebig
 		phi = 0;
 		return;
