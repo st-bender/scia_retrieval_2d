@@ -1860,7 +1860,10 @@ void SNOE_apriori_NO(Retrievalgitter &grid, Ausgewertete_Messung_Limb &aml,
 	for (int i = 0; i < grid.m_Anzahl_Breiten; i++) {
 		Gitterpunkt gp = grid.m_Gitter[i];
 		__dynam_MOD_glon[0] = gp.longitude;
-		__dynam_MOD_glat[0] = gp.m_Breite;
+		if (grid.m_Anzahl_Breiten > 1)
+			__dynam_MOD_glat[0] = gp.m_Breite;
+		else
+			__dynam_MOD_glat[0] = aml.m_Latitude_TP;
 		__snoe_MOD_snoe_3d(&doy, snoe_no);
 		for (int j = 0; j < __params_MOD_nz; j++) {
 			apriori(j * grid.m_Anzahl_Breiten + i) = snoe_no[j];
