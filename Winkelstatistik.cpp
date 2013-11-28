@@ -173,8 +173,7 @@ void Winkelstatistik::Statistik_auf_Bildschirm_ausgeben()
 //////////////////////////////////////////////////////
 int Winkelstatistik::Statistik_in_Datei_ausgeben(string Dateiname)
 {
-	ofstream outfile;
-	outfile.open(Dateiname.c_str());
+	ofstream outfile(Dateiname.c_str());
 	if (!outfile.is_open()) {
 		cerr << "Datei " << Dateiname
 			 << " kann nicht zum schreiben der Winkelstatistik geöffnet werden."

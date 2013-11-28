@@ -63,8 +63,7 @@ int Load_Limb_Ascii(string Datei_in, string textheader[31], int &no_of_alt,
 	//Schritt 1 Laden der Datei in Datenstrukturen
 	//
 	////////////////////////////////////////////////////////////////////////////
-	ifstream infile;
-	infile.open(Datei_in.c_str());
+	ifstream infile(Datei_in.c_str());
 	if (!infile.is_open()) {
 		cout << Datei_in << " konnte nicht zum lesen geöffnet werden\n";
 		return 1;
@@ -308,8 +307,7 @@ int Load_Nadir_Ascii(string Datei_in,
 	// Ascii Datei Laden
 	/////////////////////////////////////////////////////////
 	// ERSTER DURCHLAUF ARRAYDIMENSIONEN ERMITTELN
-	ifstream infile;
-	infile.open(Datei_in.c_str());
+	ifstream infile(Datei_in.c_str());
 	if (!infile.is_open()) {
 		cout << Datei_in << " kann nicht geladen werden in Nadirumwandlung\n";
 		return 1;
@@ -483,8 +481,7 @@ int Save_Limb_Ascii(string Datei_out,
 	//
 	////////////////////////////////////////////////////////////////////////////
 	//cout<<"speichern anfang\n";
-	ofstream outfile;
-	outfile.open(Datei_out.c_str());
+	ofstream outfile(Datei_out.c_str());
 	if (!outfile.is_open()) {
 		cout << Datei_out << " konnte nicht zum schreiben geöffnet werden\n";
 		return 1;
@@ -642,8 +639,7 @@ int Save_Limb_l_mpl_binary(string Datei_out,
 	//Schritt 3 Speichern der Daten in Ausgabedatei
 	//
 	////////////////////////////////////////////////////////////////////////////
-	ofstream outfile;
-	outfile.open(Datei_out.c_str(), ios_base::binary);
+	ofstream outfile(Datei_out.c_str(), ios_base::binary);
 	for (int i = 0; i < lang_textheader; i++) {
 		outfile.write((char *) textheader[i].c_str(), sizeof(char) * 100);
 		//   cout<<textheader[i].c_str()<<"\n";
@@ -697,9 +693,7 @@ int Save_Nadir_Ascii(string Datei_out,
 	////////////////////////////////////////////////////////////
 	// ASCII Datei schreiben
 	////////////////////////////////////////////////////////////
-	ofstream outfile;
-
-	outfile.open(Datei_out.c_str());
+	ofstream outfile(Datei_out.c_str());
 	if (!outfile.is_open()) {
 		cout << Datei_out
 			 << " kann nicht erzeugt werden in Nadir Rückumwandlung in Ascii\n";
@@ -768,8 +762,7 @@ int Save_Nadir_n_mpl_binary(string Datei_out,
 	///////////////////////////////////////////////////////////////////////
 	// n_mpl_binary Datei speichern
 	//////////////////////////////////////////////////////////////////////
-	ofstream outfile;
-	outfile.open(Datei_out.c_str(), ios_base::binary);
+	ofstream outfile(Datei_out.c_str(), ios_base::binary);
 	// Zuerst alles was nur einmal geschrieben werden muss hinschreiben
 	for (int i = 0; i < Anzahl_Textheaderzeilen; i++) {
 		outfile.write((char *) textheader[i].c_str(), sizeof(char) * 100);

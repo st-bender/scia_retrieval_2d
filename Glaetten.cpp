@@ -357,7 +357,6 @@ double spidr_value_from_file(int year, int month, int day,
 	double ret = defvalue;
 	std::string line, date;
 	std::stringstream ss;
-	std::ifstream f;
 	size_t pos;
 
 	// construct the date string from the variables
@@ -366,7 +365,7 @@ double spidr_value_from_file(int year, int month, int day,
 		<< "-" << std::setw(2) << std::setfill('0') << day;
 	ss >> date;
 
-	f.open(filename.c_str());
+	std::ifstream f(filename.c_str());
 	if (!f.is_open()) {
 		std::cerr << "Error opening `" << filename << "'." << std::endl;
 		return ret;

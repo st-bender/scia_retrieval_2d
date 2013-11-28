@@ -564,8 +564,7 @@ int Ausgabe_Saeulendichten(string Dateiname,
 
 MPL_Matrix Read_Atmodatei(string Dateiname)
 {
-	ifstream infile;
-	infile.open(Dateiname.c_str());
+	ifstream infile(Dateiname.c_str());
 	if (!(infile.is_open())) {
 		cout << "Datei " << Dateiname << " kann nicht gefunden werden.\n";
 		MPL_Matrix dummy;

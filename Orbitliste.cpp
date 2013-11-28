@@ -19,8 +19,7 @@ using namespace std;
 //*****************************************************************
 int Orbitliste::Liste_Laden(string Dateiname)
 {
-	ifstream infile;
-	infile.open(Dateiname.c_str());
+	ifstream infile(Dateiname.c_str());
 	if (!(infile.is_open())) {
 		cout << Dateiname << " kann nicht gefunden werden\n";
 		return -1;
@@ -79,8 +78,7 @@ bool Orbitliste::Ist_Messung_Nadirmessung(uint Index)
 //Wartungsfunktion ///////////////////////////////////////////////////////
 void Orbitliste::In_Datei_Speichern(string Dateiname)
 {
-	ofstream outfile;
-	outfile.open(Dateiname.c_str());
+	ofstream outfile(Dateiname.c_str());
 	//ich verzichte hier mal auf weitere sicherheitsfragen
 	for (unsigned int i = 0; i < this->m_Dateinamen.size(); i++) {
 		outfile << m_Dateinamen[i] << "\n";

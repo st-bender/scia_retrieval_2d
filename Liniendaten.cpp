@@ -34,10 +34,8 @@ Liniendaten::Liniendaten()
 /*************************************************************************/
 void Liniendaten::Einlesen(string Dateiname, double Wellenlaenge)
 {
-	ifstream infile;
 	string zeile;
-	//Datei öffnen
-	infile.open(Dateiname.c_str());
+	ifstream infile(Dateiname.c_str());
 	if (!infile.is_open()) {
 		cerr << "Datei " << Dateiname << " fehlt...Programm stürzt ab\n";
 		exit(1);
