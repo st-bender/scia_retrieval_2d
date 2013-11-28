@@ -109,7 +109,6 @@ public:
 	////////////////////////////////////////////////////////////////
 
 	// Methoden
-	void Null_Initialisierung();
 	MPL_Matrix get_Zeile(int Zeilennummer); // gibt eine Zeile als Spaltenvektor aus
 	MPL_Matrix get_Spalte(int Spaltennummer); // gibt eine Spalte als Spaltenvektor aus
 	void transpose();
@@ -468,12 +467,6 @@ inline bool MPL_Matrix::operator == (const MPL_Matrix &rhs) const
 }
 
 //Methoden
-/////////////////////////////////////////////////////////
-// Methodenstart
-/////////////////////////////////////////////////////////
-inline void MPL_Matrix::Null_Initialisierung()
-{
-}//ende Nullinitialisierung
 /////////////////////////////////////////////////////////
 // Methodenstart
 /////////////////////////////////////////////////////////
