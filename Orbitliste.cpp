@@ -83,6 +83,5 @@ void Orbitliste::In_Datei_Speichern(string Dateiname)
 	for (unsigned int i = 0; i < this->m_Dateinamen.size(); i++) {
 		outfile << m_Dateinamen[i] << "\n";
 	}
-	outfile.close();
 }//Ende in_Datei_Speichern
 ////////////////////////////////////////////////////////////////////////////////

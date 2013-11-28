@@ -61,9 +61,6 @@ void Liniendaten::Einlesen(string Dateiname, double Wellenlaenge)
 			getline(infile, zeile);
 		}
 	}//ende while
-	//Datei schließen
-	infile.close();
-
 }
 /* Einlesen ende***************************************************************/
 /******************************************************************************/

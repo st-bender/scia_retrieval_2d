@@ -381,7 +381,6 @@ double spidr_value_from_file(int year, int month, int day,
 			iss >> ret;
 		}
 	}
-	f.close();
 
 	return ret;
 }

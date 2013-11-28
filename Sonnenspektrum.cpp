@@ -51,7 +51,6 @@ int Sonnenspektrum::Laden_GOME(string Dateiname, string Fallback_Dateiname)
 	}
 	// ok, einlesen geht also
 	//cout<<m_Wellenlaengen[25]<<"\t"<<m_Intensitaeten[25];
-	infile.close();
 	return 0;
 }//Sonnenspektrum::Laden(string Dateiname, string Fallback_Dateiname) ende
 //=============================================================================
@@ -95,7 +94,6 @@ int Sonnenspektrum::Laden_SCIA(string Dateiname, string Fallback_Dateiname)
 
 	int_ref1 = get_rad_at_wl(228.6);
 	int_ref2 = get_rad_at_wl(240.2);
-	infile.close();
 	return 0;
 }
 ////////////////////////////////////////////////////
@@ -218,7 +216,6 @@ int Sonnenspektrum::Speichern(string Dateiname)  //zur Kontrolle
 	for (unsigned int i = 0; i < m_WL_interpoliert.size(); i++) {
 		outfile << m_WL_interpoliert[i] << "\t" << m_Int_interpoliert[i] << "\n";
 	}
-	outfile.close();
 	return 0;
 } //Ende Speichern
 
@@ -234,6 +231,5 @@ int Sonnenspektrum::Speichern_was_geladen_wurde(string Dateiname)
 		outfile << this->m_Wellenlaengen[i] << "\t"
 				<< this->m_Intensitaeten[i] << "\n";
 	}
-	outfile.close();
 	return 0;
 }//Ende Speichern_was_geladen_wurde

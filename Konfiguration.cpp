@@ -376,11 +376,6 @@ int Konfiguration::Konfiguration_einlesen(std::string file)
 		}
 	} //ende while !eof
 
-	//Datei Schließen
-	//cout<<"Datei schließen\n";
-	infile.close();
-	//cout<<"Datei geschlossen\n";
-
 	return 0;
 }
 // Ende Konfiguration_einlesen ////////////////////////////////////////

@@ -205,8 +205,6 @@ int Winkelstatistik::Statistik_in_Datei_ausgeben(string Dateiname)
 	outfile << "nicht_ok____: "
 			<< m_counter_0_05 + m_counter_0_1 + m_counter_0_2
 			 + m_counter_0_5 + m_counter_1 + m_counter_2 + m_counter_5 << "\n";
-	outfile.close();
-	outfile.clear();
 
 	return 0;
 }

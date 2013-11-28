@@ -567,8 +567,6 @@ int NO_emiss::read_luque_data_from_file(std::string filename)
 				  >> f_lam(i, j) >> f_osc(i, j) >> f_A(i, j);
 		}
 
-	lfile.close();
-
 	return 0;
 }
 

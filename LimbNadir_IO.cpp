@@ -400,8 +400,6 @@ int Load_Nadir_Ascii(string Datei_in,
 		}
 
 	}// ende for i
-	infile.close();
-	infile.clear();
 	//cout<<"ASCII Nadir Laden fertig\n";
 	return 0;
 }
@@ -616,7 +614,6 @@ int Save_Limb_Ascii(string Datei_out,
 		outfile << "\t" << Limbdaten[j].m_error[l];
 	}
 	//ausgabe ende
-	outfile.close();
 	//cout<<"Speichern fertig\n";
 	return 0;
 }
@@ -672,8 +669,6 @@ int Save_Limb_l_mpl_binary(string Datei_out,
 		outfile.write((char *) &Limbdaten[i].m_radiance[0], sizeof(float)*no_of_pix);
 		outfile.write((char *) &Limbdaten[i].m_error[0], sizeof(float)*no_of_pix);
 	}
-	outfile.close();
-	outfile.clear();
 	//cout<<"Speichern fertig\n";
 	return 0;
 }
@@ -742,8 +737,6 @@ int Save_Nadir_Ascii(string Datei_out,
 		}
 
 	}// ende for i
-	outfile.close();
-	outfile.clear();
 	//cout<<"Speichern fertig\n";
 	return 0;
 }
@@ -798,8 +791,6 @@ int Save_Nadir_n_mpl_binary(string Datei_out,
 		outfile.write((char *) &Nadirdaten[i].m_radiance[0], sizeof(float)*No_of_Pix);
 		outfile.write((char *) &Nadirdaten[i].m_error[0], sizeof(float)*No_of_Pix);
 	}
-	outfile.close();
-	outfile.clear();
 	//cout<<"BINARY Nadir speichern fertig\n";
 	return 0;
 }
