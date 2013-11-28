@@ -324,14 +324,13 @@ int Load_Nadir_Ascii(string Datei_in,
 	}
 	infile >> No_of_Pix;
 	//cout<<"No_of_Pix: "<<No_of_Pix<<"\n";
-	infile.close();
-	infile.clear();
 	//speicher anmelden
 	Kanal_Nr = new int[No_of_Pix];
 	Wellenlaenge = new float[No_of_Pix];
 	Nadirdaten = new Nadir_Datensatz[No_of_Messungen];
 	// ZWEITER DURCHLAUF Kanal und WL Felder füllen
-	infile.open(Datei_in.c_str());
+	infile.clear();
+	infile.seekg(0, ios::beg);
 	if (!infile.is_open()) {
 		cout << Datei_in << " kann nicht geladen werden in Nadirumwandlung\n";
 		return 1;
@@ -345,10 +344,9 @@ int Load_Nadir_Ascii(string Datei_in,
 			   >> Wellenlaenge[i];
 		getline(infile, s_dummy);
 	}
-	infile.close();
-	infile.clear();
 	//DRITTER DURCHLAUF großes Feld Füllen
-	infile.open(Datei_in.c_str());
+	infile.clear();
+	infile.seekg(0, ios::beg);
 	if (!infile.is_open()) {
 		cout << Datei_in << " kann nicht geladen werden in Nadirumwandlung\n";
 		return 1;
