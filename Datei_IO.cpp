@@ -203,6 +203,10 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
 	// 3. Nachbearbeitung/Ausschlusskriterien
 	// Wird jetzt nach dem Laden durchgeführt
 	// 4. Erstellung des Übergabevektors
+	// check Anzahl_Hoehen for correctness and change it to
+	// the largest sensible number of altitudes
+	if (Anzahl_Hoehen < 0 || Anzahl_Hoehen > no_of_alt - 1)
+		Anzahl_Hoehen = no_of_alt - 1;
 	Ergebnisvektor
 		= make_messung_limb_vector(Dateiname, Limbdaten, Wellenlaengen,
 				no_of_pix, no_of_alt, orbit_phase, Datum, Center_Lat_Lon,
