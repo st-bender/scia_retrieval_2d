@@ -109,8 +109,9 @@ bool test_auf_SAA_limb(Messung_Limb &space, Konfiguration &konf)
 	 * the desired wavelength range. */
 	if (Ni == 0) return true;
 
-	double I_max = *max_element(space.m_Intensitaeten.begin() + i0,
-			space.m_Intensitaeten.begin() + i1);
+	auto pbounds = std::minmax_element(space.m_Intensitaeten.begin() + i0,
+				space.m_Intensitaeten.begin() + i1);
+	double I_ptp = *pbounds.second - *pbounds.first;
 	double I_sum = accumulate(space.m_Intensitaeten.begin() + i0,
 			space.m_Intensitaeten.begin() + i1, 0.);
 	double I_avg = I_sum / Ni;
@@ -125,10 +126,11 @@ bool test_auf_SAA_limb(Messung_Limb &space, Konfiguration &konf)
 
 	/* the threshold is a rule of thumb from one day (2010-02-18) */
 	/* TODO: replace by a more sophisticated/reliable approach */
-	if (I_max > konf.SAA_cutoff) {
+	if (I_ptp > konf.SAA_cutoff) {
 		cerr << "SAA or peak detected:" << endl;
+		cerr << space.m_Latitude_TP << "\t" << space.m_Hoehe_TP << "\t";
 		cerr << space.m_Longitude_Sat << "\t" << space.m_Latitude_Sat << "\t";
-		cerr << I_max << "\t" << I_avg << "\t";
+		cerr << I_ptp << "\t" << I_avg << "\t";
 		cerr << sqrt(I_rms_err_sq) << endl;
 		SAA = true;
 	}
