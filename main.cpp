@@ -152,6 +152,11 @@ irgendetwas nicht funktioniert, mich kontaktieren
 #include "Dateinamensteile_Bestimmen.h"
 #include "Ausgewertete_Messung_Limb.h"
 #include "Ausgewertete_Messung_Nadir.h"
+
+/* override version with -DVERSION="<version>" cflags or cxxflags */
+#ifndef VERSION
+#define VERSION "unknown"
+#endif
 //===========================================================
 // eigene externe Bibliotheken-> Müssen mitgeliefert werden,
 // falls nicht dabei, mail an martin
@@ -194,6 +199,8 @@ double slit_func_gauss(double fwhm, double x0, double x)
 // argv[i] enthält den i-ten Kommandozeilenparameter argv[0] ist Programmname
 int main(int argc, char *argv[])
 {
+	/* version information first */
+	std::cout << argv[0] << " version " << VERSION << std::endl;
 	//////////////////////////////////////////////////////////////////////////
 	// Übernahme der Kommandozeilenargumente
 
