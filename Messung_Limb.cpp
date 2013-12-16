@@ -268,11 +268,11 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 		string plot_dir = Arbeitsverzeichnis + "/Plots";
 		mkdir(plot_dir.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
-			<< "_" << Index << "_" << m_Hoehe_TP << "km.ps";
+			<< "_" << Index << "_" << m_Hoehe_TP << "km.pdf";
 		string new_datnam(buf.str());
 		string s1(plot_dir + "/" + new_datnam);
 		//s1 ist der Volle Pfad der Datei...diesen kann man wegspeichern, um
-		//später die .ps files in ein großes pdf zu packen
+		//später die .pdf files in ein großes pdf zu packen
 		Spezfenst.m_Liste_der_Plot_Dateinamen.push_back(s1);
 		//Orbitnummer ermitteln/////
 		// egal wie die Datei heißt, die Orbitnummer sind die 5 Zeichen vor .dat
@@ -555,11 +555,11 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 			<< std::setw(3) << std::setfill('0') << std::setprecision(0)
 			<< std::fixed << m_Hoehe_TP << "km_"
 			<< std::setw(3) << std::setfill('0') << std::setprecision(0)
-			<< std::fixed << m_Latitude_TP << "deg.ps";
+			<< std::fixed << m_Latitude_TP << "deg.pdf";
 		std::string new_datnam(buf.str());
 		std::string s1(plot_dir + "/" + new_datnam);
 		// s1 ist der Volle Pfad der Datei... diesen wegspeichern,
-		// um später die .ps files in ein großes pdf zu packen
+		// um später die .pdf files in ein großes pdf zu packen
 		Spezfenst.m_Liste_der_Plot_Dateinamen.push_back(s1);
 		// Orbitnummer ermitteln
 		// die Orbitnummer sind die 5 Zeichen vor .dat
