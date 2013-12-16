@@ -33,11 +33,11 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 			 vector<double> &x1, vector<double> &y1,
 			 vector<double> &x2, vector<double> &y2,
 			 int Startindex, int Endindex, double Mittelwert, double Fehler,
-			 bool keep)
+			 bool keep, bool run)
 {
 	string Rohdaten_Name_a = Dateiname + "_a.raw.dat";
 	string Rohdaten_Name_b = Dateiname + "_b.raw.dat";
-	string Temp_Skript_Name = Dateiname + ".plt";
+	string Temp_Skript_Name = Dateiname + ".py";
 
 	ofstream outfile1a, outfile1b, outfile2;
 	outfile1a.open(Rohdaten_Name_a.c_str());
@@ -56,72 +56,64 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	////////////////////////////////////////////////////////////////////////////
 	outfile1a.close();
 	outfile1b.close();
-	// x und y Grenzen des Datensatzes finden //////////////////////////////
-	double x_min = std::min(*std::min_element(x1.begin(), x1.end()),
-			*std::min_element(x2.begin(), x2.end()));
-	double x_max = std::max(*std::max_element(x1.begin(), x1.end()),
-			*std::max_element(x2.begin(), x2.end()));
-	double y_min = std::min(*std::min_element(y1.begin(), y1.end()),
-			*std::min_element(y2.begin(), y2.end()));
-	double y_max = std::max(*std::max_element(y1.begin(), y1.end()),
-			*std::max_element(y2.begin(), y2.end()));
 
 	stringstream buf;
 	buf.precision(4);
-	buf << "scd: " << Mittelwert << " cm^{-2}";
+	buf << "scd: " << Mittelwert << " $cm^{-2}$";
 	string text_messwert(buf.str());
 	buf.str(string()); // clear the stream
-	buf << "error: " << Fehler << " cm^{-2}";
+	buf << "error: " << Fehler << " $cm^{-2}$";
 	string text_Fehler(buf.str());
 	////////////////////////////////////////////////////////////////////////////
-	// Gnuplotscript schreiben
+	// Pythonscript schreiben
 	////////////////////////////////////////////////////////////////////////////
 	outfile2.open(Temp_Skript_Name.c_str());
-	//outfile2<<"set terminal x11\n";   // Betriebssystemabhängig, standard auf
-	//was ungefährliches setzen
-	outfile2 << "#!/usr/bin/env gnuplot" << endl;
-	outfile2 << "set terminal postscript landscape enhanced color "
-			 << "font \"Helvetica\" 24 solid linewidth 2\n";
-	outfile2 << "set size ratio 0.5\n";
-	if (y_max - y_min < 10000. && y_max - y_min > 1.)
-		outfile2 << "set format y \"%.1f\"\n";
-	else
-		outfile2 << "set format y \"%.1t{/Symbol \\327}10^{%T}\"\n";
-	outfile2 << "set style line 1 lc 1 lt 1 lw 3 pt 7 ps 4\n";
-	outfile2 << "set style line 2 lc 3 lt 2 lw 3 pt 5 ps 4\n";
-	outfile2 << "set output '" << Dateiname.c_str() << "'\n";
-	outfile2 << "set title \'" << title.c_str() << "\'\n";
-	outfile2 << "set xlabel \'" << xlabel.c_str() << "\'\n";
-	outfile2 << "set ylabel \'" << ylabel.c_str() << "\'\n";
-	outfile2 << "set xtics 1\n";
-	outfile2 << "set nokey \n"; //keine Legende
-	outfile2 << "set label \"" << text_messwert.c_str() << "\" at "
-			 << x_min + 0.4 * (x_max - x_min) << ","
-			 << y_min + 0.98 * (y_max - y_min) << "\n";
-	outfile2 << "set label \"" << text_Fehler.c_str() << "\" at "
-			 << x_min + 0.4 * (x_max - x_min) << ","
-			 << y_min + 0.9 * (y_max - y_min) << "\n";
+	outfile2 << "#!/usr/bin/env python" << std::endl;
+	outfile2 << "import numpy as np" << std::endl;
+	outfile2 << "from matplotlib import rc\n"
+			 << "import matplotlib.pyplot as plt\n"
+			 << "import matplotlib.ticker as tic\n"
+			 << "rc('axes', linewidth=1.5)\n"
+			 << "rc('lines', linewidth=1.5)\n"
+			 << "rc('mathtext', default='regular')\n"
+			 << std::endl;
+	outfile2 << "xy1 = np.genfromtxt('" << Rohdaten_Name_a.c_str() << "')\n";
+	outfile2 << "xy2 = np.genfromtxt('" << Rohdaten_Name_b.c_str() << "')\n";
+	outfile2 << "fig, ax = plt.subplots(figsize=(7, 5))" << std::endl;
+	outfile2 << "ax.set_title('" << title.c_str() << "')" << std::endl;
+	outfile2 << "ax.title.set_y(1.05)" << std::endl;
+	outfile2 << "ax.set_xlabel('" << xlabel.c_str() << "')" << std::endl;
+	outfile2 << "ax.set_ylabel(r'" << ylabel.c_str() << "')" << std::endl;
+	outfile2 << "ax.annotate(r'" << text_messwert.c_str() << "', "
+			 << "xy=(0.5, 0.96), xycoords='axes fraction', "
+			 << "horizontalalignment='center', "
+			 << "verticalalignment='center')\n";
+	outfile2 << "ax.annotate(r'" << text_Fehler.c_str() << "', "
+			 << "xy=(0.5, 0.90), xycoords='axes fraction', "
+			 << "horizontalalignment='center', "
+			 << "verticalalignment='center')\n";
 	// nun beide Datenreihen mit  Linien Plotten
-	outfile2 << "plot '"
-			 << Rohdaten_Name_a.c_str()
-			 << "' using 1:2 with lines ls 1, '"
-			 << Rohdaten_Name_b.c_str()
-			 << "' using 1:2 with lines ls 2\n";
+	outfile2 << "ax.plot(xy1.T[0], xy1.T[1], 'r-', xy2.T[0], xy2.T[1], 'b-')\n";
+	outfile2 << "ax.xaxis.set_major_locator(tic.MultipleLocator(1.))\n";
+	outfile2 << "plt.tight_layout()\n";
+	outfile2 << "plt.savefig('" << Dateiname.c_str() << "')" << std::endl;
 
 	////////////////////////////////////////////////////////////////////////////
-	// Gnuplotscript schreiben ENDE
+	// Pythonscript schreiben ENDE
 	////////////////////////////////////////////////////////////////////////////
 	outfile2.close();
 	////////////////////////////////////////////////////////////////////////////
-	// Gnuplotscript ausführen
+	// Pythonscript ausführen
 	////////////////////////////////////////////////////////////////////////////
-	string befehl;
-	befehl = "gnuplot " + Temp_Skript_Name;
-	system(befehl.c_str());
+	if (run) {
+		std::string befehl;
+		befehl = "python " + Temp_Skript_Name;
+		system(befehl.c_str());
+	}
 	////////////////////////////////////////////////////////////////////////////
-	// Gnuplotscript löschen
+	// Pythonscript löschen
 	////////////////////////////////////////////////////////////////////////////
-	// hmm Wartet der, bis Gnuplot fertig ist?---sollte er, in system steckt ja
+	// hmm Wartet der, bis Python fertig ist?---sollte er, in system steckt ja
 	// waitpid drin
 	// remove the plot data file only if requested (the default)
 	if (!keep) {
