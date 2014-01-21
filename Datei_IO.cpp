@@ -599,7 +599,8 @@ MPL_Matrix Read_Atmodatei(string Dateiname)
 ////////////////////////////////////////////////////////////////////////////////
 int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
 		MPL_Matrix &Dichten, MPL_Matrix &Dichten_tot, MPL_Matrix &apriori,
-		MPL_Matrix &S_x, MPL_Matrix &S_x_meas, MPL_Matrix &AKM)
+		MPL_Matrix &S_x, MPL_Matrix &S_x_meas, MPL_Matrix &AKM,
+		bool save_sx, bool save_akm)
 {
 	// Die Ausgabe erfolgt in 3 Dateien mit zusätzlichem Namen
 	// _Dichten.txt, _Sx.txt und  _AKM.txt
@@ -658,12 +659,15 @@ int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
 	// Die anderen beiden kurz und schmerzlos
 	//S_x
 	// Zeilenweise ausgeben
-	S_x.in_Datei_speichern(Dateiname2);
-	S_x_meas.in_Datei_speichern(Dateiname2_meas);
+	if (save_sx) {
+		S_x.in_Datei_speichern(Dateiname2);
+		S_x_meas.in_Datei_speichern(Dateiname2_meas);
+	}
 
 	//AKM
 	// Zeilenweise ausgeben
-	AKM.in_Datei_speichern(Dateiname3);
+	if (save_akm)
+		AKM.in_Datei_speichern(Dateiname3);
 
 	return 0;
 }
