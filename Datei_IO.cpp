@@ -30,13 +30,12 @@ extern int Prioritylevel;
 // calculates the intensity average over a range of wavelengths.
 // when median is set to true, it returns the median in the range,
 // otherwise the arithmetic mean is returned (the default case)
-double average_over_wl_range(float *input, float *Wellenlaengen,
+double average_over_wl_range(std::vector<float> rad, std::vector<float> wl,
 		int N_wl, double wl_start, double wl_end, bool median = false)
 {
 	long start, end;
 	double avg = 0.;
 	// copy to a vector for <algorithm>
-	vector<float> wl(Wellenlaengen, Wellenlaengen + N_wl);
 	vector<float>::iterator wl_low, wl_up;
 
 	if (wl_start > wl_end) {
@@ -56,9 +55,6 @@ double average_over_wl_range(float *input, float *Wellenlaengen,
 
 	start = distance(wl.begin(), wl_low);
 	end = distance(wl.begin(), wl_up);
-
-	// copy the intensities to a vector
-	vector<float> rad(input + start, input + end);
 
 	if (median == false) {
 		// build the arithmetic mean
