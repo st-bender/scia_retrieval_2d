@@ -33,7 +33,6 @@ extern int Prioritylevel;
 double average_over_wl_range(std::vector<float> rad, std::vector<float> wl,
 		int N_wl, double wl_start, double wl_end, bool median = false)
 {
-	long start, end;
 	double avg = 0.;
 	// copy to a vector for <algorithm>
 	vector<float>::iterator wl_low, wl_up;
@@ -52,9 +51,6 @@ double average_over_wl_range(std::vector<float> rad, std::vector<float> wl,
 	if (wl_up != wl.begin()) --wl_up;
 
 	if (wl_up == wl_low) return 0.; // nothing to average
-
-	start = distance(wl.begin(), wl_low);
-	end = distance(wl.begin(), wl_up);
 
 	if (median == false) {
 		// build the arithmetic mean
