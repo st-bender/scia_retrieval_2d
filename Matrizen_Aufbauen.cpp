@@ -1592,7 +1592,7 @@ int Pixel_finden_und_AMF_erhoehen_LOS(MPL_Matrix &AMF, Retrievalgitter &Grid,
 		//  <<Grid.m_Gitter[Grid.m_Anzahl_Punkte-1].m_Min_Breite<<"\n";
 		return 2;
 	}  // kein Punkt des Gitters
-	if (Punkt_Hoehe < Grid.m_Gitter[0].m_Min_Hoehe) {
+	if (Punkt_Hoehe <= Grid.m_Gitter[0].m_Min_Hoehe) {
 		Pixelnummer = -1;
 		/*
 		cout << "Fall2d\n";
