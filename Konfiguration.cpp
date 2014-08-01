@@ -26,6 +26,7 @@ template <class T> vector<T> string_to_vector(string zeile);
 // default constructor to initialise the config default values
 Konfiguration::Konfiguration() :
 	m_Pfad_Solar_Correction_Factors("DATA/sol_corrfac_sao-scia.dat"),
+	m_Pfad_NO_parameters("DATA/Luqueetal.dat"),
 	m_Pfad_Ap_index("DATA/spidr_ap_2000-2012.dat"),
 	m_Pfad_Kp_index("DATA/spidr_kp_2000-2012.dat"),
 	m_Pfad_f107_index("DATA/spidr_f107_2000-2012.dat"),
@@ -102,6 +103,11 @@ int Konfiguration::Konfiguration_einlesen(std::string file)
 			//cout<<"Xsect\n";
 			getline(infile, Zeile);
 			this->m_Pfad_Wirkungsquerschnitte_der_Atmosphaerengase = Zeile;
+			continue;
+		}
+		if (Zeile == "NO parameters") {
+			getline(infile, Zeile);
+			this->m_Pfad_NO_parameters = Zeile;
 			continue;
 		}
 		if (Zeile == "Ap index file") {

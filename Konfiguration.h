@@ -22,6 +22,7 @@ public:
 	std::string m_Pfad_Linienparameter_Metalle;
 	std::string m_Pfad_Dichten_der_Atmosphaerengase;
 	std::string m_Pfad_Wirkungsquerschnitte_der_Atmosphaerengase;
+	std::string m_Pfad_NO_parameters;
 	std::string m_Pfad_Ap_index;
 	std::string m_Pfad_Kp_index;
 	std::string m_Pfad_f107_index;
