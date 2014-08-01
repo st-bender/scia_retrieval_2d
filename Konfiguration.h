@@ -18,6 +18,7 @@ public:
 	int m_Anzahl_der_Emitter;
 	std::string m_Pfad_Solar_Spektrum;
 	std::string m_Pfad_Solar_Fallback_Spektrum;
+	std::string m_Pfad_Solar_Correction_Factors;
 	std::string m_Pfad_Linienparameter_Metalle;
 	std::string m_Pfad_Dichten_der_Atmosphaerengase;
 	std::string m_Pfad_Wirkungsquerschnitte_der_Atmosphaerengase;

@@ -25,6 +25,7 @@ template <class T> vector<T> string_to_vector(string zeile);
 
 // default constructor to initialise the config default values
 Konfiguration::Konfiguration() :
+	m_Pfad_Solar_Correction_Factors("DATA/sol_corrfac_sao-scia.dat"),
 	m_MinLat(-90.0), m_MaxLat(90.0), m_NLat(72),
 	skip_SAA(true), SAA_cutoff(8.8e10),
 	atmo_Temp(200.), NO_apriori(false),
@@ -75,6 +76,11 @@ int Konfiguration::Konfiguration_einlesen(std::string file)
 			//cout<<"fallbacksolar\n";
 			getline(infile, Zeile);
 			this->m_Pfad_Solar_Fallback_Spektrum = Zeile;
+			continue;
+		}
+		if (Zeile == "solar correction factors") {
+			getline(infile, Zeile);
+			this->m_Pfad_Solar_Correction_Factors = Zeile;
 			continue;
 		}
 		if (Zeile == "Line parameters") {
