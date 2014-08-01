@@ -222,16 +222,16 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 				if (sfit->m_Spezies_Name == "NO") {
 					double sol_fac = spidr_value_from_file(mlit->m_Jahr,
 							mlit->m_Monat, mlit->m_Tag,
-							"DATA/sol_corrfac_sao-scia.dat", 1.0);
+							Konf.m_Pfad_Solar_Correction_Factors, 1.0);
 					std::cerr << "# solar factor = " << sol_fac << std::endl;
 					// create new object, same transition but modelled temperature
-					double temp = mlit->msise_temperature();
+					double temp = mlit->msise_temperature(Konf);
 					int vu = sfit->NO_vec.at(k).get_vu();
 					int vl = sfit->NO_vec.at(k).get_vl();
 					int vl_abs = sfit->NO_vec.at(k).get_vl_abs();
 					NO_emiss NO_new(vu, vl, vl_abs, temp);
 					NO_new.solar = sfit->NO_vec.at(k).solar * sol_fac;
-					NO_new.read_luque_data_from_file("DATA/Luqueetal.dat");
+					NO_new.read_luque_data_from_file(Konf.m_Pfad_NO_parameters);
 					NO_new.calc_excitation();
 					NO_new.calc_line_emissivities();
 					NO_new.scia_convolve(Rohdaten.at(0));
