@@ -1823,7 +1823,7 @@ extern "C" {
  * and the model expects to find a file "noem_eof.nc" in the "input/" subdir.
  */
 void SNOE_apriori_NO(Retrievalgitter &grid, Ausgewertete_Messung_Limb &aml,
-		MPL_Matrix &apriori)
+		MPL_Matrix &apriori, Konfiguration &Konf)
 {
 	// to get the day of the year
 	int days[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
@@ -1837,9 +1837,9 @@ void SNOE_apriori_NO(Retrievalgitter &grid, Ausgewertete_Messung_Limb &aml,
 
 	// get solar data from the spidr input files
 	__params_MOD_f107 = spidr_value_from_file(aml.m_Jahr, aml.m_Monat,
-			aml.m_Tag, "DATA/spidr_f107_2000-2012.dat");
+			aml.m_Tag, Konf.m_Pfad_f107_index);
 	__params_MOD_kp = spidr_value_from_file(aml.m_Jahr, aml.m_Monat,
-			aml.m_Tag, "DATA/spidr_kp_2000-2012.dat");
+			aml.m_Tag, Konf.m_Pfad_Kp_index);
 	std::cout << "# snoe parameters: f10.7 = " << __params_MOD_f107
 		<< ", kp = " << __params_MOD_kp << std::endl;
 

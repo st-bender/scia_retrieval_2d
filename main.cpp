@@ -1275,7 +1275,7 @@ int main(int argc, char *argv[])
 		Dichte_apriori_NO = MPL_Matrix(Grid.m_Anzahl_Punkte, 1);
 		if (Konf.NO_apriori)
 			SNOE_apriori_NO(Grid, Ausgewertete_Limbmessung_NO.front(),
-					Dichte_apriori_NO);
+					Dichte_apriori_NO, Konf);
 		// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
 		Saeulendichten_NO = MPL_Matrix(Ausgewertete_Limbmessung_NO.size()
 				+ Ausgewertete_Nadirmessung_NO.size(), 1); //Spaltenvektor
