@@ -1,0 +1,11 @@
+! This file contains line parameters read by ReadLineData.f90
+!
+! Format:
+! Total number of emitters
+! Number of lines per species (mind the order!)
+! Wavelength [nm]      rel. Einstein coefficient   f-value   E1   E2
+ 2
+ 2 1
+279.553    .956     .61      .5      .5
+280.270    .954     .31      0.      1.
+285.213    .847    1.80      1.      0.
