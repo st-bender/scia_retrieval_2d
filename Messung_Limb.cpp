@@ -19,6 +19,7 @@
 #include <cstdio>   //Filekram
 #include <iomanip>
 #include <sys/stat.h>
+#include "Konfiguration.h"
 #include "Ausdrucke.h"
 #include "Fit_Polynom.h"
 #include "Glaetten.h"
@@ -1198,7 +1199,7 @@ int Messung_Limb::savitzky_golay(int window_size)
 	return my_savitzky_golay(m_Intensitaeten, window_size);
 }
 
-double Messung_Limb::msise_temperature()
+double Messung_Limb::msise_temperature(Konfiguration &Konf)
 {
 	struct nrlmsise_output output;
 	struct nrlmsise_input input;
@@ -1235,9 +1236,9 @@ double Messung_Limb::msise_temperature()
 
 	// solar data from spidr data files
 	double f107 = spidr_value_from_file(m_Jahr, m_Monat, m_Tag,
-			"DATA/spidr_f107_2000-2012.dat");
+			Konf.m_Pfad_f107_index);
 	double ap = spidr_value_from_file(m_Jahr, m_Monat, m_Tag,
-			"DATA/spidr_ap_2000-2012.dat");
+			Konf.m_Pfad_Ap_index);
 	std::cout << "# msis parameters: f10.7 = " << f107
 		<< ", ap = " << ap << std::endl;
 	input.f107A = f107;
