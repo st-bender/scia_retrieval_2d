@@ -509,7 +509,7 @@ int main(int argc, char *argv[])
 		NO_emiss NO(Konf.NO_v_u.at(i), Konf.NO_v_l.at(i),
 				Konf.NO_v_l_abs.at(i), Konf.atmo_Temp);
 		NO.get_solar_data(sol_ref);
-		NO.read_luque_data_from_file("DATA/Luqueetal.dat");
+		NO.read_luque_data_from_file(Konf.m_Pfad_NO_parameters);
 		NO.calc_excitation();
 		NO.calc_line_emissivities();
 		std::cout << "NO transition " << i
