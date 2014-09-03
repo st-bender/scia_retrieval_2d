@@ -121,6 +121,7 @@ class NO_emiss {
 	double get_wl_abs_median();
 	double get_wl_abs_vu_0();
 	double get_wl_emiss_vu_vl();
+	double get_band_emiss();
 	double get_scia_band_emiss();
 };
 

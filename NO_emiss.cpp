@@ -922,6 +922,10 @@ double NO_emiss::get_wl_emiss_vu_vl()
 {
 	return 0.1 * f_lam(v_u, v_l);
 }
+double NO_emiss::get_band_emiss()
+{
+	return emiss_tot;
+}
 double NO_emiss::get_scia_band_emiss()
 {
 	return scia_band_emiss;
