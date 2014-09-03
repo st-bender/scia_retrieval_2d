@@ -229,6 +229,11 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 					int vu = sfit->NO_vec.at(k).get_vu();
 					int vl = sfit->NO_vec.at(k).get_vl();
 					int vl_abs = sfit->NO_vec.at(k).get_vl_abs();
+					std::cerr << "# atmo temperature = " << temp
+						<< ", vl_abs (v) = " << vl_abs
+						<< ", vu (v') = " << vu
+						<< ", vl (v'') = " << vl
+						<< std::endl;
 					NO_emiss NO_new(vu, vl, vl_abs, temp);
 					NO_new.solar = sfit->NO_vec.at(k).solar * sol_fac;
 					NO_new.read_luque_data_from_file(Konf.m_Pfad_NO_parameters);
