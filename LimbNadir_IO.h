@@ -191,7 +191,7 @@ int Load_Limb_l_mpl_binary(std::string Datei_in,
 
 int Load_Nadir_Ascii(std::string Datei_in,
 					 std::string textheader[7], int &No_of_Messungen, int &No_of_Pix,
-					 int*& Kanal_Nr, float &orbit_phase,
+					 int*& Kanal_Nr,
 					 float*& Wellenlaenge, Nadir_Datensatz*& Nadirdaten);
 int Load_Nadir_n_mpl_binary(std::string Datei_in,
 							std::string textheader[7], int &No_of_Messungen,
