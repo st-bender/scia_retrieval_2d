@@ -31,7 +31,7 @@ extern int Prioritylevel;
 // when median is set to true, it returns the median in the range,
 // otherwise the arithmetic mean is returned (the default case)
 double average_over_wl_range(std::vector<float> rad, std::vector<float> wl,
-		int N_wl, double wl_start, double wl_end, bool median = false)
+		double wl_start, double wl_end, bool median = false)
 {
 	double avg = 0.;
 	// copy to a vector for <algorithm>
