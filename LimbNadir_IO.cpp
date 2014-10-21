@@ -22,6 +22,11 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 
 
+template<typename T>
+std::istream& binary_read(std::istream* stream, T& value, size_t N = 1) {
+	return stream->read(reinterpret_cast<char *>(&value), N * sizeof(T));
+}
+
 inline void Limb_Datensatz::read_from_mpl_binary(std::ifstream *stream,
 		int no_of_pix)
 {

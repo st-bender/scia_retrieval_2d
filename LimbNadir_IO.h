@@ -170,11 +170,6 @@ inline Limb_Datensatz &Limb_Datensatz::operator=(const Limb_Datensatz &RHS)
 }
 #endif /* NADIR_DATENSATZ_HH_ */
 
-template<typename T>
-std::istream& binary_read(std::istream* stream, T& value, size_t N = 1) {
-	return stream->read(reinterpret_cast<char *>(&value), N * sizeof(T));
-}
-
 // Laden
 int Load_Limb_Ascii(std::string Datei_in,
 					std::string textheader[31], int &no_of_alt, int &no_of_pix,
