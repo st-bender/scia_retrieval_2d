@@ -574,7 +574,7 @@ int NO_emiss::read_luque_data_from_file(std::string filename)
 // Excitation of upper state J-levels: k_u = j_u - 0.5, k_u = j_u + 0.5
 int NO_emiss::calc_excitation()
 {
-	int i, l, k_l, k_u;
+	int i, l, k_l, k_u, nidx;
 	double j_l = 0., j_u = 0., nj_frac, sum1, sum2;
 	double f_FC_tot;
 
@@ -586,22 +586,21 @@ int NO_emiss::calc_excitation()
 			if (l == 1 || l == 4 || l == 7 || l == 10) j_l = j_u;
 			if (l == 2 || l == 5 || l == 8 || l == 11) j_l = j_u - 1.;
 
-			if (l == 0 || l == 1 || l == 2 || l == 6 || l == 8 || l == 10)
+			if (l == 0 || l == 1 || l == 2 || l == 6 || l == 8 || l == 10) {
 				k_l = j_l - 0.5;
-			else
+				nidx = 0;
+			} else {
 				k_l = j_l + 0.5;
+				nidx = 1;
+			}
 			if (l == 0 || l == 1 || l == 2 || l == 7 || l == 9 || l == 11)
 				k_u = j_u - 0.5;
 			else
 				k_u = j_u + 0.5;
 
 			if ((k_l >= 0) && (k_u >= 0) && (j_l >= 0.5) && (k_l <= NJ)) {
-				if (l == 0 || l == 1 || l == 2 || l == 6 || l == 8 || l == 10)
-					nj_frac = NJ_to_N(0, j_l - 0.5);
-				else
-					nj_frac = NJ_to_N(1, j_l + 0.5);
-
 				if ((k_l >= 1) || (k_l == 1 && j_l == 1.5) || (k_l == 0)) {
+					nj_frac = NJ_to_N(nidx, k_l);
 					if (l == 0 || l == 1 || l == 2 || l == 7 || l == 9 || l == 11)
 						sum1 += lambda_K_abs(l, k_l) * lambda_K_abs(l, k_l)
 							* solar(l, k_l) * vf_HL_K(l, k_l) / (2. * j_l + 1.)
@@ -610,7 +609,7 @@ int NO_emiss::calc_excitation()
 						sum2 += lambda_K_abs(l, k_l) * lambda_K_abs(l, k_l)
 							* solar(l, k_l) * vf_HL_K(l, k_l) / (2. * j_l + 1.)
 							* nj_frac;
-					}
+				}
 			}
 		}
 		sum1 *= phys::flux * f_osc(v_u, 0);
