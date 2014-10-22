@@ -612,8 +612,8 @@ int NO_emiss::calc_excitation()
 				}
 			}
 		}
-		sum1 *= phys::flux * f_osc(v_u, 0);
-		sum2 *= phys::flux * f_osc(v_u, 0);
+		sum1 *= phys::flux * f_osc(v_u, v_l_abs);
+		sum2 *= phys::flux * f_osc(v_u, v_l_abs);
 		excit(0, i) = sum1;
 		if (i < NJ) excit(1, i + 1) = sum2;
 	}
