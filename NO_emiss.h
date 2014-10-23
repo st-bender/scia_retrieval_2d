@@ -103,6 +103,8 @@ class NO_emiss {
 	int read_luque_data_from_file(std::string filename);
 	int calc_excitation();
 	int calc_line_emissivities();
+	std::vector<double> calc_polarisation();
+	int pol_corr(double SZA, double rel_SAA, double mu2 = 0.17, double mu3 = -0.2);
 	int scia_convolve(class Messung_Limb &ml);
 	int print_lines_emiss_absorp();
 	int print_Hoenl_London_abs();

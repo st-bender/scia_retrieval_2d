@@ -675,6 +675,84 @@ int NO_emiss::calc_line_emissivities()
 	return 0;
 }
 
+/* line polarisations as per
+ * Zare, J. Chem. Phys. 45, 4510 (1966)
+ * doi:10.1063/1.1727531
+ */
+std::vector<double> NO_emiss::calc_polarisation()
+{
+	double j_u = 0.;
+	std::vector<double> pol_j(12, 0.);
+
+	for (int i = 0; i <= NJ; i++) {
+		double excit_p = excit_pqr(0, i);
+		double excit_q = excit_pqr(1, i);
+		double excit_r = excit_pqr(2, i);
+		for (size_t j = 0; j < 12; j++) {
+			if (j == 0 || j == 1 || j == 2 || j == 7 || j == 9 || j == 11)
+				j_u = i + 0.5;
+			else
+				j_u = i - 0.5;
+
+			if (j % 3 == 0)
+				pol_j.at(j) += - (2.*j_u - 1.) / (6.*j_u + 7.) * excit_q
+							+ (2.*j_u*j_u - j_u) / (14.*j_u*j_u + 33.*j_u + 20.) * excit_p
+							+ 1./7. * excit_r;
+			if (j % 3 == 1)
+				pol_j.at(j) +=  (4.*(j_u*j_u + j_u) - 3.) / (8.*(j_u*j_u + j_u) - 1.) * excit_q
+							- (2.*j_u - 1.) / (6.*j_u + 7.) * excit_p
+							- (2.*j_u + 3.) / (6.*j_u - 1.) * excit_r;
+			if (j % 3 == 2)
+				pol_j.at(j) += - (2.*j_u + 3.) / (6.*j_u - 1.) * excit_q
+							+ (2.*j_u*j_u + 5.*j_u + 3.) / (14.*j_u*j_u - 5.*j_u + 1.) * excit_r
+							+ 1./7. * excit_p;
+		}
+	}
+
+	return pol_j;
+}
+
+/* SCIAMACHY polarisation correction from
+ * "SCIAMACHY Level 0 to 1c Processing
+ *  Algorithm Theoretical Basis Document"
+ * Doc. No. ENV-ATB-DLR-SCIA-0041, pages 96--110
+ * and from Liebing et al, Atmos. Meas. Tech. 6, 1503--1520, 2013
+ *          doi:10.5194/amt-6-1503-2013
+ * and from M.L.'s paper in preparation.
+ */
+int NO_emiss::pol_corr(double SZA, double rel_SAA,
+		double mu2, double mu3)
+{
+	const double deg = M_PI / 180.0;
+	double sin_th0 = std::sin(SZA * deg);
+	double cos_phi = std::cos(rel_SAA * deg);
+	double sin_phi = std::sin(rel_SAA * deg);
+	double cos_Theta = sin_th0 * cos_phi;
+	double cos_chi = sin_th0 * sin_phi / std::sqrt(1. - cos_Theta*cos_Theta);
+	double chi;
+
+	std::vector<double> Ps = calc_polarisation();
+
+	if (SZA < 90.)
+		chi = std::acos(cos_chi);
+	else
+		chi = std::acos(-cos_chi);
+
+	emiss_tot = 0.;
+
+	for (int i = 0; i < 12; i++) {
+		double Q = Ps.at(i) * std::cos(2. * chi);
+		double U = Ps.at(i) * std::sin(2. * chi);
+		double f = 1. + mu2 * Q + mu3 * U;
+		for (int j = 0; j <= NJ; j++) {
+			gamma_j(i, j) *= f;
+			emiss_tot += gamma_j(i, j);
+		}
+	}
+
+	return 0;
+}
+
 // integral of the slit function, using Bronstein formula 87.
 double int_slit_func(double fwhm, double x)
 {
