@@ -533,8 +533,13 @@ int main(int argc, char *argv[])
 		Lindat.m_Wellenlaenge = wl;
 		Lindat.m_rel_Einstein = 1;
 		Lindat.m_f_Wert = 0.162;
+		// isotropic scattering
 		Lindat.m_E1 = 0;
 		Lindat.m_E2 = 1;
+		// Rayleigh scattering with depolarization rho = 0.0295
+		// [Rozanov 2001, Scharringhausen 2008]
+		//Lindat.m_E1 = 0.9563932002956393;
+		//Lindat.m_E2 = 4.3606799704360676e-2;
 		Spez.m_Liniendaten.push_back(Lindat);
 	}
 	Spezies_Fenster.push_back(Spez);
