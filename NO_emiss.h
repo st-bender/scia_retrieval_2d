@@ -81,6 +81,7 @@ class NO_emiss {
 	MPL_Matrix f_lam; // band wavelength [nm]
 	// the excitation of J'
 	MPL_Matrix excit;
+	MPL_Matrix excit_pqr;
 	// line emissivities by upper state k
 	double emiss_tot;
 	MPL_Matrix gamma_j;

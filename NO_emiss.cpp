@@ -96,6 +96,7 @@ int NO_emiss::alloc_memory()
 	MPL_Matrix flam(NO_const::l_vu + 1, NO_const::l_vl + 1);
 
 	MPL_Matrix exc(2, NJ + 1);
+	MPL_Matrix exc_pqr(3, NJ + 1);
 
 	MPL_Matrix vfHL_emiss(12, NJ + 1);
 	MPL_Matrix vfHL_emiss_K(12, NJ + 1);
@@ -125,6 +126,7 @@ int NO_emiss::alloc_memory()
 	f_lam = flam;
 
 	excit = exc;
+	excit_pqr = exc_pqr;
 
 	vf_HL_emiss = vfHL_emiss;
 	vf_HL_emiss_K = vfHL_emiss_K;
@@ -609,6 +611,8 @@ int NO_emiss::calc_excitation()
 						sum2 += lambda_K_abs(l, k_l) * lambda_K_abs(l, k_l)
 							* solar(l, k_l) * vf_HL_K(l, k_l) / (2. * j_l + 1.)
 							* nj_frac;
+					excit_pqr(l % 3, i) += vf_HL_K(l, k_l) / (2. * j_l + 1.)
+						* nj_frac;
 				}
 			}
 		}
