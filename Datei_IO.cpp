@@ -113,6 +113,7 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 		ml.m_Hoehe_TP = Limbdaten[offset + direction * i].m_Tangentenhoehe;
 		ml.m_Erdradius = Limbdaten[offset + direction * i].m_Erdradius;
 		ml.m_TP_SZA = Limbdaten[offset + direction * i].m_TP_SZA;
+		ml.m_TP_rel_SAA = Limbdaten[offset + direction * i].m_TP_SAA;
 		ml.m_Number_of_Wavelength = no_of_pix;
 
 		int idx_282nm = 0;
