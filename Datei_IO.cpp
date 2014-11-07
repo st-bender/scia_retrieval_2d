@@ -319,16 +319,14 @@ ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(string Dateiname,
 
 	//Teile von Schritt 4 nochmal für die niedrigste Höhe
 	//Eigentlich reichen Intensitäten
-	for (int j = 0; j < no_of_pix; j++) {
-		niedrigste_Hoehe.m_Intensitaeten.push_back(Limbdaten[no_of_alt - 2].m_radiance[j]);
-		space.m_Wellenlaengen.push_back(Wellenlaengen[j]);
-		space.m_Intensitaeten.push_back(Limbdaten[no_of_alt - 1].m_radiance[j]);
-	}
-	niedrigste_Hoehe.m_TP_SZA = Limbdaten[no_of_alt - 2].m_TP_SZA;
-	space.m_TP_SZA = Limbdaten[no_of_alt - 1].m_TP_SZA;
-	space.m_Latitude_Sat = Limbdaten[no_of_alt - 1].m_Sub_Sat_Lat;
-	space.m_Longitude_Sat = Limbdaten[no_of_alt - 1].m_Sub_Sat_Lon;
-	space.m_Hoehe_Sat = Limbdaten[no_of_alt - 1].m_Sat_Hoehe;
+	niedrigste_Hoehe = Ergebnisvektor.front();
+
+	// Prepares a one element vector with the last entry in the measurements
+	// vector containing the "dark" scan at around 360 km.
+	// It then returns the only element as the "space" limb scan as requested.
+	space = make_messung_limb_vector(Dateiname, Limbdaten, Wellenlaengen,
+				no_of_pix, no_of_alt, orbit_phase, Datum, Center_Lat_Lon,
+				1, Anzahl_Hoehen, +1).front();
 
 	return Ergebnisvektor;
 }

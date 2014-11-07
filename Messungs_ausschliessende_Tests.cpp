@@ -72,7 +72,10 @@ bool Test_auf_Nachtmessung_Limb_meso_thermo(Messung_Limb &niedrigste_hoehe,
 	}
 	Signal /= (Index2 - Index1 + 1);
 	//cerr<<"Signal 290nm-295nm 53km:"<<Signal<<"\n";
-	double threshold = 5E10; // ist doch fast gleich
+	/* originally 5.e10, but now the signal is already dark current corrected
+	 * (by -3.9e9) and the threshold needs to be lower for identical output.
+	 * In general, it does not matter that much and could also be zero. */
+	double threshold = 4.61E10; // ist doch fast gleich
 	if (Signal < threshold) {
 		cerr<<"Nachtmessung detektiert\n";
 		cerr<<"Signal 290nm-295nm 53km:"<<Signal<<"\n";
