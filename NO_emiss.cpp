@@ -694,18 +694,23 @@ std::vector<double> NO_emiss::calc_polarisation()
 			else
 				j_u = i - 0.5;
 
-			if (j % 3 == 0)
+			switch (j % 3) {
+			case 0: /* P branch */
 				pol_j.at(j) += - (2.*j_u - 1.) / (6.*j_u + 7.) * excit_q
 							+ (2.*j_u*j_u - j_u) / (14.*j_u*j_u + 33.*j_u + 20.) * excit_p
 							+ 1./7. * excit_r;
-			if (j % 3 == 1)
+				break;
+			case 1: /* Q branch */
 				pol_j.at(j) +=  (4.*(j_u*j_u + j_u) - 3.) / (8.*(j_u*j_u + j_u) - 1.) * excit_q
 							- (2.*j_u - 1.) / (6.*j_u + 7.) * excit_p
 							- (2.*j_u + 3.) / (6.*j_u - 1.) * excit_r;
-			if (j % 3 == 2)
+				break;
+			case 2: /* R branch */
 				pol_j.at(j) += - (2.*j_u + 3.) / (6.*j_u - 1.) * excit_q
 							+ (2.*j_u*j_u + 5.*j_u + 3.) / (14.*j_u*j_u - 5.*j_u + 1.) * excit_r
 							+ 1./7. * excit_p;
+				break;
+			}
 		}
 	}
 
