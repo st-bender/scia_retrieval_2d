@@ -59,19 +59,9 @@ void Matrix_Invertieren(MPL_Matrix &M)
 	// Die Funktion wandelt die Matrix M in ihre eigene Inverse um
 	// Dafür muss das gehen (M quadratisch und nicht singulär)
 	int N = M.m_Zeilenzahl; // M ist quadratisch !!!!
-	MPL_Matrix Inverse(N, N); // Inverse als Einheitsmatrix der RHS initialisieren
-	int NN = N * N; // spare die Multiplikation
-	for (int i = 0; i < NN; i++) {
-		Inverse.m_Elemente[i] = 0;
-	}
-	for (int i = 0; i < N; i++) {
-		Inverse.m_Elemente[i + N * i] = 1;
-	}
-	int *IPIV;
-	IPIV = new int[N]; // Lösung des Gleichungssystems M*Inverse=RHS vorbereiten
-	for (int i = 0; i < N; i++)  {
-		IPIV[i] = 0;
-	}
+	MPL_Matrix dummy(N, N);
+	MPL_Matrix Inverse = dummy.unity(); // Inverse als Einheitsmatrix der RHS initialisieren
+	int *IPIV = new int[N]; // Lösung des Gleichungssystems M*Inverse=RHS vorbereiten
 	int NRHS = N;
 	int LDA = N;
 	int LDB = N;
