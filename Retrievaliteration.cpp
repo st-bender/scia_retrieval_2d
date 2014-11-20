@@ -99,14 +99,10 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	////////////////////////////////////////////////////////////////////////////
 	// LU Zerlegung der LHS
 	////////////////////////////////////////////////////////////////////////////
-	MPL_Matrix Dichten_alt = Dichten;
-	MPL_Matrix RHS(Dichten.m_Zeilenzahl, 1);
+	MPL_Matrix RHS(Dichten.m_Zeilenzahl, 1, 1.);
 	MPL_Matrix Saeulendichten_neu(Saeulendichten.m_Zeilenzahl, 1);
 	MPL_Matrix Saeulendichten_rest(Saeulendichten.m_Zeilenzahl, 1);
 	//cout<<"RHS.m_Zeilenzahl: "<<RHS.m_Zeilenzahl<<"\n";
-	for (int i = 0; i < RHS.m_Elementanzahl; i++) {
-		RHS(i) = 1;    //Dummy Rechte Seite erstellen
-	}
 	// Zunächst die LU Zerlegung der LHS durchführen mit dummy RHS,
 	// in der Iteration dann nur das Rückeinsetzen nutzen
 	// START LU ZERLEGUNG
