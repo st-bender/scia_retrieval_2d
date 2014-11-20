@@ -116,8 +116,7 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	int N = LHS.m_Zeilenzahl;
 	//array mit der Pivotisierungsmatrix sollte so groß wie N sein,
 	//alle Elemente 0
-	int *IPIV;
-	IPIV = new int[N];
+	int *IPIV = new int[N];
 	// ------ RHS oben definiert
 	//Spalten von RHS 1 nehmen, um keine c/Fortran Verwirrungen zu provozieren
 	int NRHS = 1;
