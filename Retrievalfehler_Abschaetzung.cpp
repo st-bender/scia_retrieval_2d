@@ -66,12 +66,10 @@ void Matrix_Invertieren(MPL_Matrix &M)
 	int LDA = N;
 	int LDB = N;
 	int INFO;
-	// M in Fortran Matrix umwandeln->M_transponieren
-	M = M.transponiert();
 	//Solveraufruf
 	dgesv_(&N, &NRHS, M.m_Elemente, &LDA, IPIV, Inverse.m_Elemente, &LDB, &INFO);
 	// Die Inverse von Fortran in C++ -> Inverse transponieren
-	M = Inverse.transponiert();  // Ergebnis in M deponieren
+	M = Inverse;  // Ergebnis in M deponieren
 	delete[] IPIV;
 }
 ///////////////////////////////////////////////////////
