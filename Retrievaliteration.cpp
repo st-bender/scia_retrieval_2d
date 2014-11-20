@@ -108,7 +108,7 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	// START LU ZERLEGUNG
 	// VORBEREITEN
 	//Fortran Matrizen sind zu C++ Matrizen transponiert
-	MPL_Matrix A = LHS.transponiert();
+	MPL_Matrix A = LHS.transponiert_full();
 	// Man kann auch die MPL_Matrix nach Fortran Nomenklatur anpassen, aber
 	// transponieren ist nicht zeitaufwändig
 	// Feldgröße Speed propto N^3, LHS ist quadratisch, N ist Anzahl

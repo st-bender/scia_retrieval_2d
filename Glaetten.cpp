@@ -267,7 +267,7 @@ int my_lowess(vector<double> &x, vector<double> &y, double f)
 int my_solve(MPL_Matrix &LHS, MPL_Matrix &RHS)
 {
 	// Fortran Matrizen sind zu C++ Matrizen transponiert
-	MPL_Matrix A = LHS.transponiert();
+	MPL_Matrix A = LHS.transponiert_full();
 	// N ist Anzahl der Gitterpunkte
 	int N = LHS.m_Zeilenzahl;
 	// array mit der Pivotisierungsmatrix sollte so groß wie N sein,

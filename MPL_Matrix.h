@@ -62,9 +62,10 @@ class MPL_Matrix
 {
 public:
 	//Konstruktoren //////////////////////////////////
-	MPL_Matrix() : m_Zeilenzahl(0), m_Spaltenzahl(0),
+	MPL_Matrix() : transposed(false), m_Zeilenzahl(0), m_Spaltenzahl(0),
 		m_Elementanzahl(0), m_Elemente(0) {}
 	MPL_Matrix(int Zeilenzahl, int Spaltenzahl, double value = 0.0) :
+		transposed(false),
 		m_Zeilenzahl(Zeilenzahl), m_Spaltenzahl(Spaltenzahl),
 		m_Elementanzahl(Zeilenzahl * Spaltenzahl)
 		{
@@ -111,8 +112,11 @@ public:
 	// Methoden
 	MPL_Matrix get_Zeile(int Zeilennummer); // gibt eine Zeile als Spaltenvektor aus
 	MPL_Matrix get_Spalte(int Spaltennummer); // gibt eine Spalte als Spaltenvektor aus
+
 	void transpose();
 	MPL_Matrix transponiert(); //transponierte Matrix
+	MPL_Matrix transponiert_full(); //transponierte Matrix
+	MPL_Matrix transponiert_full2(); //transponierte Matrix
 //    MPLMatrix  invertiert();
 //    //inverse Matrix, falls existent...
 //      existiert nur bei quadratischen, nicht singulären Matrizen
@@ -127,6 +131,7 @@ public:
 	void in_Datei_speichern(std::string Dateiname) const;
 
 	//Membervariablen
+	bool transposed;
 	int m_Zeilenzahl;
 	int m_Spaltenzahl;
 	int m_Elementanzahl;
@@ -168,6 +173,7 @@ inline MPL_Matrix &MPL_Matrix::operator = (const MPL_Matrix &rhs)
 {
 	if (this == &rhs)
 		return *this;
+	this->transposed = rhs.transposed;
 	this->m_Zeilenzahl = rhs.m_Zeilenzahl;
 	this->m_Spaltenzahl = rhs.m_Spaltenzahl;
 	this->m_Elementanzahl = rhs.m_Elementanzahl;
@@ -200,18 +206,17 @@ inline MPL_Matrix &MPL_Matrix::operator *= (const MPL_Matrix &rhs)
 		return *this;
 	}
 	// gemm vorbereiten  (das ist ein Routine aus ATLAS)
-	char TRANSA = 't';
-	char TRANSB = 't';
+	char TRANSA = transposed ? 'n' : 't';
+	char TRANSB = rhs.transposed ? 'n' : 't';
 	int M = this->m_Zeilenzahl;
 	int N = rhs.m_Spaltenzahl;
 	int K = this->m_Spaltenzahl;
 	double ALPHA = 1.0;
-	int LDA = K;
-	int LDB = N;
+	int LDA = transposed ? M : K;
+	int LDB = rhs.transposed ? K : N;
 	double BETA = 0.0;
 	int LDC = M;
-	double *C;
-	C = new double[M * N];
+	double *C = new double[M * N];
 	// Matrixmultiplikation durchführen
 	dgemm_(&TRANSA, &TRANSB, &M, &N, &K,
 		   &ALPHA, m_Elemente, &LDA, rhs.m_Elemente, &LDB, &BETA, C, &LDC);
@@ -301,7 +306,8 @@ inline MPL_Matrix &MPL_Matrix::operator /= (double rhs)
 inline double &MPL_Matrix::operator()(int Zeile, int Spalte)
 {
 	//A(1,2)=b;
-	int idx = Zeile * m_Spaltenzahl + Spalte;
+	int idx = transposed ? Spalte * m_Zeilenzahl + Zeile
+						 : Zeile * m_Spaltenzahl + Spalte;
 	if (idx >= 0 && idx < m_Elementanzahl)
 		return m_Elemente[idx];
 	else {
@@ -338,18 +344,17 @@ inline MPL_Matrix MPL_Matrix::operator * (const MPL_Matrix &rhs) const
 		return *this;
 	}
 	// gemm vorbereiten  (das ist ein Routine aus ATLAS)
-	char TRANSA = 't';
-	char TRANSB = 't';
+	char TRANSA = transposed ? 'n' : 't';
+	char TRANSB = rhs.transposed ? 'n' : 't';
 	int M = this->m_Zeilenzahl;
 	int N = rhs.m_Spaltenzahl;
 	int K = this->m_Spaltenzahl;
 	double ALPHA = 1.0;
-	int LDA = K;
-	int LDB = N;
+	int LDA = transposed ? M : K;
+	int LDB = rhs.transposed ? K : N;
 	double BETA = 0.0;
 	int LDC = M;
-	double *C;
-	C = new double[M * N];
+	double *C = new double[M * N];
 	// Matrixmultiplikation durchführen
 	dgemm_(&TRANSA, &TRANSB, &M, &N, &K,
 		   &ALPHA, m_Elemente, &LDA, rhs.m_Elemente, &LDB, &BETA, C, &LDC);
@@ -496,13 +501,17 @@ inline MPL_Matrix MPL_Matrix::get_Spalte(int Spaltennummer)
 /////////////////////////////////////////////////////////
 inline void MPL_Matrix::transpose()
 {
-	for (int i = 0; i < m_Spaltenzahl; i++)
-		for (int j = 0; j < i; j++)
-			std::swap(m_Elemente[i + j * m_Spaltenzahl],
-					m_Elemente[j + i * m_Spaltenzahl]);
 	std::swap(m_Spaltenzahl, m_Zeilenzahl);
+	transposed = !transposed;
 }
 inline MPL_Matrix MPL_Matrix::transponiert() //transponierte Matrix
+{
+	MPL_Matrix Transponierte(*this);
+	std::swap(Transponierte.m_Spaltenzahl, Transponierte.m_Zeilenzahl);
+	Transponierte.transposed = !transposed;
+	return Transponierte;
+}
+inline MPL_Matrix MPL_Matrix::transponiert_full()
 {
 	//Zeilen und Spalten tauschen
 	MPL_Matrix Transponierte(m_Spaltenzahl, m_Zeilenzahl);
@@ -510,6 +519,16 @@ inline MPL_Matrix MPL_Matrix::transponiert() //transponierte Matrix
 		for (int j = 0; j < m_Zeilenzahl; j++)
 			Transponierte.m_Elemente[j + i * m_Zeilenzahl]
 				= m_Elemente[i + j * m_Spaltenzahl];
+	return Transponierte;
+}
+inline MPL_Matrix MPL_Matrix::transponiert_full2()
+{
+	MPL_Matrix Transponierte(m_Spaltenzahl, m_Zeilenzahl);
+	for (int n = 0; n < m_Elementanzahl; n++) {
+		int i = n / m_Zeilenzahl;
+		int j = n % m_Zeilenzahl;
+		Transponierte.m_Elemente[n] = m_Elemente[j * m_Spaltenzahl + i];
+	}
 	return Transponierte;
 }
 /////////////////////////////////////////////////////////
