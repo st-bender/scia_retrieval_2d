@@ -40,6 +40,7 @@ public:
 	std::vector<double> m_Grid_ext_low;
 	std::vector<double> m_Grid_ext_high;
 	double m_TOA; //top of Atmosphere, ab hier keine Absorption mehr
+	double m_BOA; //bottom of Atmosphere, darunte nur noch Absorption
 	// Switches für Selection Rules //////////////////////////////////
 	int m_Nadir_only;  // switch 0 ja 1 nein
 	int m_Nachtmessung;// switch 0 ja 1 nein

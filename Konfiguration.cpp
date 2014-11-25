@@ -34,6 +34,7 @@ Konfiguration::Konfiguration() :
 	m_Pfad_Kp_index("DATA/spidr_kp_2000-2012.dat"),
 	m_Pfad_f107_index("DATA/spidr_f107_2000-2012.dat"),
 	m_MinLat(-90.0), m_MaxLat(90.0), m_NLat(72),
+	m_TOA(200.0), m_BOA(50.0),
 	skip_SAA(true), SAA_cutoff(8.8e10),
 	atmo_Temp(200.), NO_apriori(false),
 	retrieval_algo(1)
@@ -188,6 +189,13 @@ int Konfiguration::Konfiguration_einlesen(std::string file)
 			getline(infile, Zeile);
 			ss << Zeile;
 			ss >> m_TOA;
+			continue;
+		}
+		if (Zeile == "BOA") {
+			//cout<<"TOA\n";
+			getline(infile, Zeile);
+			ss << Zeile;
+			ss >> m_BOA;
 			continue;
 		}
 		// Selection rules /////
