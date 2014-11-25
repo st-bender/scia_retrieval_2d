@@ -166,7 +166,7 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 			// indicate whether or not to skip tangent point
 			bool skip = false;
 			// skip if tangent point is too low or too high
-			if (mlit->m_Hoehe_TP < 50.0 || mlit->m_Hoehe_TP > 200.0)
+			if (mlit->m_Hoehe_TP < Konf.m_BOA || mlit->m_Hoehe_TP > Konf.m_TOA)
 				skip = true;
 			for (k = 0, ldit = sfit->m_Liniendaten.begin();
 					ldit != sfit->m_Liniendaten.end(); k++, ++ldit) {
