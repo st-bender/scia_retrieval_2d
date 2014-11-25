@@ -753,7 +753,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 						|| (Punkt_Breite < -90.0 + aml_it->m_Deklination)) {
 					continue;
 				}
-				double BOA_LFS = 50.0; //bottom of atmosphere
+				double BOA_LFS = Konf.m_BOA; //bottom of atmosphere
 				if (Punkt_Hoehe < BOA_LFS) {
 					cout << "50 km unterschritten bei LFS, "
 						 << "das Licht wird schon bei LFS absorbiert\n";
@@ -1145,7 +1145,7 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 						(Punkt_Breite < -90.0 + amn_it->m_Deklination)) {
 					continue;
 				}
-				double BOA_LFS = 50.0; //bottom of atmosphere
+				double BOA_LFS = Konf.m_BOA; //bottom of atmosphere
 				if (Punkt_Hoehe < BOA_LFS) {
 					cout << "50 km unterschritten bei LFS, "
 						 << "das Licht wird schon bei LFS absorbiert\n";
