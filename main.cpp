@@ -1477,7 +1477,7 @@ int main(int argc, char *argv[])
 	if (mache_volles_Retrieval_MgI == "ja") {
 		Retrievalfehler_Abschaetzung(S_x_MgI, S_x_meas_MgI, AKM_MgI,
 									 S_apriori_MgI, S_y_MgI, S_Breite, S_Hoehe,
-									 S_letzte_Hoehe_MgI, MgI_Lambda_Breite,
+									 MgI_Lambda_Breite,
 									 MgI_Lambda_Hoehe, AMF_MgI, Konf);
 	}
 	/////////////////////////
@@ -1490,7 +1490,7 @@ int main(int argc, char *argv[])
 	if (mache_volles_Retrieval_MgII == "ja") {
 		Retrievalfehler_Abschaetzung(S_x_MgII, S_x_meas_MgII, AKM_MgII,
 									 S_apriori_MgII, S_y_MgII, S_Breite, S_Hoehe,
-									 S_letzte_Hoehe_MgII, MgII_Lambda_Breite,
+									 MgII_Lambda_Breite,
 									 MgII_Lambda_Hoehe, AMF_MgII, Konf);
 	}
 	/////////////////////////
@@ -1503,7 +1503,7 @@ int main(int argc, char *argv[])
 	if (mache_volles_Retrieval_unknown == "ja") {
 		Retrievalfehler_Abschaetzung(S_x_unknown, S_x_meas_unknown, AKM_unknown,
 									 S_apriori_unknown, S_y_unknown, S_Breite,
-									 S_Hoehe, S_letzte_Hoehe_unknown,
+									 S_Hoehe,
 									 unknown_Lambda_Breite,
 									 unknown_Lambda_Hoehe, AMF_unknown, Konf);
 	}
@@ -1517,7 +1517,7 @@ int main(int argc, char *argv[])
 	if (mache_volles_Retrieval_FeI == "ja") {
 		Retrievalfehler_Abschaetzung(S_x_FeI, S_x_meas_FeI, AKM_FeI,
 									 S_apriori_FeI, S_y_FeI, S_Breite, S_Hoehe,
-									 S_letzte_Hoehe_FeI, FeI_Lambda_Breite,
+									 FeI_Lambda_Breite,
 									 FeI_Lambda_Hoehe, AMF_FeI, Konf);
 	}
 	/////////////////////////
@@ -1530,7 +1530,7 @@ int main(int argc, char *argv[])
 	if (mache_volles_Retrieval_NO == "ja") {
 		Retrievalfehler_Abschaetzung(S_x_NO, S_x_meas_NO, AKM_NO,
 									 S_apriori_NO, S_y_NO, S_Breite, S_Hoehe,
-									 S_letzte_Hoehe_NO, NO_Lambda_Breite,
+									 NO_Lambda_Breite,
 									 NO_Lambda_Hoehe, AMF_NO, Konf);
 	}
 	time(&Teil5_End);

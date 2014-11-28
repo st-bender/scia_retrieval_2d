@@ -23,7 +23,6 @@ int Retrievalfehler_Abschaetzung(MPL_Matrix &S_x,
 								 const MPL_Matrix &S_y,
 								 MPL_Matrix &S_Breite,
 								 MPL_Matrix &S_Hoehe,
-								 MPL_Matrix &S_letzte_Hoehe,
 								 const double &Lambda_Breite,
 								 const double &Lambda_Hoehe,
 								 MPL_Matrix &AMF,
@@ -36,7 +35,6 @@ int Retrievalfehler_Abschaetzung(MPL_Matrix &S_x,
 	MPL_Matrix AMF_trans = AMF.transponiert();
 	MPL_Matrix S_Hoehe_trans = S_Hoehe.transponiert();
 	MPL_Matrix S_Breite_trans = S_Breite.transponiert();
-	MPL_Matrix S_letzte_Hoehe_trans = S_Breite.transponiert();
 
 	S_x = (AMF_trans * (S_y * AMF)); // hier noch invers, also noch invertieren
 	S_x += S_apriori;
