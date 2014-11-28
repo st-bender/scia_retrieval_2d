@@ -759,9 +759,7 @@ inline void MPL_Matrix::in_Datei_speichern(std::string Dateiname) const
 				outfile << "\t";
 			}
 		}
-		if (i < (m_Zeilenzahl - 1)) {
-			outfile << "\n";
-		}
+		outfile << std::endl;
 	}
 	outfile.close();
 	outfile.clear();
