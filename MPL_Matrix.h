@@ -308,7 +308,7 @@ inline double &MPL_Matrix::operator()(int Zeile, int Spalte)
 	//A(1,2)=b;
 	int idx = transposed ? Spalte * m_Zeilenzahl + Zeile
 						 : Zeile * m_Spaltenzahl + Spalte;
-	if (idx >= 0 && idx < m_Elementanzahl)
+	if ((uint)idx < (uint)m_Elementanzahl)
 		return m_Elemente[idx];
 	else {
 		std::cerr << "Achtung!!! Zugriff auf Elemente ausserhalb der Matrix"
@@ -321,7 +321,7 @@ inline double &MPL_Matrix::operator()(int Zeile, int Spalte)
 /////////////////////////////////////////////////////////
 inline double &MPL_Matrix::operator()(int Elementindex)
 {
-	if ((Elementindex >= 0) && (Elementindex < m_Elementanzahl))
+	if ((uint)Elementindex < (uint)m_Elementanzahl)
 		return this->m_Elemente[Elementindex];
 	else {
 		std::cerr << "Achtung!!! Zugriff auf Elemente ausserhalb der Matrix"
