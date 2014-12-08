@@ -436,6 +436,8 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 				&& rad.at(i_basewin_l_min + i - 1) < rad_i
 				&& rad.at(i_basewin_l_min + i + 1) < rad_i) {
 			// exclude the previous, the current, and the next point.
+			// That means we pop the last one and don't include the current
+			// one, and interpolate the next point of the fit spectrum.
 			if (!fit_spec.empty()) fit_spec.pop_back();
 			// interpolate three points of the peak linearly
 			double y0 = rad.at(i_basewin_l_min + i - 2);
