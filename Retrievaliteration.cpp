@@ -127,15 +127,6 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	//aber danbn sollte der Aufbau von LHS schon stören
 	//int Anzahl=N*N;
 	char textflag = 'N'; // "No transpose"; //fürs Rückeinsetzen
-	// AUFRUF   A ist LHS.transponiert und B ist RHS
-	dgesv_(&N, &NRHS, A.m_Elemente, &LDA, IPIV, RHS.m_Elemente, &LDB, &INFO);
-	// TODO im Prinizp muss man RHS, falls es eine Matrix ist,
-	// jetzt auch transponieren
-	// ENDE LU ZERLEGUNG
-	//cout<<"RHS.m_Zeilenzahl: "<<RHS.m_Zeilenzahl<<"\n";
-	////////////////////////////////////////////////////////////////////////////
-	// ENDE LU Zerlegung der LHS
-	////////////////////////////////////////////////////////////////////////////
 
 	double Residual, Residual_1, residual_prev = 0.001;
 	MPL_Matrix Mat_Residual;
@@ -155,9 +146,13 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	//RHS sollte ein Spaltenvektor sein
 	RHS = AMF_trans * S_y * (Saeulendichten - AMF * Dichten_apriori)
 		  + R * Dichten_apriori;
-	// Lösungen durch Rückeinsetzen finden
-	dgetrs_(&textflag, &N, &NRHS, A.m_Elemente, &LDA, IPIV, RHS.m_Elemente,
-			&LDB, &INFO);
+	// Lösungen durch LU Zerlegung finden
+	// LU Komponenten für später in A abgelegt
+	dgesv_(&N, &NRHS, A.m_Elemente, &LDA, IPIV, RHS.m_Elemente, &LDB, &INFO);
+	//cout<<"RHS.m_Zeilenzahl: "<<RHS.m_Zeilenzahl<<"\n";
+	////////////////////////////////////////////////////////////////////////////
+	// ENDE LU Zerlegung der LHS
+	////////////////////////////////////////////////////////////////////////////
 	Dichten = RHS;
 	///////////////////////////////////////
 	// ENDE erster Schritt
