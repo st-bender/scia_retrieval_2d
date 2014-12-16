@@ -1853,7 +1853,7 @@ void SNOE_apriori_NO(Retrievalgitter &grid, Ausgewertete_Messung_Limb &aml,
 	float *snoe_no = new float[__params_MOD_nz];
 
 	// initialise altitude array
-	for (int i = 0; i < grid.m_Anzahl_Hoehen; i++)
+	for (int i = 0; i < __params_MOD_nz; i++)
 		__dynam_MOD_zkm[i] = grid.m_Gitter[i * grid.m_Anzahl_Breiten].m_Hoehe;
 
 	// run the model for each latitude
