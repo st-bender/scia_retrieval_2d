@@ -48,6 +48,7 @@
 #include<iostream>
 #include <cstdio>
 #include<fstream>
+#include <algorithm>
 #include "gzstream.h"
 
 extern "C" {
@@ -182,9 +183,7 @@ inline MPL_Matrix &MPL_Matrix::operator = (const MPL_Matrix &rhs)
 		m_Elemente = 0;
 	}
 	m_Elemente = new double[m_Elementanzahl];
-	for (int i = 0; i < m_Elementanzahl; i++) {
-		this->m_Elemente[i] = rhs.m_Elemente[i];
-	}
+	std::copy_n(rhs.m_Elemente, m_Elementanzahl, m_Elemente);
 	return *this;
 }
 // ende operator =
@@ -247,9 +246,8 @@ inline MPL_Matrix &MPL_Matrix::operator +=(const MPL_Matrix &rhs)
 	}
 	// Wenn spaltenzahl und Zeilenzahl gleich,
 	// dann ist auch die reihenfolge der elemente gleich
-	for (int i = 0; i < m_Elementanzahl; i++) {
-		this->m_Elemente[i] += rhs.m_Elemente[i];
-	}
+	std::transform(m_Elemente, m_Elemente + m_Elementanzahl, rhs.m_Elemente,
+			m_Elemente, std::plus<double>());
 	return *this;
 } //ende +=
 /////////////////////////////////////////////////////////
@@ -267,9 +265,8 @@ inline MPL_Matrix &MPL_Matrix::operator -= (const MPL_Matrix &rhs)
 	}
 	// Wenn spaltenzahl und Zeilenzahl gleich,
 	// dann ist auch die reihenfolge der elemente gleich
-	for (int i = 0; i < m_Elementanzahl; i++) {
-		this->m_Elemente[i] -= rhs.m_Elemente[i];
-	}
+	std::transform(m_Elemente, m_Elemente + m_Elementanzahl, rhs.m_Elemente,
+			m_Elemente, std::minus<double>());
 	return *this;
 } // ende -=
 /////////////////////////////////////////////////////////
@@ -278,9 +275,8 @@ inline MPL_Matrix &MPL_Matrix::operator -= (const MPL_Matrix &rhs)
 // Skalare Multiplikation
 inline MPL_Matrix &MPL_Matrix::operator *= (double rhs)
 {
-	for (int i = 0; i < m_Elementanzahl; i++) {
-		this->m_Elemente[i] *= rhs;
-	}
+	std::transform(m_Elemente, m_Elemente + m_Elementanzahl, m_Elemente,
+			std::bind2nd(std::multiplies<double>(), rhs));
 	return *this;
 }// ende *=
 /////////////////////////////////////////////////////////
@@ -293,9 +289,8 @@ inline MPL_Matrix &MPL_Matrix::operator /= (double rhs)
 		std::cerr << "Division durch 0 wird nicht durchgeführt!" << std::endl;
 		return *this;
 	}
-	for (int i = 0; i < m_Elementanzahl; i++) {
-		this->m_Elemente[i] /= rhs;
-	}
+	std::transform(m_Elemente, m_Elemente + m_Elementanzahl, m_Elemente,
+			std::bind2nd(std::divides<double>(), rhs));
 	return *this;
 }// ende /=
 
@@ -384,9 +379,8 @@ inline MPL_Matrix MPL_Matrix::operator +(const MPL_Matrix &rhs) const
 	MPL_Matrix Summe(rhs.m_Zeilenzahl, rhs.m_Spaltenzahl);
 	// Wenn spaltenzahl und Zeilenzahl gleich,
 	// dann ist auch die reihenfolge der elemente gleich
-	for (int i = 0; i < m_Elementanzahl; i++) {
-		Summe.m_Elemente[i] = this->m_Elemente[i] + rhs.m_Elemente[i];
-	}
+	std::transform(m_Elemente, m_Elemente + m_Elementanzahl, rhs.m_Elemente,
+			Summe.m_Elemente, std::plus<double>());
 	return Summe;
 }
 /////////////////////////////////////////////////////////
@@ -404,9 +398,8 @@ inline MPL_Matrix MPL_Matrix::operator - (const MPL_Matrix &rhs) const
 	MPL_Matrix Differenz(rhs.m_Zeilenzahl, rhs.m_Spaltenzahl);
 	// Wenn spaltenzahl und Zeilenzahl gleich,
 	// dann ist auch die reihenfolge der elemente gleich
-	for (int i = 0; i < m_Elementanzahl; i++) {
-		Differenz.m_Elemente[i] = this->m_Elemente[i] - rhs.m_Elemente[i];
-	}
+	std::transform(m_Elemente, m_Elemente + m_Elementanzahl, rhs.m_Elemente,
+			Differenz.m_Elemente, std::minus<double>());
 	return Differenz;
 }//ende -
 /////////////////////////////////////////////////////////
@@ -416,9 +409,10 @@ inline MPL_Matrix MPL_Matrix::operator * (const double &rhs) const
 {
 	MPL_Matrix Skalare_Multiplikation;
 	Skalare_Multiplikation = *this;
-	for (int i = 0; i < Skalare_Multiplikation.m_Elementanzahl; i++) {
-		Skalare_Multiplikation.m_Elemente[i] *= rhs;
-	}
+	std::transform(Skalare_Multiplikation.m_Elemente,
+			Skalare_Multiplikation.m_Elemente + Skalare_Multiplikation.m_Elementanzahl,
+			Skalare_Multiplikation.m_Elemente,
+			std::bind2nd(std::multiplies<double>(), rhs));
 	return Skalare_Multiplikation;
 }// ende skalare Mult
 /////////////////////////////////////////////////////////
@@ -434,9 +428,10 @@ inline MPL_Matrix MPL_Matrix::operator / (const double &rhs) const
 	}
 	MPL_Matrix Skalare_Division;
 	Skalare_Division = *this;
-	for (int i = 0; i < Skalare_Division.m_Elementanzahl; i++) {
-		Skalare_Division.m_Elemente[i] /= rhs;
-	}
+	std::transform(Skalare_Division.m_Elemente,
+			Skalare_Division.m_Elemente + Skalare_Division.m_Elementanzahl,
+			Skalare_Division.m_Elemente,
+			std::bind2nd(std::divides<double>(), rhs));
 	return Skalare_Division;
 }//Ende skalare Division
 /////////////////////////////////////////////////////////
