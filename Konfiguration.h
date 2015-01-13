@@ -75,6 +75,8 @@ public:
 	unsigned no_NO_transitions;
 	std::vector<int> NO_v_u, NO_v_l, NO_v_l_abs;
 	bool NO_apriori;
+	double NO_apriori_bottom, NO_apriori_top;
+	double NO_apriori_scale;
 	int retrieval_algo;
 	bool MLT;
 };

@@ -37,6 +37,8 @@ Konfiguration::Konfiguration() :
 	m_TOA(200.0), m_BOA(50.0),
 	skip_SAA(true), SAA_cutoff(8.8e10),
 	atmo_Temp(200.), NO_apriori(false),
+	NO_apriori_bottom(40.0), NO_apriori_top(160.0),
+	NO_apriori_scale(1.0),
 	retrieval_algo(1)
 {
 }
@@ -400,6 +402,19 @@ int Konfiguration::Konfiguration_einlesen(std::string file)
 			else NO_apriori = true;
 			continue;
 		}
+		if (Zeile == "NO apriori altitude range") {
+			getline(infile, Zeile);
+			vector<double> dummy = string_to_vector<double>(Zeile);
+			this->NO_apriori_bottom = dummy[0];
+			this->NO_apriori_top = dummy[1];
+			continue;
+		}
+		if (Zeile == "NO apriori scale") {
+			getline(infile, Zeile);
+			ss << Zeile;
+			ss >> NO_apriori_scale;
+			continue;
+		}
 		if (Zeile == "Retrieval algorithm") {
 			getline(infile, Zeile);
 			ss << Zeile;
@@ -516,6 +531,9 @@ int Konfiguration::Konfiguration_anzeigen()
 	if (NO_apriori) cout << "SNOEM";
 	else cout << "null";
 	cout << endl;
+	cout << "NO apriori bottom: " << this->NO_apriori_bottom << "\n";
+	cout << "NO apriori top: " << this->NO_apriori_top << "\n";
+	cout << "NO apriori scale: " << this->NO_apriori_scale << "\n";
 	cout << "Retrieval algorithm: ";
 	switch (retrieval_algo) {
 	case 0:
