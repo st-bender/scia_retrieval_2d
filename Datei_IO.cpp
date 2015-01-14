@@ -69,8 +69,8 @@ double average_over_wl_range(std::vector<float> rad, std::vector<float> wl,
 // float *Wellenlaengen into a vector<Messung_Limb>
 vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 		std::vector<Limb_Datensatz> &Limbdaten, std::vector<float> &Wellenlaengen,
-		int no_of_pix, int no_of_alt, float orbit_phase, int Datum[6],
-		float cent_lat_lon[10], int no_of_heights, int offset, int direction)
+		int no_of_alt, int no_of_pix, int Datum[6], float cent_lat_lon[10],
+		float orbit_phase, int no_of_heights, int offset, int direction)
 {
 	bool has_straylight = false;
 	// dark signal and error
@@ -202,7 +202,7 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
 		Anzahl_Hoehen = no_of_alt - 1;
 	Ergebnisvektor
 		= make_messung_limb_vector(Dateiname, Limbdaten, Wellenlaengen,
-				no_of_pix, no_of_alt, orbit_phase, Datum, Center_Lat_Lon,
+				no_of_alt, no_of_pix, Datum, Center_Lat_Lon, orbit_phase,
 				Anzahl_Hoehen, no_of_alt - Anzahl_Hoehen - 1, 1);
 
 	//Teile von Schritt 4 nochmal für die Troposhärische Säule
@@ -314,7 +314,7 @@ ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(string Dateiname,
 		Anzahl_Hoehen = no_of_alt - 1;
 	Ergebnisvektor
 		= make_messung_limb_vector(Dateiname, Limbdaten, Wellenlaengen,
-				no_of_pix, no_of_alt, orbit_phase, Datum, Center_Lat_Lon,
+				no_of_alt, no_of_pix, Datum, Center_Lat_Lon, orbit_phase,
 				Anzahl_Hoehen, Anzahl_Hoehen - 1, -1);
 
 	//Teile von Schritt 4 nochmal für die niedrigste Höhe
@@ -325,7 +325,7 @@ ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(string Dateiname,
 	// vector containing the "dark" scan at around 360 km.
 	// It then returns the only element as the "space" limb scan as requested.
 	space = make_messung_limb_vector(Dateiname, Limbdaten, Wellenlaengen,
-				no_of_pix, no_of_alt, orbit_phase, Datum, Center_Lat_Lon,
+				no_of_alt, no_of_pix, Datum, Center_Lat_Lon, orbit_phase,
 				1, Anzahl_Hoehen, +1).front();
 
 	return Ergebnisvektor;
