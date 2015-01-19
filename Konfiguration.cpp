@@ -38,7 +38,7 @@ Konfiguration::Konfiguration() :
 	skip_SAA(true), SAA_cutoff(8.8e10),
 	atmo_Temp(200.), NO_apriori(false),
 	NO_apriori_bottom(40.0), NO_apriori_top(160.0),
-	NO_apriori_scale(1.0),
+	NO_apriori_scale(1.0), NO_apriori_smoothness(4.0),
 	retrieval_algo(1)
 {
 }
@@ -415,6 +415,12 @@ int Konfiguration::Konfiguration_einlesen(std::string file)
 			ss >> NO_apriori_scale;
 			continue;
 		}
+		if (Zeile == "NO apriori smoothness") {
+			getline(infile, Zeile);
+			ss << Zeile;
+			ss >> NO_apriori_smoothness;
+			continue;
+		}
 		if (Zeile == "Retrieval algorithm") {
 			getline(infile, Zeile);
 			ss << Zeile;
@@ -534,6 +540,7 @@ int Konfiguration::Konfiguration_anzeigen()
 	cout << "NO apriori bottom: " << this->NO_apriori_bottom << "\n";
 	cout << "NO apriori top: " << this->NO_apriori_top << "\n";
 	cout << "NO apriori scale: " << this->NO_apriori_scale << "\n";
+	cout << "NO apriori smoothness: " << this->NO_apriori_smoothness << "\n";
 	cout << "Retrieval algorithm: ";
 	switch (retrieval_algo) {
 	case 0:

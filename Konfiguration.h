@@ -76,7 +76,9 @@ public:
 	std::vector<int> NO_v_u, NO_v_l, NO_v_l_abs;
 	bool NO_apriori;
 	double NO_apriori_bottom, NO_apriori_top;
-	double NO_apriori_scale;
+	/* NO apriori scaling factor and transition width in km
+	 * for a smooth transition from 0 to 1 (or to NO_apriori_scale). */
+	double NO_apriori_scale, NO_apriori_smoothness;
 	int retrieval_algo;
 	bool MLT;
 };
