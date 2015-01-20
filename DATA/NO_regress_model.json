@@ -1,0 +1,21 @@
+{
+	"files" : {
+		"solar" : {
+			"f107": "DATA/spidr_f107_2000-2012.dat",
+			"ap": "DATA/spidr_ap_2000-2012.dat",
+			"kp": "DATA/spidr_kp_2000-2012.dat",
+			"hpe": "DATA/noaa_hpe_2000-2012.dat",
+			"ionpairs": "DATA/ionpairs100km_spe_2000-2011.dat",
+			"lya": "DATA/lisird_lya_2000-2012.dat"
+		},
+		"data" : {
+			"regress" : "DATA/regress_mlt_2km_lya+0_kp+1_v3.0_akm0.002_geogra_all_60-160km.dat"
+		}
+	},
+	"config" : {
+		"solnames" : ["lya", "kp"],
+		"solscales" : [1.0, 1.0],
+		"sol_lags" : [0, 1],
+		"solsubmin" : 1
+	}
+}
