@@ -23,6 +23,7 @@
 
 #include "Koordinatentransformation.h"
 #include "Glaetten.h"
+#include "NO_regression_model.h"
 
 #include <ctime>
 #include <cstdlib>
@@ -1875,4 +1876,23 @@ void SNOE_apriori_NO(Retrievalgitter &grid, Ausgewertete_Messung_Limb &aml,
 	delete[] __dynam_MOD_zkm;
 	delete[] __dynam_MOD_glat;
 	delete[] __dynam_MOD_glon;
+}
+
+/*
+ * NO apriori derived from the regression model.
+ */
+void regression_apriori_NO(Retrievalgitter &grid, Ausgewertete_Messung_Limb &aml,
+		MPL_Matrix &apriori, Konfiguration &Konf)
+{
+	std::vector<double> alt_vec;
+	for (int i = 0; i < grid.m_Anzahl_Hoehen; i++)
+		alt_vec.push_back(grid.m_Gitter[i * grid.m_Anzahl_Breiten].m_Hoehe);
+
+	for (int j = 0; j < grid.m_Anzahl_Breiten; j++) {
+		double lat = grid.m_Gitter[j].m_Breite;
+		std::vector<double> NO_model
+				= NO_regress_model_python(aml, Konf, alt_vec, lat);
+		for (int i = 0; i < grid.m_Anzahl_Hoehen; i++)
+			apriori(i * grid.m_Anzahl_Breiten + j) = NO_model.at(i);
+	}
 }
