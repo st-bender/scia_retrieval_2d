@@ -52,6 +52,38 @@ void smooth_data(int Datasize, double *Data, int Anzahl_Nachbarn_eine_Seite,
 	delete[] Data_old;
 }
 
+/*
+ * smooth base function (for the partition of unity)
+ * theta(t) = 0, t <= 0
+ * theta(t) = exp(-1/t), t > 0
+ */
+double my_theta(double t)
+{
+	if (t <= 0.) return 0.;
+	return std::exp(-1. / t);
+}
+/*
+ * smooth transition function
+ * phi(x) = 0, x < 0
+ * phi(x) = 1, x >= 1
+ */
+double my_phi(double x)
+{
+	double tx = my_theta(x);
+	double t1mx = my_theta(1. - x);
+	return tx / (tx + t1mx);
+}
+/*
+ * smooth transition function
+ * Phi(x) = 0, x < a - w
+ * Phi(x) = 1, a <= x <= b
+ * Phi(x) = 0, x > b + w
+ */
+double my_Phi(double a, double b, double w, double x)
+{
+	return my_phi((x - a + w) / w) * my_phi((b - x + w) / w);
+}
+
 int my_moving_average(vector<double> &y, int ws)
 {
 	vector<double> y_neu;

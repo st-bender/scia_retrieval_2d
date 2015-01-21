@@ -11,6 +11,8 @@
 void smooth_data(int Datasize, double *Data, int Anzahl_Nachbarn_eine_Seite,
 		int Zahl_der_Iterationen);
 
+double my_phi(double x);
+double my_Phi(double a, double b, double w, double x);
 int my_moving_average(std::vector<double> &y, int ws);
 int my_savitzky_golay(std::vector<double> &y, int ws);
 int my_gauss_blur_1d(std::vector<double> &y);
