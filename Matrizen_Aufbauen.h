@@ -77,4 +77,6 @@ void SNOE_apriori_NO(class Retrievalgitter &grid,
 void regression_apriori_NO(class Retrievalgitter &grid,
 		class Ausgewertete_Messung_Limb &aml, MPL_Matrix &apriori,
 		class Konfiguration &Konf);
+void scale_apriori(class Retrievalgitter &grid, MPL_Matrix &apriori,
+		class Konfiguration &Konf);
 #endif /* MATRIZZEN_AUFBAUEN_HH_ */

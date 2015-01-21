@@ -1896,3 +1896,34 @@ void regression_apriori_NO(Retrievalgitter &grid, Ausgewertete_Messung_Limb &aml
 			apriori(i * grid.m_Anzahl_Breiten + j) = NO_model.at(i);
 	}
 }
+
+/* step transition */
+double scale_function_step(double z, Konfiguration &Konf)
+{
+	if (z < Konf.NO_apriori_bottom || z > Konf.NO_apriori_top)
+		return 0.;
+	return 1.;
+}
+/* smooth transition */
+double scale_function_smooth(double z, Konfiguration &Konf)
+{
+	return my_Phi(Konf.NO_apriori_bottom, Konf.NO_apriori_top,
+			Konf.NO_apriori_smoothness, z);
+}
+
+/*
+ * Scales the apriori values by a constant factor given by
+ * Konf.NO_apriori_scale and an (optional) transition function.
+ * The transition function restricts the altitudes at which the
+ * apriori values are taken into account for the retrieval.
+ */
+void scale_apriori(Retrievalgitter &grid, MPL_Matrix &apriori,
+		Konfiguration &Konf)
+{
+	for (int i = 0; i < grid.m_Anzahl_Hoehen; i++) {
+		double z = grid.m_Gitter[i * grid.m_Anzahl_Breiten].m_Hoehe;
+		double f = scale_function_smooth(z, Konf);
+		for (int j = 0; j < grid.m_Anzahl_Breiten; j++)
+			apriori(i * grid.m_Anzahl_Breiten + j) *= f * Konf.NO_apriori_scale;
+	}
+}
