@@ -202,7 +202,7 @@ int NO_emiss::populate_Fs()
 		F_l(1, i) = F1(B_Vl, D_Vl, Y_l, lambda_l, j);
 		F_l_abs(0, i) = F0(B_Vl_abs, D_Vl_abs, Y_l_abs, lambda_l, j);
 		F_l_abs(1, i) = F1(B_Vl_abs, D_Vl_abs, Y_l_abs, lambda_l, j);
-		
+
 		F_u(0, i) = B_Vu * i * (i + 1)
 			- D_Vu * i * i * (i + 1) * (i + 1)
 			+ 0.5 * gam_u * i;
