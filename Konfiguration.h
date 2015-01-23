@@ -42,11 +42,11 @@ public:
 	double m_TOA; //top of Atmosphere, ab hier keine Absorption mehr
 	double m_BOA; //bottom of Atmosphere, darunte nur noch Absorption
 	// Switches für Selection Rules //////////////////////////////////
-	int m_Nadir_only;  // switch 0 ja 1 nein
-	int m_Nachtmessung;// switch 0 ja 1 nein
-	int m_Geolocation; // switch 0 ja 1 nein
-	int m_Large_SZA;   // switch 0 ja 1 nein //SZA Sonnenwinkel zum Zenit
-	int m_NLC;         // switch 0 ja 1 nein
+	unsigned short m_Nadir_only;  // switch 0 ja 1 nein
+	unsigned short m_Nachtmessung;// switch 0 ja 1 nein
+	unsigned short m_Geolocation; // switch 0 ja 1 nein
+	unsigned short m_Large_SZA;   // switch 0 ja 1 nein //SZA Sonnenwinkel zum Zenit
+	unsigned short m_NLC;         // switch 0 ja 1 nein
 	bool skip_SAA;
 	double m_Maximaler_SZA;         // falls Auswahlkriterium Large_SZA aktiv ist dies die Grenze
 	double SAA_cutoff;
@@ -66,7 +66,7 @@ public:
 	std::vector<double> m_Fehlergrenzen;   //sollte man auch dynamisch machen nach anzahl der spezies
 	double m_FWHM;
 	std::string m_Betriebssystem;
-	int m_Do_Corrections_of_Radiances; // switch 0 ja 1 nein
+	unsigned short m_Do_Corrections_of_Radiances; // switch 0 ja 1 nein
 	int m_Max_Zahl_Levenberg_Schritte;
 	double m_Levenberg_Schrittweite;
 	int m_Max_Zahl_Iterationen;
@@ -79,7 +79,7 @@ public:
 	/* NO apriori scaling factor and transition width in km
 	 * for a smooth transition from 0 to 1 (or to NO_apriori_scale). */
 	double NO_apriori_scale, NO_apriori_smoothness;
-	int retrieval_algo;
+	unsigned short retrieval_algo;
 	bool MLT;
 };
 
