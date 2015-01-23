@@ -394,12 +394,9 @@ int Konfiguration::Konfiguration_einlesen(std::string file)
 			continue;
 		}
 		if (Zeile == "NO apriori") {
-			int apri = 0;
 			getline(infile, Zeile);
 			ss << Zeile;
-			ss >> apri;
-			if (apri == 0) NO_apriori = false;
-			else NO_apriori = true;
+			ss >> NO_apriori;
 			continue;
 		}
 		if (Zeile == "NO apriori altitude range") {
@@ -534,8 +531,17 @@ int Konfiguration::Konfiguration_anzeigen()
 			 << ", v_l_abs = " << NO_v_l_abs.at(i) << endl;
 	}
 	cout << "NO apriori: ";
-	if (NO_apriori) cout << "SNOEM";
-	else cout << "null";
+	switch (NO_apriori) {
+	case 1:
+		cout << "NOEM";
+		break;
+	case 2:
+		cout << "Regression";
+		break;
+	case 0:
+	default:
+		cout << "null";
+	}
 	cout << endl;
 	cout << "NO apriori bottom: " << this->NO_apriori_bottom << "\n";
 	cout << "NO apriori top: " << this->NO_apriori_top << "\n";
