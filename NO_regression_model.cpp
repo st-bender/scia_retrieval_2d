@@ -26,7 +26,9 @@ std::vector<double> NO_regress_model_python(Ausgewertete_Messung_Limb &aml,
 	std::stringstream ss;
 	std::string alt_string;
 	ss << "\"";
-	std::copy(alts.begin(), alts.end(), std::ostream_iterator<double>(ss, ","));
+	std::copy(alts.begin(), alts.end() - 1,
+			std::ostream_iterator<double>(ss, ","));
+	ss << alts.back();
 	ss << "\"";
 	ss >> alt_string;
 	ss.str(std::string());

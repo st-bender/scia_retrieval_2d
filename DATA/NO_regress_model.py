@@ -73,7 +73,7 @@ def main():
 	t_day = (date - model_t0).days
 
 	try:
-		alt = np.genfromtxt(StringIO(sys.argv[3]), dtype='<f8', delimiter=",")[:-1]
+		alt = np.genfromtxt(StringIO(sys.argv[3]), dtype='<f8', delimiter=",")
 		lat = float(sys.argv[4])
 	except:
 		alt = 100.0
