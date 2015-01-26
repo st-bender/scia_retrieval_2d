@@ -68,13 +68,13 @@ def main():
 	model_t0 = dt.datetime(2003, 7, 1)
 
 	coeff_fname = files["data"]["regress"]
-	data_name = sys.argv[2]
-	date = dp.parse(sys.argv[3])
+	data_name = config["dataname"]
+	date = dp.parse(sys.argv[2])
 	t_day = (date - model_t0).days
 
 	try:
-		alt = np.genfromtxt(StringIO(sys.argv[4]), dtype='<f8', delimiter=",")[:-1]
-		lat = float(sys.argv[5])
+		alt = np.genfromtxt(StringIO(sys.argv[3]), dtype='<f8', delimiter=",")[:-1]
+		lat = float(sys.argv[4])
 	except:
 		alt = 100.0
 		lat = 67.5

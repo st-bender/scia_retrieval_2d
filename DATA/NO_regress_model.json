@@ -13,6 +13,7 @@
 		}
 	},
 	"config" : {
+		"dataname" : "reference",
 		"solnames" : ["lya", "kp"],
 		"solscales" : [1.0, 1.0],
 		"sol_lags" : [0, 1],

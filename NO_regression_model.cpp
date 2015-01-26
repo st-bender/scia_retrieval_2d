@@ -33,7 +33,7 @@ std::vector<double> NO_regress_model_python(Ausgewertete_Messung_Limb &aml,
 	ss.clear();
 
 	/* prepare the command line to run */
-	std::string command{"python " + script + " " + config + " reference "
+	std::string command{"python " + script + " " + config + " "
 			+ date + " " + alt_string + " " + std::to_string(lat)};
 
 	std::vector<double> NO_apriori;
