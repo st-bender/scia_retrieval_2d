@@ -18,7 +18,9 @@
 #include "Speziesfenster.h"
 #include "Dateinamensteile_Bestimmen.h"
 
-using namespace std;
+using std::cout;
+using std::string;
+using std::vector;
 //////////////////////////////////////////////////
 //constructor
 //////////////////////////////////////////////////
@@ -245,7 +247,7 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 		}
 
 		string s_OrbNum;
-		stringstream buf;
+		std::stringstream buf;
 		//TODO immer prüfen, ob Dateienamenlänge noch stimmt...
 		// falls / im Namen ist das schlecht
 		string Datnam = sb_basename(m_Dateiname_L1C);

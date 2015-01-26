@@ -20,7 +20,7 @@
 #include <algorithm>
 
 
-using namespace std;
+using std::vector;
 
 //Methoden
 //////////////////////////////////////////////////////////
@@ -132,8 +132,8 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 
 	this->m_Anzahl_Hoehen = Anzahl_Hoehen;
 	this->m_Anzahl_Breiten = Breitenzahl;
-	cout << "m_Anzahl_Breiten: " << m_Anzahl_Breiten << "\n";
-	cout << "m_Anzahl_Hoehen: " << m_Anzahl_Hoehen << "\n";
+	std::cout << "m_Anzahl_Breiten: " << m_Anzahl_Breiten << "\n";
+	std::cout << "m_Anzahl_Hoehen: " << m_Anzahl_Hoehen << "\n";
 	this->m_Anzahl_Punkte = m_Anzahl_Breiten * m_Anzahl_Hoehen;
 	// Es muss noch Speicherplatz für das Gitter reserviert werden ////////
 	m_Gitter.resize(m_Anzahl_Punkte);
@@ -240,7 +240,7 @@ void Retrievalgitter::Alle_Durchstosspunkte_Null_setzen()
 //////////////////////////////////////////////////////////
 // Funktionsstart In_Datei_Ausgeben
 /////////////////////////////////////////////////////////
-void Retrievalgitter::In_Datei_Ausgeben(string Dateiname)
+void Retrievalgitter::In_Datei_Ausgeben(std::string Dateiname)
 {
 	//Gebe alle Gitterpunkte aus
 	int i;

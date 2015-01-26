@@ -15,7 +15,10 @@
 #include <algorithm>
 #include <numeric>
 
-using namespace std;
+using std::cerr;
+using std::cout;
+using std::endl;
+using std::vector;
 
 //////////////////////////////////////////////////////////////////////////
 // Funktionsstart Test_auf_Nachtmessung_Limb

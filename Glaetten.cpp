@@ -20,7 +20,7 @@ extern "C" {
 			int *LDB, int *INFO);
 }
 
-using namespace std;
+using std::vector;
 
 void smooth_data(int Datasize, double *Data, int Anzahl_Nachbarn_eine_Seite,
 		int Zahl_der_Iterationen)
@@ -167,7 +167,7 @@ int my_savitzky_golay(vector<double> &y, int ws)
 	case 9:
 		return my_convolution_1d(y, wgts9);
 	default:
-		cerr << "unsupported window size for Savitzky-Golay." << endl;
+		std::cerr << "unsupported window size for Savitzky-Golay." << std::endl;
 		return -1;
 	}
 

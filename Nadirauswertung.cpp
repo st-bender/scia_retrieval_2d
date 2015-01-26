@@ -16,7 +16,8 @@
 #include "Datei_IO.h"  //ReadL1C_Nadir_mpl_binary
 #include"Messungs_ausschliessende_Tests.h"
 
-using namespace std;
+using std::string;
+using std::vector;
 
 int Nadir_Auswertung(Orbitliste &Orbitlist,
 					 int l,

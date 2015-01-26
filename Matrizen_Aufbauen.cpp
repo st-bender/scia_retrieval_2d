@@ -33,7 +33,10 @@
 #include <numeric>
 
 
-using namespace std;
+using std::cerr;
+using std::cout;
+using std::endl;
+using std::vector;
 
 void Matrizen_Aufbauen(MPL_Matrix &S_Breite, MPL_Matrix &S_Hoehe,
 						MPL_Matrix &S_letzte_Hoehe, double Lambda_letzte_Hoehe,

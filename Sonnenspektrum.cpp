@@ -14,7 +14,8 @@
 #include "Messung_Limb.h"
 #include "Glaetten.h"
 
-using namespace std;
+using std::cout;
+using std::string;
 
 //=============================================================================
 int Sonnenspektrum::Laden_GOME(string Dateiname, string Fallback_Dateiname)
@@ -28,7 +29,7 @@ int Sonnenspektrum::Laden_GOME(string Dateiname, string Fallback_Dateiname)
 	// die ersten 800 zeilen decken den 200nm-300nm Bereich ab
 
 	//cout<<"Aufruf von Sonnenspektrum laden\n";
-	ifstream infile(Dateiname.c_str());
+	std::ifstream infile(Dateiname.c_str());
 	if (!(infile.is_open())) {
 		cout << "Achtung!!!: verwende Fallbackspektrum\n";
 		infile.open(Fallback_Dateiname.c_str());
@@ -64,7 +65,7 @@ int Sonnenspektrum::Laden_SCIA(string Dateiname, string Fallback_Dateiname)
 	// gemessen wird
 	double read_wl, read_int, dummy;
 	string s_dummy;
-	ifstream infile(Dateiname.c_str());
+	std::ifstream infile(Dateiname.c_str());
 	if (!(infile.is_open())) {
 		cout << "Achtung!!!: verwende Fallbackspektrum\n";
 		infile.open(Fallback_Dateiname.c_str());
@@ -81,7 +82,7 @@ int Sonnenspektrum::Laden_SCIA(string Dateiname, string Fallback_Dateiname)
 
 	infile >> m_Anzahl_WL;
 	if (m_Anzahl_WL == 0) {
-		cerr << "Sonnenspektrum ist unbrauchbar!" << endl;
+		std::cerr << "Sonnenspektrum ist unbrauchbar!" << std::endl;
 		return 2;
 	}
 
@@ -150,7 +151,7 @@ int Sonnenspektrum::Interpolieren(Messung_Limb &Messung_Erdschein)
 	double kleine_WL, grosse_WL;
 	double int_interp, wl_interp;
 	long Index_kleine_WL = 0, Index_grosse_WL = 1;
-	vector<double>::iterator low, me_wl_it;
+	std::vector<double>::iterator low, me_wl_it;
 	// cout<<Messung_Erdschein.m_Wellenlaengen[0]<<"\n";
 	//cout<<Messung_Erdschein.m_Intensitaeten[0]<<"\n";
 	m_Int_interpoliert.resize(0);
@@ -207,7 +208,7 @@ int Sonnenspektrum::nicht_interpolieren()
 
 int Sonnenspektrum::Speichern(string Dateiname)  //zur Kontrolle
 {
-	ofstream outfile(Dateiname.c_str());
+	std::ofstream outfile(Dateiname.c_str());
 	if (!(outfile.is_open())) {
 		cout << Dateiname << " konnte nicht zum Speichern geöffnet werden\n";
 		return 1;
@@ -221,7 +222,7 @@ int Sonnenspektrum::Speichern(string Dateiname)  //zur Kontrolle
 
 int Sonnenspektrum::Speichern_was_geladen_wurde(string Dateiname)
 {
-	ofstream outfile(Dateiname.c_str());
+	std::ofstream outfile(Dateiname.c_str());
 	if (!(outfile.is_open())) {
 		cout << Dateiname << " konnte nicht zum Speichern geöffnet werden\n";
 		return 1;

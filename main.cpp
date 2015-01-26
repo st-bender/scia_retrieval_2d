@@ -166,9 +166,12 @@ irgendetwas nicht funktioniert, mich kontaktieren
 //              // Nadirauswertung verwendet
 //              // und macht so die Funktionenen in Datei_IO.h z.T. überflüssig
 //===========================================================
-// den std namespace verwenden damit nicht immer std::
-// geschrieben werden muss
-using namespace std;
+
+using std::cerr;
+using std::cout;
+using std::endl;
+using std::string;
+using std::vector;
 
 ///////////////////////////////////////
 // START globale Variablen
@@ -1622,7 +1625,7 @@ int main(int argc, char *argv[])
 	// Zeitmessung
 	time(&timer1);
 	deltaT = timer1 - start_zeit;
-	stringstream buf;
+	std::stringstream buf;
 	buf << "Gesamtlaufzeit des Programms in Sekunden:\t " << deltaT;
 	Nachricht_Schreiben(buf.str(), 10, Prioritylevel);
 	buf.str(string());

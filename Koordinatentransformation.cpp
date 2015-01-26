@@ -9,7 +9,6 @@
 #include<iostream>
 
 
-using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Kugelkoordinaten
@@ -47,7 +46,7 @@ void Umwandlung_Karthesisch_in_Kugel(double x, double y, double z, double &r,
 
 	r = sqrt(x * x + y * y + z * z);
 	if (r == 0.0) {
-		cout << " Umwandlung in Kugelkoordinaten von (0,0,0) nicht sinnvoll\n";
+		std::cout << " Umwandlung in Kugelkoordinaten von (0,0,0) nicht sinnvoll\n";
 		phi = 0;
 		theta = 0;
 		return;

@@ -34,7 +34,10 @@ extern "C" {
 } //Lapackroutine zur Lösung eines linearen GLeichungssystems
 
 
-using namespace std;
+using std::cout;
+using std::string;
+using std::stringstream;
+using std::vector;
 
 Messung_Limb::Messung_Limb(std::string filename) :
 	m_Dateiname_L1C(filename)

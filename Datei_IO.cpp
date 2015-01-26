@@ -23,7 +23,8 @@
 #include "Retrievalgitter.h"
 #include "Glaetten.h"
 
-using namespace std;
+using std::string;
+using std::vector;
 
 extern int Prioritylevel;
 
@@ -569,9 +570,9 @@ int Ausgabe_Saeulendichten(string Dateiname,
 
 MPL_Matrix Read_Atmodatei(string Dateiname)
 {
-	ifstream infile(Dateiname.c_str());
+	std::ifstream infile(Dateiname.c_str());
 	if (!(infile.is_open())) {
-		cout << "Datei " << Dateiname << " kann nicht gefunden werden.\n";
+		std::cout << "Datei " << Dateiname << " kann nicht gefunden werden.\n";
 		MPL_Matrix dummy;
 		return dummy;
 	}

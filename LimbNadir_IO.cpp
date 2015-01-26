@@ -13,7 +13,12 @@
 #include <iostream>
 #include <sstream>
 
-using namespace std;
+using std::cout;
+using std::ios;
+using std::ios_base;
+using std::ifstream;
+using std::ofstream;
+using std::string;
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //

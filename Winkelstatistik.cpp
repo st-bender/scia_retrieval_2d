@@ -12,7 +12,6 @@
 #include<iostream>
 #include<fstream>
 
-using namespace std;
 //////////////////////////////////////////////////////
 // KONSTRUKTOR
 //////////////////////////////////////////////////////
@@ -136,6 +135,7 @@ int Winkelstatistik::Winkel_berechnen_und_einordnen(
 //////////////////////////////////////////////////////
 void Winkelstatistik::Statistik_auf_Bildschirm_ausgeben()
 {
+	using std::cout;
 	cout << "Winkelstatistik\n";
 	cout << "Limbmessungen: " << m_counter_0_001 + m_counter_0_002 +
 		 m_counter_0_005 + m_counter_0_01 +
@@ -171,13 +171,13 @@ void Winkelstatistik::Statistik_auf_Bildschirm_ausgeben()
 //////////////////////////////////////////////////////
 // Methodenstart Statistik_in_Datei_ausgeben
 //////////////////////////////////////////////////////
-int Winkelstatistik::Statistik_in_Datei_ausgeben(string Dateiname)
+int Winkelstatistik::Statistik_in_Datei_ausgeben(std::string Dateiname)
 {
-	ofstream outfile(Dateiname.c_str());
+	std::ofstream outfile(Dateiname.c_str());
 	if (!outfile.is_open()) {
-		cerr << "Datei " << Dateiname
+		std::cerr << "Datei " << Dateiname
 			 << " kann nicht zum schreiben der Winkelstatistik geöffnet werden."
-			 << endl;
+			 << std::endl;
 		return 1;
 	}
 	outfile << "Winkelstatistik\n";

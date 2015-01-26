@@ -8,8 +8,6 @@
 #include"Fit_Polynom.h"
 #include<iostream>
 
-using namespace std;
-
 extern "C" {
 	void dgesv_(int *N, int *NRHS, double *A, int *LDA, int *IPIV, double *B, int *LDB, int *INFO);
 	void dgetrs_(char *, int *N, int *NRHS, double *A, int *LDA, int *IPIV, double *B, int *LDB, int *INFO);

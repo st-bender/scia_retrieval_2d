@@ -9,8 +9,6 @@
 #include "Konfiguration.h"
 #include "MPL_Matrix.h"
 
-using namespace std;
-
 extern "C" {
 	void dgesv_(int *N, int *NRHS, double *A, int *LDA, int *IPIV, double *B,
 				int *LDB, int *INFO);

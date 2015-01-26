@@ -14,7 +14,10 @@
 #include <algorithm>
 #include <iterator>
 
-using namespace std;
+using std::cout;
+using std::ofstream;
+using std::string;
+using std::vector;
 
 // helper function to convert a pair of doubles into a std::string,
 // separated by a tab; used below for the ostream_iterator in std::transform.
@@ -57,7 +60,7 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	outfile1a.close();
 	outfile1b.close();
 
-	stringstream buf;
+	std::stringstream buf;
 	buf.precision(4);
 	buf << "scd: " << Mittelwert << " $cm^{-2}$";
 	string text_messwert(buf.str());
@@ -533,7 +536,7 @@ int Plots_Zusammenfassen(string Pfad_multips2pdf, string Pfad_multips2ps,
 	cout << "Erzeuge_große_PDF\n";
 	for (size_t k = 0; k < Max_Zahl_grosse_pdf; k++) {
 		cout << k << "te große ps Datei\n";
-		stringstream buf;
+		std::stringstream buf;
 		buf << Name_pdf_Datei << k << ".pdf";
 		string Name_grosse_pdf(buf.str());
 		Liste_der_grossen_pdf.push_back(Name_grosse_pdf);

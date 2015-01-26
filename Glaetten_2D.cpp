@@ -11,7 +11,9 @@
 #include <iostream>
 #include <cstdio>
 
-using namespace std;
+using std::cerr;
+using std::string;
+using std::vector;
 
 int SCD_Glaettung(vector<Ausgewertete_Messung_Limb>& AML, int Anzahl_Linien,
 		string limbmesothermo)

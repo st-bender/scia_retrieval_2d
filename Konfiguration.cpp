@@ -18,7 +18,11 @@
 #include <cstdlib>        // für atoi
 
 //namespace
-using namespace std;
+using std::cout;
+using std::endl;
+using std::string;
+using std::stringstream;
+using std::vector;
 
 //Protos für Hilfsfunktionen
 template <class T> vector<T> string_to_vector(string zeile);
@@ -52,10 +56,10 @@ int Konfiguration::Konfiguration_einlesen(std::string file)
 	***************************************************/
 
 	//Datei Öffnen
-	ifstream infile(file.c_str());
+	std::ifstream infile(file.c_str());
 	//cout<<"Datei einlesen\n";
 	if (!infile.is_open()) {
-		cerr << "Konfigurationsdatei " << file.c_str()
+		std::cerr << "Konfigurationsdatei " << file.c_str()
 			 << " fehlt....Programm stürzt ab\n";
 		exit(1);
 	}
@@ -569,7 +573,7 @@ template <class T> vector<T> string_to_vector(string zeile)
 {
 	vector<T> zahlen;
 	T zahl;
-	istringstream iss(zeile);
+	std::istringstream iss(zeile);
 
 	while (iss >> zahl)
 		zahlen.push_back(zahl);

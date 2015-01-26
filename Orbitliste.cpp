@@ -14,14 +14,16 @@
 
 #include"Orbitliste.h"
 
-using namespace std;
+using std::cerr;
+using std::endl;
+using std::string;
 
 //*****************************************************************
 int Orbitliste::Liste_Laden(string Dateiname)
 {
-	ifstream infile(Dateiname.c_str());
+	std::ifstream infile(Dateiname.c_str());
 	if (!(infile.is_open())) {
-		cout << Dateiname << " kann nicht gefunden werden\n";
+		std::cout << Dateiname << " kann nicht gefunden werden\n";
 		return -1;
 	}
 	while (!(infile.eof())) {
@@ -78,7 +80,7 @@ bool Orbitliste::Ist_Messung_Nadirmessung(uint Index)
 //Wartungsfunktion ///////////////////////////////////////////////////////
 void Orbitliste::In_Datei_Speichern(string Dateiname)
 {
-	ofstream outfile(Dateiname.c_str());
+	std::ofstream outfile(Dateiname.c_str());
 	//ich verzichte hier mal auf weitere sicherheitsfragen
 	for (unsigned int i = 0; i < this->m_Dateinamen.size(); i++) {
 		outfile << m_Dateinamen[i] << "\n";

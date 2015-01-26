@@ -31,7 +31,8 @@
 #include "Konfiguration.h"
 #include "Glaetten.h"
 
-using namespace std;
+using std::string;
+using std::vector;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Funktionsstart Limb_Auswertung

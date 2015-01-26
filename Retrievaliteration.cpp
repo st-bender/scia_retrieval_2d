@@ -11,7 +11,8 @@
 #include "Konfiguration.h"
 #include <cmath>
 
-using namespace std;
+using std::cout;
+using std::endl;
 
 extern "C" {
 	void dgesv_(int *N, int *NRHS, double *A, int *LDA, int *IPIV, double *B,

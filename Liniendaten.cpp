@@ -17,7 +17,8 @@
 
 #include "Liniendaten.h"
 
-using namespace std;
+using std::cout;
+using std::string;
 
 Liniendaten::Liniendaten()
 {
@@ -35,9 +36,9 @@ Liniendaten::Liniendaten()
 void Liniendaten::Einlesen(string Dateiname, double Wellenlaenge)
 {
 	string zeile;
-	ifstream infile(Dateiname.c_str());
+	std::ifstream infile(Dateiname.c_str());
 	if (!infile.is_open()) {
-		cerr << "Datei " << Dateiname << " fehlt...Programm stürzt ab\n";
+		std::cerr << "Datei " << Dateiname << " fehlt...Programm stürzt ab\n";
 		exit(1);
 	}
 	// erste 8 Zeilen ignorieren
