@@ -33,17 +33,17 @@ ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(std::string Dateiname,
 std::vector<class Messung_Nadir> ReadL1C_Nadir_mpl_binary(std::string Dateiname, int &Anzahl_Messungen);
 //Besser ein dynamisches Array einlesen, schneller als Vektor
 ////////////////////////////////////////////////////////////////////////////////
-int Ausgabe_Saeulendichten(std::string Dateiname,
+void Ausgabe_Saeulendichten(std::string Dateiname,
 		std::vector<class Ausgewertete_Messung_Limb> &A_Messung_L);
-int Ausgabe_Saeulendichten_back(std::string Dateiname,
+void Ausgabe_Saeulendichten_back(std::string Dateiname,
 		std::vector<class Ausgewertete_Messung_Limb> &aml_vec, MPL_Matrix &y);
-int Ausgabe_Saeulendichten(std::string Dateiname,
+void Ausgabe_Saeulendichten(std::string Dateiname,
 		std::vector<class Ausgewertete_Messung_Nadir> &A_Messung_N);
 //funktion ist ja überladbar
 
 MPL_Matrix Read_Atmodatei(std::string Dateiname);
 //Ausgeben
-int Ausgabe_Dichten(std::string Dateiname_out, class Retrievalgitter &Grid,
+void Ausgabe_Dichten(std::string Dateiname_out, class Retrievalgitter &Grid,
 		MPL_Matrix &Dichten, MPL_Matrix &Dichten_tot, MPL_Matrix &apriori,
 		MPL_Matrix &S_x, MPL_Matrix &S_x_meas, MPL_Matrix &AKM,
 		bool save_sx = true, bool save_akm = true);

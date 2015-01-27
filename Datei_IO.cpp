@@ -454,7 +454,7 @@ vector<Messung_Nadir> ReadL1C_Nadir_mpl_binary(string Dateiname, int &Anzahl_Mes
 //START int Ausgabe_Zeilendichten_Limb(string Dateiname);
 //********************************************************************//
 ////////////////////////////////////////////////////////////////////////////////
-int Ausgabe_Saeulendichten(string Dateiname,
+void Ausgabe_Saeulendichten(string Dateiname,
 		vector<Ausgewertete_Messung_Limb> &A_Messung_L)
 {
 	//Formatierte Ausgabe
@@ -492,7 +492,6 @@ int Ausgabe_Saeulendichten(string Dateiname,
 	//cerr<<"Datei schließen\n";
 	// Datei schließen
 	fclose(outfile);
-	return 0;
 }
 ////////////////////////////////////////////////////////////////////////////////
 //********************************************************************//
@@ -500,7 +499,7 @@ int Ausgabe_Saeulendichten(string Dateiname,
 //********************************************************************//
 ////////////////////////////////////////////////////////////////////////////////
 /* prints the back-inserted columns to a file */
-int Ausgabe_Saeulendichten_back(std::string Dateiname,
+void Ausgabe_Saeulendichten_back(std::string Dateiname,
 		std::vector<Ausgewertete_Messung_Limb> &aml_vec, MPL_Matrix &y)
 {
 	std::vector<Ausgewertete_Messung_Limb> aml_vec_neu;
@@ -514,14 +513,14 @@ int Ausgabe_Saeulendichten_back(std::string Dateiname,
 		aml_vec_neu.at(i).m_Zeilendichte = y(i);
 	}
 
-	return Ausgabe_Saeulendichten(Dateiname, aml_vec_neu);
+	Ausgabe_Saeulendichten(Dateiname, aml_vec_neu);
 }
 ////////////////////////////////////////////////////////////////////////////////
 //********************************************************************//
 //START int Ausgabe_Zeilendichten_Nadir
 //********************************************************************//
 ////////////////////////////////////////////////////////////////////////////////
-int Ausgabe_Saeulendichten(string Dateiname,
+void Ausgabe_Saeulendichten(string Dateiname,
 		vector<Ausgewertete_Messung_Nadir> &A_Messung_N)
 {
 	//Formatierte Ausgabe
@@ -560,7 +559,6 @@ int Ausgabe_Saeulendichten(string Dateiname,
 	///////////////////////////////////////////////////////////
 	// Datei schließen
 	fclose(outfile);
-	return 0;
 }
 ////////////////////////////////////////////////////////////////////////////////
 //********************************************************************//
@@ -597,7 +595,7 @@ MPL_Matrix Read_Atmodatei(string Dateiname)
 ////////////////////////////////////////////////////////////////////////////////
 // Funktionsstart Ausgabe_Dichten
 ////////////////////////////////////////////////////////////////////////////////
-int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
+void Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
 		MPL_Matrix &Dichten, MPL_Matrix &Dichten_tot, MPL_Matrix &apriori,
 		MPL_Matrix &S_x, MPL_Matrix &S_x_meas, MPL_Matrix &AKM,
 		bool save_sx, bool save_akm)
@@ -668,8 +666,6 @@ int Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
 	// Zeilenweise ausgeben
 	if (save_akm)
 		AKM.in_Datei_speichern(Dateiname3);
-
-	return 0;
 }
 ////////////////////////////////////////////////////////////////////////////////
 // Funktionsende Ausgabe_Dichten
