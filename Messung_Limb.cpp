@@ -1336,7 +1336,9 @@ int Messung_Limb::Deklinationswinkel_bestimmen()
 	//cout<<Tage<<"\n";
 	//double bla=cos(360.0/365.0*(Tage+10.0)*pi/180.0);
 	//cout<<bla<<"\n";
-	this->m_Deklinationswinkel = -23.44 * cos(2. * pi / 365. * (Tage + 10.));
+	this->m_Deklinationswinkel = -180.0 / pi * std::asin(
+			0.39779 * std::cos(2. * pi / 365.24 * (Tage + 10.)
+				+ 0.0334 * std::sin(2. * pi / 365.24 * (Tage - 2.))));
 	return 0;
 }// int        Deklinationswinkel_bestimmen() ende
 
