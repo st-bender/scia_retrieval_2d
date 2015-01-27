@@ -42,7 +42,7 @@ public:
 	int m_Tag;
 	int m_Stunde;
 	int m_Minute;
-	float m_Sekunde;
+	int m_Sekunde;
 	float m_SZA_TOA[3];
 	float m_SAA_TOA[3];
 	float m_LOS_Zenit_Winkel[3];

@@ -75,7 +75,7 @@ public:
 	int m_Tag;
 	int m_Stunde;
 	int m_Minute;
-	float m_Sekunde;
+	int m_Sekunde;
 	// Geolokationen für Raytrace
 	double m_Latitude_Sat;
 	double m_Longitude_Sat;
