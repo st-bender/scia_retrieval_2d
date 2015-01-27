@@ -75,7 +75,7 @@ int Nadir_Auswertung(Orbitliste &Orbitlist,
 				ldit->Emissivitaet_ermitteln();
 				//Spezfenst.m_Liniendaten[k].Auf_Bildschirm_Ausgeben();
 
-				mnit->Intensitaeten_durch_piF_Gamma_berechnen((*sfit), k);
+				mnit->Intensitaeten_durch_piF_Gamma_berechnen((*sfit), ldit->m_Gamma);
 
 				// Jetzt Zeilendichte und Fehler bestimmen
 				mnit->Zeilendichte_Bestimmen((*sfit), k,
