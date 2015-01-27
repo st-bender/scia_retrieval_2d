@@ -14,7 +14,7 @@ extern "C" {
 				int *LDB, int *INFO);
 }
 
-int Retrievalfehler_Abschaetzung(MPL_Matrix &S_x,
+void Retrievalfehler_Abschaetzung(MPL_Matrix &S_x,
 								 MPL_Matrix &S_x_meas,
 								 MPL_Matrix &Averaging_Kernel_Matrix,
 								 const MPL_Matrix &S_apriori,
@@ -45,7 +45,6 @@ int Retrievalfehler_Abschaetzung(MPL_Matrix &S_x,
 	MPL_Matrix S_y_inv = S_y;
 	Matrix_Invertieren(S_y_inv);
 	S_x_meas = D * S_y_inv * D.transponiert();
-	return 0;
 }
 ///////////////////////////////////////////////////////
 // Funktionsstart Matrix_Invertieren
