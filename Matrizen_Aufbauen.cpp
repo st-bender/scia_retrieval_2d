@@ -1728,7 +1728,7 @@ MPL_Vektor Punkt_auf_Strecke_bei_Radius(MPL_Vektor &Streckenstartpunkt,
 // Prepares a (column) vector to hold the total number density at the grid
 // points using the number densities from the measurement points that fall
 // into the corresponding grid point.
-int prepare_total_density(Retrievalgitter &grid, MPL_Matrix &dens,
+void prepare_total_density(Retrievalgitter &grid, MPL_Matrix &dens,
 		std::vector<Ausgewertete_Messung_Limb> &aml_vec)
 {
 	std::vector<Gitterpunkt> zero_dens_pts;
@@ -1795,8 +1795,6 @@ int prepare_total_density(Retrievalgitter &grid, MPL_Matrix &dens,
 				// sensible for low altitudes
 				dens(gp->m_eigener_Index) = 2.e16;
 	}
-
-	return 0;
 }
 
 /*
