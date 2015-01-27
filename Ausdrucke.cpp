@@ -31,7 +31,7 @@ std::string pair_to_string(double x, double y)
 ////////////////////////////////////////////////////////////////////////////////
 // Funktionsstart Plot_2xy
 ////////////////////////////////////////////////////////////////////////////////
-int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
+void Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 			 string title, string xlabel, string ylabel,
 			 vector<double> &x1, vector<double> &y1,
 			 vector<double> &x2, vector<double> &y2,
@@ -124,7 +124,6 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 		remove(Rohdaten_Name_a.c_str());
 		remove(Rohdaten_Name_b.c_str());
 	}
-	return 0;
 }
 ////////////////////////////////////////////////////////////////////////////////
 // ENDE Plot_2xy
@@ -132,7 +131,7 @@ int Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 ////////////////////////////////////////////////////////////////////////////////
 // Funktionsstart Plot_Slantcoloumns_polyfit_MgI
 ////////////////////////////////////////////////////////////////////////////////
-int Plot_Slantcoloumns_polyfit_MgI(string Arbeitsverzeichnis, string Dateiname,
+void Plot_Slantcoloumns_polyfit_MgI(string Arbeitsverzeichnis, string Dateiname,
 								   string title, double *WL, int Startind,
 								   int Endind, double *WL_fein,
 								   int Startind_fein, int Endind_fein,
@@ -292,7 +291,6 @@ int Plot_Slantcoloumns_polyfit_MgI(string Arbeitsverzeichnis, string Dateiname,
 	////////////////////////////////////////////////////////////////////////////
 	remove(Temp_Skript_Name.c_str());
 	remove(Rohdaten_Name.c_str());
-	return 0;
 }
 ////////////////////////////////////////////////////////////////////////////////
 // ENDE Plot_Slantcoloumns_polyfit
@@ -300,7 +298,7 @@ int Plot_Slantcoloumns_polyfit_MgI(string Arbeitsverzeichnis, string Dateiname,
 ////////////////////////////////////////////////////////////////////////////////
 // Funktionsstart Plot_Spektren_und_Quotient
 ////////////////////////////////////////////////////////////////////////////////
-int Plot_Spektren_und_Quotient(string Arbeitsverzeichnis, string Dateiname,
+void Plot_Spektren_und_Quotient(string Arbeitsverzeichnis, string Dateiname,
 							   string title, double *WL, int Startind,
 							   int Endind, double *Limb, double *Limb_error,
 							   double *Sonne, double *Quotient,
@@ -399,8 +397,6 @@ int Plot_Spektren_und_Quotient(string Arbeitsverzeichnis, string Dateiname,
 	////////////////////////////////////////////////////////////////////////////
 	remove(Temp_Skript_Name.c_str());
 	remove(Rohdaten_Name.c_str());
-	return 0;
-
 }
 ////////////////////////////////////////////////////////////////////////////////
 // ENDE Plot_Spektren_und_Quotient
@@ -408,7 +404,7 @@ int Plot_Spektren_und_Quotient(string Arbeitsverzeichnis, string Dateiname,
 ////////////////////////////////////////////////////////////////////////////////
 // Funktionsstart Plot_Quotient_mit_Fehler
 ////////////////////////////////////////////////////////////////////////////////
-int Plot_Quotient_mit_Fehler(string Arbeitsverzeichnis, string Dateiname,
+void Plot_Quotient_mit_Fehler(string Arbeitsverzeichnis, string Dateiname,
 							 string title, double *WL, int Startind, int Endind,
 							 double *Quotient, double *Quotient_error,
 							 double *Quotient_stabw)
@@ -499,8 +495,6 @@ int Plot_Quotient_mit_Fehler(string Arbeitsverzeichnis, string Dateiname,
 	////////////////////////////////////////////////////////////////////////////
 	remove(Temp_Skript_Name.c_str());
 	remove(Rohdaten_Name.c_str());
-	return 0;
-
 }
 ////////////////////////////////////////////////////////////////////////////////
 // ENDE Plot_Quotient_mit_Fehler
@@ -510,7 +504,7 @@ int Plot_Quotient_mit_Fehler(string Arbeitsverzeichnis, string Dateiname,
 ////////////////////////////////////////////////////////////////////////////////
 // Funktionsstart Plots_Zusammenfassen
 ////////////////////////////////////////////////////////////////////////////////
-int Plots_Zusammenfassen(string Pfad_multips2pdf, string Pfad_multips2ps,
+void Plots_Zusammenfassen(string Pfad_multips2pdf, string Pfad_multips2ps,
 		string Name_pdf_Datei, vector<string> Liste_der_ps_Dateinamen)
 {
 	// Die Plots in der Liste mit den ps Dateien werden in eine PDF Datei
@@ -567,7 +561,6 @@ int Plots_Zusammenfassen(string Pfad_multips2pdf, string Pfad_multips2ps,
 			sit != Liste_der_grossen_pdf.end(); ++sit ) {
 		remove(sit->c_str());
 	}
-	return 0;
 }
 ////////////////////////////////////////////////////////////////////////////////
 // ENDE Plots_Zusammenfassen
