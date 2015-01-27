@@ -26,14 +26,14 @@ public:
 	// Assignmentoperator Overload
 	Messung_Nadir &operator =(const Messung_Nadir &rhs);
 	//Methoden
-	int Zeilendichte_Bestimmen(class Speziesfenster &Spezfenst, int Index,
+	void Zeilendichte_Bestimmen(class Speziesfenster &Spezfenst, int Index,
 			std::string Arbeitsverzeichnis, std::string mache_Fit_Plots, int MessungsNr);
 	//int Sauelendichte_Bestimmen_MgI(Speziesfenster& Spezfenst, int Index,
 	//  string Arbeitsverzeichnis, string mache_Fit_Plots, int MessungsNr);
-	int Intensitaeten_normieren(std::vector<double> &Sonnen_Intensitaet);
-	int Intensitaeten_durch_piF_Gamma_berechnen(class Speziesfenster Spezfenst, int Index);
-	int Deklinationswinkel_bestimmen();
-	int Sonnen_Longitude_bestimmen();
+	void Intensitaeten_normieren(std::vector<double> &Sonnen_Intensitaet);
+	void Intensitaeten_durch_piF_Gamma_berechnen(class Speziesfenster Spezfenst, int Index);
+	void Deklinationswinkel_bestimmen();
+	void Sonnen_Longitude_bestimmen();
 	Ausgewertete_Messung_Nadir Ergebnis_Zusammenfassen();
 
 	//Hilfsfunktionen
@@ -56,7 +56,7 @@ public:
 
 	//Wartungsfunktionen
 	//zum Testen und debuggen und überprüfen, ob der fit halbwegs passt
-	int Ausgabe_in_Datei(std::string Dateiname);
+	void Ausgabe_in_Datei(std::string Dateiname);
 
 	//Membervariablen
 

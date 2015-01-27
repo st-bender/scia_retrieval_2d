@@ -126,7 +126,7 @@ Messung_Nadir &Messung_Nadir::operator =(const Messung_Nadir &rhs)
 //////////////////////////////////////////////////
 //Zeilendichte_Bestimmen
 //////////////////////////////////////////////////
-int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
+void Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 		string Arbeitsverzeichnis, string mache_Fit_Plots, int MessungsNr)
 {
 	//kurz:
@@ -298,8 +298,6 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	}
 	// Ende Plot ///////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////
-
-	return 0;
 }//int Zeilendichte_Bestimmen() ende
 //////////////////////////////////////////////////
 //Zeilendichte_Bestimmen ENDE
@@ -307,14 +305,13 @@ int Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 //////////////////////////////////////////////////
 //Intensitaeten_normieren
 //////////////////////////////////////////////////
-int Messung_Nadir::Intensitaeten_normieren(vector<double> &Sonnen_Intensitaet)
+void Messung_Nadir::Intensitaeten_normieren(vector<double> &Sonnen_Intensitaet)
 // Da das Limbspektrum mehr Wellenlängen hat, ist das kein Problem
 {
 	for (int i = 0; i < this->m_Number_of_Wavelength; i++) {
 		this->m_Intensitaeten_durch_piF[i]
 			= this->m_Intensitaeten[i] / Sonnen_Intensitaet[i];
 	}
-	return 0;
 }
 //////////////////////////////////////////////////
 //Intensitaeten_normieren ENDE
@@ -322,7 +319,7 @@ int Messung_Nadir::Intensitaeten_normieren(vector<double> &Sonnen_Intensitaet)
 //////////////////////////////////////////////////
 //Intensitaeten_durch_piF_Gamma_berechnen
 //////////////////////////////////////////////////
-int Messung_Nadir::Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfenst, int Index)
+void Messung_Nadir::Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfenst, int Index)
 {
 	for (int i = 0; i < this->m_Number_of_Wavelength; i++) {
 		//langsam, optimierbar
@@ -331,8 +328,6 @@ int Messung_Nadir::Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfe
 		// Faktor 0.11 siehe Diskussion über Emissivitäten LimbLimb
 	}
 	//cout<<"m_Intensitaeten_durch_piF[0] "<<m_Intensitaeten_durch_piF[0]
-	//  <<"\tgamma "<<Spezfenst.m_Liniendaten[Index].m_Gamma<<"\n";
-	return 0;
 }
 //////////////////////////////////////////////////
 //Intensitaeten_durch_piF_Gamma_berechnen ENDE
@@ -340,7 +335,7 @@ int Messung_Nadir::Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfe
 //////////////////////////////////////////////////
 //Deklinationswinkel_bestimmen
 //////////////////////////////////////////////////
-int Messung_Nadir::Deklinationswinkel_bestimmen() // auch gleich wie bei Limb
+void Messung_Nadir::Deklinationswinkel_bestimmen() // auch gleich wie bei Limb
 {
 	const double pi = M_PI;
 	// Formel nach der englischen Wikipedia
@@ -358,14 +353,13 @@ int Messung_Nadir::Deklinationswinkel_bestimmen() // auch gleich wie bei Limb
 	//cout<<bla<<"\n";
 	this->m_Deklinationswinkel =
 		-23.45 * cos((double)360 / 365 * (Tage + 10) * pi / 180);
-	return 0;
 }// int        Deklinationswinkel_bestimmen() ende
 //////////////////////////////////////////////////
 //Deklinationswinkel_bestimmen ENDE
 //////////////////////////////////////////////////
 //========================================
 // Funktionsstart  Sonnen_Longitude_bestimmen
-int Messung_Nadir::Sonnen_Longitude_bestimmen()
+void Messung_Nadir::Sonnen_Longitude_bestimmen()
 {
 	// 12 Uhr Mittags (UTC) ist die Sonne bei Phi=0(glaub Greenwich,
 	// oder zumindest in etwa) im Zenit
@@ -374,8 +368,6 @@ int Messung_Nadir::Sonnen_Longitude_bestimmen()
 	Stunden += (double) this->m_Minute / ((double) 60.0);
 
 	this->m_Sonnen_Longitude = 180.0 - 360.0 * (Stunden / 24.0);
-
-	return 0;
 }
 //ENDE Sonnen_Longitude_bestimmen
 //========================================
@@ -682,7 +674,7 @@ double Messung_Nadir::Evaluate_Error_primitive(vector<double> &x, vector<double>
 // Wartungsfunktionen
 //
 ////////////////////////////////////////////////////////////////////////////////
-int Messung_Nadir::Ausgabe_in_Datei(string Dateiname)
+void Messung_Nadir::Ausgabe_in_Datei(string Dateiname)
 {
 	//TODO hier kann sich später auch noch was verändern
 	/************************************************************
@@ -741,7 +733,6 @@ int Messung_Nadir::Ausgabe_in_Datei(string Dateiname)
 	///////////////////////////////////////////////////////////
 	// Datei schließen
 	fclose(outfile);
-	return 0;
 }//Ausgabe_in_Datei ENDE
 ////////////////////////////////////////////////////////////////////////////////
 //
