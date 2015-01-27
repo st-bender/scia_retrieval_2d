@@ -20,16 +20,16 @@ public:
 	// Assignmentoperator Overload
 	Messung_Limb &operator =(const Messung_Limb &rhs);
 	//Methoden
-	int Zeilendichte_Bestimmen(class Speziesfenster &Spezfenst, int Index,
+	void Zeilendichte_Bestimmen(class Speziesfenster &Spezfenst, int Index,
 			std::string Arbeitsverzeichnis, std::string mache_Fit_Plots);
-	int Saeulendichte_Bestimmen_MgI285nm(class Speziesfenster &Spezfenst,
+	void Saeulendichte_Bestimmen_MgI285nm(class Speziesfenster &Spezfenst,
 			int Index,
 			std::string Arbeitsverzeichnis, std::string mache_Fit_Plots,
 			double *mean_10_20);
-	int Plots_der_Spektren_erzeugen(class Speziesfenster &Spezfenst, int Index,
+	void Plots_der_Spektren_erzeugen(class Speziesfenster &Spezfenst, int Index,
 			std::string Arbeitsverzeichnis, std::string mache_Fit_Plots,
 			double *mean_10_20);
-	int slant_column_NO(class NO_emiss &NO, std::string mache_Fit_Plots,
+	void slant_column_NO(class NO_emiss &NO, std::string mache_Fit_Plots,
 			class Sonnenspektrum &sol_spec, int index,
 			class Speziesfenster &Spezfenst, std::string Arbeitsverzeichnis,
 			bool debug = true);
@@ -38,16 +38,17 @@ public:
 	int moving_average(int window_size);
 	int savitzky_golay(int window_size);
 	double msise_temperature(class Konfiguration &Konf);
-	int Intensitaeten_normieren(std::vector<double> &Sonnen_Intensitaet);
+	void Intensitaeten_normieren(std::vector<double> &Sonnen_Intensitaet);
 	//int        Intensitaeten_normieren(Sonnenspektrum Solspec, Fenster);
 	// hier müsste überlegt werden, wie man mehrfachkorrekturen umgeht
-	int Intensitaeten_durch_piF_Gamma_berechnen(class Speziesfenster Spezfenst,
+	void Intensitaeten_durch_piF_Gamma_berechnen(class Speziesfenster Spezfenst,
 			double wl_gamma);
 	// In der Formel ist piF in W/(m^2*Wellenlänge) verlangt..
 	// also muss noch mit der Kanalbreite multipliziert werden
-	int Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(class Speziesfenster Spezfenst);
-	int Deklinationswinkel_bestimmen();
-	int Sonnen_Longitude_bestimmen();
+	void Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(class Speziesfenster Spezfenst);
+	void Deklinationswinkel_bestimmen();
+	void Sonnen_Longitude_bestimmen();
+	void calc_SunEarthDistance();
 
 	Ausgewertete_Messung_Limb Ergebnis_Zusammenfassen();
 
@@ -77,7 +78,7 @@ public:
 	//können und sollten sogar später auskommentiert werden,
 	//und dienen im wesentlichen zum debuggen
 	//zum Testen und debuggen und überprüfen, ob der fit halbwegs passt
-	int Ausgabe_in_Datei(std::string Dateiname);
+	void Ausgabe_in_Datei(std::string Dateiname);
 
 	//Membervariablen
 

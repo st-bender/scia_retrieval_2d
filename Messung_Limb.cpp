@@ -142,7 +142,7 @@ Messung_Limb &Messung_Limb::operator =(const Messung_Limb &rhs)
 //Methoden
 //========================================
 //========================================
-int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
+void Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 		string Arbeitsverzeichnis, string mache_Fit_Plots)
 {
 	//kurz:
@@ -313,8 +313,6 @@ int Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 				 m_Zeilendichte, m_Fehler_Zeilendichten);
 	}
 	// Ende Plot ///////////////////////////////////////////////////////////////
-
-	return 0;
 }//int Zeilendichte_Bestimmen() ende
 //========================================
 /* the rough rayleigh cross section for wl in [nm] in [cm^2] */
@@ -363,7 +361,7 @@ class rayl {
 	double f_sol;
 };
 //========================================
-int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
+void Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		Sonnenspektrum &sol_spec, int index,
 		Speziesfenster &Spezfenst, std::string Arbeitsverzeichnis,
 		bool debug)
@@ -605,8 +603,6 @@ int Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 			<< std::accumulate(peakwin_rad.begin(), peakwin_rad.end(), 0.)*0.11
 			<< std::endl;
 	}
-
-	return 0;
 }
 
 double Messung_Limb::fit_NO_spec(NO_emiss &NO,
@@ -636,7 +632,7 @@ double Messung_Limb::fit_NO_spec(NO_emiss &NO,
 ////////////////////////////////////////////////////////////////////////////////
 // Funktionsstart Saeulendichte_Bestimmen_MgI285nm
 ////////////////////////////////////////////////////////////////////////////////
-int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
+void Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 		int Index, string Arbeitsverzeichnis, string mache_Fit_Plots,
 		double *mean_10_20)
 {
@@ -972,8 +968,6 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 	delete[] Vollfenster_fein_Sonne;
 	delete[] Limbfit_Parameter;
 	delete[] Sonnefit_Parameter;
-
-	return 0;
 }
 ////////////////////////////////////////////////////////////////////////////////
 // ENDE Saeulendichte_Bestimmen_MgI285nm
@@ -981,7 +975,7 @@ int Messung_Limb::Saeulendichte_Bestimmen_MgI285nm(Speziesfenster &Spezfenst,
 ////////////////////////////////////////////////////////////////////////////////
 // Funktionsstart Plots_der_Spektren_erzeugen
 ////////////////////////////////////////////////////////////////////////////////
-int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
+void Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 		int Index, string Arbeitsverzeichnis, string mache_Fit_Plots,
 		double *mean_10_20)
 {
@@ -1193,7 +1187,6 @@ int Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 	delete[] Vollfenster_Limb_abs_error;
 	delete[] Messwerte_Quotient_error;
 	delete[] Messwerte_Quotient_stabw;
-	return 0;
 }
 ////////////////////////////////////////////////////////////////////////////////
 // ENDE Plots_der_Spektren_erzeugen
@@ -1261,7 +1254,7 @@ double Messung_Limb::msise_temperature(Konfiguration &Konf)
 	return output.t[1];
 }
 
-int Messung_Limb::Intensitaeten_normieren(vector<double> &Sonnen_Intensitaet)
+void Messung_Limb::Intensitaeten_normieren(vector<double> &Sonnen_Intensitaet)
 {
 	//Teiler wurde vorher interpoliert
 	//todo prüfen
@@ -1270,21 +1263,18 @@ int Messung_Limb::Intensitaeten_normieren(vector<double> &Sonnen_Intensitaet)
 			Sonnen_Intensitaet.begin(), m_Intensitaeten_durch_piF.begin(),
 			std::divides<double>());
 	m_Sonne = Sonnen_Intensitaet;
-
-	return 0;
 }
 //========================================
 //========================================
-int Messung_Limb::Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfenst, double wl_gamma)
+void Messung_Limb::Intensitaeten_durch_piF_Gamma_berechnen(Speziesfenster Spezfenst, double wl_gamma)
 {
 
 	//Auf dem ganzen Fenster...Verschwendung !!!!!...
 	std::transform(m_Intensitaeten_durch_piF.begin(), m_Intensitaeten_durch_piF.end(),
 			m_Intensitaeten_durch_piF_Gamma.begin(),
 			std::bind2nd(std::divides<double>(), wl_gamma));
-	return 0;
 }
-int Messung_Limb::Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Speziesfenster Spezfenst)
+void Messung_Limb::Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Speziesfenster Spezfenst)
 {
 
 	//Auf dem ganzen Fenster...Verschwendung !!!!!
@@ -1311,11 +1301,10 @@ int Messung_Limb::Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen(Spez
 			= m_Intensitaeten_durch_piF_Gamma[i] / Delta_WL;
 		// glaub man muss dividieren
 	}
-	return 0;
 }
 //========================================
 //========================================
-int Messung_Limb::Deklinationswinkel_bestimmen()
+void Messung_Limb::Deklinationswinkel_bestimmen()
 {
 	const double pi = M_PI;
 	// Formel nach der englischen Wikipedia
@@ -1339,13 +1328,12 @@ int Messung_Limb::Deklinationswinkel_bestimmen()
 	this->m_Deklinationswinkel = -180.0 / pi * std::asin(
 			0.39779 * std::cos(2. * pi / 365.24 * (Tage + 10.)
 				+ 0.0334 * std::sin(2. * pi / 365.24 * (Tage - 2.))));
-	return 0;
 }// int        Deklinationswinkel_bestimmen() ende
 
 //========================================
 //========================================
 // Funktionsstart  Sonnen_Longitude_bestimmen
-int Messung_Limb::Sonnen_Longitude_bestimmen()
+void Messung_Limb::Sonnen_Longitude_bestimmen()
 {
 	// 12 Uhr Mittags (UTC) ist die Sonne bei Phi=0
 	// (glaub Greenwich, oder zumindest in etwa) im Zenit
@@ -1354,8 +1342,6 @@ int Messung_Limb::Sonnen_Longitude_bestimmen()
 	Stunden += (double) this->m_Minute / 60.0;
 
 	this->m_Sonnen_Longitude = 180.0 - 360.0 * (Stunden / 24.0);
-
-	return 0;
 }
 //ENDE Sonnen_Longitude_bestimmen
 //========================================
@@ -1804,7 +1790,7 @@ double Messung_Limb::Evaluate_Error_primitive(vector<double> &x,
 // Wartungsfunktionen
 //
 ////////////////////////////////////////////////////////////////////////////////
-int Messung_Limb::Ausgabe_in_Datei(string Dateiname)
+void Messung_Limb::Ausgabe_in_Datei(string Dateiname)
 {
 	//TODO hier kann sich später auch noch was verändern
 	/************************************************************
@@ -1866,7 +1852,6 @@ int Messung_Limb::Ausgabe_in_Datei(string Dateiname)
 	///////////////////////////////////////////////////////////
 	// Datei schließen
 	fclose(outfile);
-	return 0;
 }//Ausgabe_in_Datei ENDE
 ////////////////////////////////////////////////////////////////////////////////
 //
