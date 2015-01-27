@@ -20,7 +20,7 @@ bool Test_auf_Nachtmessung_Limb_meso_thermo(class Messung_Limb &niedrigste_hoehe
 bool test_auf_SAA_limb(class Messung_Limb &space, Konfiguration &konf);
 bool Test_auf_NLC_Limb(std::vector<class Messung_Limb> &Rohdaten,
 		class Konfiguration &Konf);
-int Test_auf_korrekte_geolocations_Limb(std::vector<class Messung_Limb> &Rohdaten,
+void Test_auf_korrekte_geolocations_Limb(std::vector<class Messung_Limb> &Rohdaten,
 		int &counter_Winkel_nicht_ok);
 bool Test_auf_Nachtmessung_Nadir(std::vector<class Messung_Nadir> &Rohdaten,
 		int Anzahl_Datensaetze);

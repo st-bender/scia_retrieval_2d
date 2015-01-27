@@ -187,7 +187,7 @@ bool Test_auf_NLC_Limb(vector<Messung_Limb> &Rohdaten, Konfiguration &Konf)
 //////////////////////////////////////////////////////////////////////////
 // Funktionsstart Test_auf_korrekte_geolocations_Limb
 /////////////////////////////////////////////////////////////////////////
-int Test_auf_korrekte_geolocations_Limb(vector<Messung_Limb> &Rohdaten,
+void Test_auf_korrekte_geolocations_Limb(vector<Messung_Limb> &Rohdaten,
 		int &counter_Winkel_nicht_ok)
 {
 	//Die Positionen des Tangentenpunktes und des Satelliten werden in
@@ -264,7 +264,6 @@ int Test_auf_korrekte_geolocations_Limb(vector<Messung_Limb> &Rohdaten,
 			++rd_it;
 		}
 	} //ende while
-	return 0;
 }
 //////////////////////////////////////////////////////////////////////////
 // ENDE Test_auf_korrekte_geolocations_Limb
