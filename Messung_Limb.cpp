@@ -1319,11 +1319,15 @@ int Messung_Limb::Deklinationswinkel_bestimmen()
 {
 	const double pi = M_PI;
 	// Formel nach der englischen Wikipedia
-	//theta=-23,45*cos(360° *(N+10)/365);
+	// https://en.wikipedia.org/wiki/Position_of_the_Sun#Declination_of_the_Sun_as_seen_from_Earth
+	// theta = -23,44*cos(2*pi/365 * (N+10));
 	// dieser Winkel ändert sich nicht sehr stark von Tag zu Tag
 	int Monatstage[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+	if (m_Jahr % 4 == 0 &&
+			!(m_Jahr % 100 == 0 && m_Jahr % 400 != 0))
+		Monatstage[1] = 29;
 	// reicht auch auf Tagesgenauigkeit
-	double Tage = 0;
+	double Tage = -1.;
 	for (int i = 0; i < (this->m_Monat - 1); i++) {
 		Tage += Monatstage[i];
 	}
@@ -1332,8 +1336,7 @@ int Messung_Limb::Deklinationswinkel_bestimmen()
 	//cout<<Tage<<"\n";
 	//double bla=cos(360.0/365.0*(Tage+10.0)*pi/180.0);
 	//cout<<bla<<"\n";
-	this->m_Deklinationswinkel = -23.45 * cos(360.0 / 365.0 * (Tage + 10.0)
-								* pi / 180.0);
+	this->m_Deklinationswinkel = -23.44 * cos(2. * pi / 365. * (Tage + 10.));
 	return 0;
 }// int        Deklinationswinkel_bestimmen() ende
 
