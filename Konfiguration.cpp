@@ -48,7 +48,7 @@ Konfiguration::Konfiguration() :
 }
 
 // Konfiguration_einlesen /////////////////////////////////////////////
-int Konfiguration::Konfiguration_einlesen(std::string file)
+void Konfiguration::Konfiguration_einlesen(std::string file)
 {
 	/***************************************************
 	In dieser Funktion werden alle Parameter aus Scia2d.conf
@@ -438,12 +438,10 @@ int Konfiguration::Konfiguration_einlesen(std::string file)
 			continue;
 		}
 	} //ende while !eof
-
-	return 0;
 }
 // Ende Konfiguration_einlesen ////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
-int Konfiguration::Konfiguration_anzeigen()
+void Konfiguration::Konfiguration_anzeigen()
 {
 	// Directory structure /////
 	cout << "Anzahl der Emitter: " << this->m_Anzahl_der_Emitter << "\n";
@@ -565,7 +563,6 @@ int Konfiguration::Konfiguration_anzeigen()
 	if (MLT) cout << "true";
 	else cout << "false";
 	cout << endl;
-	return 0;
 }//ende Konfiguration_anzeigen
 
 // HILFSFUNTION /////////////////////////////////////////////////////

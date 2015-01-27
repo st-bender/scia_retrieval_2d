@@ -11,8 +11,8 @@ public:
 	// default constructor
 	Konfiguration();
 	// Methoden
-	int Konfiguration_einlesen(std::string file);  // die ist in Scia.conf drin
-	int Konfiguration_anzeigen();  // gucken obs geklappt hat
+	void Konfiguration_einlesen(std::string file);  // die ist in Scia.conf drin
+	void Konfiguration_anzeigen();  // gucken obs geklappt hat
 	// Member_Variablen
 	// Directory Structures //////////////////////////////////////////
 	int m_Anzahl_der_Emitter;
