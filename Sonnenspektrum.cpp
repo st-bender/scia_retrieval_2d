@@ -129,7 +129,7 @@ double Sonnenspektrum::get_rad_at_wl(double wl)
 	return rad;
 }
 
-int Sonnenspektrum::Interpolieren(Messung_Limb &Messung_Erdschein)
+void Sonnenspektrum::Interpolieren(Messung_Limb &Messung_Erdschein)
 {
 	double I1, I2;
 	//Beide Spektren haben nur einen offset, aber bei fast allen Messungen den
@@ -185,19 +185,16 @@ int Sonnenspektrum::Interpolieren(Messung_Limb &Messung_Erdschein)
 		m_WL_interpoliert.push_back(wl_interp);
 	}
 	//cout<<Messung_Erdschein.m_Wellenlaengen[0]<<"\n";
-	return 0;
 }//Interpolieren(Messung_Limb Messung_Erdschein) ende
 //=============================================================================
 ///////////////////////////////////////////////////
 // Methodenstart nicht interpolieren
 ///////////////////////////////////////////////////
-int Sonnenspektrum::nicht_interpolieren()
+void Sonnenspektrum::nicht_interpolieren()
 {
 	// vector copies
 	m_Int_interpoliert = m_Intensitaeten;
 	m_WL_interpoliert = m_Wellenlaengen;
-
-	return 0;
 }
 ///////////////////////////////////////////////////
 // ENDE nicht interpolieren

@@ -24,8 +24,8 @@ public:
 	int savitzky_golay(int window_size);
 	int saoref_to_sciamachy();
 	double get_rad_at_wl(double wl);
-	int Interpolieren(class Messung_Limb &Messung_Erdschein);
-	int nicht_interpolieren();
+	void Interpolieren(class Messung_Limb &Messung_Erdschein);
+	void nicht_interpolieren();
 	std::vector<double> m_Wellenlaengen; // wie lang sind die eigentlich
 	std::vector<double> m_Intensitaeten;
 	// Auf Erdschein-Messungs-Wellenlängen Interpolierte Intensität
