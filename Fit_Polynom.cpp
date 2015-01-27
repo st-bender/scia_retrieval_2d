@@ -202,7 +202,7 @@ void Fit_Polynom(double *x, double *y, int Startindex, int Endindex, double x0,
 ////////////////////////////////////////////////////////////////////////////////
 // Funktionsstart x_zu_Minimum_von_y_in_Intervall
 ////////////////////////////////////////////////////////////////////////////////
-int x_zu_Minimum_von_y_in_Intervall(double *x, double *y, int Startindex,
+void x_zu_Minimum_von_y_in_Intervall(double *x, double *y, int Startindex,
 									int Endindex, double &x_min, double &y_min,
 									int &Indexmin)
 {
@@ -214,7 +214,6 @@ int x_zu_Minimum_von_y_in_Intervall(double *x, double *y, int Startindex,
 	x_min = x[Min_index];
 	y_min = y[Min_index];
 	Indexmin = Min_index;
-	return 0;
 }
 ////////////////////////////////////////////////////////////////////////////////
 // Ende x_zu_Minimum_von_y_in_Intervall
