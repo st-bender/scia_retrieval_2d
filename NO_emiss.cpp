@@ -72,7 +72,7 @@ NO_emiss::NO_emiss(int vu, int vl, int vl_abs, double T) :
 	set_Hoenl_London_emiss();
 }
 
-int NO_emiss::alloc_memory()
+void NO_emiss::alloc_memory()
 {
 	// allocate
 	MPL_Matrix Fl(2, NJ + 3);
@@ -133,11 +133,9 @@ int NO_emiss::alloc_memory()
 	quant_j_up = quantjup;
 
 	gamma_j = gam_j;
-
-	return 0;
 }
 
-int NO_emiss::set_constants()
+void NO_emiss::set_constants()
 {
 	// rotational parameters of the upper state, from Eparvier and Barth
 	B_Vu = 1.9965 - 0.01915 * (v_u + 0.5);
@@ -190,10 +188,8 @@ int NO_emiss::set_constants()
 	// and Lambda splitting (Hund's case a)
 	sum_j *= part_el * (std::exp(-f_boltz * E_l_abs)
 			+ std::exp(+f_boltz * E_l_abs));
-
-	return 0;
 }
-int NO_emiss::populate_Fs()
+void NO_emiss::populate_Fs()
 {
 	for (int i = 0; i <= NJ + 2; i++) {
 		double j = i + 0.5;
@@ -218,11 +214,9 @@ int NO_emiss::populate_Fs()
 					* std::exp(-f_boltz * (flow + E_l_abs));
 		}
 	}
-
-	return 0;
 }
 
-int NO_emiss::calc_lines_emiss_absorp()
+void NO_emiss::calc_lines_emiss_absorp()
 {
 	int i, j, l;
 	double E_rot, E_rot_abs;
@@ -283,13 +277,11 @@ int NO_emiss::calc_lines_emiss_absorp()
 		for (j = 0; j <= 11; j++)
 			if (xlines_K(j, i) != 0.)
 				lambda_K(j, i) = 1.e8 / xlines_K(j, i);
-
-	return 0;
 }
 
 // Absorption Hoenl-London factors from ground state
 // from Earls, 1935, normalised to 4*(2J+1)
-int NO_emiss::set_Hoenl_London_abs()
+void NO_emiss::set_Hoenl_London_abs()
 {
 	int i;
 	double j, u, d1, d2, d3;
@@ -396,12 +388,10 @@ int NO_emiss::set_Hoenl_London_abs()
 			vf_HL_K(11, i + 1) = ((2.*j + 1.) * (2.*j + 1.)
 					- (2.*j + 1.) * u * (4.*j*j + 4.*j - 7. + 2.*Y_l)) / d1;
 	}
-
-	return 0;
 }
 // Hoenl-London factors of emission, relative to upper state K
 // and upper state J ? anyways, these are normalised to 2*(2J+1)
-int NO_emiss::set_Hoenl_London_emiss()
+void NO_emiss::set_Hoenl_London_emiss()
 {
 	int i;
 	double j, u, d1, d2, d3;
@@ -522,12 +512,10 @@ int NO_emiss::set_Hoenl_London_emiss()
 			quant_j_up(11, i + 1) = j;
 		}
 	}
-
-	return 0;
 }
 
 // Get solar spectral data
-int NO_emiss::get_solar_data(Sonnenspektrum &sol_spec)
+void NO_emiss::get_solar_data(Sonnenspektrum &sol_spec)
 {
 	int i, j;
 
@@ -538,8 +526,6 @@ int NO_emiss::get_solar_data(Sonnenspektrum &sol_spec)
 				solar(j, i) = 0.1 * interpolate(sol_spec.m_Wellenlaengen,
 						sol_spec.m_Intensitaeten, 0.1 * lambda_K_abs(j, i));
 			}
-
-	return 0;
 }
 
 // Get data from Luque et al.
@@ -574,7 +560,7 @@ int NO_emiss::read_luque_data_from_file(std::string filename)
 
 // the excitation of J': sum over all J
 // Excitation of upper state J-levels: k_u = j_u - 0.5, k_u = j_u + 0.5
-int NO_emiss::calc_excitation()
+void NO_emiss::calc_excitation()
 {
 	int i, l, k_l, k_u, nidx;
 	double j_l = 0., j_u = 0., nj_frac, sum1, sum2;
@@ -629,11 +615,9 @@ int NO_emiss::calc_excitation()
 	}
 	W_vib = 1.e8 / f_lam(v_u, v_l);
 	f_FC_v = f_FC(v_u, v_l) * W_vib*W_vib*W_vib / f_FC_tot;
-
-	return 0;
 }
 
-int NO_emiss::calc_line_emissivities()
+void NO_emiss::calc_line_emissivities()
 {
 	int i, l, k_l, k_u;
 	double j_l = 0., j_u = 0.;
@@ -671,8 +655,6 @@ int NO_emiss::calc_line_emissivities()
 			}
 		}
 	}
-
-	return 0;
 }
 
 /* line polarisations as per
@@ -725,7 +707,7 @@ std::vector<double> NO_emiss::calc_polarisation()
  *          doi:10.5194/amt-6-1503-2013
  * and from M.L.'s paper in preparation.
  */
-int NO_emiss::pol_corr(double SZA, double rel_SAA,
+void NO_emiss::pol_corr(double SZA, double rel_SAA,
 		double mu2, double mu3)
 {
 	const double deg = M_PI / 180.0;
@@ -754,8 +736,6 @@ int NO_emiss::pol_corr(double SZA, double rel_SAA,
 			emiss_tot += gamma_j(i, j);
 		}
 	}
-
-	return 0;
 }
 
 // integral of the slit function, using Bronstein formula 87.
@@ -772,7 +752,7 @@ double int_slit_func(double fwhm, double x)
 		+ 2. * (std::atan(y + 1.) + std::atan(y - 1.)));
 }
 
-int NO_emiss::scia_convolve(Messung_Limb &ml)
+void NO_emiss::scia_convolve(Messung_Limb &ml)
 {
 	int i, j;
 	std::vector<double> x = ml.m_Wellenlaengen;
@@ -809,11 +789,9 @@ int NO_emiss::scia_convolve(Messung_Limb &ml)
 	 * but is close enough. */
 	scia_band_emiss = 4. * M_PI * 0.11 *
 		std::accumulate(spec_scia_res.begin(), spec_scia_res.end(), 0.);
-
-	return 0;
 }
 
-int NO_emiss::print_lines_emiss_absorp()
+void NO_emiss::print_lines_emiss_absorp()
 {
 	int i, j;
 
@@ -838,11 +816,9 @@ int NO_emiss::print_lines_emiss_absorp()
 		}
 		std::cout << std::endl;
 	}
-
-	return 0;
 }
 
-int NO_emiss::print_Hoenl_London_abs()
+void NO_emiss::print_Hoenl_London_abs()
 {
 	int i, j;
 	double sum;
@@ -861,10 +837,8 @@ int NO_emiss::print_Hoenl_London_abs()
 		}
 		std::cout << "\t" << sum << std::endl;
 	}
-
-	return 0;
 }
-int NO_emiss::print_Hoenl_London_emiss()
+void NO_emiss::print_Hoenl_London_emiss()
 {
 	int i, j;
 	double sum;
@@ -883,10 +857,8 @@ int NO_emiss::print_Hoenl_London_emiss()
 		}
 		std::cout << "\t" << sum << std::endl;
 	}
-
-	return 0;
 }
-int NO_emiss::print_solar_data()
+void NO_emiss::print_solar_data()
 {
 	int i, j;
 
@@ -903,11 +875,9 @@ int NO_emiss::print_solar_data()
 		std::cout << "\t" << NJ_to_N(1, i);
 		std::cout << std::endl;
 	}
-
-	return 0;
 }
 
-int NO_emiss::print_excitation()
+void NO_emiss::print_excitation()
 {
 	int i;
 	double j_u;
@@ -922,11 +892,9 @@ int NO_emiss::print_excitation()
 		if (i < NJ) std::cout << "\t" << excit(1, j_u + 0.5);
 		std::cout << std::endl;
 	}
-
-	return 0;
 }
 
-int NO_emiss::print_line_emissivities()
+void NO_emiss::print_line_emissivities()
 {
 	int i, j;
 
@@ -943,8 +911,6 @@ int NO_emiss::print_line_emissivities()
 	std::cout << "band emission rate factor of the " << v_u << "-" << v_l
 		<< " transition at " << Temp << " K, photons molec-1 s-1:" << std::endl;
 	std::cout << emiss_tot << std::endl;
-
-	return 0;
 }
 
 int NO_emiss::get_NJ()
