@@ -20,9 +20,9 @@ public:
 	//Sciamachy Sonnenspektrum des Orbits
 	int Laden_SCIA(std::string Dateiname, std::string Fallback_Dateiname);
 
-	int moving_average(int window_size);
-	int savitzky_golay(int window_size);
-	int saoref_to_sciamachy();
+	void moving_average(int window_size);
+	void savitzky_golay(int window_size);
+	void saoref_to_sciamachy();
 	double get_rad_at_wl(double wl);
 	void Interpolieren(class Messung_Limb &Messung_Erdschein);
 	void nicht_interpolieren();

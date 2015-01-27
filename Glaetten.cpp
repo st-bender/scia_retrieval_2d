@@ -84,7 +84,7 @@ double my_Phi(double a, double b, double w, double x)
 	return my_phi((x - a + w) / w) * my_phi((b - x + w) / w);
 }
 
-int my_moving_average(vector<double> &y, int ws)
+void my_moving_average(vector<double> &y, int ws)
 {
 	vector<double> y_neu;
 	vector<double>::iterator y_it;
@@ -112,11 +112,9 @@ int my_moving_average(vector<double> &y, int ws)
 	}
 
 	y = y_neu;
-
-	return 0;
 }
 
-int my_convolution_1d(vector<double> &y, vector<double> &weights)
+void my_convolution_1d(vector<double> &y, vector<double> &weights)
 {
 	size_t i;
 	const size_t ws = weights.size(), wsh = ws / 2;
@@ -145,8 +143,6 @@ int my_convolution_1d(vector<double> &y, vector<double> &weights)
 	}
 
 	y = y_neu;
-
-	return 0;
 }
 
 int my_savitzky_golay(vector<double> &y, int ws)
@@ -161,11 +157,14 @@ int my_savitzky_golay(vector<double> &y, int ws)
 
 	switch (ws) {
 	case 5:
-		return my_convolution_1d(y, wgts5);
+		my_convolution_1d(y, wgts5);
+		break;
 	case 7:
-		return my_convolution_1d(y, wgts7);
+		my_convolution_1d(y, wgts7);
+		break;
 	case 9:
-		return my_convolution_1d(y, wgts9);
+		my_convolution_1d(y, wgts9);
+		break;
 	default:
 		std::cerr << "unsupported window size for Savitzky-Golay." << std::endl;
 		return -1;
@@ -174,18 +173,18 @@ int my_savitzky_golay(vector<double> &y, int ws)
 	return 0;
 }
 
-int my_gauss_blur_1d(vector<double> &y)
+void my_gauss_blur_1d(vector<double> &y)
 {
 	const double wgts[7] = { 0.0044, 0.054, 0.242, 0.399, 0.242, 0.054, 0.0044 };
 
 	vector<double> weights(wgts, wgts + 7);
 
-	return my_convolution_1d(y, weights);
+	my_convolution_1d(y, weights);
 }
 
 /* transforms the sao solar reference (0.01 nm resolution)
  * to the sciamachy resolution (0.11 nm), FWHM = 0.22 nm */
-int my_sciamachy_blur(vector<double> &y)
+void my_sciamachy_blur(vector<double> &y)
 {
 	const double wgts[99] = { .01036709959893280509, .01125594763314678180,
 		.01224195115079379920, .01333810263675415044, .01455946003010629420,
@@ -224,7 +223,7 @@ int my_sciamachy_blur(vector<double> &y)
 
 	vector<double> weights(wgts, wgts + 99);
 
-	return my_convolution_1d(y, weights);
+	my_convolution_1d(y, weights);
 }
 
 /* lowess smoothing, code inspired by the biopython module found in
@@ -240,7 +239,7 @@ int my_sciamachy_blur(vector<double> &y)
  * approach to regression analysis by local fitting", Journal of the American
  * Statistical Association, Sep 1988, volume 83, number 403, pp. 596-610.
  */
-int my_lowess(vector<double> &x, vector<double> &y, double f)
+void my_lowess(vector<double> &x, vector<double> &y, double f)
 {
 	size_t n = x.size();
 	size_t r = ceil(f * n);
@@ -289,8 +288,6 @@ int my_lowess(vector<double> &x, vector<double> &y, double f)
 		y_neu.push_back(yval);
 	}
 	y = y_neu;
-
-	return 0;
 }
 
 /* linear equation solver helper function

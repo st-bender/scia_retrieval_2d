@@ -35,8 +35,8 @@ public:
 			bool debug = true);
 	double fit_NO_spec(class NO_emiss &NO, std::vector<double> &x,
 			std::vector<double> &y, double &rms_err);
-	int moving_average(int window_size);
-	int savitzky_golay(int window_size);
+	void moving_average(int window_size);
+	void savitzky_golay(int window_size);
 	double msise_temperature(class Konfiguration &Konf);
 	void Intensitaeten_normieren(std::vector<double> &Sonnen_Intensitaet);
 	//int        Intensitaeten_normieren(Sonnenspektrum Solspec, Fenster);
