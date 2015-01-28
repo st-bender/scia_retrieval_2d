@@ -156,6 +156,9 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 		// wegen Parallelisierung
 		// sin und cos sind langsame Funktionen...
 		// werden aber hierbei auch nicht oft eingesetzt
+		if (mlit->m_Hoehe_TP < Konf.m_BOA || mlit->m_Hoehe_TP > Konf.m_TOA)
+			// skip if tangent point is too low or too high
+			continue;
 		mlit->Deklinationswinkel_bestimmen(); //Sonnenlatitude
 		mlit->Sonnen_Longitude_bestimmen();
 		mlit->Intensitaeten_normieren(Solspec.m_Int_interpoliert);
@@ -166,9 +169,6 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 			//Schleife über alle Linien dieser Spezies
 			// indicate whether or not to skip tangent point
 			bool skip = false;
-			// skip if tangent point is too low or too high
-			if (mlit->m_Hoehe_TP < Konf.m_BOA || mlit->m_Hoehe_TP > Konf.m_TOA)
-				skip = true;
 			for (k = 0, ldit = sfit->m_Liniendaten.begin();
 					ldit != sfit->m_Liniendaten.end(); k++, ++ldit) {
 				// Aus SZA_TP und SAA_TP lässt sich die Polararisation in den
