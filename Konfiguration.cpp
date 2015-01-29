@@ -241,12 +241,9 @@ void Konfiguration::Konfiguration_einlesen(std::string file)
 			continue;
 		}
 		if (Zeile == "Skip SAA") {
-			int saa = 0;
 			getline(infile, Zeile);
 			ss << Zeile;
-			ss >> saa;
-			if (saa == 0) skip_SAA = false;
-			else skip_SAA = true;
+			ss >> skip_SAA;
 			continue;
 		}
 		if (Zeile == "SAA cut-off value") {
@@ -429,12 +426,9 @@ void Konfiguration::Konfiguration_einlesen(std::string file)
 			continue;
 		}
 		if (Zeile == "MLT") {
-			int mlt = 0;
 			getline(infile, Zeile);
 			ss << Zeile;
-			ss >> mlt;
-			if (mlt == 0) MLT = false;
-			else MLT = true;
+			ss >> MLT;
 			continue;
 		}
 	} //ende while !eof
