@@ -43,7 +43,7 @@ Konfiguration::Konfiguration() :
 	atmo_Temp(200.), NO_apriori(0),
 	NO_apriori_bottom(40.0), NO_apriori_top(160.0),
 	NO_apriori_scale(1.0), NO_apriori_smoothness(4.0),
-	retrieval_algo(1)
+	retrieval_algo(1), MLT(false)
 {
 }
 
