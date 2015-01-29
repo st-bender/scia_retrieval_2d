@@ -438,6 +438,7 @@ void Konfiguration::Konfiguration_einlesen(std::string file)
 void Konfiguration::Konfiguration_anzeigen()
 {
 	// Directory structure /////
+	cout.setf(std::ios::boolalpha); // Print "true" or "false" for bool.
 	cout << "Anzahl der Emitter: " << this->m_Anzahl_der_Emitter << "\n";
 	cout << "Solarpfad: " << this->m_Pfad_Solar_Spektrum << "\n";
 	cout << "Ersatz-Solarpfad: " << this->m_Pfad_Solar_Fallback_Spektrum << "\n";
@@ -461,10 +462,7 @@ void Konfiguration::Konfiguration_anzeigen()
 	cout << "Geolocation: " << this->m_Geolocation << "\n";
 	cout << "Large SZA: " << this->m_Large_SZA << "\n";
 	cout << "Mesosphärische Wolken: " << this->m_NLC << "\n";
-	cout << "Skip SAA: ";
-	if (skip_SAA) cout << "yes";
-	else cout << "no";
-	cout << endl;
+	cout << "Skip SAA: " << skip_SAA << "\n";
 	cout << "Max SZA: " << this->m_Maximaler_SZA << "\n";
 	cout << "SAA cut-off: " << SAA_cutoff << "\n";
 	cout << "Geolocation Boundaries: ";
@@ -553,10 +551,7 @@ void Konfiguration::Konfiguration_anzeigen()
 		cout << "new";
 	}
 	cout << "\n";
-	cout << "MLT: ";
-	if (MLT) cout << "true";
-	else cout << "false";
-	cout << endl;
+	cout << "MLT: " << MLT << endl;
 }//ende Konfiguration_anzeigen
 
 // HILFSFUNTION /////////////////////////////////////////////////////
