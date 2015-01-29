@@ -40,7 +40,7 @@ Konfiguration::Konfiguration() :
 	m_MinLat(-90.0), m_MaxLat(90.0), m_NLat(72),
 	m_TOA(200.0), m_BOA(50.0),
 	skip_SAA(true), SAA_cutoff(8.8e10),
-	atmo_Temp(200.), NO_apriori(false),
+	atmo_Temp(200.), NO_apriori(0),
 	NO_apriori_bottom(40.0), NO_apriori_top(160.0),
 	NO_apriori_scale(1.0), NO_apriori_smoothness(4.0),
 	retrieval_algo(1)
