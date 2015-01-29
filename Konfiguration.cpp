@@ -82,57 +82,47 @@ void Konfiguration::Konfiguration_einlesen(std::string file)
 		}
 		if (Zeile == "Solar spectra") {
 			//cout<<"solar\n";
-			getline(infile, Zeile);
-			this->m_Pfad_Solar_Spektrum = Zeile;
+			getline(infile, m_Pfad_Solar_Spektrum);
 			continue;
 		}
 		if (Zeile == "Fallback solar spectrum") {
 			//cout<<"fallbacksolar\n";
-			getline(infile, Zeile);
-			this->m_Pfad_Solar_Fallback_Spektrum = Zeile;
+			getline(infile, m_Pfad_Solar_Fallback_Spektrum);
 			continue;
 		}
 		if (Zeile == "solar correction factors") {
-			getline(infile, Zeile);
-			this->m_Pfad_Solar_Correction_Factors = Zeile;
+			getline(infile, m_Pfad_Solar_Correction_Factors);
 			continue;
 		}
 		if (Zeile == "Line parameters") {
 			//cout<<"Linepars\n";
-			getline(infile, Zeile);
-			this->m_Pfad_Linienparameter_Metalle = Zeile;
+			getline(infile, m_Pfad_Linienparameter_Metalle);
 			continue;
 		}
 		if (Zeile == "Atmospheric structure") {
 			//cout<<"Atmos\n";
-			getline(infile, Zeile);
-			this->m_Pfad_Dichten_der_Atmosphaerengase = Zeile;
+			getline(infile, m_Pfad_Dichten_der_Atmosphaerengase);
 			continue;
 		}
 		if (Zeile == "Cross sections") {
 			//cout<<"Xsect\n";
-			getline(infile, Zeile);
-			this->m_Pfad_Wirkungsquerschnitte_der_Atmosphaerengase = Zeile;
+			getline(infile, m_Pfad_Wirkungsquerschnitte_der_Atmosphaerengase);
 			continue;
 		}
 		if (Zeile == "NO parameters") {
-			getline(infile, Zeile);
-			this->m_Pfad_NO_parameters = Zeile;
+			getline(infile, m_Pfad_NO_parameters);
 			continue;
 		}
 		if (Zeile == "Ap index file") {
-			getline(infile, Zeile);
-			this->m_Pfad_Ap_index = Zeile;
+			getline(infile, m_Pfad_Ap_index);
 			continue;
 		}
 		if (Zeile == "Kp index file") {
-			getline(infile, Zeile);
-			this->m_Pfad_Kp_index = Zeile;
+			getline(infile, m_Pfad_Kp_index);
 			continue;
 		}
 		if (Zeile == "f10.7 index file") {
-			getline(infile, Zeile);
-			this->m_Pfad_f107_index = Zeile;
+			getline(infile, m_Pfad_f107_index);
 			continue;
 		}
 		if (Zeile == "Absorption wavelengths") {
@@ -145,14 +135,12 @@ void Konfiguration::Konfiguration_einlesen(std::string file)
 		// Input DATA /////
 		if (Zeile == "Scan ID data path") {
 			//cout<<"Scan ID\n";
-			getline(infile, Zeile);
-			this->m_Pfad_Datei_mit_Dateinamen_fuer_Messungen_eines_Orbits = Zeile;
+			getline(infile, m_Pfad_Datei_mit_Dateinamen_fuer_Messungen_eines_Orbits);
 			continue;
 		}
 		if (Zeile == "Correction factors") {
 			//cout<<"Correction factors\n";
-			getline(infile, Zeile);
-			this->m_Pfad_Korrekturfaktoren = Zeile;
+			getline(infile, m_Pfad_Korrekturfaktoren);
 			continue;
 		}
 		if (Zeile == "MinAlt and MaxAlt") {
