@@ -285,6 +285,12 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 				aml_it->m_Wellenlaenge_abs, V_Atmo_Wqs_abs(0));
 		interpolieren(M_Atmo_Wirkungsquerschnitte, 0, 2,
 				aml_it->m_Wellenlaenge_abs, V_Atmo_Wqs_abs(1));
+		//std::cerr << "# MessungNR = " << MessungNR << ", wl = "
+		//	<< aml_it->m_Wellenlaenge << ", wl_abs = "
+		//	<< aml_it->m_Wellenlaenge_abs << std::endl;
+		//std::cerr << "# WQs: emiss " << V_Atmo_Wirkungsquerschnitte(0)
+		//	<< ", " << V_Atmo_Wirkungsquerschnitte(1) << "; abs: "
+		//	<< V_Atmo_Wqs_abs(0) << ", " << V_Atmo_Wqs_abs(1) << std::endl;
 		//zwei Wege müssen betrachtet werden:
 		//Satellit-Punkt
 		//Punkt-Sonne
@@ -789,11 +795,14 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 
 				Tau_LFS += Schrittlaenge * 100000.0
 					* (V_Atmo_Dichten * V_Atmo_Wqs_abs);
+				//std::cerr << "WQ = " << V_Atmo_Dichten * V_Atmo_Wqs_abs << std::endl;
+				//std::cerr << "Tau = " << 100000.0 * Schrittlaenge * V_Atmo_Dichten * V_Atmo_Wqs_abs << std::endl;
 			} // Ende for Schritt
 			// ENDE RAYTRACINGSCHLEIFE LIMB LFS /////////////////////////////
 			// Multipliziere AMF mit exp(-Tau)
 			// Bei LFS zählt nur Tau_gesamt, deshalb ist der weg,
 			// wie tau erhöht wird egal
+			//std::cerr << "Tau_LFS = " << Tau_LFS << std::endl;
 			AMF(MessungNR, GitterpunktNR) *= exp(-Tau_LFS);
 
 		} // ende Schleife über alle Gitterpunkte für zusätzliche Abdämpfung LFS
