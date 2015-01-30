@@ -147,6 +147,16 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	//RHS sollte ein Spaltenvektor sein
 	RHS = AMF_trans * S_y * (Saeulendichten - AMF * Dichten_apriori)
 		  + R * Dichten_apriori;
+#ifdef DEBUG_RETRIEVAL_MATRICES
+	LHS.in_Datei_speichern("/tmp/LHS1.dat.gz");
+	RHS.in_Datei_speichern("/tmp/RHS1.dat.gz");
+	AMF.in_Datei_speichern("/tmp/AMF1.dat.gz");
+	Saeulendichten.in_Datei_speichern("/tmp/SDN1.dat.gz");
+	Dichten_apriori.in_Datei_speichern("/tmp/DAP1.dat.gz");
+	S_y.in_Datei_speichern("/tmp/SY1.dat.gz");
+	S_apriori.in_Datei_speichern("/tmp/SAP1.dat.gz");
+	R.in_Datei_speichern("/tmp/R1.dat.gz");
+#endif /* DEBUG_RETRIEVAL_MATRICES */
 	// Lösungen durch LU Zerlegung finden
 	// LU Komponenten für später in A abgelegt
 	dgesv_(&N, &NRHS, A.m_Elemente, &LDA, IPIV, RHS.m_Elemente, &LDB, &INFO);
