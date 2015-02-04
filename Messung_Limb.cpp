@@ -270,10 +270,9 @@ double sigma_rayleigh(double wl)
 		1.062, 1.060, 1.059, 1.057, 1.056, 1.055, 1.055, 1.054, 1.053, 1.053, 1.052,
 		1.052, 1.052, 1.051, 1.051, 1.051, 1.050, 1.049, 1.049, 1.048, 1.048,
 		1.048, 1.048, 1.047, 1.047, 1.047, 1.047, 1.047 };
-	double F_k, n = n_air(wl);
+	double n = n_air(wl);
 	double nm1_div_NA = (n - 1.) / 2.687e-2;
-
-	F_k = interpolate(wl_Fk, F_ks, wl);
+	double F_k = interpolate(wl_Fk, F_ks, wl);
 
 	return 32. * M_PI*M_PI*M_PI / 3. * nm1_div_NA*nm1_div_NA
 		* F_k / (wl*wl*wl*wl) * 1.e-14;
