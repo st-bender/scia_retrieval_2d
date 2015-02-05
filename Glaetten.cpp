@@ -372,6 +372,8 @@ double interpolate(std::vector<double> &x, std::vector<double> &y, double x0)
 double n_air(double wl)
 {
 	double sigma = 1.e6 / (wl * wl);
+	/* Edlen, J. Optic. Soc. Am., vol. 43, no. 5, pp. 339--344, 1953
+	 * doi: 10.1364/JOSA.43.000339 */
 	return 1. + 0.000064328 + 0.0294981 / (146. - sigma)
 		+ 0.0002554 / (41. - sigma);
 }
