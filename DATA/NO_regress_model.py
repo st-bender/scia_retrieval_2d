@@ -50,12 +50,15 @@ def time_fun_sol(tday, t0, solnames, solscales, sol_lags, solsubmin=1):
 
 def coeffs_alt_lat(coeffs, fields, alt=100.0, lat=67.5):
 	fields_float = [(f, '<f8') for f in fields]
-	alts = np.unique(coeffs['alts'])
 	lats = np.unique(coeffs['lats'])
 	lats_right = lats + np.mean(0.5*np.diff(lats))
 	j = bisect.bisect_left(lats_right, lat)
+	if j >= lats.shape[0]:
+		# decrease index if it is too large
+		j = lats.shape[0] - 1
 	l1 = lats[j]
 	cfl1 = coeffs[coeffs['lats']==l1]
+	alts = cfl1['alts']
 	return (alts,
 		cfl1[fields].astype(fields_float).view('<f8').reshape(-1, len(fields)))
 
