@@ -700,7 +700,11 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			MPL_Vektor Startpunkt_normiert(Start_Punkt);
 			Startpunkt_normiert.Normieren();
 			double Cos_SZA_LFS = Startpunkt_normiert * Sonne_normal;
-			if (Cos_SZA_LFS < 0) {
+			double b = Start_Punkt.Betrag_ausgeben(); // = r_E + H
+			if (Cos_SZA_LFS < 0. &&
+					/* check if LFS goes below BOA (default 50 km) */
+					b * std::sqrt(1. - Cos_SZA_LFS*Cos_SZA_LFS)
+						< aml_it->m_Erdradius + Konf.m_BOA) {
 				//cout<<"Limb LFS Gitterpunkt im Dunkeln (SZA>90°)\n";
 				AMF(MessungNR, GitterpunktNR) = 0;
 				continue;
@@ -713,7 +717,6 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			// hier kommt der Sonnenzenitwinkel ins Spiel
 			// mit Cosinussatz a^2=b^2+c^2-2bc cos(alpha)
 			// a ist gesucht alpha=SZA, b=r_E+H, c=r_E+TOA
-			double b = Start_Punkt.Betrag_ausgeben();
 			double c = TOA_LFS + aml_it->m_Erdradius;
 			// Cos(SZA) gerade aus Skalarprodukt des Einheitsvektors in
 			// Sonnenrichtung und des Einheitsvektors in Startpunktrichtung
