@@ -580,10 +580,9 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			//cout<<"Punkt_Hoehe: "<<Punkt_Hoehe<<"\n";
 			//cout<<"Punkt_Laenge: "<<Punkt_Laenge<<"\n";
 			//cout<<"Punkt_Breite: "<<Punkt_Breite<<"\n";
-			int myerr;
 			//cout<<"Tau_LOS: "<<Tau_LOS<<"\n";
 
-			myerr = Pixel_finden_und_AMF_erhoehen_LOS(AMF, Grid, MessungNR,
+			int myerr = Pixel_finden_und_AMF_erhoehen_LOS(AMF, Grid, MessungNR,
 					Pixelnummer,
 					Schrittlaenge, Tau_LOS,
 					Punkt_Hoehe, aml_it->m_Erdradius,
@@ -1003,9 +1002,8 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 				* (Cos_Streuwinkel * Cos_Streuwinkel + 1) + E2;
 			// Gitterpunkt finden und AMF erhöhen;
 			// Durchstoßpunkte der Gitterelemente finden (siehe LFS)
-			int myerr;
 
-			myerr = Pixel_finden_und_AMF_erhoehen_LOS(AMF, Grid, MessungNR,
+			int myerr = Pixel_finden_und_AMF_erhoehen_LOS(AMF, Grid, MessungNR,
 					Pixelnummer,
 					Schrittweite, Tau_Nadir_LOS,
 					AP_Hoehe, amn_it->m_Erdradius,
