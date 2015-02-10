@@ -312,8 +312,7 @@ void Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 
 	// threshold for peak detection in the NO wavelength range
 	// starting at 6*10^10 at 247 nm (NO(0, 2)) and increasing ~ lambda^4
-	// because of Rayleigh scattering
-	double NO_wl_max = NO.get_scia_wl_at_max();
+	// because of Rayleigh scattering (see below)
 	const double peak_threshold = 6.e10;
 
 	//Zunächst Indizes der Wellenlaengen der Basisfenster bestimmen
@@ -375,7 +374,7 @@ void Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		// make sure, that the surrounding points are lower
 		// threshold is 6*10^10 (see above) at 247 nm (NO(0, 2))
 		// and scales ~ lambda^4 like Rayleigh scattering
-		if (rad_i > peak_threshold * std::pow(NO_wl_max / 247.0, 4)
+		if (rad_i > peak_threshold * std::pow(wl / 247.0, 4)
 				&& i > 2 && i < N_base + N_peak - 2
 				&& rad.at(idx - 1) < rad_i
 				&& rad.at(idx + 1) < rad_i) {
