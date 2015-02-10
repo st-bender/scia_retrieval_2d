@@ -589,6 +589,13 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 					Punkt_Hoehe, aml_it->m_Erdradius,
 					Punkt_Laenge, Punkt_Breite,
 					Phasenfunktion, Tau_LOS_Matrix);
+			if (myerr == 4) {
+				IERR = 1;
+				cout << "mysteriöser fall beendet Programm\n";
+				MPL_Matrix dummy(1, 1);
+				return dummy;
+			}
+
 			//letzten Punkt als hinteren Durchstoßpunkt nutzen, des letzen
 			//Feldes nutzen, falls zufällig erster und letzter Punkt gleich,
 			//wird das nicht gemacht
@@ -607,13 +614,6 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 								Grid.m_Gitter[Pixelnummer].m_hinterer_Durchstosspunkt(2));
 					}
 				}
-			}
-
-			if (myerr == 4) {
-				IERR = 1;
-				cout << "mysteriöser fall beendet Programm\n";
-				MPL_Matrix dummy(1, 1);
-				return dummy;
 			}
 			//sleep(1);
 		}
@@ -1011,6 +1011,12 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 					AP_Hoehe, amn_it->m_Erdradius,
 					AP_Laenge, AP_Breite,
 					Phasenfunktion, Tau_LOS_Matrix);
+			if (myerr == 4) {
+				IERR = 1;
+				cout << "mysteriöser fall beendet Programm\n";
+				MPL_Matrix dummy(1, 1);
+				return dummy;
+			}
 
 			if (aktueller_Schritt == Schrittzahl - 1) {
 				//cout<<"letzter Punkt\n";
@@ -1028,12 +1034,6 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 								Grid.m_Gitter[Pixelnummer].m_hinterer_Durchstosspunkt(2));
 					}
 				}
-			}
-			if (myerr == 4) {
-				IERR = 1;
-				cout << "mysteriöser fall beendet Programm\n";
-				MPL_Matrix dummy(1, 1);
-				return dummy;
 			}
 		}
 		//Ende Nadir LOS Raytracingschleife ////////////////////////////////////
