@@ -371,11 +371,12 @@ void Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		double rad_i = rad.at(idx);
 		wl = m_Wellenlaengen.at(idx);
 		// peak detection: unusual high radiance
-		// make sure, that the surrounding points are lower
 		// threshold is 6*10^10 (see above) at 247 nm (NO(0, 2))
 		// and scales ~ lambda^4 like Rayleigh scattering
 		if (rad_i > peak_threshold * std::pow(wl / 247.0, 4)
 				&& i > 2 && i < N_base + N_peak - 2
+				// make sure that the surrounding points are smaller, i.e.,
+				// that we have a single large spike in the spectrum
 				&& rad.at(idx - 1) < rad_i
 				&& rad.at(idx + 1) < rad_i) {
 			// exclude the previous, the current, and the next point.
