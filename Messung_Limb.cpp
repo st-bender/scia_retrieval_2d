@@ -386,7 +386,7 @@ void Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 			double yN = rad.at(idx + 2);
 			double a = 0.25 * (yN - y0);
 			for (int k = 0; k < 3; k++)
-				rad.at(idx - 1 + k) = k*a + y0;
+				rad.at(idx - 1 + k) = (k + 1)*a + y0;
 			// done interpolating
 			i++;
 		} else
