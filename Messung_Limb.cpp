@@ -367,25 +367,26 @@ void Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	}
 
 	for (i = 0; i < N_base + N_peak; i++) {
-		double sol_i = sol_rad.at(i_basewin_l_min + i);
-		double rad_i = rad.at(i_basewin_l_min + i);
-		wl = m_Wellenlaengen.at(i_basewin_l_min + i);
+		int idx = i_basewin_l_min + i;
+		double sol_i = sol_rad.at(idx);
+		double rad_i = rad.at(idx);
+		wl = m_Wellenlaengen.at(idx);
 		// peak detection: unusual high radiance
 		// make sure, that the surrounding points are lower
 		if (rad_i > peak_threshold
 				&& i > 2 && i < N_base + N_peak - 2
-				&& rad.at(i_basewin_l_min + i - 1) < rad_i
-				&& rad.at(i_basewin_l_min + i + 1) < rad_i) {
+				&& rad.at(idx - 1) < rad_i
+				&& rad.at(idx + 1) < rad_i) {
 			// exclude the previous, the current, and the next point.
 			// That means we pop the last one and don't include the current
 			// one, and interpolate the next point of the fit spectrum.
 			if (!fit_spec.empty()) fit_spec.pop_back();
 			// interpolate three points of the peak linearly
-			double y0 = rad.at(i_basewin_l_min + i - 2);
-			double yN = rad.at(i_basewin_l_min + i + 2);
+			double y0 = rad.at(idx - 2);
+			double yN = rad.at(idx + 2);
 			double a = 0.25 * (yN - y0);
 			for (int k = 0; k < 3; k++)
-				rad.at(i_basewin_l_min + i - 1 + k) = k*a + y0;
+				rad.at(idx - 1 + k) = k*a + y0;
 			// done interpolating
 			i++;
 		} else
