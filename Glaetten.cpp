@@ -372,10 +372,10 @@ double interpolate(std::vector<double> &x, std::vector<double> &y, double x0)
 double n_air(double wl)
 {
 	double sigma = 1.e6 / (wl * wl);
-	/* Edlen, J. Optic. Soc. Am., vol. 43, no. 5, pp. 339--344, 1953
-	 * doi: 10.1364/JOSA.43.000339 */
-	return 1. + 0.000064328 + 0.0294981 / (146. - sigma)
-		+ 0.0002554 / (41. - sigma);
+	/* Peck and Reeder, J. Optic. Soc. Am., vol. 62, no. 8, pp. 958--962, 1972
+	 * doi: 10.1364/JOSA.62.000958 */
+	return 1. + (8060.51 + 2480990. / (132.274 - sigma)
+					+ 17455.7 / (39.32957 - sigma)) * 1.e-8;
 }
 double shift_wavelength(double wl)
 {
