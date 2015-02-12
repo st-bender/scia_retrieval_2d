@@ -522,8 +522,8 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 					|| (Punkt_Breite < -90.0 + aml_it->m_Deklination)) {
 				if (aktuelle_Schritt_Nr == Schrittzahl - 1) {
 					//cout<<"letzter Punkt und im dunkeln\n";
-					if (Pixelnummer != -1) {
-						if (Grid.m_Gitter[Pixelnummer].m_hinterer_Durchstosspunkt.Betrag_ausgeben() == 0) {
+					if (Pixelnummer != -1 &&
+						Grid.m_Gitter[Pixelnummer].m_hinterer_Durchstosspunkt.Betrag_ausgeben() == 0) {
 							cout << "MessungNR: " << MessungNR << "\n";
 							cout << "fehlenden hinteren Durchstoßpunkt setzen\n";
 							Umwandlung_Kugel_in_Karthesisch(Punkt_Hoehe + aml_it->m_Erdradius,
@@ -532,7 +532,6 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 									Grid.m_Gitter[Pixelnummer].m_hinterer_Durchstosspunkt(0),
 									Grid.m_Gitter[Pixelnummer].m_hinterer_Durchstosspunkt(1),
 									Grid.m_Gitter[Pixelnummer].m_hinterer_Durchstosspunkt(2));
-						}
 					}
 				}
 				continue;
@@ -601,8 +600,8 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			if (aktuelle_Schritt_Nr == Schrittzahl - 1) {
 				//cout<<"letzter Punkt\n";
 				//cout<<"Pixelnummer:  "<<Pixelnummer<<"\n\n";
-				if (Pixelnummer != -1) {
-					if (Grid.m_Gitter[Pixelnummer].m_hinterer_Durchstosspunkt.Betrag_ausgeben() == 0) {
+				if (Pixelnummer != -1 &&
+					Grid.m_Gitter[Pixelnummer].m_hinterer_Durchstosspunkt.Betrag_ausgeben() == 0) {
 						//cout<<"MessungNR: "<<MessungNR<<"\n";
 						//cout<<"fehlenden hinteren Durchstoßpunkt setzen\n";
 						Umwandlung_Kugel_in_Karthesisch(Punkt_Hoehe + aml_it->m_Erdradius,
@@ -611,7 +610,6 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 								Grid.m_Gitter[Pixelnummer].m_hinterer_Durchstosspunkt(0),
 								Grid.m_Gitter[Pixelnummer].m_hinterer_Durchstosspunkt(1),
 								Grid.m_Gitter[Pixelnummer].m_hinterer_Durchstosspunkt(2));
-					}
 				}
 			}
 			//sleep(1);
