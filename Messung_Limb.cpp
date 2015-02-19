@@ -1200,6 +1200,16 @@ double Messung_Limb::msise_temperature(Konfiguration &Konf)
 	total_number_density = output.d[0] + output.d[1] + output.d[2]
 		+ output.d[3] + output.d[4] + output.d[6] + output.d[7];
 
+	/*
+	// http://www.kayelaby.npl.co.uk/general_physics/2_5/2_5_7.html
+	// refraction at pressure p [Pa] and T [Celsius] is related to this:
+	// n' − 1 = (n − 1)*p[1 + p*(60.1 - 0.972*T)*10^-10]/[96095.43(1 + 0.003661*T)]
+	double T_K = output.t[1];
+	double T_C = T_K - 273.15;
+	double p_Pa = 1.e6 * total_number_density * 1.3806504e-23 * T_K;
+	double n_f = p_Pa*(1.+p_Pa*(60.1-0.972*T_C)*1.e-10)/(96095.43*(1.+0.003661*T_C));
+	// */
+
 	return output.t[1];
 }
 
