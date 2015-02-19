@@ -686,6 +686,8 @@ MPL_Matrix Luftmassenfaktoren_Matrix_aufbauen(/*MPL_Matrix& Zeilendichten,*/
 			// cout<<"Startpunkt(0): "<<Start_Punkt(0)<<"\t"
 			//       <<"Startpunkt(1): "<<Start_Punkt(1)<<"\t"
 			//       <<"Startpunkt(2): "<<Start_Punkt(2)<<"\n";
+			//MPL_Vektor Start_Punkt(0.5 * (Grid.m_Gitter[GitterpunktNR].m_hinterer_Durchstosspunkt
+			//				+ Grid.m_Gitter[GitterpunktNR].m_vorderer_Durchstosspunkt));
 			//vom Startpunkt aus gehts in Richtung Sonne voran
 			MPL_Vektor Sonne_normal(3); //wie bei LOS
 			Umwandlung_Kugel_in_Karthesisch(1,       // 1 km lang damit normiert
