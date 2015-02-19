@@ -71,6 +71,8 @@ void Konfiguration::Konfiguration_einlesen(std::string file)
 		stringstream ss;
 		int Zeilenzahl;
 		getline(infile, Zeile);
+		// skip comment lines
+		if (Zeile[0] == '!') continue;
 		// Einträge abarbeiten
 		// Directory Structure /////
 		if (Zeile == "Number of emitters") {
