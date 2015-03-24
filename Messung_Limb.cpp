@@ -75,8 +75,6 @@ Messung_Limb &Messung_Limb::operator =(const Messung_Limb &rhs)
 	m_TP_rel_SAA = rhs.m_TP_rel_SAA;
 	center_lat = rhs.center_lat;
 	center_lon = rhs.center_lon;
-	m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand
-		= rhs.m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand;
 
 	// Return a reference to *this object.
 	return *this;
