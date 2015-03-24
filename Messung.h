@@ -30,6 +30,8 @@ public:
 	void Deklinationswinkel_bestimmen();
 	void Sonnen_Longitude_bestimmen();
 	void calc_SunEarthDistance();
+	double fit_NO_spec(class NO_emiss &NO, std::vector<double> &x,
+			std::vector<double> &y, double &rms_err);
 
 	//Hilfsfunktionen  //nur intern aufrufen!!!
 	int Get_Index(double WL);

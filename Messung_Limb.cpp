@@ -259,13 +259,6 @@ void Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 	// Ende Plot ///////////////////////////////////////////////////////////////
 }//int Zeilendichte_Bestimmen() ende
 //========================================
-class lin_x {
-	public:
-	lin_x(double a0) : a(a0) {}
-	double operator()(double x, double y) { return x + a*y; }
-	private:
-	double a;
-};
 class rayl {
 	public:
 	rayl(double f) : f_sol(f) {}
@@ -527,30 +520,6 @@ void Messung_Limb::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 			<< std::accumulate(peakwin_rad.begin(), peakwin_rad.end(), 0.)*0.11
 			<< std::endl;
 	}
-}
-
-double Messung_Limb::fit_NO_spec(NO_emiss &NO,
-		std::vector<double> &x, std::vector<double> &y,
-		double &rms_err)
-{
-	int l0 = sb_Get_Index(x.at(0)) + 1;
-
-	double sum_gy = std::inner_product(y.begin(), y.end(),
-			NO.spec_scia_res.begin() + l0, 0.0);
-	double sum_gg = std::inner_product(NO.spec_scia_res.begin() + l0,
-			NO.spec_scia_res.begin() + l0 + x.size(),
-			NO.spec_scia_res.begin() + l0, 0.0);
-	double A = sum_gy / sum_gg;
-
-	std::vector<double> diffs;
-	std::transform(y.begin(), y.end(), NO.spec_scia_res.begin() + l0,
-			std::back_inserter(diffs), lin_x(-A));
-
-	double err = std::inner_product(diffs.begin(), diffs.end(),
-			diffs.begin(), 0.0) / diffs.size();
-	rms_err = std::sqrt(err);
-
-	return A;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

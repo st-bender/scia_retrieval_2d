@@ -234,6 +234,36 @@ void Messung::calc_SunEarthDistance()
 	m_SunEarthDistance = a * (1. - e * e) / (1. + e * std::cos(theta));
 }
 
+class lin_x {
+	public:
+	lin_x(double a0) : a(a0) {}
+	double operator()(double x, double y) { return x + a*y; }
+	private:
+	double a;
+};
+double Messung::fit_NO_spec(NO_emiss &NO,
+		std::vector<double> &x, std::vector<double> &y,
+		double &rms_err)
+{
+	int l0 = sb_Get_Index(x.at(0)) + 1;
+
+	double sum_gy = std::inner_product(y.begin(), y.end(),
+			NO.spec_scia_res.begin() + l0, 0.0);
+	double sum_gg = std::inner_product(NO.spec_scia_res.begin() + l0,
+			NO.spec_scia_res.begin() + l0 + x.size(),
+			NO.spec_scia_res.begin() + l0, 0.0);
+	double A = sum_gy / sum_gg;
+
+	std::vector<double> diffs;
+	std::transform(y.begin(), y.end(), NO.spec_scia_res.begin() + l0,
+			std::back_inserter(diffs), lin_x(-A));
+
+	double err = std::inner_product(diffs.begin(), diffs.end(),
+			diffs.begin(), 0.0) / diffs.size();
+	rms_err = std::sqrt(err);
+
+	return A;
+}
 
 //========================================
 //Methoden ende

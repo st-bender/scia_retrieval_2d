@@ -32,8 +32,6 @@ public:
 			class Sonnenspektrum &sol_spec, int index,
 			class Speziesfenster &Spezfenst, std::string Arbeitsverzeichnis,
 			bool debug = true);
-	double fit_NO_spec(class NO_emiss &NO, std::vector<double> &x,
-			std::vector<double> &y, double &rms_err);
 	void moving_average(int window_size);
 	void savitzky_golay(int window_size);
 	double msise_temperature(class Konfiguration &Konf);
