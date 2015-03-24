@@ -369,6 +369,14 @@ double interpolate(std::vector<double> &x, std::vector<double> &y, double x0)
 		+ (x0 - x.at(i)) * (y.at(i) - y.at(i + 1)) / (x.at(i) - x.at(i + 1));
 }
 
+double fit_spectra(std::vector<double> &x, std::vector<double> &y)
+{
+	double sum_gy = std::inner_product(x.begin(), x.end(), y.begin(), 0.);
+	double sum_gg = std::inner_product(x.begin(), x.end(), x.begin(), 0.);
+
+	return sum_gy / sum_gg;
+}
+
 double n_air(double wl)
 {
 	double sigma = 1.e6 / (wl * wl);
@@ -376,6 +384,24 @@ double n_air(double wl)
 	 * doi: 10.1364/JOSA.62.000958 */
 	return 1. + (8060.51 + 2480990. / (132.274 - sigma)
 					+ 17455.7 / (39.32957 - sigma)) * 1.e-8;
+}
+/* the rough rayleigh cross section for wl in [nm] in [cm^2] */
+double sigma_rayleigh(double wl)
+{
+	/* ref.: planet. space sci., vol. 32, no. 6, pp 785-790, 1984 */
+	std::vector<double> wl_Fk{ 200, 205, 210, 215, 220, 225, 230, 240, 250, 260,
+		270, 280, 290, 300, 310, 320, 330, 340, 350, 360, 370, 380, 390, 400,
+		450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000 };
+	std::vector<double> F_ks{ 1.080, 1.077, 1.074, 1.072, 1.070, 1.068, 1.066, 1.064,
+		1.062, 1.060, 1.059, 1.057, 1.056, 1.055, 1.055, 1.054, 1.053, 1.053, 1.052,
+		1.052, 1.052, 1.051, 1.051, 1.051, 1.050, 1.049, 1.049, 1.048, 1.048,
+		1.048, 1.048, 1.047, 1.047, 1.047, 1.047, 1.047 };
+	double n = n_air(wl);
+	double nm1_div_NA = (n - 1.) / 2.687e-2;
+	double F_k = interpolate(wl_Fk, F_ks, wl);
+
+	return 32. * M_PI*M_PI*M_PI / 3. * nm1_div_NA*nm1_div_NA
+		* F_k / (wl*wl*wl*wl) * 1.e-14;
 }
 double shift_wavelength(double wl)
 {
