@@ -377,6 +377,7 @@ vector<Messung_Nadir> make_messung_nadir_vector(string Dateiname,
 			mn.m_Intensitaeten_relativer_Fehler.push_back(Nadirdaten[i].m_error[j]);
 			mn.m_Intensitaeten_durch_piF.push_back(0.);
 			mn.m_Intensitaeten_durch_piF_Gamma.push_back(0.);
+			mn.m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand.push_back(0.);
 		}
 		// Der Pixel 552 (282,03nm zeigt bei nadir( und nur dort, einen Peak)
 		// Das ist die Kanalgrenze zwischen Kanal1a und Kanal1b

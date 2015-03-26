@@ -76,6 +76,9 @@ int Nadir_Auswertung(Orbitliste &Orbitlist,
 				//Spezfenst.m_Liniendaten[k].Auf_Bildschirm_Ausgeben();
 
 				mnit->Intensitaeten_durch_piF_Gamma_berechnen((*sfit), ldit->m_Gamma);
+				// In der Formel ist piF in W/(m^2*Wellenlänge) verlangt..
+				// also muss noch mit der Kanalbreite multipliziert werden
+				mnit->Intensitaeten_durch_piF_Gamma_mal_Gitterabstand_berechnen((*sfit));
 
 				// Jetzt Zeilendichte und Fehler bestimmen
 				mnit->Zeilendichte_Bestimmen((*sfit), k,
