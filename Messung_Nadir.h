@@ -26,7 +26,7 @@ public:
 	Messung_Nadir &operator =(const Messung_Nadir &rhs);
 	//Methoden
 	void Zeilendichte_Bestimmen(class Speziesfenster &Spezfenst, int Index,
-			std::string Arbeitsverzeichnis, std::string mache_Fit_Plots, int MessungsNr);
+			std::string Arbeitsverzeichnis, std::string mache_Fit_Plots);
 	Ausgewertete_Messung_Nadir Ergebnis_Zusammenfassen();
 
 	//Wartungsfunktionen

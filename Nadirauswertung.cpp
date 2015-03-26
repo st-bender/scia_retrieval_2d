@@ -82,7 +82,7 @@ int Nadir_Auswertung(Orbitliste &Orbitlist,
 
 				// Jetzt Zeilendichte und Fehler bestimmen
 				mnit->Zeilendichte_Bestimmen((*sfit), k,
-						Arbeitsverzeichnis, mache_Fit_Plots, i);
+						Arbeitsverzeichnis, mache_Fit_Plots);
 
 				// Ergebnis zusammenfassen
 				Ausgewertete_Messung_Nadir Ergebnis = mnit->Ergebnis_Zusammenfassen();

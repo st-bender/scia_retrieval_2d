@@ -67,7 +67,7 @@ Messung_Nadir &Messung_Nadir::operator =(const Messung_Nadir &rhs)
 //Zeilendichte_Bestimmen
 //////////////////////////////////////////////////
 void Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
-		string Arbeitsverzeichnis, string mache_Fit_Plots, int MessungsNr)
+		string Arbeitsverzeichnis, string mache_Fit_Plots)
 {
 	//kurz:
 	//Diese Fitroutine ermittelt die Fläche von I/(piF*Gamma) bei der
@@ -196,7 +196,7 @@ void Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 		string plot_dir = Arbeitsverzeichnis + "/Plots";
 		mkdir(plot_dir.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
-			<< "_" << MessungsNr << "_" << Index << ".ps";
+			<< "_" << m_Messung_ID << "_" << Index << ".ps";
 		string new_datnam(buf.str());
 		string s1(plot_dir + "/" + new_datnam);
 		//s1 ist der Volle Pfad der Datei...
