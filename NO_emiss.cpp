@@ -752,7 +752,7 @@ double int_slit_func(double fwhm, double x)
 		+ 2. * (std::atan(y + 1.) + std::atan(y - 1.)));
 }
 
-void NO_emiss::scia_convolve(Messung_Limb &ml)
+void NO_emiss::scia_convolve(Messung &ml)
 {
 	int i, j;
 	std::vector<double> x = ml.m_Wellenlaengen;

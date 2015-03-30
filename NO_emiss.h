@@ -105,7 +105,7 @@ class NO_emiss {
 	void calc_line_emissivities();
 	std::vector<double> calc_polarisation();
 	void pol_corr(double SZA, double rel_SAA, double mu2 = 0.17, double mu3 = -0.2);
-	void scia_convolve(class Messung_Limb &ml);
+	void scia_convolve(class Messung &ml);
 	void print_lines_emiss_absorp();
 	void print_Hoenl_London_abs();
 	void print_Hoenl_London_emiss();
