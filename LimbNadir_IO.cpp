@@ -272,7 +272,6 @@ inline void Nadir_Datensatz::read_from_mpl_binary(std::ifstream *stream,
 	m_N_radiances = no_of_pix;
 	m_radiance.resize(no_of_pix);
 	m_error.resize(no_of_pix);
-	//cout<<"Les
 	binary_read(stream, m_Messung_ID);
 	binary_read(stream, m_state_ID);
 	binary_read(stream, m_Jahr);
@@ -281,17 +280,17 @@ inline void Nadir_Datensatz::read_from_mpl_binary(std::ifstream *stream,
 	binary_read(stream, m_Stunde);
 	binary_read(stream, m_Minute);
 	binary_read(stream, m_Sekunde);
-	binary_read(stream, m_SZA_TOA, 3);
-	binary_read(stream, m_SAA_TOA, 3);
-	binary_read(stream, m_LOS_Zenit_Winkel, 3);
-	binary_read(stream, m_LOS_Azimut_Winkel, 3);
+	binary_read(stream, m_SZA_TOA[0], 3);
+	binary_read(stream, m_SAA_TOA[0], 3);
+	binary_read(stream, m_LOS_Zenit_Winkel[0], 3);
+	binary_read(stream, m_LOS_Azimut_Winkel[0], 3);
 	binary_read(stream, m_Hoehe);
 	binary_read(stream, m_Sat_Lat);
 	binary_read(stream, m_Sat_Lon);
 	binary_read(stream, m_Sat_Erdradius);
 	binary_read(stream, m_orbit_phase);
-	binary_read(stream, m_geo_nadir_corner_lat, 4);
-	binary_read(stream, m_geo_nadir_corner_lon, 4);
+	binary_read(stream, m_geo_nadir_corner_lat[0], 4);
+	binary_read(stream, m_geo_nadir_corner_lon[0], 4);
 	binary_read(stream, m_geo_nadir_center_lat);
 	binary_read(stream, m_geo_nadir_center_lon);
 	binary_read(stream, m_Integrationszeit);
