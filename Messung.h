@@ -82,7 +82,7 @@ public:
 	int m_Tag;
 	int m_Stunde;
 	int m_Minute;
-	int m_Sekunde;
+	float m_Sekunde;
 	// Geolocation
 	double m_Latitude_Sat;   // hierfür muss das Programm noch geändert werden
 	double m_Longitude_Sat;
