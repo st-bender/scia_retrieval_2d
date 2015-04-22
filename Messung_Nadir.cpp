@@ -142,7 +142,7 @@ void Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 				Spezfenst.m_Wellenlaengen[Index], 0, N_Peak - 1);
 	////////////////////////////////////////////////////////////////////////////
 	// Hier kann man zur Testzwecken noch einen Plot machen  ///////////////////
-	if (mache_Fit_Plots == "ja") {
+	if (mache_Fit_Plots == "ja" && Spezfenst.plot_fit) {
 		//TODO das als Funktion implementieren
 		vector<double> Funktion;
 
