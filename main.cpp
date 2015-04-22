@@ -695,7 +695,8 @@ int main(int argc, char *argv[])
 							 Ausgewertete_Nadirmessung_MgII,
 							 Ausgewertete_Nadirmessung_unknown,
 							 Ausgewertete_Nadirmessung_FeI,
-							 Ausgewertete_Nadirmessung_NO);
+							 Ausgewertete_Nadirmessung_NO,
+							 Konf);
 			/////////////////////////////////////
 			//Nadirauswertung Ende
 			////////////////////////////////////

@@ -15,6 +15,7 @@
 #include "Messung_Nadir.h"
 #include "Datei_IO.h"  //ReadL1C_Nadir_mpl_binary
 #include"Messungs_ausschliessende_Tests.h"
+#include "Konfiguration.h"
 
 using std::string;
 using std::vector;
@@ -30,7 +31,8 @@ int Nadir_Auswertung(Orbitliste &Orbitlist,
 					 vector<Ausgewertete_Messung_Nadir>& Ausgewertete_Nadirmessung_MgII,
 					 vector<Ausgewertete_Messung_Nadir>& Ausgewertete_Nadirmessung_unknown,
 					 vector<Ausgewertete_Messung_Nadir>& Ausgewertete_Nadirmessung_FeI,
-					 vector<Ausgewertete_Messung_Nadir>& Ausgewertete_Nadirmessung_NO)
+					 vector<Ausgewertete_Messung_Nadir>& Ausgewertete_Nadirmessung_NO,
+					 Konfiguration &Konf)
 {
 	//cout<<"Start_Nadirauswertung\n";
 	unsigned int i, j, k;
