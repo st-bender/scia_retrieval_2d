@@ -26,10 +26,6 @@ public:
 	void Plots_der_Spektren_erzeugen(class Speziesfenster &Spezfenst, int Index,
 			std::string Arbeitsverzeichnis, std::string mache_Fit_Plots,
 			double *mean_10_20);
-	void slant_column_NO(class NO_emiss &NO, std::string mache_Fit_Plots,
-			class Sonnenspektrum &sol_spec, int index,
-			class Speziesfenster &Spezfenst, std::string Arbeitsverzeichnis,
-			bool debug = true);
 	void moving_average(int window_size);
 	void savitzky_golay(int window_size);
 	double msise_temperature(class Konfiguration &Konf);
