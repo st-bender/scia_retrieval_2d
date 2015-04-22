@@ -40,45 +40,7 @@ using std::stringstream;
 using std::vector;
 
 Messung_Limb::Messung_Limb(std::string filename) :
-	Messung(filename)
-{
-	//initialisierung
-	total_number_density = 0.;
-	m_Latitude_TP = 0;
-	m_Longitude_TP = 0;
-	m_Hoehe_TP = 0;
-	m_TP_SZA = 0.;
-	m_TP_rel_SAA = 0.;
-	center_lat = 0.;
-	center_lon = 0.;
-	//statische Felder werden erstmal nicht 0 gesetzt
-}
-
-//========================================
-//
-// Assignmentoperator Overload
-//
-//========================================
-Messung_Limb &Messung_Limb::operator =(const Messung_Limb &rhs)
-{
-	//TODO das nochmal anpassen
-	// Prevent self assignment. We say two Strings
-	// are equal if their memory addresses are equal.
-	if (this == &rhs)
-		return *this;
-	Messung::operator=(rhs);
-	total_number_density = rhs.total_number_density;
-	m_Latitude_TP = rhs.m_Latitude_TP;
-	m_Longitude_TP = rhs.m_Longitude_TP;
-	m_Hoehe_TP = rhs.m_Hoehe_TP;
-	m_TP_SZA = rhs.m_TP_SZA;
-	m_TP_rel_SAA = rhs.m_TP_rel_SAA;
-	center_lat = rhs.center_lat;
-	center_lon = rhs.center_lon;
-
-	// Return a reference to *this object.
-	return *this;
-}// Assignmentoperator Overload ende
+	Messung(filename) {}
 //========================================
 //========================================
 //Methoden

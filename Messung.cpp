@@ -59,6 +59,21 @@ Messung::Messung(std::string filename) :
 	m_Hoehe_Sat = 0;
 	m_Erdradius = 0;
 	m_orbit_phase = 0.;
+	// limb initialisierung
+	total_number_density = 0.;
+	m_Latitude_TP = 0;
+	m_Longitude_TP = 0;
+	m_Hoehe_TP = 0;
+	m_TP_SZA = 0.;
+	m_TP_rel_SAA = 0.;
+	center_lat = 0.;
+	center_lon = 0.;
+	// nadir initialisierung
+	// Herkunftsmerkmale
+	m_Messung_ID = -1;
+	// Geolokationen für Raytrace
+	m_Latitude_Ground = 0;
+	m_Longitude_Ground = 0;
 	//statische Felder werden erstmal nicht 0 gesetzt
 }
 //========================================
@@ -106,6 +121,24 @@ Messung &Messung::operator =(const Messung &rhs)
 	m_Hoehe_Sat = rhs.m_Hoehe_Sat;
 	m_Erdradius = rhs.m_Erdradius;
 	m_orbit_phase = rhs.m_orbit_phase;
+
+	// limb only variables
+	total_number_density = rhs.total_number_density;
+	m_Latitude_TP = rhs.m_Latitude_TP;
+	m_Longitude_TP = rhs.m_Longitude_TP;
+	m_Hoehe_TP = rhs.m_Hoehe_TP;
+	m_TP_SZA = rhs.m_TP_SZA;
+	m_TP_rel_SAA = rhs.m_TP_rel_SAA;
+	center_lat = rhs.center_lat;
+	center_lon = rhs.center_lon;
+
+	// nadir only variables
+	// Herkunftsmerkmale
+	m_Messung_ID = rhs.m_Messung_ID;
+	//Geolocations
+	m_Latitude_Ground = rhs.m_Latitude_Ground;
+	m_Longitude_Ground = rhs.m_Longitude_Ground;
+
 	m_Number_of_Wavelength = rhs.m_Number_of_Wavelength;
 	// copy vectors
 	m_Wellenlaengen = rhs.m_Wellenlaengen;

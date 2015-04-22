@@ -25,39 +25,9 @@ using std::vector;
 //constructor
 //////////////////////////////////////////////////
 Messung_Nadir::Messung_Nadir(std::string filename) :
-	Messung(filename)
-{
-	//initialisierung
-	// Herkunftsmerkmale
-	m_Messung_ID = 0;
-	// Geolokationen für Raytrace
-	m_Latitude_Ground = 0;
-	m_Longitude_Ground = 0;
-}
+	Messung(filename) {}
 //////////////////////////////////////////////////
 //constructor ENDE
-//////////////////////////////////////////////////
-
-//////////////////////////////////////////////////
-// Assignmentoperator Overload
-//////////////////////////////////////////////////
-Messung_Nadir &Messung_Nadir::operator =(const Messung_Nadir &rhs)
-{
-	// Prevent self assignment. a=a;  We say two Strings
-	// are equal if their memory addresses are equal.
-	if (this == &rhs)
-		return *this;
-	Messung::operator=(rhs);
-	// Herkunftsmerkmale
-	m_Messung_ID = rhs.m_Messung_ID;
-	//Geolocations
-	m_Latitude_Ground = rhs.m_Latitude_Ground;
-	m_Longitude_Ground = rhs.m_Longitude_Ground;
-
-	return *this;
-}
-//////////////////////////////////////////////////
-// Assignmentoperator Overload ENDE
 //////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 //Methoden

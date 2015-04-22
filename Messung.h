@@ -90,6 +90,25 @@ public:
 	double m_Erdradius;
 
 	double m_orbit_phase;
+
+	// limb Membervariablen
+	// total number density at measurement point
+	double total_number_density;
+	// Geolocation
+	double m_Latitude_TP;
+	double m_Longitude_TP;
+	double m_Hoehe_TP;
+	double m_TP_SZA;      // alt
+	double m_TP_rel_SAA;  // alt - relative Solar azimuth angle
+	double center_lat, center_lon;
+
+	// nadir Membervariablen
+	// Herkunftsmerkmale
+	int m_Messung_ID;
+	// Geolokationen für Raytrace
+	double m_Latitude_Ground;
+	double m_Longitude_Ground;
+
 	// Datenfelder
 	int m_Number_of_Wavelength;
 	std::vector<double> m_Wellenlaengen;
