@@ -32,6 +32,10 @@ public:
 	void calc_SunEarthDistance();
 	double fit_NO_spec(class NO_emiss &NO, std::vector<double> &x,
 			std::vector<double> &y, double &rms_err);
+	void slant_column_NO(class NO_emiss &NO, std::string mache_Fit_Plots,
+			class Sonnenspektrum &sol_spec, int index,
+			class Speziesfenster &Spezfenst, std::string Arbeitsverzeichnis,
+			bool debug = true);
 
 	//Hilfsfunktionen  //nur intern aufrufen!!!
 	int Get_Index(double WL);
@@ -90,6 +94,25 @@ public:
 	double m_Erdradius;
 
 	double m_orbit_phase;
+
+	// limb Membervariablen
+	// total number density at measurement point
+	double total_number_density;
+	// Geolocation
+	double m_Latitude_TP;
+	double m_Longitude_TP;
+	double m_Hoehe_TP;
+	double m_TP_SZA;      // alt
+	double m_TP_rel_SAA;  // alt - relative Solar azimuth angle
+	double center_lat, center_lon;
+
+	// nadir Membervariablen
+	// Herkunftsmerkmale
+	int m_Messung_ID;
+	// Geolokationen für Raytrace
+	double m_Latitude_Ground;
+	double m_Longitude_Ground;
+
 	// Datenfelder
 	int m_Number_of_Wavelength;
 	std::vector<double> m_Wellenlaengen;

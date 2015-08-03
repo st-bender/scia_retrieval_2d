@@ -59,6 +59,21 @@ Messung::Messung(std::string filename) :
 	m_Hoehe_Sat = 0;
 	m_Erdradius = 0;
 	m_orbit_phase = 0.;
+	// limb initialisierung
+	total_number_density = 0.;
+	m_Latitude_TP = 0;
+	m_Longitude_TP = 0;
+	m_Hoehe_TP = 0;
+	m_TP_SZA = 0.;
+	m_TP_rel_SAA = 0.;
+	center_lat = 0.;
+	center_lon = 0.;
+	// nadir initialisierung
+	// Herkunftsmerkmale
+	m_Messung_ID = -1;
+	// Geolokationen für Raytrace
+	m_Latitude_Ground = 0;
+	m_Longitude_Ground = 0;
 	//statische Felder werden erstmal nicht 0 gesetzt
 }
 //========================================
@@ -106,6 +121,24 @@ Messung &Messung::operator =(const Messung &rhs)
 	m_Hoehe_Sat = rhs.m_Hoehe_Sat;
 	m_Erdradius = rhs.m_Erdradius;
 	m_orbit_phase = rhs.m_orbit_phase;
+
+	// limb only variables
+	total_number_density = rhs.total_number_density;
+	m_Latitude_TP = rhs.m_Latitude_TP;
+	m_Longitude_TP = rhs.m_Longitude_TP;
+	m_Hoehe_TP = rhs.m_Hoehe_TP;
+	m_TP_SZA = rhs.m_TP_SZA;
+	m_TP_rel_SAA = rhs.m_TP_rel_SAA;
+	center_lat = rhs.center_lat;
+	center_lon = rhs.center_lon;
+
+	// nadir only variables
+	// Herkunftsmerkmale
+	m_Messung_ID = rhs.m_Messung_ID;
+	//Geolocations
+	m_Latitude_Ground = rhs.m_Latitude_Ground;
+	m_Longitude_Ground = rhs.m_Longitude_Ground;
+
 	m_Number_of_Wavelength = rhs.m_Number_of_Wavelength;
 	// copy vectors
 	m_Wellenlaengen = rhs.m_Wellenlaengen;
@@ -265,6 +298,281 @@ double Messung::fit_NO_spec(NO_emiss &NO,
 	return A;
 }
 
+class rayl {
+	public:
+	rayl(double f) : f_sol(f) {}
+	double operator()(double x, double sol) {
+		return f_sol * sigma_rayleigh(x) * sol;
+	}
+	private:
+	double f_sol;
+};
+//========================================
+void Messung::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
+		Sonnenspektrum &sol_spec, int index,
+		Speziesfenster &Spezfenst, std::string Arbeitsverzeichnis,
+		bool debug)
+{
+	// I/(piFGamma)=integral(AMF n ds) mit AMF = s exp(-tau) ...aber zu der
+	// Formel später nochmal zurück Das spätere Retrieval ermittelt dann die
+	// Dichte n aus der rechten Seite
+
+	// threshold for peak detection in the NO wavelength range
+	// starting at 6*10^10 at 247 nm (NO(0, 2)) and increasing ~ lambda^4
+	// because of Rayleigh scattering (see below)
+	const double peak_threshold = 6.e10;
+
+	//Zunächst Indizes der Wellenlaengen der Basisfenster bestimmen
+	int i, j;
+	int NO_NJ = NO.get_NJ();
+	double wl;
+	double f_sol_fit;
+	double min_lambda_NO = 1000., max_lambda_NO = 0.;
+	double gamma_threshold = 0.25 * NO.get_spec_scia_max();
+	for (i = 0; i < NO_NJ; i++) {
+		for (j = 0; j < 12; j++) {
+			wl = NO.get_lambda_K(j, i);
+			if (NO.get_gamma_j(j, i) > gamma_threshold) {
+				if (wl > 0. && wl < min_lambda_NO) min_lambda_NO = wl;
+				if (wl > max_lambda_NO) max_lambda_NO = wl;
+			}
+		}
+	}
+	// inner and outer baseline and peak window offset
+	// the defaults (from M.L.) are base_offset_o = 3. and base_offset_i = 1.
+	double base_offset_o = 1.5, base_offset_i = 0.3;
+	int i_basewin_l_min = sb_Get_closest_index(min_lambda_NO - base_offset_o);
+	int i_basewin_l_max = sb_Get_closest_index(min_lambda_NO - base_offset_i) - 1;
+	int i_basewin_r_min = sb_Get_closest_index(max_lambda_NO + base_offset_i) + 1;
+	int i_basewin_r_max = sb_Get_closest_index(max_lambda_NO + base_offset_o);
+	int i_peakwin_min = sb_Get_closest_index(min_lambda_NO - base_offset_i);
+	int i_peakwin_max = sb_Get_closest_index(max_lambda_NO + base_offset_i);
+	// Speicherplatzbedarf für die Fenster ermitteln
+	int base_l = (i_basewin_l_max - i_basewin_l_min + 1);
+	int base_r = (i_basewin_r_max - i_basewin_r_min + 1);
+	int N_fit_tot = i_basewin_r_max - i_basewin_l_min + 1;
+	int N_base = base_l + base_r;
+	int N_peak = i_peakwin_max - i_peakwin_min + 1;
+	// Speicher anfordern
+	std::vector<double> basewin_rad(N_base);
+	std::vector<double> peakwin_wl(N_peak);
+	std::vector<double> peakwin_rad(N_peak);
+	std::vector<double> rad = m_Intensitaeten;
+	std::vector<double> sol_rad = sol_spec.m_Int_interpoliert;
+	std::vector<double> fit_spec, ones(N_base + N_peak, 1.);
+
+	/* prints the geolocation of the tangent point for later inspection */
+	if (debug == true) {
+		std::cout << "# TP: lat = " << m_Latitude_TP;
+		std::cout << ", lon = " << m_Longitude_TP;
+		std::cout << ", height = " << m_Hoehe_TP << std::endl;
+		std::cout << "# orbit_phase = " << m_orbit_phase << std::endl;
+		std::cout << "# NO band emission = " << NO.get_scia_band_emiss()
+			<< ", NO rotational band emission = " << NO.get_band_emiss()
+			<< std::endl;
+	}
+
+	for (i = 0; i < N_base + N_peak; i++) {
+		int idx = i_basewin_l_min + i;
+		double sol_i = sol_rad.at(idx);
+		double rad_i = rad.at(idx);
+		wl = m_Wellenlaengen.at(idx);
+		// peak detection: unusual high radiance
+		// threshold is 6*10^10 (see above) at 247 nm (NO(0, 2))
+		// and scales ~ lambda^4 like Rayleigh scattering
+		if (rad_i > peak_threshold * std::pow(wl / 247.0, 4)
+				&& i > 2 && i < N_base + N_peak - 2
+				// make sure that the surrounding points are smaller, i.e.,
+				// that we have a single large spike in the spectrum
+				&& rad.at(idx - 1) < rad_i
+				&& rad.at(idx + 1) < rad_i) {
+			// exclude the previous, the current, and the next point.
+			// That means we pop the last one and don't include the current
+			// one, and interpolate the next point of the fit spectrum.
+			if (!fit_spec.empty()) fit_spec.pop_back();
+			// interpolate three points of the peak linearly
+			double y0 = rad.at(idx - 2);
+			double yN = rad.at(idx + 2);
+			double a = 0.25 * (yN - y0);
+			for (int k = 0; k < 3; k++)
+				rad.at(idx - 1 + k) = (k + 1)*a + y0;
+			// done interpolating
+			i++;
+		} else
+			fit_spec.push_back(rad_i / (sigma_rayleigh(wl) * sol_i));
+	}
+	ones.resize(fit_spec.size());
+	f_sol_fit = fit_spectra(ones, fit_spec);
+	if (debug == true)
+		std::cout << "# solar fit factor = " << f_sol_fit << std::endl;
+	if (f_sol_fit < 0.) f_sol_fit = 0.;
+
+	// prepare baseline and rayleigh data
+	std::vector<double> baseline_wl, baseline_rad, rayleigh_rad;
+	std::vector<double> y, y_weights(N_fit_tot, 1.);
+	std::copy(m_Wellenlaengen.begin() + i_basewin_l_min,
+			m_Wellenlaengen.begin() + i_basewin_l_min + N_fit_tot,
+			std::back_inserter(baseline_wl));
+	std::transform(m_Wellenlaengen.begin() + i_basewin_l_min,
+			m_Wellenlaengen.begin() + i_basewin_l_min + N_fit_tot,
+			sol_rad.begin() + i_basewin_l_min,
+			std::back_inserter(rayleigh_rad),
+			rayl(f_sol_fit));
+	std::transform(rad.begin() + i_basewin_l_min,
+			rad.begin() + i_basewin_l_min + N_fit_tot,
+			rayleigh_rad.begin(),
+			std::back_inserter(y),
+			std::minus<double>());
+
+	// Basisfenster WL und I auffüllen
+	std::copy(y.begin(), y.begin() + base_l,
+			basewin_rad.begin());
+	std::copy(y.begin() + base_l + N_peak, y.end(),
+			basewin_rad.begin() + base_l);
+	/* construct new baseline vectors by removing outliers
+	 * This currently discards 20% (10% left and 10% right)
+	 * of the baseline points. */
+	std::vector<double> rad_sort(basewin_rad);
+	std::sort(rad_sort.begin(), rad_sort.end());
+	size_t offset = rad_sort.size() / 10;
+	double rad0 = rad_sort.at(offset);
+	double rad1 = rad_sort.at(rad_sort.size() - offset - 1);
+
+	for (i = 0; i < N_fit_tot; i++) {
+		int idx = i_basewin_l_min + i;
+
+		// prepare radiances and weights for the Whittaker smoother
+		double radi = y.at(i);
+		// exclude the peak window and outliers by zeroing the weights
+		if ((idx >= i_peakwin_min && idx <= i_peakwin_max)
+			|| radi < rad0 || radi > rad1)
+			y_weights.at(i) = 0.;
+	}
+	// reset N_base
+	N_base = std::accumulate(y_weights.begin(), y_weights.end(), 0);
+
+	// replace the linear baseline by the Whittaker smoothed radiances
+	// excluding the peak window and outliers as in the linear case.
+	// the original (linear) baseline behaviour can be obtained by commenting
+	// this line or by setting lambda (the 4th argument) to something large,
+	// e.g. ~ 1.e9. (quick test showed that 3.e5 is quite close)
+	double rms_err_base;
+	baseline_rad = my_whittaker_smooth(y, y_weights, 2, 1.e4, rms_err_base);
+
+	//Peakfenster WL und I auffüllen
+	// lineare Funktion von Intensitäten des Peakfenster abziehen
+	std::copy(m_Wellenlaengen.begin() + i_peakwin_min,
+			m_Wellenlaengen.begin() + i_peakwin_min + N_peak,
+			peakwin_wl.begin());
+	std::transform(y.begin() + i_peakwin_min - i_basewin_l_min,
+			y.begin() + i_peakwin_min - i_basewin_l_min + N_peak,
+			baseline_rad.begin() + i_peakwin_min - i_basewin_l_min,
+			peakwin_rad.begin(), std::minus<double>());
+	double rms_err_peak, rms_err_tot;
+	m_Zeilendichte = fit_NO_spec(NO, peakwin_wl, peakwin_rad,
+			rms_err_peak);
+	rms_err_tot = std::sqrt((N_base * rms_err_base * rms_err_base
+		+ N_peak * rms_err_peak * rms_err_peak) / (N_base + N_peak));
+	m_Fehler_Zeilendichten = rms_err_tot / NO.get_spec_scia_max();
+
+	if (mache_Fit_Plots == "ja" && Spezfenst.plot_fit) {
+		// prepare data to plot
+		std::vector<double> wavelengths, spec_wo_rayleigh = y, NO_fit;
+		for (i = 0; i < base_l; i++) {
+			wavelengths.push_back(m_Wellenlaengen.at(i_basewin_l_min + i));
+			NO_fit.push_back(m_Zeilendichte *
+					NO.get_spec_scia_res(i_basewin_l_min + i)
+					+ baseline_rad.at(i));
+		}
+		for (size_t k = 0; k < peakwin_wl.size(); k++) {
+			wavelengths.push_back(m_Wellenlaengen.at(i_peakwin_min + k));
+			NO_fit.push_back(m_Zeilendichte *
+					NO.get_spec_scia_res(i_peakwin_min + k)
+					+ baseline_rad.at(i_peakwin_min - i_basewin_l_min + k));
+		}
+		for (i = 0; i < base_r; i++) {
+			wavelengths.push_back(m_Wellenlaengen.at(i_basewin_r_min + i));
+			NO_fit.push_back(m_Zeilendichte *
+					NO.get_spec_scia_res(i_basewin_r_min + i)
+					+ baseline_rad.at(i_basewin_r_min - i_basewin_l_min + i));
+		}
+
+		std::transform(spec_wo_rayleigh.begin(), spec_wo_rayleigh.end(),
+				spec_wo_rayleigh.begin(),
+				std::bind1st(std::multiplies<double>(), 1.e-9));
+		std::transform(NO_fit.begin(), NO_fit.end(), NO_fit.begin(),
+				std::bind1st(std::multiplies<double>(), 1.e-9));
+
+		// plot the data to postscript files
+		std::string s_OrbNum;
+		std::stringstream buf;
+		//TODO immer prüfen, ob Dateienamenlänge noch stimmt...
+		// falls / im Namen ist das schlecht
+		std::string Datnam = sb_basename(m_Dateiname_L1C);
+
+		//TODO Pfad anpassen
+		std::string plot_dir = Arbeitsverzeichnis + "/Plots";
+		mkdir(plot_dir.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
+			<< "_" << index << "_"
+			<< std::setw(3) << std::setfill('0') << std::setprecision(0)
+			<< std::fixed << m_Hoehe_TP << "km_"
+			<< std::setw(3) << std::setfill('0') << std::setprecision(0)
+			<< std::fixed << m_Latitude_TP << "deg.pdf";
+		if (m_Messung_ID != -1) {
+		buf.str(string());
+		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
+			<< "_" << m_Messung_ID << "_" << index << ".pdf";
+		}
+		std::string new_datnam(buf.str());
+		std::string s1(plot_dir + "/" + new_datnam);
+		// s1 ist der Volle Pfad der Datei... diesen wegspeichern,
+		// um später die .pdf files in ein großes pdf zu packen
+		Spezfenst.m_Liste_der_Plot_Dateinamen.push_back(s1);
+		// Orbitnummer ermitteln
+		// die Orbitnummer sind die 5 Zeichen vor .dat
+		size_t pos_suffix = 0;
+		pos_suffix = Datnam.find(".dat");
+		if (pos_suffix == string::npos) {
+			std::cerr << " kein .dat in Limbdateiname... "
+					  << "Orbitnummer nicht findbar" << std::endl;
+			s_OrbNum = "xxxxx";
+		} else {
+			s_OrbNum = Datnam.substr(pos_suffix - 5, 5);
+		}
+		buf.str(std::string());
+		buf << "Orbit " << s_OrbNum.c_str() << ", "
+			<< NO.get_vu() << NO.get_vl() << ", "
+			<< std::resetiosflags(std::ios::fixed)
+			<< " Lat: " << std::setprecision(3) << m_Latitude_TP << " deg,"
+			<< " Lon: " << std::setprecision(3) << m_Longitude_TP << " deg,"
+			<< " Alt: " << std::setprecision(3) << m_Hoehe_TP << " km.";
+		if (m_Messung_ID != -1) {
+		buf.str(string());
+		buf << "Orbit " << s_OrbNum.c_str() << ", Nadir GP:"
+			<< " Lat: " << m_Latitude_Ground << " deg,"
+			<< " Lon: " << m_Longitude_Ground << " deg; Sat:"
+			<< " Lat: " << m_Latitude_Sat << " deg,"
+			<< " Lon: " << m_Longitude_Sat << " deg.";
+		}
+		std::string s2(buf.str());
+
+		Plot_2xy(Arbeitsverzeichnis.c_str(), s1.c_str(), s2.c_str(),
+				 "wavelength [nm]",
+				 "residual radiance [10^9 ph/cm^2/s/nm]",
+				 wavelengths, spec_wo_rayleigh, wavelengths, NO_fit,
+				 0, wavelengths.size() - 1,
+				 m_Zeilendichte, m_Fehler_Zeilendichten);
+	}
+
+	if (debug == true) {
+		std::cout << "# slant column = " << m_Zeilendichte;
+		std::cout << ", error = " << m_Fehler_Zeilendichten << std::endl;
+		std::cout << "# emissivity = "
+			<< std::accumulate(peakwin_rad.begin(), peakwin_rad.end(), 0.)*0.11
+			<< std::endl;
+	}
+}
 //========================================
 //Methoden ende
 //========================================

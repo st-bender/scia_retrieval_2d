@@ -26,6 +26,7 @@ int Nadir_Auswertung(class Orbitliste &Orbitlist,
 					 std::vector<class Ausgewertete_Messung_Nadir> &Ausgewertete_Nadirmessung_MgII,
 					 std::vector<class Ausgewertete_Messung_Nadir> &Ausgewertete_Nadirmessung_unknown,
 					 std::vector<class Ausgewertete_Messung_Nadir> &Ausgewertete_Nadirmessung_FeI,
-					 std::vector<class Ausgewertete_Messung_Nadir> &Ausgewertete_Nadirmessung_NO);
+					 std::vector<class Ausgewertete_Messung_Nadir> &Ausgewertete_Nadirmessung_NO,
+					 class Konfiguration &Konf);
 
 #endif /* NADIRAUSWERTUNG_HH_ */
