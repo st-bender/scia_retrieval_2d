@@ -235,7 +235,12 @@ int Load_Limb_l_mpl_binary(string Datei_in,
 	ss << c_textheader;
 	ss >> lang_textheader;
 	for (int i = 0; i < lang_textheader; i++) {
+		int pos = infile.tellg();
 		infile.read((char *) c_textheader, sizeof(char) * 100);
+		if (c_textheader[0] != '#') {
+			infile.seekg(pos);
+			break;
+		}
 		textheader[i] = c_textheader;
 		//cout<<textheader[i]<<"\n";
 	}
@@ -436,7 +441,12 @@ int Load_Nadir_n_mpl_binary(string Datei_in,
 	// Zuerst alles was nur einmal geschrieben ist lesen
 	char c_textheader[100];
 	for (int i = 0; i < Anzahl_Textheaderzeilen; i++) {
+		int pos = infile.tellg();
 		infile.read((char *) c_textheader, sizeof(char) * 100);
+		if (c_textheader[0] != '#') {
+			infile.seekg(pos);
+			break;
+		}
 		textheader[i] = c_textheader;
 	}
 	infile.read((char *) &No_of_Messungen, sizeof(int));
