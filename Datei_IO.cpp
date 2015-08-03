@@ -358,6 +358,7 @@ vector<Messung_Nadir> make_messung_nadir_vector(string Dateiname,
 		mn.m_Erdradius = Nadirdaten[i].m_Sat_Erdradius;
 		mn.m_orbit_phase = Nadirdaten[i].m_orbit_phase;
 
+		int idx_282nm = 0;
 		//Füllbare Felder
 		mn.m_Number_of_Wavelength = No_of_Pix;
 		//Felder allokieren
@@ -369,22 +370,17 @@ vector<Messung_Nadir> make_messung_nadir_vector(string Dateiname,
 			mn.m_Intensitaeten_durch_piF.push_back(0.);
 			mn.m_Intensitaeten_durch_piF_Gamma.push_back(0.);
 			mn.m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand.push_back(0.);
+			// save the index for 282.03 nm for later
+			if (Wellenlaenge[j] < 282.04) idx_282nm = j;
 		}
 		// Der Pixel 552 (282,03nm zeigt bei nadir( und nur dort, einen Peak)
 		// Das ist die Kanalgrenze zwischen Kanal1a und Kanal1b
 		// Interpolieren zwischen 282 und 283 nm
 		//mn.m_Intensitaeten[536]=(mn.m_Intensitaeten[535]+mn.m_Intensitaeten[537])/2;
 		//mn.m_Intensitaeten_relativer_Fehler[536]=(mn.m_Intensitaeten_relativer_Fehler[535]+mn.m_Intensitaeten_relativer_Fehler[537])/2;
-		double f1 = 0.9, f2 = 0.1;
-		for (int j = 536; j < 545; j++) {
-			mn.m_Intensitaeten[j]
-				= f1 * mn.m_Intensitaeten[535] + f2 * mn.m_Intensitaeten[545];
-			mn.m_Intensitaeten_relativer_Fehler[536]
-				= f1 * mn.m_Intensitaeten_relativer_Fehler[535]
-				+ f2 * mn.m_Intensitaeten_relativer_Fehler[545];
-			f1 -= 0.1;
-			f2 += 0.1;
-		}
+		mn.m_Intensitaeten.at(idx_282nm) = 0.5 *
+			(mn.m_Intensitaeten.at(idx_282nm - 1) +
+			 mn.m_Intensitaeten.at(idx_282nm + 1));
 
 		mn_vec.push_back(mn);
 	}
