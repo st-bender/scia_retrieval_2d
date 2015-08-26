@@ -46,6 +46,12 @@ double Evibl(int v)
 		+ NO_const::w_Yl * (v + 0.5) * (v + 0.5) * (v + 0.5)
 		+ NO_const::w_Zl * (v + 0.5) * (v + 0.5) * (v + 0.5) * (v + 0.5);
 }
+double Evibu(int v)
+{
+	return NO_const::w_u * (v + 0.5)
+		- NO_const::w_Xu * (v + 0.5) * (v + 0.5)
+		+ NO_const::w_Yu * (v + 0.5) * (v + 0.5) * (v + 0.5);
+}
 double F0(double B, double D, double Y, double lam, double j)
 {
 	return B * ((j + 0.5) * (j + 0.5) - lam * lam
@@ -165,9 +171,8 @@ void NO_emiss::set_constants()
 	//lower state of the absorption
 	E_vib_l_abs = Evibl(v_l_abs);
 
-	E_vib_u = NO_const::w_u * (v_u + 0.5)
-		- NO_const::w_Xu * (v_u + 0.5) * (v_u + 0.5)
-		+ NO_const::w_Yu * (v_u + 0.5) * (v_u + 0.5) * (v_u + 0.5);
+	E_vib_u = Evibu(v_u);
+
 	E_vib = E_vib_u - E_vib_l;
 	W_vib = E_tot + E_vib;
 
