@@ -41,7 +41,7 @@ double A_v(int v)
 }
 double Evibl(int v)
 {
-    return NO_const::w_l * (v + 0.5)
+	return NO_const::w_l * (v + 0.5)
 		- NO_const::w_Xl * (v + 0.5) * (v + 0.5)
 		+ NO_const::w_Yl * (v + 0.5) * (v + 0.5) * (v + 0.5)
 		+ NO_const::w_Zl * (v + 0.5) * (v + 0.5) * (v + 0.5) * (v + 0.5);
