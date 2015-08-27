@@ -84,20 +84,25 @@ void Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	outfile2 << "xy2 = np.genfromtxt('" << Rohdaten_Name_b.c_str() << "')\n";
 	outfile2 << "fig, ax = plt.subplots(figsize=(7, 5))" << std::endl;
 	outfile2 << "ax.set_title('" << title.c_str() << "')" << std::endl;
-	outfile2 << "ax.title.set_y(1.05)" << std::endl;
-	outfile2 << "ax.set_xlabel('" << xlabel.c_str() << "')" << std::endl;
-	outfile2 << "ax.set_ylabel(r'" << ylabel.c_str() << "')" << std::endl;
+	outfile2 << "ax.title.set_y(1.02)" << std::endl;
+	outfile2 << "ax.set_xlabel(r'$" << xlabel.c_str() << "$')" << std::endl;
+	outfile2 << "ax.set_ylabel(r'$" << ylabel.c_str() << "$')" << std::endl;
 	outfile2 << "ax.annotate(r'" << text_messwert.c_str() << "', "
-			 << "xy=(0.5, 0.96), xycoords='axes fraction', "
-			 << "horizontalalignment='center', "
+			 << "xy=(0.02, 0.94), xycoords='axes fraction', "
+			 << "horizontalalignment='left', "
 			 << "verticalalignment='center')\n";
 	outfile2 << "ax.annotate(r'" << text_Fehler.c_str() << "', "
-			 << "xy=(0.5, 0.90), xycoords='axes fraction', "
-			 << "horizontalalignment='center', "
+			 << "xy=(0.02, 0.88), xycoords='axes fraction', "
+			 << "horizontalalignment='left', "
 			 << "verticalalignment='center')\n";
 	// nun beide Datenreihen mit  Linien Plotten
-	outfile2 << "ax.plot(xy1.T[0], xy1.T[1], 'r-', xy2.T[0], xy2.T[1], 'b-')\n";
+	outfile2 << "ax.plot(xy1.T[0], xy1.T[1], '-', color=\"#e66101\")\n";
+	outfile2 << "ax.plot(xy2.T[0], xy2.T[1], '-', color=\"#5e3c99\")\n";
 	outfile2 << "ax.xaxis.set_major_locator(tic.MultipleLocator(1.))\n";
+	outfile2 << "ax.xaxis.set_tick_params(which='major', width=1.5, length=6, pad=8)\n";
+	outfile2 << "ax.yaxis.set_tick_params(which='major', width=1.5, length=6, pad=8)\n";
+	outfile2 << "ax.xaxis.set_tick_params(which='minor', length=3)\n";
+	outfile2 << "ax.yaxis.set_tick_params(which='minor', length=3)\n";
 	outfile2 << "plt.tight_layout()\n";
 	outfile2 << "plt.savefig('" << Dateiname.c_str() << "')" << std::endl;
 
