@@ -117,6 +117,7 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 		ml.m_TP_rel_SAA = Limbdaten[offset + direction * i].m_TP_SAA;
 		ml.m_Number_of_Wavelength = no_of_pix;
 
+		int idx_282nm = 0;
 		for (int j = 0; j < no_of_pix; j++) {
 			ml.m_Wellenlaengen.push_back(Wellenlaengen[j]);
 			if (has_straylight) {
@@ -134,8 +135,16 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 			ml.m_Intensitaeten_durch_piF.push_back(0.);
 			ml.m_Intensitaeten_durch_piF_Gamma.push_back(0.);
 			ml.m_Intensitaeten_durch_piF_Gamma_mal_Gitterabstand.push_back(0.);
+			// save the index for 282.03 nm for later
+			if (Wellenlaengen[j] < 282.04) idx_282nm = j;
 		}
 
+		// Der Pixel 552 (282,03nm zeigt bei nadir( und nur dort, einen Peak)
+		// ....interpretation dead pixel
+		// use the saved index for 282.03 nm and interpolate the value
+		ml.m_Intensitaeten.at(idx_282nm) = 0.5 *
+			(ml.m_Intensitaeten.at(idx_282nm - 1) +
+			 ml.m_Intensitaeten.at(idx_282nm + 1));
 		Ergebnisvektor.push_back(ml);
 	}
 
