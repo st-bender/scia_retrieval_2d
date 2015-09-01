@@ -197,9 +197,9 @@ void Messung_Limb::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 		//Orbitnummer ermittelt///////
 		buf.str(string());
 		buf << "Orbit " << s_OrbNum.c_str() << ", Limb TP:"
-			<< " Lat: " << m_Latitude_TP << " deg,"
-			<< " Lon: " << m_Longitude_TP << " deg,"
-			<< " Hoehe: " << m_Hoehe_TP << " km.";
+			<< " lat: " << m_Latitude_TP << " deg,"
+			<< " lon: " << m_Longitude_TP << " deg,"
+			<< " alt: " << m_Hoehe_TP << " km";
 		string s2(buf.str());
 		//cout<<s1<<"\n";
 		//int Plot_2xy(string Dateiname,string title, string xlabel,

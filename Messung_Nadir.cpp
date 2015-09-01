@@ -187,10 +187,10 @@ void Messung_Nadir::Zeilendichte_Bestimmen(Speziesfenster &Spezfenst, int Index,
 		//Orbitnummer ermittelt///////
 		buf.str(string());
 		buf << "Orbit " << s_OrbNum.c_str() << ", Nadir GP:"
-			<< " Lat: " << m_Latitude_Ground << " deg,"
-			<< " Lon: " << m_Longitude_Ground << " deg; Sat:"
-			<< " Lat: " << m_Latitude_Sat << " deg,"
-			<< " Lon: " << m_Longitude_Sat << " deg.";
+			<< " lat: " << m_Latitude_Ground << " deg,"
+			<< " lon: " << m_Longitude_Ground << " deg; Sat:"
+			<< " lat: " << m_Latitude_Sat << " deg,"
+			<< " lon: " << m_Longitude_Sat << " deg";
 		string s2(buf.str());
 		//cout<<s1<<"\n";
 		//int Plot_2xy(string Dateiname,string title, string xlabel,

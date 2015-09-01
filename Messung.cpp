@@ -542,11 +542,11 @@ void Messung::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		}
 		buf.str(std::string());
 		buf << "Orbit " << s_OrbNum.c_str() << ", "
-			<< NO.get_vu() << NO.get_vl() << ", "
+			<< NO.get_vu() << NO.get_vl() << ","
 			<< std::resetiosflags(std::ios::fixed)
-			<< " Lat: " << std::setprecision(3) << m_Latitude_TP << " deg,"
-			<< " Lon: " << std::setprecision(3) << m_Longitude_TP << " deg,"
-			<< " Alt: " << std::setprecision(3) << m_Hoehe_TP << " km.";
+			<< " lat: " << std::setprecision(3) << m_Latitude_TP << " deg,"
+			<< " lon: " << std::setprecision(3) << m_Longitude_TP << " deg,"
+			<< " alt: " << std::setprecision(3) << m_Hoehe_TP << " km";
 		if (m_Messung_ID != -1) {
 		buf.str(string());
 		buf << "Orbit " << s_OrbNum.c_str() << ", Nadir GP:"
