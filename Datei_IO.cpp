@@ -454,6 +454,9 @@ vector<Messung_Nadir> ReadL1C_Nadir_mpl_binary(string Dateiname, int &Anzahl_Mes
 void Ausgabe_Saeulendichten(string Dateiname,
 		vector<Ausgewertete_Messung_Limb> &A_Messung_L)
 {
+	size_t lang = A_Messung_L.size();
+	if (lang == 0)
+		return;
 	//Formatierte Ausgabe
 	FILE *outfile;
 	//Datei öffnen
@@ -467,7 +470,6 @@ void Ausgabe_Saeulendichten(string Dateiname,
 			"Lat_Sat[°]", "Lon_Sat[°]", "Lat_TP[°]", "Lon_TP[°]",
 			"Hoehe_TP[km]", "Erdradius[km]", "Deklinationswinkel[°]",
 			"Sonne_Lon[°]", "Zeilendichte[cm^-2]", "Fehler_Zeilendichte[cm^-2]");
-	size_t lang = A_Messung_L.size();
 	//cerr<<"Matrix schreiben\n";
 	for (size_t i = 0; i < lang; i++) {
 		//die letzte Zeile der Datei ist leer, da \n in der Vorletzten steht
