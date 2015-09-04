@@ -55,6 +55,8 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	Rl = (Lambda_Breite * (S_Breite_trans * S_Breite));  // Breitenglattung
 	Ra = (Lambda_Hoehe * (S_Hoehe_trans * S_Hoehe)); // Hoehenglattung
 	R += Rl + Ra;
+	// S_y here is equal to S_y^-1 in ususal retrieval equations,
+	// as is S_apriori (~ S_a^-1)
 	LHS = (AMF_trans * (S_y * AMF));
 	LHS += R;
 	// LHS += Rl + Ra;

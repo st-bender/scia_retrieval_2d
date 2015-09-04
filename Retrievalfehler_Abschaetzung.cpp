@@ -34,6 +34,8 @@ void Retrievalfehler_Abschaetzung(MPL_Matrix &S_x,
 	MPL_Matrix S_Hoehe_trans = S_Hoehe.transponiert();
 	MPL_Matrix S_Breite_trans = S_Breite.transponiert();
 
+	// S_y here is equal to S_y^-1 in ususal retrieval equations,
+	// as is S_apriori (~ S_a^-1)
 	S_x = (AMF_trans * (S_y * AMF)); // hier noch invers, also noch invertieren
 	S_x += S_apriori;
 	S_x += Lambda_Hoehe * (S_Hoehe_trans * S_Hoehe);
