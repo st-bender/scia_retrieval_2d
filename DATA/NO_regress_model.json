@@ -9,7 +9,7 @@
 			"lya": "DATA/lisird_lya_2000-2012.dat"
 		},
 		"data" : {
-			"regress" : "DATA/regress_mlt_2km_lya+0_kp+1_v3.0_akm0.002_geogra_all_60-160km.dat"
+			"regress" : "DATA/regress_mlt_2km_lya+0_kp+1_v4.0_akm0.002_geogra_all_60-160km.dat"
 		}
 	},
 	"config" : {
