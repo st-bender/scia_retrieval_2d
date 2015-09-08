@@ -1909,14 +1909,14 @@ void regression_apriori_NO(Retrievalgitter &grid, Ausgewertete_Messung_Limb &aml
 }
 
 /* step transition */
-double scale_function_step(double z, Konfiguration &Konf)
+double transition_step(double z, Konfiguration &Konf)
 {
 	if (z < Konf.NO_apriori_bottom || z > Konf.NO_apriori_top)
 		return 0.;
 	return 1.;
 }
 /* smooth transition */
-double scale_function_smooth(double z, Konfiguration &Konf)
+double transition_smooth(double z, Konfiguration &Konf)
 {
 	return my_Phi(Konf.NO_apriori_bottom, Konf.NO_apriori_top,
 			Konf.NO_apriori_smoothness, z);
@@ -1931,9 +1931,11 @@ double scale_function_smooth(double z, Konfiguration &Konf)
 void scale_apriori(Retrievalgitter &grid, MPL_Matrix &apriori,
 		Konfiguration &Konf)
 {
+	double (*transition)(double, Konfiguration&) = transition_smooth;
+
 	for (int i = 0; i < grid.m_Anzahl_Hoehen; i++) {
 		double z = grid.m_Gitter[i * grid.m_Anzahl_Breiten].m_Hoehe;
-		double f = scale_function_smooth(z, Konf);
+		double f = transition(z, Konf);
 		for (int j = 0; j < grid.m_Anzahl_Breiten; j++)
 			apriori(i * grid.m_Anzahl_Breiten + j) *= f * Konf.NO_apriori_scale;
 	}
