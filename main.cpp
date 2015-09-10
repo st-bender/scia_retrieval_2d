@@ -1606,6 +1606,12 @@ int main(int argc, char *argv[])
 				Dichte_apriori_NO, S_x_NO, S_x_meas_NO, AKM_NO);
 		Ausgabe_Saeulendichten_back(Pfad_Saeulen_Limb_NO_back,
 				Ausgewertete_Limbmessung_NO, result);
+#ifdef DEBUG_NO_MATRICES
+		// debug output
+		Dichte_n_NO.in_Datei_speichern(Dateiname_out + "_Dichten.txt.gz");
+		S_y_NO.in_Datei_speichern(Dateiname_out + "_Sy.txt.gz");
+		AMF_NO.in_Datei_speichern(Dateiname_out + "_AMF.txt.gz");
+#endif /* DEBUG_NO_MATRICES */
 	}
 
 	time(&Teil6_End);
