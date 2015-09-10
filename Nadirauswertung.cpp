@@ -15,6 +15,7 @@
 #include "Messung_Nadir.h"
 #include "Datei_IO.h"  //ReadL1C_Nadir_mpl_binary
 #include"Messungs_ausschliessende_Tests.h"
+#include "Glaetten.h"
 #include "Konfiguration.h"
 
 using std::string;
@@ -106,6 +107,43 @@ int Nadir_Auswertung(Orbitliste &Orbitlist,
 				}
 				if (sfit->m_Spezies_Name == "FeI") {
 					Ausgewertete_Nadirmessung_FeI.push_back(Ergebnis);
+				}
+				if (sfit->m_Spezies_Name == "NO") {
+					double sol_fac = spidr_value_from_file(mnit->m_Jahr,
+							mnit->m_Monat, mnit->m_Tag,
+							Konf.m_Pfad_Solar_Correction_Factors, 1.0);
+					std::cerr << "# solar factor = " << sol_fac << std::endl;
+					// create new object, same transition but modelled temperature
+					// fixed for now at 200 K since we are not sure which altitude
+					// we would have to use for it.
+					double temp = 200.0;
+					int vu = sfit->NO_vec.at(k).get_vu();
+					int vl = sfit->NO_vec.at(k).get_vl();
+					int vl_abs = sfit->NO_vec.at(k).get_vl_abs();
+					std::cerr << "# atmo temperature = " << temp
+						<< ", vl_abs (v) = " << vl_abs
+						<< ", vu (v') = " << vu
+						<< ", vl (v'') = " << vl
+						<< std::endl;
+					NO_emiss NO_new(vu, vl, vl_abs, temp);
+					NO_new.solar = sfit->NO_vec.at(k).solar * sol_fac;
+					NO_new.read_luque_data_from_file(Konf.m_Pfad_NO_parameters);
+					NO_new.calc_excitation();
+					NO_new.calc_line_emissivities();
+					//NO_new.pol_corr(mlit->m_TP_SZA, mlit->m_TP_rel_SAA, 0.17, -0.2);
+					NO_new.scia_convolve(Rohdaten.at(0));
+					double wl_abs = NO_new.get_wl_abs_vu_0();
+					double wl_emiss = NO_new.get_wl_emiss_vu_vl();
+					std::cerr << "# wls: abs = " << wl_abs << ", emiss = "
+						<< wl_emiss << std::endl;
+					mnit->slant_column_NO(NO_new, mache_Fit_Plots, Solspec, k,
+							*sfit, Arbeitsverzeichnis);
+					Ergebnis = mnit->Ergebnis_Zusammenfassen();
+					Ergebnis.m_Wellenlaenge
+						= ldit->m_Wellenlaenge
+						= sfit->m_Wellenlaengen.at(k)
+						= wl_emiss;
+					Ausgewertete_Nadirmessung_NO.push_back(Ergebnis);
 				}
 			}//ende k Linie
 		}//ende j Spezies_Fenster
