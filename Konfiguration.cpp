@@ -47,6 +47,20 @@ Konfiguration::Konfiguration() :
 {
 }
 
+#define read_var(key, variable) \
+	if (Zeile == (key)) { \
+		std::getline(infile, Zeile); \
+		ss << Zeile; \
+		ss >> (variable); \
+		continue; \
+	}
+
+#define read_string(key, variable) \
+	if (Zeile == (key)) { \
+		std::getline(infile, (variable)); \
+		continue; \
+	}
+
 // Konfiguration_einlesen /////////////////////////////////////////////
 void Konfiguration::Konfiguration_einlesen(std::string file)
 {
