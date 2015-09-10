@@ -79,9 +79,10 @@ double my_phi(double x)
  * Phi(x) = 1, a <= x <= b
  * Phi(x) = 0, x > b + w
  */
-double my_Phi(double a, double b, double w, double x)
+double Phi_func(double (*trans01)(double),
+				double a, double b, double w, double x)
 {
-	return my_phi((x - a + w) / w) * my_phi((b - x + w) / w);
+	return trans01((x - a + w) / w) * trans01((b - x + w) / w);
 }
 
 void my_moving_average(vector<double> &y, int ws)

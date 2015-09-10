@@ -31,6 +31,7 @@
 #include <vector>
 #include <iterator>
 #include <numeric>
+#include <functional>
 
 
 using std::cerr;
@@ -1915,10 +1916,10 @@ double transition_step(double z, Konfiguration &Konf)
 		return 0.;
 	return 1.;
 }
-/* smooth transition */
-double transition_smooth(double z, Konfiguration &Konf)
+/* arbitrary transition using given function */
+double transition_func(double (*trans01)(double), double z, Konfiguration &Konf)
 {
-	return my_Phi(Konf.NO_apriori_bottom, Konf.NO_apriori_top,
+	return Phi_func(trans01, Konf.NO_apriori_bottom, Konf.NO_apriori_top,
 			Konf.NO_apriori_smoothness, z);
 }
 
@@ -1931,7 +1932,9 @@ double transition_smooth(double z, Konfiguration &Konf)
 void scale_apriori(Retrievalgitter &grid, MPL_Matrix &apriori,
 		Konfiguration &Konf)
 {
-	double (*transition)(double, Konfiguration&) = transition_smooth;
+	auto trans01 = my_phi;
+	auto transition = std::bind(transition_func, trans01,
+			std::placeholders::_1, std::placeholders::_2);
 
 	for (int i = 0; i < grid.m_Anzahl_Hoehen; i++) {
 		double z = grid.m_Gitter[i * grid.m_Anzahl_Breiten].m_Hoehe;
