@@ -537,6 +537,9 @@ int main(int argc, char *argv[])
 		// isotropic scattering
 		Lindat.m_E1 = 0;
 		Lindat.m_E2 = 1;
+		// half-isotropic scattering
+		//Lindat.m_E1 = 0.5;
+		//Lindat.m_E2 = 0.5;
 		// Rayleigh scattering with depolarization rho = 0.0295
 		// [Rozanov 2001, Scharringhausen 2008]
 		//Lindat.m_E1 = 0.9563932002956393;
