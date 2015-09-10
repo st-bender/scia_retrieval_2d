@@ -25,6 +25,7 @@ public:
 	double m_Sonnen_Longitude;
 	// Zusatzinformationen
 	double m_Wellenlaenge; //Übergangswellenlänge
+	double m_Wellenlaenge_abs; //Absorptionswellenlänge
 	// Datum
 	int m_Jahr;
 	int m_Monat;

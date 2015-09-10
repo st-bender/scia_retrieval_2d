@@ -90,7 +90,9 @@ int Nadir_Auswertung(Orbitliste &Orbitlist,
 				// Ergebnis zusammenfassen
 				Ausgewertete_Messung_Nadir Ergebnis = mnit->Ergebnis_Zusammenfassen();
 				// Die braucht man später für die Luftmassenmatrix
-				Ergebnis.m_Wellenlaenge = sfit->m_Wellenlaengen[k];
+				Ergebnis.m_Wellenlaenge
+					= Ergebnis.m_Wellenlaenge_abs
+					= ldit->m_Wellenlaenge;
 				//Ergebnis.Ausgabe_auf_Bildschirm();
 				// Zusammenfassung der Zwischenresultate dem Vektor
 				// für die jeweilige Spezies zuordnen
@@ -143,6 +145,7 @@ int Nadir_Auswertung(Orbitliste &Orbitlist,
 						= ldit->m_Wellenlaenge
 						= sfit->m_Wellenlaengen.at(k)
 						= wl_emiss;
+					Ergebnis.m_Wellenlaenge_abs = wl_abs;
 					Ausgewertete_Nadirmessung_NO.push_back(Ergebnis);
 				}
 			}//ende k Linie
