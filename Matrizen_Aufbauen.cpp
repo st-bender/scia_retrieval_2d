@@ -1909,13 +1909,6 @@ void regression_apriori_NO(Retrievalgitter &grid, Ausgewertete_Messung_Limb &aml
 	}
 }
 
-/* step transition */
-double transition_step(double z, Konfiguration &Konf)
-{
-	if (z < Konf.NO_apriori_bottom || z > Konf.NO_apriori_top)
-		return 0.;
-	return 1.;
-}
 /* arbitrary transition using given function */
 double transition_func(double (*trans01)(double), double z, Konfiguration &Konf)
 {
@@ -1932,6 +1925,17 @@ double transition_func(double (*trans01)(double), double z, Konfiguration &Konf)
 void scale_apriori(Retrievalgitter &grid, MPL_Matrix &apriori,
 		Konfiguration &Konf)
 {
+	/*
+	 * Chose the transition (step) function from zero to one here.
+	 * The current choices are:
+	 *
+	 * hardstep: = 0, x < 1; = 1, x >= 1
+	 * my_phi: = 0, x < 0, = 1, x > 1, (in C^infinity)
+	 * smoothstep: = 0, x < 0, = 1, x > 1, (with C^1 endpoints)
+	 * smootherstep: = 0, x < 0, = 1, x > 1, (with C^2 endpoints)
+	 *
+	 * The default is my_phi.
+	 */
 	auto trans01 = my_phi;
 	auto transition = std::bind(transition_func, trans01,
 			std::placeholders::_1, std::placeholders::_2);

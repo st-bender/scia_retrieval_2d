@@ -52,6 +52,11 @@ void smooth_data(int Datasize, double *Data, int Anzahl_Nachbarn_eine_Seite,
 	delete[] Data_old;
 }
 
+double clamp(double d, double min, double max)
+{
+	const double t = d < min ? min : d;
+	return t > max ? max : t;
+}
 /*
  * smooth base function (for the partition of unity)
  * theta(t) = 0, t <= 0
@@ -74,7 +79,38 @@ double my_phi(double x)
 	return tx / (tx + t1mx);
 }
 /*
- * smooth transition function
+ * hard step function at 1.0
+ * phi(x) = 0, x < 1
+ * phi(x) = 1, x >= 1
+ */
+double hardstep(double x)
+{
+	return x >= 1.0;
+}
+/*
+ * C1 step function like my_phi(x) from wikipedia
+ * https://en.wikipedia.org/wiki/Smoothstep
+ */
+double smoothstep(double x)
+{
+	x = clamp(x, 0., 1.);
+	// Evaluate polynomial
+	return x*x*(3 - 2*x);
+}
+/*
+ * C2 step function from wikipedia
+ * https://en.wikipedia.org/wiki/Smoothstep
+ */
+double smootherstep(double x)
+{
+	x = clamp(x, 0., 1.);
+	// Evaluate polynomial
+	return x*x*x*(x*(x*6 - 15) + 10);
+}
+/*
+ * flexible transition function
+ * using the first argument as transition from zero to one
+ *
  * Phi(x) = 0, x < a - w
  * Phi(x) = 1, a <= x <= b
  * Phi(x) = 0, x > b + w
