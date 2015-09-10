@@ -129,7 +129,7 @@ public:
 	MPL_Matrix unity() const;
 	//int simple_Gaussdiagonalisierung(); siehe ganz oben
 	int Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor();
-	void in_Datei_speichern(std::string Dateiname) const;
+	void in_Datei_speichern(std::string Dateiname, double precision = 0) const;
 
 	//Membervariablen
 	bool transposed;
@@ -743,10 +743,12 @@ inline int MPL_Matrix::Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor(
 ////////////////////////////////////////////////////////////////////////////////
 // Methodenstart in_Datei_speichern
 ////////////////////////////////////////////////////////////////////////////////
-inline void MPL_Matrix::in_Datei_speichern(std::string Dateiname) const
+inline void MPL_Matrix::in_Datei_speichern(std::string Dateiname, double precision) const
 {
 	ogzstream outfile;
 	outfile.open(Dateiname.c_str());
+	if (precision != 0)
+		outfile.precision(precision);
 	for (int i = 0; i < this->m_Zeilenzahl; i++) {
 		for (int j = 0; j < this->m_Spaltenzahl; j++) {
 			outfile << m_Elemente[j + i * m_Spaltenzahl];
