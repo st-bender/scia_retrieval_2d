@@ -29,7 +29,7 @@ template <class T> vector<T> string_to_vector(string zeile);
 
 // default constructor to initialise the config default values
 Konfiguration::Konfiguration() :
-	m_Pfad_Solar_Correction_Factors("DATA/sol_corrfac_sao-scia.dat"),
+	m_Pfad_Solar_Correction_Factors("DATA/sol_nomfac2002-2012_mfac_NRT_238-282nm.dat"),
 	m_Pfad_Linienparameter_Metalle("DATA/LinePars.dat"),
 	m_Pfad_Dichten_der_Atmosphaerengase("DATA/ACE_air_o3_50_200.dat"),
 	m_Pfad_Wirkungsquerschnitte_der_Atmosphaerengase("DATA/XSECT_air_o3.dat"),
