@@ -82,7 +82,7 @@ void Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 			 << std::endl;
 	outfile2 << "xy1 = np.genfromtxt('" << Rohdaten_Name_a.c_str() << "')\n";
 	outfile2 << "xy2 = np.genfromtxt('" << Rohdaten_Name_b.c_str() << "')\n";
-	outfile2 << "fig, ax = plt.subplots(figsize=(7, 5))" << std::endl;
+	outfile2 << "fig, ax = plt.subplots(figsize=(8.4, 5))" << std::endl;
 	outfile2 << "ax.set_title('" << title.c_str() << "')" << std::endl;
 	outfile2 << "ax.title.set_y(1.02)" << std::endl;
 	outfile2 << "ax.set_xlabel(r'$" << xlabel.c_str() << "$')" << std::endl;
