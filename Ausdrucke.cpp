@@ -103,6 +103,10 @@ void Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	outfile2 << "ax.yaxis.set_tick_params(which='major', width=1.5, length=6, pad=8)\n";
 	outfile2 << "ax.xaxis.set_tick_params(which='minor', length=3)\n";
 	outfile2 << "ax.yaxis.set_tick_params(which='minor', length=3)\n";
+	outfile2 << "ax.spines[\"top\"].set_visible(False)\n";
+	outfile2 << "ax.spines[\"right\"].set_visible(False)\n";
+	outfile2 << "ax.xaxis.tick_bottom()\n";
+	outfile2 << "ax.yaxis.tick_left()\n";
 	outfile2 << "plt.tight_layout()\n";
 	outfile2 << "plt.savefig('" << Dateiname.c_str() << "')" << std::endl;
 
