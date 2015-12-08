@@ -119,9 +119,18 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	double h_end = Konf.m_MaxAlt;
 	double dh = 2., dhh = 0.5 * dh;
 	int Anzahl_Hoehen = int((h_end - h_start) / dh) + 1;   // 82  //42  //132
-	vector<double> untere_Hoehe(Anzahl_Hoehen);
-	vector<double> mittlere_Hoehe(Anzahl_Hoehen);
-	vector<double> obere_Hoehe(Anzahl_Hoehen);
+	int add_alts = Konf.m_Anzahl_zusaetzliche_Hoehengitterpunkte;
+	/* Check if the extensions really start above the top grid altitude.
+	 * If not, simply skip the extensions entirely. This ensures backward
+	 * compatibility with old code versions and config files where the number
+	 * of grid extensions is non-zero but starting at the ground. Since we did
+	 * not extend the grid at all before, we use this as an indicator to not
+	 * extend the grid. */
+	if (add_alts > 0 && Konf.m_Grid_ext_low.at(0) <= h_end)
+		add_alts = 0;
+	vector<double> untere_Hoehe(Anzahl_Hoehen + add_alts);
+	vector<double> mittlere_Hoehe(Anzahl_Hoehen + add_alts);
+	vector<double> obere_Hoehe(Anzahl_Hoehen + add_alts);
 	for (int i = 0; i < Anzahl_Hoehen; i++) {
 		// dh km Schritte
 		untere_Hoehe[i]   = h_start - dhh + i * dh;
@@ -129,6 +138,14 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 		obere_Hoehe[i]    = h_start + dhh + i * dh;
 	}
 	/////////////////////////////
+	for (int i = 0; i < add_alts; ++i) {
+		untere_Hoehe[Anzahl_Hoehen + i] = Konf.m_Grid_ext_low.at(i);
+		obere_Hoehe[Anzahl_Hoehen + i] = Konf.m_Grid_ext_high.at(i);
+		mittlere_Hoehe[Anzahl_Hoehen + i]
+			= 0.5 * (obere_Hoehe[Anzahl_Hoehen + i]
+					+ untere_Hoehe[Anzahl_Hoehen + i]);
+	}
+	Anzahl_Hoehen += add_alts;
 
 	this->m_Anzahl_Hoehen = Anzahl_Hoehen;
 	this->m_Anzahl_Breiten = Breitenzahl;
