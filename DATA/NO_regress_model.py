@@ -94,7 +94,7 @@ def main():
 	sol_lags = config.get("sol_lags", [0, 1])
 	solsubmin = config.get("solsubmin", 1)
 
-	fields = ["offset", "cos1", "sin1", "cos2", "sin2", "lya", "kp"]
+	fields = ["offset", "cos1", "sin1", "cos2", "sin2"] + solnames
 	data = np.genfromtxt(coeff_fname, dtype=None, names=True)
 	coeffs = data[data['name']==data_name]
 
