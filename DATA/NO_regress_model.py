@@ -49,7 +49,6 @@ def time_fun_sol(tday, t0, solnames, solscales, sol_lags, solsubmin=1):
 	return time_fun_vec(tday, solvalues=sdicts)
 
 def coeffs_alt_lat(coeffs, fields, alt=100.0, lat=67.5):
-	fields_float = [(f, '<f8') for f in fields]
 	lats = np.unique(coeffs['lats'])
 	lats_right = lats + np.mean(0.5*np.diff(lats))
 	j = bisect.bisect_left(lats_right, lat)
@@ -59,8 +58,7 @@ def coeffs_alt_lat(coeffs, fields, alt=100.0, lat=67.5):
 	l1 = lats[j]
 	cfl1 = coeffs[coeffs['lats']==l1]
 	alts = cfl1['alts']
-	return (alts,
-		cfl1[fields].astype(fields_float).view('<f8').reshape(-1, len(fields)))
+	return (alts, cfl1[fields].view('<f8').reshape((-1, len(fields))))
 
 def main():
 	ff = open(sys.argv[1], 'r')
