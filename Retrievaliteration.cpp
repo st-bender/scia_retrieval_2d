@@ -101,7 +101,6 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	// LU Zerlegung der LHS
 	////////////////////////////////////////////////////////////////////////////
 	MPL_Matrix RHS(Dichten.m_Zeilenzahl, 1, 1.);
-	MPL_Matrix Saeulendichten_neu(Saeulendichten.m_Zeilenzahl, 1);
 	MPL_Matrix Saeulendichten_rest(Saeulendichten.m_Zeilenzahl, 1);
 	//cout<<"RHS.m_Zeilenzahl: "<<RHS.m_Zeilenzahl<<"\n";
 	// Zunächst die LU Zerlegung der LHS durchführen mit dummy RHS,
@@ -173,8 +172,7 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	// Nachiteration
 	///////////////////////////////////////
 	for (int Iterationsschritt = 0; Iterationsschritt < Itmax; Iterationsschritt++) {
-		Saeulendichten_neu = AMF * Dichten;
-		Saeulendichten_rest = Saeulendichten - Saeulendichten_neu;
+		Saeulendichten_rest = Saeulendichten - AMF * Dichten;
 		MPL_Matrix Dichten_apriori_rest = Dichten_apriori - Dichten;
 		Mat_Residual = (Saeulendichten_rest.transponiert() * S_y * Saeulendichten_rest)
 			+ Dichten_apriori_rest.transponiert() * S_apriori * Dichten_apriori_rest;
