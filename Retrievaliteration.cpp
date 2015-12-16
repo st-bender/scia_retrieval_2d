@@ -46,14 +46,12 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	//linke Seite der Gleichung(anzuwenden auf Dichten, um RHS zu erhalten)
 	MPL_Matrix LHS, R, Rl, Ra;
 	MPL_Matrix AMF_trans = AMF.transponiert();
-	MPL_Matrix S_Breite_trans = S_Breite.transponiert();
-	MPL_Matrix S_Hoehe_trans = S_Hoehe.transponiert();
 
 	// Solange man die lambdas für die constraints nicht ändern will,
 	// sieht die LHS immer gleich aus
 	R = (S_apriori);
-	Rl = (Lambda_Breite * (S_Breite_trans * S_Breite));  // Breitenglattung
-	Ra = (Lambda_Hoehe * (S_Hoehe_trans * S_Hoehe)); // Hoehenglattung
+	Rl = (Lambda_Breite * (S_Breite.transponiert() * S_Breite));  // Breitenglattung
+	Ra = (Lambda_Hoehe * (S_Hoehe.transponiert() * S_Hoehe)); // Hoehenglattung
 	R += Rl + Ra;
 	// S_y here is equal to S_y^-1 in ususal retrieval equations,
 	// as is S_apriori (~ S_a^-1)
