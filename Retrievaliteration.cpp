@@ -144,7 +144,18 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	// erster Schritt
 	///////////////////////////////////////
 	//RHS sollte ein Spaltenvektor sein
-	RHS = AMF_trans * S_y * (Saeulendichten - AMF * Dichten_apriori)
+	/* according to [Funke 2005, Steck & von Clarmann 2001],
+	 * the iterative solution is
+	 * x_{i+1} = x_i + (K^T S_y^{-1} K + R)^{-1}
+	 *             \times [K^T S_y^{-1} (y - F(x_i)) + R (x_a - x_i)]
+	 * where we have an arbitrary choice for x_0.
+	 * In the case of x_0 = x_a, (x_a - x_0) vanishes, but we have
+	 * to add x_a to the first solution below.
+	 * Instead here we use x_0 = 0 and since F is linear
+	 * (F(x) = K*x in our case), F(0) = K*0 = 0.
+	 * Therefore, y - F(x_0) = y for calculating x_1.
+	 */
+	RHS = AMF_trans * S_y * (Saeulendichten)
 		  + R * Dichten_apriori;
 #ifdef DEBUG_RETRIEVAL_MATRICES
 	LHS.in_Datei_speichern("/tmp/LHS1.dat.gz");
@@ -163,6 +174,8 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	////////////////////////////////////////////////////////////////////////////
 	// ENDE LU Zerlegung der LHS
 	////////////////////////////////////////////////////////////////////////////
+	/* This should be Dichten_apriori + RHS,
+	 * if x_0 = x_a was used above. */
 	Dichten = RHS;
 	///////////////////////////////////////
 	// ENDE erster Schritt
