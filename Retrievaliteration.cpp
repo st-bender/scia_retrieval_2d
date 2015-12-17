@@ -45,7 +45,7 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 
 	//linke Seite der Gleichung(anzuwenden auf Dichten, um RHS zu erhalten)
 	MPL_Matrix LHS, R, Rl, Ra;
-	MPL_Matrix AMF_trans = AMF.transponiert();
+	MPL_Matrix AMF_trans_S_y = AMF.transponiert() * S_y;
 
 	// Solange man die lambdas für die constraints nicht ändern will,
 	// sieht die LHS immer gleich aus
@@ -55,7 +55,7 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	R += Rl + Ra;
 	// S_y here is equal to S_y^-1 in ususal retrieval equations,
 	// as is S_apriori (~ S_a^-1)
-	LHS = (AMF_trans * (S_y * AMF));
+	LHS = (AMF_trans_S_y * AMF);
 	LHS += R;
 	// LHS += Rl + Ra;
 //    cout<<"LHS: "<<LHS.m_Zeilenzahl<<"\t"<<LHS.m_Spaltenzahl<<"\n";
@@ -155,7 +155,7 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	 * (F(x) = K*x in our case), F(0) = K*0 = 0.
 	 * Therefore, y - F(x_0) = y for calculating x_1.
 	 */
-	RHS = AMF_trans * S_y * (Saeulendichten)
+	RHS = AMF_trans_S_y * (Saeulendichten)
 		  + R * Dichten_apriori;
 #ifdef DEBUG_RETRIEVAL_MATRICES
 	LHS.in_Datei_speichern("/tmp/LHS1.dat.gz");
@@ -212,7 +212,7 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 		}
 		residual_prev = Residual;
 		//RHS sollte ein Spaltenvektor sein
-		RHS = AMF_trans * (S_y * Saeulendichten_rest)
+		RHS = AMF_trans_S_y * Saeulendichten_rest
 			  + R * Dichten_apriori_rest;
 		// Lösungen durch Rückeinsetzen finden
 		dgetrs_(&textflag, &N, &NRHS, A.m_Elemente, &LDA, IPIV, RHS.m_Elemente,
