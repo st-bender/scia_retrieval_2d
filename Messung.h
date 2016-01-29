@@ -32,6 +32,8 @@ public:
 	void calc_SunEarthDistance();
 	double fit_NO_spec(class NO_emiss &NO, std::vector<double> &x,
 			std::vector<double> &y, double &rms_err);
+	double fit_rayleigh_and_interp_peaks(class Sonnenspektrum &sol_spec,
+			double wl_min, double wl_max, bool debug = true);
 	void slant_column_NO(class NO_emiss &NO, std::string mache_Fit_Plots,
 			class Sonnenspektrum &sol_spec, int index,
 			class Speziesfenster &Spezfenst, std::string Arbeitsverzeichnis,

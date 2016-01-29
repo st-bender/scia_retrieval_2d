@@ -308,6 +308,63 @@ class rayl {
 	double f_sol;
 };
 //========================================
+/* Finds the Rayleigh fit factor for the Rayleigh background by fitting
+ * (solar spectrum x Rayleigh cross section) to the limb spectrum
+ * in the selected wavelength range.
+ * Linearly interpolates large peak values, note that this alters
+ * the values of m_Intensitaeten, which should be kept in mind whenever
+ * m_Intensitaeten is used.
+ */
+double Messung::fit_rayleigh_and_interp_peaks(Sonnenspektrum &sol_spec,
+		double wl_min, double wl_max, bool debug)
+{
+	// threshold for peak detection in the NO wavelength range
+	// starting at 6*10^10 at 247 nm (NO(0, 2)) and increasing ~ lambda^4
+	// because of Rayleigh scattering (see below)
+	const double peak_threshold = 6.e10;
+	int i_min = sb_Get_closest_index(wl_min);
+	int i_max = sb_Get_closest_index(wl_max);
+	std::vector<double> fit_spec, ones(i_max - i_min + 1, 1.);
+
+	for (int i = i_min; i < i_max + 1; ++i) {
+		double sol_i = sol_spec.m_Int_interpoliert.at(i);
+		double rad_i = m_Intensitaeten.at(i);
+		double wl = m_Wellenlaengen.at(i);
+		// peak detection: unusual high radiance
+		// threshold is 6*10^10 (see above) at 247 nm (NO(0, 2))
+		// and scales ~ lambda^4 like Rayleigh scattering
+		if (rad_i > peak_threshold * std::pow(wl / 247.0, 4)
+				&& i > i_min + 2 && i < i_max - 2
+				// make sure that the surrounding points are smaller, i.e.,
+				// that we have a single large spike in the spectrum
+				&& m_Intensitaeten.at(i - 1) < rad_i
+				&& m_Intensitaeten.at(i + 1) < rad_i) {
+			// exclude the previous, the current, and the next point.
+			// That means we pop the last one and don't include the current
+			// one, and interpolate the next point of the fit spectrum.
+			if (!fit_spec.empty())
+				fit_spec.pop_back();
+			// interpolate three points of the peak linearly
+			double y0 = m_Intensitaeten.at(i - 2);
+			double yN = m_Intensitaeten.at(i + 2);
+			double a = 0.25 * (yN - y0);
+			for (int k = 0; k < 3; k++)
+				m_Intensitaeten.at(i - 1 + k) = (k + 1)*a + y0;
+			// done interpolating
+			++i;
+		} else {
+			fit_spec.push_back(rad_i / (sigma_rayleigh(wl) * sol_i));
+		}
+	}
+	ones.resize(fit_spec.size(), 1.);
+	double f_sol_fit = fit_spectra(ones, fit_spec);
+	if (debug == true)
+		std::cout << "# solar fit factor = " << f_sol_fit << std::endl;
+	if (f_sol_fit < 0.)
+		f_sol_fit = 0.;
+	return f_sol_fit;
+}
+//========================================
 void Messung::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		Sonnenspektrum &sol_spec, int index,
 		Speziesfenster &Spezfenst, std::string Arbeitsverzeichnis,
@@ -316,11 +373,6 @@ void Messung::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	// I/(piFGamma)=integral(AMF n ds) mit AMF = s exp(-tau) ...aber zu der
 	// Formel später nochmal zurück Das spätere Retrieval ermittelt dann die
 	// Dichte n aus der rechten Seite
-
-	// threshold for peak detection in the NO wavelength range
-	// starting at 6*10^10 at 247 nm (NO(0, 2)) and increasing ~ lambda^4
-	// because of Rayleigh scattering (see below)
-	const double peak_threshold = 6.e10;
 
 	//Zunächst Indizes der Wellenlaengen der Basisfenster bestimmen
 	int i, j;
@@ -359,7 +411,6 @@ void Messung::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	std::vector<double> peakwin_rad(N_peak);
 	std::vector<double> rad = m_Intensitaeten;
 	std::vector<double> sol_rad = sol_spec.m_Int_interpoliert;
-	std::vector<double> fit_spec, ones(N_base + N_peak, 1.);
 
 	/* prints the geolocation of the tangent point for later inspection */
 	if (debug == true) {
@@ -372,40 +423,11 @@ void Messung::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 			<< std::endl;
 	}
 
-	for (i = 0; i < N_base + N_peak; i++) {
-		int idx = i_basewin_l_min + i;
-		double sol_i = sol_rad.at(idx);
-		double rad_i = rad.at(idx);
-		wl = m_Wellenlaengen.at(idx);
-		// peak detection: unusual high radiance
-		// threshold is 6*10^10 (see above) at 247 nm (NO(0, 2))
-		// and scales ~ lambda^4 like Rayleigh scattering
-		if (rad_i > peak_threshold * std::pow(wl / 247.0, 4)
-				&& i > 2 && i < N_base + N_peak - 2
-				// make sure that the surrounding points are smaller, i.e.,
-				// that we have a single large spike in the spectrum
-				&& rad.at(idx - 1) < rad_i
-				&& rad.at(idx + 1) < rad_i) {
-			// exclude the previous, the current, and the next point.
-			// That means we pop the last one and don't include the current
-			// one, and interpolate the next point of the fit spectrum.
-			if (!fit_spec.empty()) fit_spec.pop_back();
-			// interpolate three points of the peak linearly
-			double y0 = rad.at(idx - 2);
-			double yN = rad.at(idx + 2);
-			double a = 0.25 * (yN - y0);
-			for (int k = 0; k < 3; k++)
-				rad.at(idx - 1 + k) = (k + 1)*a + y0;
-			// done interpolating
-			i++;
-		} else
-			fit_spec.push_back(rad_i / (sigma_rayleigh(wl) * sol_i));
-	}
-	ones.resize(fit_spec.size());
-	f_sol_fit = fit_spectra(ones, fit_spec);
-	if (debug == true)
-		std::cout << "# solar fit factor = " << f_sol_fit << std::endl;
-	if (f_sol_fit < 0.) f_sol_fit = 0.;
+	f_sol_fit = fit_rayleigh_and_interp_peaks(sol_spec,
+			min_lambda_NO - base_offset_o,
+			max_lambda_NO + base_offset_o, debug);
+	// reassign because m_Intensitaeten may have changed
+	rad = m_Intensitaeten;
 
 	// prepare baseline and rayleigh data
 	std::vector<double> baseline_wl, baseline_rad, rayleigh_rad;
