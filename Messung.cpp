@@ -456,9 +456,9 @@ void Messung::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 	 * of the baseline points. */
 	std::vector<double> rad_sort(basewin_rad);
 	std::sort(rad_sort.begin(), rad_sort.end());
-	size_t offset = rad_sort.size() / 10;
-	double rad0 = rad_sort.at(offset);
-	double rad1 = rad_sort.at(rad_sort.size() - offset - 1);
+	size_t ten_perc = rad_sort.size() / 10;
+	double rad0 = rad_sort.at(ten_perc);
+	double rad1 = rad_sort.at(rad_sort.size() - ten_perc - 1);
 
 	for (i = 0; i < N_fit_tot; i++) {
 		int idx = i_basewin_l_min + i;
