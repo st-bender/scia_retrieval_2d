@@ -182,7 +182,12 @@ inline MPL_Matrix &MPL_Matrix::operator = (const MPL_Matrix &rhs)
 		delete[] m_Elemente;
 		m_Elemente = 0;
 	}
-	m_Elemente = new double[m_Elementanzahl];
+	m_Elemente = new (std::nothrow) double[m_Elementanzahl];
+	if (!m_Elemente) {
+		std::cout << "out of memory: cannot allocate "
+			<< m_Elementanzahl << " doubles." << std::endl;
+		exit(1);
+	}
 	std::copy_n(rhs.m_Elemente, m_Elementanzahl, m_Elemente);
 	return *this;
 }
