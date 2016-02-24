@@ -446,6 +446,7 @@ void Konfiguration::Konfiguration_anzeigen()
 	cout << "Anzahl der Emitter: " << this->m_Anzahl_der_Emitter << "\n";
 	cout << "Solarpfad: " << this->m_Pfad_Solar_Spektrum << "\n";
 	cout << "Ersatz-Solarpfad: " << this->m_Pfad_Solar_Fallback_Spektrum << "\n";
+	cout << "Pfad Sonnespektrumkorrektur: " << this->m_Pfad_Solar_Correction_Factors << "\n";
 	cout << "Pfad Linienparameter: " << this->m_Pfad_Linienparameter_Metalle << "\n";
 	cout << "Pfad Atmosphärendichten: " << this->m_Pfad_Dichten_der_Atmosphaerengase << "\n";
 	cout << "Pfad AtmosphärenWQ: " << this->m_Pfad_Wirkungsquerschnitte_der_Atmosphaerengase << "\n";
