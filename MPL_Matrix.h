@@ -127,6 +127,7 @@ public:
 	void Vielfaches_einer_Zeile_addieren(int Summenzeile, int Additionszeile, double Faktor);
 	MPL_Matrix row_diff();
 	MPL_Matrix unity() const;
+	double trace();
 	//int simple_Gaussdiagonalisierung(); siehe ganz oben
 	int Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor();
 	void in_Datei_speichern(std::string Dateiname, double precision = 0) const;
@@ -602,6 +603,20 @@ inline MPL_Matrix MPL_Matrix::unity() const
 		E.m_Elemente[i * m + i] = 1.;
 
 	return E;
+}
+
+inline double MPL_Matrix::trace()
+{
+	if (m_Zeilenzahl != m_Spaltenzahl) {
+		std::cerr << "Matrix is non-square." << std::endl;
+		return 0.;
+	}
+
+	double trace = 0.;
+	for (int i = 0; i < m_Zeilenzahl; ++i)
+		trace += m_Elemente[i * m_Zeilenzahl + i];
+
+	return trace;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
