@@ -379,11 +379,17 @@ std::vector<double> my_whittaker_smooth(std::vector<double> &y,
 	MPL_Matrix A = W + lambda * D.transponiert() * D;
 	my_solve(A, Z);
 
+	/* According to the paper, the Whittaker smoothing matrix H
+	 * is given by H = (W + lambda*D^T*D)^-1 * W = A^-1 * W. */
+	MPL_Matrix H(E);
+	my_solve(A, H);
+	H = H * W;
+
 	// calculate the rms error of the smoothed points
 	double N = std::accumulate(w.begin(), w.end(), 0.);
 	MPL_Matrix R = Y - Z;
 	MPL_Matrix Res = R.transponiert() * W * R;
-	err = std::sqrt(Res(0, 0) / N);
+	err = std::sqrt(Res(0, 0) / (N - 1.25 * H.trace() + 0.5));
 
 	// generate return vector
 	std::vector<double> z(Z.m_Elemente, Z.m_Elemente + Z.m_Elementanzahl);
