@@ -336,10 +336,11 @@ int my_solve(MPL_Matrix &LHS, MPL_Matrix &RHS)
 	MPL_Matrix A = LHS.transponiert_full();
 	// N ist Anzahl der Gitterpunkte
 	int N = LHS.m_Zeilenzahl;
+	int M = RHS.m_Spaltenzahl;
 	// array mit der Pivotisierungsmatrix sollte so groß wie N sein,
 	int *IPIV = new int[N];
 	// Spalten von RHS 1 nehmen, um keine C/Fortran Verwirrungen zu provozieren
-	int NRHS = 1;
+	int NRHS = M;
 	int LDA = N;
 	int LDB = N;
 	int INFO;
