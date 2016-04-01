@@ -21,6 +21,23 @@ extern "C" {
 			double *B, int *LDB, int *INFO);
 }
 
+/* Construct the a priori covariance matrix using the a priori values.
+ * A common approach seems to be to use 1000%, i.e. set factor to 10. */
+MPL_Matrix relative_Sapriori(MPL_Matrix &Dichten_apriori,
+		MPL_Matrix &S_apriori, double factor)
+{
+	MPL_Matrix S_a_i{S_apriori};
+
+	for (int i = 0; i < Dichten_apriori.m_Elementanzahl; ++i) {
+		double x_a_i = Dichten_apriori(i);
+		if (x_a_i != 0.)
+			// relative (co)variance (squared weights)
+			S_a_i(i, i) = 1. / (factor*factor * x_a_i*x_a_i);
+	}
+
+	return S_a_i;
+}
+
 int Retrievaliteration(MPL_Matrix &Dichten,
 					   MPL_Matrix &Dichten_apriori,
 					   MPL_Matrix &Saeulendichten,
