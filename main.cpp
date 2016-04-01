@@ -1248,6 +1248,32 @@ int main(int argc, char *argv[])
 	double NO_Lambda_Hoehe
 		= Konf.m_Retrieval_Kovarianzen[spez_index + 2 * Konf.m_Anzahl_der_Emitter];
 
+	/* Adaptive regularisation parameter calculation using the calculated
+	 * fit variances. We hope that this balances the fit errors and the
+	 * regularisation more consistently instead of manually adjusting
+	 * the lambdas each time the spectral fit or error calculation changes.
+	 * Activated by setting a negative a priori lambda in the config. */
+	if (NO_Lambda_apriori < 0) {
+		NO_Lambda_Breite = 0;
+		for (auto it = Ausgewertete_Limbmessung_NO.begin();
+				it != Ausgewertete_Limbmessung_NO.end(); ++it) {
+			NO_Lambda_Breite +=
+				it->m_Fehler_Zeilendichten * it->m_Fehler_Zeilendichten;
+		}
+		for (auto it = Ausgewertete_Nadirmessung_NO.begin();
+				it != Ausgewertete_Nadirmessung_NO.end(); ++it) {
+			NO_Lambda_Breite +=
+				it->m_Fehler_Zeilendichten * it->m_Fehler_Zeilendichten;
+		}
+		/* We found empirically that lambda_lat = 2.75e19 / sum(err_scd^2)
+		 * gives about the same lambda values as before.
+		 * Note that 2.75e19 is purely empiric, found by comparing fixed to
+		 * calculated regularisation parameters for a few orbits. */
+		NO_Lambda_Breite = 2.75e19 / NO_Lambda_Breite;
+		NO_Lambda_apriori = NO_Lambda_Breite / 10.;
+		NO_Lambda_Hoehe = NO_Lambda_Breite / 3.;
+	}
+
 	cout << "Retrieval Kovarianzen NO:" << endl;
 	cout << "L_apriori = " << NO_Lambda_apriori << ", "
 		 << "L_Breite = " << NO_Lambda_Breite << ", "
