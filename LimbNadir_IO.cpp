@@ -12,6 +12,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <netcdf.h>
 
 using std::cout;
 using std::ios;
@@ -269,6 +270,123 @@ int Load_Limb_l_mpl_binary(string Datei_in,
 }
 ////////////////////////////////////////////////////////////////////////////////
 // ENDE Load_Limb_l_mpl_binary
+////////////////////////////////////////////////////////////////////////////////
+//
+////////////////////////////////////////////////////////////////////////////////
+// Funktionsstart Load_Limb_l_nc
+////////////////////////////////////////////////////////////////////////////////
+int Load_Limb_l_nc(string Datei_in,
+				   string textheader[31], int &no_of_alt,
+				   int &no_of_pix, int Orbitstate[5], int Datum[6],
+				   float Center_Lat_Lon[10], float &orbit_phase,
+				   std::vector<float> &Wellenlaengen,
+				   std::vector<Limb_Datensatz> &Limbdaten)
+{
+	int infile = ncopen(Datei_in.c_str(), NC_NOWRITE);
+	if (!infile) {
+		cout << Datei_in << " konnte nicht zum lesen geöffnet werden\n";
+		return 1;
+	}
+	/* Read the textheader first.
+	 * We save the netcdf attribute in a temporary char array first and
+	 * then manually convert it to the requested array of strings. */
+	int th_len;
+	nc_type th_type;
+	ncattinq(infile, NC_GLOBAL, "textheader", &th_type, &th_len);
+	char* th_read = new char[th_len];
+	ncattget(infile, NC_GLOBAL, "textheader", th_read);
+	std::stringstream th_ss(th_read);
+	string th_item;
+	int th_cnt = 0;
+	while (std::getline(th_ss, th_item, '\n')) {
+		textheader[th_cnt] = th_item;
+		++th_cnt;
+	}
+	delete[] th_read;
+	/* Directly reading into orbit_phase does not seem to work properly.
+	 * Thus, we also use a temporary variable for it. The rest of the
+	 * netcdf reading seems to work as expected, though. */
+	float ophase;
+	ncattget(infile, NC_GLOBAL, "orbit_phase", &ophase);
+	ncattget(infile, NC_GLOBAL, "orbit_state", Orbitstate);
+	ncattget(infile, NC_GLOBAL, "date", Datum);
+	ncattget(infile, NC_GLOBAL, "cent_lat_lon", Center_Lat_Lon);
+	int lid = ncdimid(infile, "limb");
+	int wlid = ncdimid(infile, "wavelength");
+	ncdiminq(infile, lid, 0, (long *)&no_of_alt);
+	ncdiminq(infile, wlid, 0, (long *)&no_of_pix);
+	long start[] = {0};
+	long acount[] = {no_of_alt};
+	long wlcount[] = {no_of_pix};
+	long rstart[] = {0, 0};
+	long rcount[] = {no_of_alt, no_of_pix};
+	Wellenlaengen.resize(no_of_pix);
+	ncvarget(infile, ncvarid(infile, "wavelength"), start, wlcount, Wellenlaengen.data());
+	std::vector<float> v_Sub_Sat_Lat(no_of_alt);
+	std::vector<float> v_Sub_Sat_Lon(no_of_alt);
+	std::vector<float> v_TP_Lat(no_of_alt);
+	std::vector<float> v_TP_Lon(no_of_alt);
+	std::vector<float> v_Tangentenhoehe(no_of_alt);
+	std::vector<float> v_TP_SZA(no_of_alt);
+	std::vector<float> v_TP_SAA(no_of_alt);
+	std::vector<float> v_TP_LOS_Zenit(no_of_alt);
+	std::vector<float> v_TOA_SZA(no_of_alt);
+	std::vector<float> v_TOA_SAA(no_of_alt);
+	std::vector<float> v_TOA_LOS_Zenit(no_of_alt);
+	std::vector<float> v_Sat_SZA(no_of_alt);
+	std::vector<float> v_Sat_SAA(no_of_alt);
+	std::vector<float> v_Sat_LOS_Zenit(no_of_alt);
+	std::vector<float> v_Sat_Hoehe(no_of_alt);
+	std::vector<float> v_Erdradius(no_of_pix);
+	ncvarget(infile, ncvarid(infile, "sub_sat_lat"), start, acount, v_Sub_Sat_Lat.data());
+	ncvarget(infile, ncvarid(infile, "sub_sat_lon"), start, acount, v_Sub_Sat_Lon.data());
+	ncvarget(infile, ncvarid(infile, "TP latitude"), start, acount, v_TP_Lat.data());
+	ncvarget(infile, ncvarid(infile, "TP longitude"), start, acount, v_TP_Lon.data());
+	ncvarget(infile, ncvarid(infile, "TP altitude"), start, acount, v_Tangentenhoehe.data());
+	ncvarget(infile, ncvarid(infile, "TP SZA"), start, acount, v_TP_SZA.data());
+	ncvarget(infile, ncvarid(infile, "TP SAA"), start, acount, v_TP_SAA.data());
+	ncvarget(infile, ncvarid(infile, "TP LOS Zenit"), start, acount, v_TP_LOS_Zenit.data());
+	ncvarget(infile, ncvarid(infile, "TOA SZA"), start, acount, v_TOA_SZA.data());
+	ncvarget(infile, ncvarid(infile, "TOA SAA"), start, acount, v_TOA_SAA.data());
+	ncvarget(infile, ncvarid(infile, "TOA LOS Zenit"), start, acount, v_TOA_LOS_Zenit.data());
+	ncvarget(infile, ncvarid(infile, "SAT SZA"), start, acount, v_Sat_SZA.data());
+	ncvarget(infile, ncvarid(infile, "SAT SAA"), start, acount, v_Sat_SAA.data());
+	ncvarget(infile, ncvarid(infile, "SAT LOS Zenit"), start, acount, v_Sat_LOS_Zenit.data());
+	ncvarget(infile, ncvarid(infile, "SAT altitude"), start, acount, v_Sat_Hoehe.data());
+	ncvarget(infile, ncvarid(infile, "earthradius"), start, acount, v_Erdradius.data());
+	std::vector<float> rads(no_of_alt * no_of_pix);
+	std::vector<float> errs(no_of_alt * no_of_pix);
+	ncvarget(infile, ncvarid(infile, "radiance"), rstart, rcount, rads.data());
+	ncvarget(infile, ncvarid(infile, "radiance errors"), rstart, rcount, errs.data());
+	for (int i = 0; i < no_of_alt; ++i) {
+		Limb_Datensatz lds;
+		lds.m_N_radiances = no_of_pix;
+		lds.m_Sub_Sat_Lat = v_Sub_Sat_Lat.at(i);
+		lds.m_Sub_Sat_Lon = v_Sub_Sat_Lon.at(i);
+		lds.m_TP_Lat = v_TP_Lat.at(i);
+		lds.m_TP_Lon = v_TP_Lon.at(i);
+		lds.m_Tangentenhoehe = v_Tangentenhoehe.at(i);
+		lds.m_TP_SZA = v_TP_SZA.at(i);
+		lds.m_TP_SAA = v_TP_SAA.at(i);
+		lds.m_TP_LOS_Zenit = v_TP_LOS_Zenit.at(i);
+		lds.m_TOA_SZA = v_TOA_SZA.at(i);
+		lds.m_TOA_SAA = v_TOA_SAA.at(i);
+		lds.m_TOA_LOS_Zenit = v_TOA_LOS_Zenit.at(i);
+		lds.m_Sat_SZA = v_Sat_SZA.at(i);
+		lds.m_Sat_SAA = v_Sat_SAA.at(i);
+		lds.m_Sat_LOS_Zenit = v_Sat_LOS_Zenit.at(i);
+		lds.m_Sat_Hoehe = v_Sat_Hoehe.at(i);
+		lds.m_Erdradius = v_Erdradius.at(i);
+		lds.m_radiance.assign(rads.begin() + i * no_of_pix, rads.begin() + (i + 1) * no_of_pix);
+		lds.m_error.assign(errs.begin() + i * no_of_pix, errs.begin() + (i + 1) * no_of_pix);
+		Limbdaten.push_back(lds);
+	}
+	orbit_phase = ophase;
+
+	return 0;
+}
+////////////////////////////////////////////////////////////////////////////////
+// ENDE Load_Limb_l_nc
 ////////////////////////////////////////////////////////////////////////////////
 
 inline void Nadir_Datensatz::read_from_mpl_binary(std::ifstream *stream,

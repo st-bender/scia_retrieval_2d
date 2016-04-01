@@ -54,4 +54,4 @@ add_definitions(`${CMAKE_CURRENT_SOURCE_DIR}/git_version_flags.sh`)
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -m64")
 add_executable(scia_retrieval ${scia_SRC})
 
-target_link_libraries(scia_retrieval ${linalg_LIBS} NOEM gfortran ${ncdf_LIB} gzstream z gomp)
+target_link_libraries(scia_retrieval ${linalg_LIBS} NOEM gfortran netcdf ${ncdf_LIB} gzstream z gomp)
