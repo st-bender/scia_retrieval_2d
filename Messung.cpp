@@ -297,6 +297,35 @@ double Messung::fit_NO_spec(NO_emiss &NO,
 
 	return A;
 }
+double Messung::fit_NO_spec_weighted(NO_emiss &NO,
+		std::vector<double> &x, std::vector<double> &y,
+		std::vector<double> &yerr, double &rms_err)
+{
+	int l0 = sb_Get_Index(x.at(0)) + 1;
+
+	/* prepare weighted vectors, 'yerr' should be something like sigma of y */
+	std::vector<double> yw, NO_specw;
+	std::transform(y.begin(), y.end(), yerr.begin(),
+			std::back_inserter(yw), std::divides<double>());
+	std::transform(NO.spec_scia_res.begin() + l0,
+			NO.spec_scia_res.begin() + l0 + x.size(),
+			yerr.begin(), std::back_inserter(NO_specw),
+			std::divides<double>());
+
+	/* In matrix terms we now calculate X^T*W*y = X'^T*y' and
+	 * X^T*W*X = X'^T*X' with X' = w*X and y' = w*y, where
+	 * w = sqrt(W) = 1 / yerr. */
+	double sum_gwy = std::inner_product(yw.begin(), yw.end(),
+			NO_specw.begin(), 0.0);
+	double sum_gwg = std::inner_product(NO_specw.begin(),
+			NO_specw.end(), NO_specw.begin(), 0.0);
+
+	double A = sum_gwy / sum_gwg;
+
+	rms_err = std::sqrt(1. / sum_gwg);
+
+	return A;
+}
 
 class rayl {
 	public:

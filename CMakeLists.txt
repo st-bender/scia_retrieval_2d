@@ -39,7 +39,11 @@ endif ()
 #	DOC "local libs")
 
 #link_directories(${CMAKE_SOURCE_DIR}/lib ${sp_PATH})
-link_directories(/usr/lb64 /usr/local/lib/amd64 ${loc_LIBS} ${sp_PATH})
+link_directories(/usr/lib64
+	/usr/local/lib/amd64
+	/usr/gnu/lib/amd64
+	/home/Processor/Work_SB/openblas_64.i/lib
+	${loc_LIBS} ${sp_PATH})
 
 add_definitions(-O2 -m64 -march=native -g -pedantic -Wall -Wextra -Wshadow)
 add_definitions(-std=gnu++0x)
@@ -54,4 +58,4 @@ add_definitions(`${CMAKE_CURRENT_SOURCE_DIR}/git_version_flags.sh`)
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -m64")
 add_executable(scia_retrieval ${scia_SRC})
 
-target_link_libraries(scia_retrieval ${linalg_LIBS} NOEM gfortran ${ncdf_LIB} gzstream z gomp)
+target_link_libraries(scia_retrieval ${linalg_LIBS} NOEM gfortran netcdf ${ncdf_LIB} gzstream z gomp)

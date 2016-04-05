@@ -184,6 +184,13 @@ int Load_Limb_l_mpl_binary(std::string Datei_in,
 						   std::vector<float> &Wellenlaengen,
 						   std::vector<Limb_Datensatz> &Limbdaten);
 
+int Load_Limb_l_nc(std::string Datei_in,
+				   std::string textheader[31], int &no_of_alt,
+				   int &no_of_pix, int Orbitstate[5], int Datum[6],
+				   float Center_Lat_Lon[10], float &orbit_phase,
+				   std::vector<float> &Wellenlaengen,
+				   std::vector<Limb_Datensatz> &Limbdaten);
+
 int Load_Nadir_Ascii(std::string Datei_in,
 					 std::string textheader[7], int &No_of_Messungen, int &No_of_Pix,
 					 int*& Kanal_Nr,

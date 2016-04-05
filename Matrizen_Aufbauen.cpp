@@ -106,6 +106,20 @@ MPL_Matrix Einheitsmatrix_aufbauen(int Dimension)
 	}
 	return Eins;
 } //ende Einheitsmatrix_aufbauen(int Dimension)
+////////////////////////////////////////////////////////////////////////////////
+//Funktionsstart  Diagonalmatrix_aufbauen()
+////////////////////////////////////////////////////////////////////////////////
+MPL_Matrix Diagonalmatrix_aufbauen(MPL_Matrix &V)
+{
+	// Copy all elements of V (which is thereby flattened).
+	// Ideally, V is a row or column vector.
+	MPL_Matrix Diag{V.m_Elementanzahl, V.m_Elementanzahl};
+
+	for (int i = 0; i < V.m_Elementanzahl; ++i) {
+		Diag(i, i) = V(i);
+	}
+	return Diag;
+} //ende Diagonalmatrix_aufbauen
 //==============================================================================
 //
 //==============================================================================

@@ -28,6 +28,7 @@ void Matrizen_Aufbauen(MPL_Matrix &S_Breite, MPL_Matrix &S_Hoehe,
 						class Konfiguration &Konf, int &IERR);
 void generate_Sy(MPL_Matrix &S_y, MPL_Matrix &Saeulendichten_Fehler);
 MPL_Matrix Einheitsmatrix_aufbauen(int Dimension);
+MPL_Matrix Diagonalmatrix_aufbauen(MPL_Matrix &V);
 MPL_Matrix Werte_bei_maximaler_Hoehe_Flagmatrix_Aufbauen(class Retrievalgitter &Grid);
 MPL_Matrix Differenz_von_benachbarten_Zeilenelementen_Matrix_aufbauen(int Zeilen, int Spalten);
 MPL_Matrix Differenz_von_benachbarten_Spaltenelementen_Matrix_aufbauen(int Zeilen, int Spalten);
