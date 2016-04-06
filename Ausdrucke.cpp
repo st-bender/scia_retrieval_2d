@@ -72,6 +72,7 @@ void Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	////////////////////////////////////////////////////////////////////////////
 	outfile2.open(Temp_Skript_Name.c_str());
 	outfile2 << "#!/usr/bin/env python" << std::endl;
+	outfile2 << "# vim: set fileencoding=utf-8" << std::endl;
 	outfile2 << "import numpy as np" << std::endl;
 	outfile2 << "from matplotlib import rc\n"
 			 << "import matplotlib.pyplot as plt\n"
@@ -83,7 +84,7 @@ void Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	outfile2 << "xy1 = np.genfromtxt('" << Rohdaten_Name_a.c_str() << "')\n";
 	outfile2 << "xy2 = np.genfromtxt('" << Rohdaten_Name_b.c_str() << "')\n";
 	outfile2 << "fig, ax = plt.subplots(figsize=(8.4, 5))" << std::endl;
-	outfile2 << "ax.set_title('" << title.c_str() << "')" << std::endl;
+	outfile2 << "ax.set_title(u'" << title.c_str() << "')" << std::endl;
 	outfile2 << "ax.title.set_y(1.02)" << std::endl;
 	outfile2 << "ax.set_xlabel(r'$" << xlabel.c_str() << "$')" << std::endl;
 	outfile2 << "ax.set_ylabel(r'$" << ylabel.c_str() << "$')" << std::endl;
