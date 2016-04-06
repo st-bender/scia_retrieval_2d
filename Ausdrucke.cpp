@@ -94,6 +94,7 @@ void Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	outfile2 << "from matplotlib import rc\n"
 			 << "import matplotlib.pyplot as plt\n"
 			 << "import matplotlib.ticker as tic\n"
+			 << "rc('font', size=16)\n"
 			 << "rc('axes', linewidth=1.5)\n"
 			 << "rc('lines', linewidth=1.5)\n"
 			 << "rc('mathtext', default='regular')\n"
@@ -125,8 +126,8 @@ void Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	outfile2 << "ax.spines[\"right\"].set_visible(False)\n";
 	outfile2 << "ax.xaxis.tick_bottom()\n";
 	outfile2 << "ax.yaxis.tick_left()\n";
-	outfile2 << "plt.tight_layout()\n";
-	outfile2 << "plt.savefig('" << Dateiname.c_str() << "')" << std::endl;
+	outfile2 << "fig.subplots_adjust(left=0.11, right=0.95, top=0.9, bottom=0.12)\n";
+	outfile2 << "fig.savefig('" << Dateiname.c_str() << "')" << std::endl;
 
 	////////////////////////////////////////////////////////////////////////////
 	// Pythonscript schreiben ENDE
