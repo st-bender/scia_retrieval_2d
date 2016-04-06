@@ -610,7 +610,7 @@ void Messung::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 
 		Plot_2xy(Arbeitsverzeichnis.c_str(), s1.c_str(), s2.c_str(),
 				 "wavelength [nm]",
-				 "residual radiance [10^9 ph/cm^2/s/nm]",
+				 "residual radiance [10^9 ph cm^{-2} s^{-1} nm^{-1}]",
 				 wavelengths, spec_wo_rayleigh, wavelengths, NO_fit,
 				 0, wavelengths.size() - 1,
 				 m_Zeilendichte, m_Fehler_Zeilendichten);
