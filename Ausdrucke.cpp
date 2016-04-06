@@ -13,6 +13,7 @@
 #include <sstream>
 #include <algorithm>
 #include <iterator>
+#include <regex>
 
 using std::cout;
 using std::ofstream;
@@ -67,6 +68,22 @@ void Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	buf.str(string()); // clear the stream
 	buf << "error: " << Fehler << " $cm^{-2}$";
 	string text_Fehler(buf.str());
+	/* beautify the order of magnitude converting "e+x" to 10^{x}. */
+	std::regex magregex{"e\\+(\\d+) \\$"};
+	text_messwert = std::regex_replace(text_messwert, magregex,
+			"$$\\,\\times\\,10^{$1}\\,");
+	text_Fehler = std::regex_replace(text_Fehler, magregex,
+			"$$\\,\\times\\,10^{$1}\\,");
+	/* beautify units in labels by setting the units in math mode
+	 * and substituting spaces with '\,' */
+	std::regex unitregex{"\\[(.*)\\]"};
+	/* extract units first */
+	std::string xunits{std::regex_replace(xlabel, std::regex(".*\\[(.*)\\].*"), "$$[$1]$$")};
+	std::string yunits{std::regex_replace(ylabel, std::regex(".*\\[(.*)\\].*"), "$$[$1]$$")};
+	xunits = std::regex_replace(xunits, std::regex("\\s"), "\\,");
+	yunits = std::regex_replace(yunits, std::regex("\\s"), "\\,");
+	xlabel = std::regex_replace(xlabel, unitregex, xunits);
+	ylabel = std::regex_replace(ylabel, unitregex, yunits);
 	////////////////////////////////////////////////////////////////////////////
 	// Pythonscript schreiben
 	////////////////////////////////////////////////////////////////////////////
@@ -86,8 +103,8 @@ void Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	outfile2 << "fig, ax = plt.subplots(figsize=(8.4, 5))" << std::endl;
 	outfile2 << "ax.set_title(u'" << title.c_str() << "')" << std::endl;
 	outfile2 << "ax.title.set_y(1.02)" << std::endl;
-	outfile2 << "ax.set_xlabel(r'$" << xlabel.c_str() << "$')" << std::endl;
-	outfile2 << "ax.set_ylabel(r'$" << ylabel.c_str() << "$')" << std::endl;
+	outfile2 << "ax.set_xlabel(r'" << xlabel.c_str() << "')" << std::endl;
+	outfile2 << "ax.set_ylabel(r'" << ylabel.c_str() << "')" << std::endl;
 	outfile2 << "ax.annotate(r'" << text_messwert.c_str() << "', "
 			 << "xy=(0.02, 0.94), xycoords='axes fraction', "
 			 << "horizontalalignment='left', "
