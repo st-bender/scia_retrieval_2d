@@ -52,6 +52,7 @@
 #include <vector>
 #include "gzstream.h"
 #include "netcdf.h"
+#include "hdf5.h"
 
 extern "C" {
 	void dgemm_(char *TRANSA, char *TRANSB, int *M, int *N, int *K,
@@ -134,6 +135,7 @@ public:
 	int Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor();
 	void in_Datei_speichern(std::string Dateiname, double precision = 0) const;
 	int save_to_netcdf(std::string Dateiname, bool pack = false) const;
+	int save_to_hdf5(std::string Dateiname, bool pack = false) const;
 
 	//Membervariablen
 	bool transposed;
@@ -851,6 +853,93 @@ inline int MPL_Matrix::save_to_netcdf(std::string Dateiname, bool pack) const
 		if (ret) return ret;
 	}
 	ret = nc_close(ncid);
+	return ret;
+}
+
+/* Alternative method to store the matrix contents as a (compressed) hdf5.
+ * It should be portable and saves a few bytes on disk space.
+ * If requested (pack == true), the data will be further packed using the
+ * integer representation of the data (here using 32 bit unsigned int) as
+ * described in http://nco.sourceforge.net/nco.html#Packed-data .
+ * In contrast to the netcdf4 variant above, we don't need to create
+ * dimensions first and canjust save the data as is. However, we have to
+ * define chunksizes by hand for the compression to work and the files seem to
+ * be slightly larger than their netcdf4 counterparts. */
+inline int MPL_Matrix::save_to_hdf5(std::string Dateiname, bool pack) const
+{
+	hid_t file_id, plist_id, dataset_id, dataspace_id;  /* identifiers */
+	hsize_t dims[2], cdims[2] = { 128, 128 };
+	herr_t ret;
+
+	dims[0] = m_Zeilenzahl;
+	dims[1] = m_Spaltenzahl;
+
+	/* Open an existing file. */
+	file_id = H5Fcreate(Dateiname.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
+			H5P_DEFAULT);
+
+	dataspace_id = H5Screate_simple(2, dims, NULL);
+	plist_id = H5Pcreate(H5P_DATASET_CREATE);
+	ret = H5Pset_chunk(plist_id, 2, cdims);
+	if (ret) return ret;
+	ret = H5Pset_shuffle(plist_id);
+	if (ret) return ret;
+	ret = H5Pset_deflate(plist_id, 9);
+	if (ret) return ret;
+
+	if (pack) {
+		/* Manually convert to packed 32 bit integer data, see
+		 * http://nco.sourceforge.net/nco.html#Packed-data
+		 * for details. */
+		unsigned pack_ndrv = 4294967293U; // pack ndrv for int32
+		std::vector<unsigned> idata;
+		auto minmax =
+			std::minmax_element(m_Elemente, m_Elemente + m_Elementanzahl);
+		double scale_factor = (*minmax.second - *minmax.first) / pack_ndrv;
+		double add_offset = 0.5 * (*minmax.second + *minmax.first);
+		hid_t attribute_id;
+
+		std::transform(m_Elemente, m_Elemente + m_Elementanzahl,
+				std::back_inserter(idata),
+				[=](double upk) { return (upk - add_offset) / scale_factor; });
+
+		dataset_id = H5Dcreate2(file_id, "data", H5T_STD_I32LE, dataspace_id,
+				H5P_DEFAULT, plist_id, H5P_DEFAULT);
+
+		attribute_id = H5Acreate2(dataset_id, "scale_factor", H5T_IEEE_F32LE,
+				dataspace_id, H5P_DEFAULT, H5P_DEFAULT);
+		ret = H5Awrite(attribute_id, H5T_NATIVE_DOUBLE, &scale_factor);
+		if (ret) return ret;
+		attribute_id = H5Acreate2(dataset_id, "add_offset", H5T_IEEE_F32LE,
+				dataspace_id, H5P_DEFAULT, H5P_DEFAULT);
+		ret = H5Awrite(attribute_id, H5T_NATIVE_DOUBLE, &add_offset);
+		if (ret) return ret;
+		ret = H5Aclose(attribute_id);
+		if (ret) return ret;
+		/* Write the dataset. */
+		ret = H5Dwrite(dataset_id, H5T_NATIVE_INT, H5S_ALL, H5S_ALL,
+				H5P_DEFAULT, idata.data());
+		if (ret) return ret;
+	} else {
+		/* We set the hdf5 variable to single precisions although the
+		 * actual data are double precision. According to the hdf5
+		 * documentation, they are converted automatically? Although we lose
+		 * precision this way, it should still be fine for all practical
+		 * purposes. It also saves some disk space. */
+		dataset_id = H5Dcreate2(file_id, "data", H5T_IEEE_F32LE, dataspace_id,
+				H5P_DEFAULT, plist_id, H5P_DEFAULT);
+		/* Write the dataset. */
+		ret = H5Dwrite(dataset_id, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL,
+				H5P_DEFAULT, m_Elemente);
+		if (ret) return ret;
+	}
+	ret = H5Dclose(dataset_id);
+	if (ret) return ret;
+	ret = H5Pclose(plist_id);
+	if (ret) return ret;
+	ret = H5Sclose(dataspace_id);
+	if (ret) return ret;
+	ret = H5Fclose(file_id);
 	return ret;
 }
 
