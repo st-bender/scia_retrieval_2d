@@ -50,6 +50,7 @@
 #include<fstream>
 #include <algorithm>
 #include "gzstream.h"
+#include "netcdf.h"
 
 extern "C" {
 	void dgemm_(char *TRANSA, char *TRANSB, int *M, int *N, int *K,
@@ -131,6 +132,7 @@ public:
 	//int simple_Gaussdiagonalisierung(); siehe ganz oben
 	int Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor();
 	void in_Datei_speichern(std::string Dateiname, double precision = 0) const;
+	int save_to_netcdf(std::string Dateiname, bool pack = false) const;
 
 	//Membervariablen
 	bool transposed;
@@ -784,5 +786,71 @@ inline void MPL_Matrix::in_Datei_speichern(std::string Dateiname, double precisi
 ////////////////////////////////////////////////////////////////////////////////
 // ENDE in_Datei_speichern
 ////////////////////////////////////////////////////////////////////////////////
+
+/* Alternative method to store the matrix contents as a (compressed) netcdf4.
+ * It should be portable and saves a few bytes on disk space.
+ * If requested (pack == true), the data will be further packed using the
+ * integer representation of the data (here using 32 bit unsigned int) as
+ * described in http://nco.sourceforge.net/nco.html#Packed-data . */
+inline int MPL_Matrix::save_to_netcdf(std::string Dateiname, bool pack) const
+{
+	int ncid, dimidx, dimidy, varid, ret;
+	int dimids[2];
+	int shuffle = NC_SHUFFLE;
+	int deflate = 1;
+	int deflate_level = 9;
+	ret = nc_create(Dateiname.c_str(), NC_NETCDF4 | NC_CLOBBER, &ncid);
+	if (ret) return ret;
+	ret = nc_def_dim(ncid, "rows", m_Zeilenzahl, &dimidx);
+	if (ret) return ret;
+	ret = nc_def_dim(ncid, "cols", m_Spaltenzahl, &dimidy);
+	if (ret) return ret;
+	dimids[0] = dimidx;
+	dimids[1] = dimidy;
+	if (pack) {
+		/* Manually convert to packed 32 bit integer data, see
+		 * http://nco.sourceforge.net/nco.html#Packed-data
+		 * for details. */
+		unsigned pack_ndrv = 4294967293U; // pack ndrv for int32
+		std::vector<unsigned> idata;
+		auto minmax =
+			std::minmax_element(m_Elemente, m_Elemente + m_Elementanzahl);
+		double scale_factor = (*minmax.second - *minmax.first) / pack_ndrv;
+		double add_offset = 0.5 * (*minmax.second + *minmax.first);
+		std::transform(m_Elemente, m_Elemente + m_Elementanzahl,
+				std::back_inserter(idata),
+				[=](double upk) { return (upk - add_offset) / scale_factor; });
+		ret = nc_def_var(ncid, "data", NC_UINT, 2, dimids, &varid);
+		if (ret) return ret;
+		ret = nc_put_att_double(ncid, varid, "scale_factor", NC_DOUBLE, 1, &scale_factor);
+		if (ret) return ret;
+		ret = nc_put_att_double(ncid, varid, "add_offset", NC_DOUBLE, 1, &add_offset);
+		if (ret) return ret;
+		ret = nc_def_var_deflate(ncid, varid, shuffle, deflate, deflate_level);
+		if (ret) return ret;
+		ret = nc_enddef(ncid);
+		if (ret) return ret;
+		ret = nc_put_var_uint(ncid, varid, idata.data());
+		if (ret) return ret;
+	} else {
+		/* We set the netcdf variable to single precisions although the
+		 * actual data are double precision. According to the libnetcdf
+		 * documentation, they are converted automatically. Although we lose
+		 * precision this way, it should still be fine for all practical
+		 * purposes. It also saves some disk space. */
+		ret = nc_def_var(ncid, "data", NC_FLOAT, 2, dimids, &varid);
+		if (ret) return ret;
+		ret = nc_def_var_deflate(ncid, varid, shuffle, deflate, deflate_level);
+		if (ret) return ret;
+		ret = nc_enddef(ncid);
+		if (ret) return ret;
+		/* We still have to tell libnetcdf that the memory block contains
+		 * double precision floats. */
+		ret = nc_put_var_double(ncid, varid, &m_Elemente[0]);
+		if (ret) return ret;
+	}
+	ret = nc_close(ncid);
+	return ret;
+}
 
 #endif /* MPLMATRIX_HH_ */
