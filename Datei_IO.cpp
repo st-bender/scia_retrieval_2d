@@ -614,9 +614,9 @@ void Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
 	FILE *outfile1;
 	string Dateiname1, Dateiname2, Dateiname2_meas, Dateiname3;
 	Dateiname1 = Dateiname_out + "_Dichten.txt";
-	Dateiname2 = Dateiname_out + "_Sx.txt.gz";
-	Dateiname2_meas = Dateiname_out + "_Sx_meas.txt.gz";
-	Dateiname3 = Dateiname_out + "_AKM.txt.gz";
+	Dateiname2 = Dateiname_out + "_Sx.nc";
+	Dateiname2_meas = Dateiname_out + "_Sx_meas.nc";
+	Dateiname3 = Dateiname_out + "_AKM.nc";
 	int i;
 	double stabw = 0;
 	//Datei öffnen
@@ -658,14 +658,14 @@ void Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
 	//S_x
 	// Zeilenweise ausgeben
 	if (save_sx) {
-		S_x.in_Datei_speichern(Dateiname2);
-		S_x_meas.in_Datei_speichern(Dateiname2_meas);
+		S_x.save_to_netcdf(Dateiname2);
+		S_x_meas.save_to_netcdf(Dateiname2_meas);
 	}
 
 	//AKM
 	// Zeilenweise ausgeben
 	if (save_akm)
-		AKM.in_Datei_speichern(Dateiname3);
+		AKM.save_to_netcdf(Dateiname3);
 }
 ////////////////////////////////////////////////////////////////////////////////
 // Funktionsende Ausgabe_Dichten
