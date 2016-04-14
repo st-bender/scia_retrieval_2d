@@ -125,13 +125,13 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 				dark_sig = Limbdaten[no_of_alt - 1].m_radiance[j];
 				dark_err = Limbdaten[no_of_alt - 1].m_error[j];
 			}
-			ml.m_Intensitaeten.push_back(
-					Limbdaten[offset + direction * i].m_radiance[j]
-					- dark_sig);
+			double signal = Limbdaten[offset + direction * i].m_radiance[j];
+			double relerr = Limbdaten[offset + direction * i].m_error[j];
+			ml.m_Intensitaeten.push_back(signal - dark_sig);
 			ml.m_Intensitaeten_relativer_Fehler.push_back(
-					std::sqrt(Limbdaten[offset + direction * i].m_error[j]
-							* Limbdaten[offset + direction * i].m_error[j]
-					+ dark_err * dark_err));
+					std::sqrt(((relerr * signal) * (relerr * signal) +
+					(dark_err * dark_sig) * (dark_err * dark_sig))) /
+					ml.m_Intensitaeten.back());
 			ml.m_Sonne.push_back(0.);
 			ml.m_Intensitaeten_durch_piF.push_back(0.);
 			ml.m_Intensitaeten_durch_piF_Gamma.push_back(0.);
