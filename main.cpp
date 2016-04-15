@@ -1634,9 +1634,9 @@ int main(int argc, char *argv[])
 				Ausgewertete_Limbmessung_NO, result);
 #ifdef DEBUG_NO_MATRICES
 		// debug output
-		Dichte_n_NO.in_Datei_speichern(Dateiname_out + "_Dichten.txt.gz");
-		S_y_NO.in_Datei_speichern(Dateiname_out + "_Sy.txt.gz");
-		AMF_NO.in_Datei_speichern(Dateiname_out + "_AMF.txt.gz");
+		Dichte_n_NO.save_to_netcdf(Dateiname_out + "_Dichten.nc");
+		S_y_NO.save_to_netcdf(Dateiname_out + "_Sy.nc");
+		AMF_NO.save_to_netcdf(Dateiname_out + "_AMF.nc");
 #endif /* DEBUG_NO_MATRICES */
 	}
 

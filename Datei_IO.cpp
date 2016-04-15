@@ -125,13 +125,13 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 				dark_sig = Limbdaten[no_of_alt - 1].m_radiance[j];
 				dark_err = Limbdaten[no_of_alt - 1].m_error[j];
 			}
-			ml.m_Intensitaeten.push_back(
-					Limbdaten[offset + direction * i].m_radiance[j]
-					- dark_sig);
+			double signal = Limbdaten[offset + direction * i].m_radiance[j];
+			double relerr = Limbdaten[offset + direction * i].m_error[j];
+			ml.m_Intensitaeten.push_back(signal - dark_sig);
 			ml.m_Intensitaeten_relativer_Fehler.push_back(
-					std::sqrt(Limbdaten[offset + direction * i].m_error[j]
-							* Limbdaten[offset + direction * i].m_error[j]
-					+ dark_err * dark_err));
+					std::sqrt(((relerr * signal) * (relerr * signal) +
+					(dark_err * dark_sig) * (dark_err * dark_sig))) /
+					ml.m_Intensitaeten.back());
 			ml.m_Sonne.push_back(0.);
 			ml.m_Intensitaeten_durch_piF.push_back(0.);
 			ml.m_Intensitaeten_durch_piF_Gamma.push_back(0.);
@@ -614,9 +614,9 @@ void Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
 	FILE *outfile1;
 	string Dateiname1, Dateiname2, Dateiname2_meas, Dateiname3;
 	Dateiname1 = Dateiname_out + "_Dichten.txt";
-	Dateiname2 = Dateiname_out + "_Sx.txt.gz";
-	Dateiname2_meas = Dateiname_out + "_Sx_meas.txt.gz";
-	Dateiname3 = Dateiname_out + "_AKM.txt.gz";
+	Dateiname2 = Dateiname_out + "_Sx.nc";
+	Dateiname2_meas = Dateiname_out + "_Sx_meas.nc";
+	Dateiname3 = Dateiname_out + "_AKM.nc";
 	int i;
 	double stabw = 0;
 	//Datei öffnen
@@ -658,14 +658,14 @@ void Ausgabe_Dichten(string Dateiname_out, Retrievalgitter &Grid,
 	//S_x
 	// Zeilenweise ausgeben
 	if (save_sx) {
-		S_x.in_Datei_speichern(Dateiname2);
-		S_x_meas.in_Datei_speichern(Dateiname2_meas);
+		S_x.save_to_netcdf(Dateiname2);
+		S_x_meas.save_to_netcdf(Dateiname2_meas);
 	}
 
 	//AKM
 	// Zeilenweise ausgeben
 	if (save_akm)
-		AKM.in_Datei_speichern(Dateiname3);
+		AKM.save_to_netcdf(Dateiname3);
 }
 ////////////////////////////////////////////////////////////////////////////////
 // Funktionsende Ausgabe_Dichten

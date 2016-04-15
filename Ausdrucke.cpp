@@ -13,6 +13,7 @@
 #include <sstream>
 #include <algorithm>
 #include <iterator>
+#include <regex>
 
 using std::cout;
 using std::ofstream;
@@ -67,15 +68,33 @@ void Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	buf.str(string()); // clear the stream
 	buf << "error: " << Fehler << " $cm^{-2}$";
 	string text_Fehler(buf.str());
+	/* beautify the order of magnitude converting "e+x" to 10^{x}. */
+	std::regex magregex{"e\\+(\\d+) \\$"};
+	text_messwert = std::regex_replace(text_messwert, magregex,
+			"$$\\,\\times\\,10^{$1}\\,");
+	text_Fehler = std::regex_replace(text_Fehler, magregex,
+			"$$\\,\\times\\,10^{$1}\\,");
+	/* beautify units in labels by setting the units in math mode
+	 * and substituting spaces with '\,' */
+	std::regex unitregex{"\\[(.*)\\]"};
+	/* extract units first */
+	std::string xunits{std::regex_replace(xlabel, std::regex(".*\\[(.*)\\].*"), "$$[$1]$$")};
+	std::string yunits{std::regex_replace(ylabel, std::regex(".*\\[(.*)\\].*"), "$$[$1]$$")};
+	xunits = std::regex_replace(xunits, std::regex("\\s"), "\\,");
+	yunits = std::regex_replace(yunits, std::regex("\\s"), "\\,");
+	xlabel = std::regex_replace(xlabel, unitregex, xunits);
+	ylabel = std::regex_replace(ylabel, unitregex, yunits);
 	////////////////////////////////////////////////////////////////////////////
 	// Pythonscript schreiben
 	////////////////////////////////////////////////////////////////////////////
 	outfile2.open(Temp_Skript_Name.c_str());
 	outfile2 << "#!/usr/bin/env python" << std::endl;
+	outfile2 << "# vim: set fileencoding=utf-8" << std::endl;
 	outfile2 << "import numpy as np" << std::endl;
 	outfile2 << "from matplotlib import rc\n"
 			 << "import matplotlib.pyplot as plt\n"
 			 << "import matplotlib.ticker as tic\n"
+			 << "rc('font', size=16)\n"
 			 << "rc('axes', linewidth=1.5)\n"
 			 << "rc('lines', linewidth=1.5)\n"
 			 << "rc('mathtext', default='regular')\n"
@@ -83,10 +102,10 @@ void Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	outfile2 << "xy1 = np.genfromtxt('" << Rohdaten_Name_a.c_str() << "')\n";
 	outfile2 << "xy2 = np.genfromtxt('" << Rohdaten_Name_b.c_str() << "')\n";
 	outfile2 << "fig, ax = plt.subplots(figsize=(8.4, 5))" << std::endl;
-	outfile2 << "ax.set_title('" << title.c_str() << "')" << std::endl;
+	outfile2 << "ax.set_title(u'" << title.c_str() << "')" << std::endl;
 	outfile2 << "ax.title.set_y(1.02)" << std::endl;
-	outfile2 << "ax.set_xlabel(r'$" << xlabel.c_str() << "$')" << std::endl;
-	outfile2 << "ax.set_ylabel(r'$" << ylabel.c_str() << "$')" << std::endl;
+	outfile2 << "ax.set_xlabel(r'" << xlabel.c_str() << "')" << std::endl;
+	outfile2 << "ax.set_ylabel(r'" << ylabel.c_str() << "')" << std::endl;
 	outfile2 << "ax.annotate(r'" << text_messwert.c_str() << "', "
 			 << "xy=(0.02, 0.94), xycoords='axes fraction', "
 			 << "horizontalalignment='left', "
@@ -107,8 +126,8 @@ void Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	outfile2 << "ax.spines[\"right\"].set_visible(False)\n";
 	outfile2 << "ax.xaxis.tick_bottom()\n";
 	outfile2 << "ax.yaxis.tick_left()\n";
-	outfile2 << "plt.tight_layout()\n";
-	outfile2 << "plt.savefig('" << Dateiname.c_str() << "')" << std::endl;
+	outfile2 << "fig.subplots_adjust(left=0.11, right=0.95, top=0.9, bottom=0.12)\n";
+	outfile2 << "fig.savefig('" << Dateiname.c_str() << "')" << std::endl;
 
 	////////////////////////////////////////////////////////////////////////////
 	// Pythonscript schreiben ENDE

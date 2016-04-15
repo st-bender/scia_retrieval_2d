@@ -568,7 +568,7 @@ void Messung::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 			<< std::setw(3) << std::setfill('0') << std::setprecision(0)
 			<< std::fixed << m_Hoehe_TP << "km_"
 			<< std::setw(3) << std::setfill('0') << std::setprecision(0)
-			<< std::fixed << m_Latitude_TP << "deg.pdf";
+			<< std::internal << std::fixed << m_Latitude_TP << "deg.pdf";
 		if (m_Messung_ID != -1) {
 		buf.str(string());
 		buf << Datnam.c_str() << "_" << Spezfenst.m_Spezies_Name.c_str()
@@ -591,12 +591,12 @@ void Messung::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 			s_OrbNum = Datnam.substr(pos_suffix - 5, 5);
 		}
 		buf.str(std::string());
-		buf << "Orbit " << s_OrbNum.c_str() << ", "
-			<< NO.get_vu() << NO.get_vl() << ","
+		buf << "Orbit " << s_OrbNum.c_str() << ", NO ("
+			<< NO.get_vu() << ", " << NO.get_vl() << "), "
 			<< std::resetiosflags(std::ios::fixed)
-			<< " lat: " << std::setprecision(3) << m_Latitude_TP << " deg N,"
-			<< " lon: " << std::setprecision(3) << m_Longitude_TP << " deg E,"
-			<< " alt: " << std::setprecision(3) << m_Hoehe_TP << " km";
+			<< std::setprecision(3) << m_Latitude_TP << u8"°N, "
+			<< std::setprecision(3) << m_Longitude_TP << u8"°E, "
+			<< std::setprecision(3) << m_Hoehe_TP << " km";
 		if (m_Messung_ID != -1) {
 		buf.str(string());
 		buf << "Orbit " << s_OrbNum.c_str() << ", Nadir GP:"
@@ -609,7 +609,7 @@ void Messung::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 
 		Plot_2xy(Arbeitsverzeichnis.c_str(), s1.c_str(), s2.c_str(),
 				 "wavelength [nm]",
-				 "residual radiance [10^9 ph/cm^2/s/nm]",
+				 "residual radiance [10^9 ph cm^{-2} s^{-1} nm^{-1}]",
 				 wavelengths, spec_wo_rayleigh, wavelengths, NO_fit,
 				 0, wavelengths.size() - 1,
 				 m_Zeilendichte, m_Fehler_Zeilendichten);
