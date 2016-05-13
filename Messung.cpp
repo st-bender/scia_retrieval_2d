@@ -292,7 +292,7 @@ double Messung::fit_NO_spec(NO_emiss &NO,
 			std::back_inserter(diffs), lin_x(-A));
 
 	double err = std::inner_product(diffs.begin(), diffs.end(),
-			diffs.begin(), 0.0) / diffs.size();
+			diffs.begin(), 0.0) / (diffs.size() - 1) / sum_gg;
 	rms_err = std::sqrt(err);
 
 	return A;
@@ -519,12 +519,11 @@ void Messung::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 			y.begin() + i_peakwin_min - i_basewin_l_min + N_peak,
 			baseline_rad.begin() + i_peakwin_min - i_basewin_l_min,
 			peakwin_rad.begin(), std::minus<double>());
-	double rms_err_peak, rms_err_tot;
+	double rms_err_peak;
 	m_Zeilendichte = fit_NO_spec(NO, peakwin_wl, peakwin_rad,
 			rms_err_peak);
-	rms_err_tot = std::sqrt((N_base * rms_err_base * rms_err_base
-		+ N_peak * rms_err_peak * rms_err_peak) / (N_base + N_peak));
-	m_Fehler_Zeilendichten = rms_err_tot / NO.get_spec_scia_max();
+	m_Fehler_Zeilendichten = std::sqrt(rms_err_base * rms_err_base
+			+ rms_err_peak * rms_err_peak);
 
 	if (mache_Fit_Plots == "ja" && Spezfenst.plot_fit) {
 		// prepare data to plot
