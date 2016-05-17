@@ -156,7 +156,7 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 		// wegen Parallelisierung
 		// sin und cos sind langsame Funktionen...
 		// werden aber hierbei auch nicht oft eingesetzt
-		if (mlit->m_Hoehe_TP < Konf.m_BOA || mlit->m_Hoehe_TP > Konf.m_TOA)
+		if (mlit->m_Hoehe_TP < Konf.m_min_TP || mlit->m_Hoehe_TP > Konf.m_max_TP)
 			// skip if tangent point is too low or too high
 			continue;
 		mlit->Deklinationswinkel_bestimmen(); //Sonnenlatitude
