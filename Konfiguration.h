@@ -41,6 +41,7 @@ public:
 	std::vector<double> m_Grid_ext_high;
 	double m_TOA; //top of Atmosphere, ab hier keine Absorption mehr
 	double m_BOA; //bottom of Atmosphere, darunte nur noch Absorption
+	double m_min_TP, m_max_TP; // tangent points altitude range to use
 	// Switches für Selection Rules //////////////////////////////////
 	unsigned short m_Nadir_only;  // switch 0 ja 1 nein
 	unsigned short m_Nachtmessung;// switch 0 ja 1 nein

@@ -39,6 +39,7 @@ Konfiguration::Konfiguration() :
 	m_Pfad_f107_index("DATA/spidr_f107_2000-2012.dat"),
 	m_MinLat(-90.0), m_MaxLat(90.0), m_NLat(72),
 	m_TOA(200.0), m_BOA(50.0),
+	m_max_TP(200.0), m_min_TP(50.0),
 	skip_SAA(true), SAA_cutoff(8.8e10),
 	atmo_Temp(200.), NO_apriori(0),
 	NO_apriori_bottom(40.0), NO_apriori_top(160.0),
@@ -206,6 +207,18 @@ void Konfiguration::Konfiguration_einlesen(std::string file)
 			getline(infile, Zeile);
 			ss << Zeile;
 			ss >> m_BOA;
+			continue;
+		}
+		if (Zeile == "min TP alt") {
+			getline(infile, Zeile);
+			ss << Zeile;
+			ss >> m_min_TP;
+			continue;
+		}
+		if (Zeile == "max TP alt") {
+			getline(infile, Zeile);
+			ss << Zeile;
+			ss >> m_max_TP;
 			continue;
 		}
 		// Selection rules /////
@@ -462,6 +475,9 @@ void Konfiguration::Konfiguration_anzeigen()
 		cout << "Erweiterung: " << i + 1 << " von " << this->m_Grid_ext_low[i] << " bis " << this->m_Grid_ext_high[i] << "\n";
 	}
 	cout << "TOA: " << this->m_TOA << "\n";
+	cout << "BOA: " << this->m_BOA << "\n";
+	cout << "TP altitude range used: " << this->m_min_TP
+			<< " km to " << this->m_max_TP << " km \n";
 	cout << "Nadir Only: " << this->m_Nadir_only << "\n";
 	cout << "Nachtmessung: " << this->m_Nachtmessung << "\n";
 	cout << "Geolocation: " << this->m_Geolocation << "\n";
