@@ -513,7 +513,6 @@ void Konfiguration::Konfiguration_anzeigen()
 	cout << "S_apriori: ";
 	for (int i = 0; i < this->m_Anzahl_der_Emitter; i++) {
 		cout << m_Retrieval_Kovarianzen[i + 0 * m_Anzahl_der_Emitter] << "\t";
-
 	}
 	cout << "\n";
 	cout << "S_lat: ";
