@@ -38,7 +38,7 @@ struct nrlmsise_flags {
  *   switches[i]:
  *    i - explanation
  *   -----------------
- *    0 - output in centimeters instead of meters
+ *    0 - output in meters and kilograms instead of centimeters and grams
  *    1 - F10.7 effect on mean
  *    2 - time independent
  *    3 - symmetrical annual
@@ -86,7 +86,7 @@ struct nrlmsise_input {
 	int year;      /* year, currently ignored */
 	int doy;       /* day of year */
 	double sec;    /* seconds in day (UT) */
-	double alt;    /* altitude in kilometes */
+	double alt;    /* altitude in kilometers */
 	double g_lat;  /* geodetic latitude */
 	double g_long; /* geodetic longitude */
 	double lst;    /* local apparent solar time (hours), see note below */
@@ -216,7 +216,7 @@ void ghp7 (struct nrlmsise_input *input, \
  *   and thus the loading time is increased.
  */
 #ifdef INLINE
-#define __inline_double inline double
+#define __inline_double static inline double
 #else
 #define __inline_double double
 #endif

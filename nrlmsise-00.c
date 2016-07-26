@@ -309,7 +309,7 @@ void spline (double *x, double *y, int n, double yp1, double ypn, double *y2) {
 	double *u;
 	double sig, p, qn, un;
 	int i, k;
-	u=malloc(sizeof(double)*n);
+	u=malloc(sizeof(double)*(unsigned int)n);
 	if (u==NULL) {
 		printf("Out Of Memory in spline - ERROR");
 		return;
@@ -602,9 +602,7 @@ double globe7(double *p, struct nrlmsise_input *input, struct nrlmsise_flags *fl
  *       Upper Thermosphere Parameters */
 	double t[15];
 	int i,j;
-	int sw9=1;
 	double apd;
-	double xlong;
 	double tloc;
 	double c, s, c2, c4, s2;
 	double sr = 7.2722E-5;
@@ -612,7 +610,6 @@ double globe7(double *p, struct nrlmsise_input *input, struct nrlmsise_flags *fl
 	double dr = 1.72142E-2;
 	double hr = 0.2618;
 	double cd32, cd18, cd14, cd39;
-	double p32, p18, p14, p39;
 	double df;
 	double f1, f2;
 	double tinf;
@@ -621,11 +618,6 @@ double globe7(double *p, struct nrlmsise_input *input, struct nrlmsise_flags *fl
 	tloc=input->lst;
 	for (j=0;j<14;j++)
 		t[j]=0;
-	if (flags->sw[9]>0)
-		sw9=1;
-	else if (flags->sw[9]<0)
-		sw9=-1;
-	xlong = input->g_long;
 
 	/* calculate legendre polynomials */
 	c = sin(input->g_lat * dgtr);
@@ -673,10 +665,6 @@ double globe7(double *p, struct nrlmsise_input *input, struct nrlmsise_flags *fl
 	cd18 = cos(2.0*dr*(input->doy-p[17]));
 	cd14 = cos(dr*(input->doy-p[13]));
 	cd39 = cos(2.0*dr*(input->doy-p[38]));
-	p32=p[31];
-	p18=p[17];
-	p14=p[13];
-	p39=p[38];
 
 	/* F10.7 EFFECT */
 	df = input->f107 - input->f107A;
@@ -819,7 +807,7 @@ double globe7(double *p, struct nrlmsise_input *input, struct nrlmsise_flags *fl
 	/* parms not used: 82, 89, 99, 139-149 */
 	tinf = p[30];
 	for (i=0;i<14;i++)
-		tinf = tinf + abs(flags->sw[i+1])*t[i];
+		tinf = tinf + fabs(flags->sw[i+1])*t[i];
 	return tinf;
 }
 
@@ -836,7 +824,6 @@ double glob7s(double *p, struct nrlmsise_input *input, struct nrlmsise_flags *fl
 	double t[14];
 	double tt;
 	double cd32, cd18, cd14, cd39;
-	double p32, p18, p14, p39;
 	int i,j;
 	double dr=1.72142E-2;
 	double dgtr=1.74533E-2;
@@ -853,10 +840,6 @@ double glob7s(double *p, struct nrlmsise_input *input, struct nrlmsise_flags *fl
 	cd18 = cos(2.0*dr*(input->doy-p[17]));
 	cd14 = cos(dr*(input->doy-p[13]));
 	cd39 = cos(2.0*dr*(input->doy-p[38]));
-	p32=p[31];
-	p18=p[17];
-	p14=p[13];
-	p39=p[38];
 
 	/* F10.7 */
 	t[0] = p[21]*dfa;
@@ -920,7 +903,7 @@ double glob7s(double *p, struct nrlmsise_input *input, struct nrlmsise_flags *fl
 	}
 	tt=0;
 	for (i=0;i<14;i++)
-		tt+=abs(flags->sw[i+1])*t[i];
+		tt+=fabs(flags->sw[i+1])*t[i];
 	return tt;
 }
 
@@ -1096,7 +1079,7 @@ void ghp7(struct nrlmsise_input *input, struct nrlmsise_flags *flags, struct nrl
 			zi = 14.28 * (3.64 - pl);
 		else if ((pl>-4) && (pl<=-2))
 			zi = 12.72 * (4.32 -pl);
-		else if (pl<=-4)
+		else
 			zi = 25.3 * (0.11 - pl);
 		cl = input->g_lat/90.0;
 		cl2 = cl*cl;
@@ -1166,8 +1149,8 @@ void gts7(struct nrlmsise_input *input, struct nrlmsise_flags *flags, struct nrl
 	int mn1 = 5;
 	double g0;
 	double tlb;
-	double s, z0, t0, tr12;
-	double db01, db04, db14, db16, db28, db32, db40, db48;
+	double s;
+	double db01, db04, db14, db16, db28, db32, db40;
 	double zh28, zh04, zh16, zh32, zh40, zh01, zh14;
 	double zhm28, zhm04, zhm16, zhm32, zhm40, zhm01, zhm14;
 	double xmd;
@@ -1225,10 +1208,6 @@ void gts7(struct nrlmsise_input *input, struct nrlmsise_flags *flags, struct nrl
 		meso_tn1[4]=ptm[4]*ptl[3][0];
 		meso_tgn1[1]=ptm[8]*pma[8][0]*meso_tn1[4]*meso_tn1[4]/(pow((ptm[4]*ptl[3][0]),2.0));
 	}
-
-	z0 = zn1[3];
-	t0 = meso_tn1[3];
-	tr12 = 1.0;
 
 	/* N2 variation factor at Zlb */
 	g28=flags->sw[21]*globe7(pd[2], input, flags);
@@ -1466,13 +1445,12 @@ void gts7(struct nrlmsise_input *input, struct nrlmsise_flags *flags, struct nrl
 
 	/* total mass density */
 	output->d[5] = 1.66E-24*(4.0*output->d[0]+16.0*output->d[1]+28.0*output->d[2]+32.0*output->d[3]+40.0*output->d[4]+ output->d[6]+14.0*output->d[7]);
-	db48=1.66E-24*(4.0*db04+16.0*db16+28.0*db28+32.0*db32+40.0*db40+db01+14.0*db14);
-
 
 
 	/* temperature */
 	z = sqrt(input->alt*input->alt);
 	ddum = densu(z,1.0, tinf, tlb, 0.0, 0.0, &output->t[1], ptm[5], s, mn1, zn1, meso_tn1, meso_tgn1);
+	(void) ddum; /* silence gcc */
 	if (flags->sw[0]) {
 		for(i=0;i<9;i++)
 			output->d[i]=output->d[i]*1.0E6;
