@@ -240,7 +240,8 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 					NO_new.read_luque_data_from_file(Konf.m_Pfad_NO_parameters);
 					NO_new.calc_excitation();
 					NO_new.calc_line_emissivities();
-					NO_new.pol_corr(mlit->m_TP_SZA, mlit->m_TP_rel_SAA, 0.17, -0.2);
+					if (Konf.NO_pol_correction)
+						NO_new.pol_corr(mlit->m_TP_SZA, mlit->m_TP_rel_SAA, 0.17, -0.2);
 					NO_new.scia_convolve(Rohdaten.at(0));
 					double wl_abs = NO_new.get_wl_abs_vu_0();
 					double wl_emiss = NO_new.get_wl_emiss_vu_vl();
