@@ -39,9 +39,10 @@ Konfiguration::Konfiguration() :
 	m_Pfad_f107_index("DATA/spidr_f107_2000-2012.dat"),
 	m_MinLat(-90.0), m_MaxLat(90.0), m_NLat(72),
 	m_TOA(200.0), m_BOA(50.0),
-	m_max_TP(200.0), m_min_TP(50.0),
+	m_min_TP(50.0), m_max_TP(200.0),
 	skip_SAA(true), SAA_cutoff(8.8e10),
-	atmo_Temp(200.), NO_apriori(0),
+	atmo_Temp(200.), NO_pol_correction(true),
+	NO_apriori(0),
 	NO_apriori_bottom(40.0), NO_apriori_top(160.0),
 	NO_apriori_scale(1.0), NO_apriori_smoothness(4.0),
 	retrieval_algo(1), MLT(false)
@@ -411,6 +412,12 @@ void Konfiguration::Konfiguration_einlesen(std::string file)
 			}
 			continue;
 		}
+		if (Zeile == "NO polarisation correction") {
+			getline(infile, Zeile);
+			ss << Zeile;
+			ss >> NO_pol_correction;
+			continue;
+		}
 		if (Zeile == "NO apriori") {
 			getline(infile, Zeile);
 			ss << Zeile;
@@ -544,6 +551,7 @@ void Konfiguration::Konfiguration_anzeigen()
 		cout << "v_u = " << NO_v_u.at(i) << ", v_l = " << NO_v_l.at(i)
 			 << ", v_l_abs = " << NO_v_l_abs.at(i) << endl;
 	}
+	cout << "NO polarisation correction: " << NO_pol_correction << endl;
 	cout << "NO apriori: ";
 	switch (NO_apriori) {
 	case 1:
