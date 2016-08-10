@@ -7,6 +7,7 @@
 #include "Sonnenspektrum.h"
 #include <string>
 #include<fstream>
+#include <sstream>
 #include<iostream>
 #include <iterator>
 #include <algorithm>
@@ -63,8 +64,10 @@ int Sonnenspektrum::Laden_SCIA(string Dateiname, string Fallback_Dateiname)
 {
 	// Lädt das Sonnenspektrum das mit SCIAMACHY während des gleichen Orbits
 	// gemessen wird
+	int nh = 5;
 	double read_wl, read_int, dummy;
 	string s_dummy;
+	std::stringstream ss;
 	std::ifstream infile(Dateiname.c_str());
 	if (!(infile.is_open())) {
 		cout << "Achtung!!!: verwende Fallbackspektrum\n";
@@ -75,8 +78,14 @@ int Sonnenspektrum::Laden_SCIA(string Dateiname, string Fallback_Dateiname)
 		cout << "kritischer Fehler!!!\n";
 		return 1;
 	}
-	// 6 dummyzeilen
-	for (int i = 0; i < 6; i++) {
+	// check first line for number of header lines
+	getline(infile, s_dummy);
+	if (s_dummy[0] != '#') {
+		ss << s_dummy;
+		ss >> nh;
+	}
+	// nh dummyzeilen
+	for (int i = 0; i < nh; i++) {
 		getline(infile, s_dummy);
 	}
 
@@ -87,8 +96,18 @@ int Sonnenspektrum::Laden_SCIA(string Dateiname, string Fallback_Dateiname)
 	}
 
 	getline(infile, s_dummy); // Rest der Zeile
+	if (nh > 5) {
+		// "D0" files contain more lines with
+		// meta data which we don't need.
+		for (int i = 0; i < 3; ++i)
+			getline(infile, s_dummy);
+	}
 	for (int i = 0; i < m_Anzahl_WL; i++) {
-		infile >> read_wl >> read_int >> dummy;
+		if (nh > 5)
+			// "D0" files contain only tow columns.
+			infile >> read_wl >> read_int;
+		else
+			infile >> read_wl >> read_int >> dummy;
 		m_Wellenlaengen.push_back(read_wl);
 		m_Intensitaeten.push_back(read_int);
 	}
