@@ -612,10 +612,18 @@ int main(int argc, char *argv[])
 	//
 	////////////////////////////////////////////////////////////////////////////
 
-	// convolve high resolution solar spectra with the sciamachy resolution function
-	// TODO: replace the detection by a more sophisticated method.
-	if (Solspec.m_Anzahl_WL > 4000)
+	// Convolve high resolution solar spectra with the Sciamachy resolution
+	// function if the median wavelength spacing is below 0.05 nm.
+	// The typical wavelength spacing for Sciamachy spectra is about 0.1 nm.
+	std::vector<double> solwl_diffs;
+	std::adjacent_difference (Solspec.m_Wellenlaengen.begin(),
+			Solspec.m_Wellenlaengen.end(), std::back_inserter(solwl_diffs));
+	std::nth_element(solwl_diffs.begin(),
+			solwl_diffs.begin() + solwl_diffs.size() / 2, solwl_diffs.end());
+	if (solwl_diffs.at(solwl_diffs.size() / 2) < 0.05) {
+		std::cerr << "Binning high resolution solar spectrum." << std::endl;
 		Solspec.saoref_to_sciamachy();
+	}
 
 	time(&Teil1_End);
 	T1_Dauer = Teil1_End - Teil1_Start;
