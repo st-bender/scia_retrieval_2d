@@ -353,7 +353,7 @@ double Messung::fit_rayleigh_and_interp_peaks(Sonnenspektrum &sol_spec,
 	const double peak_threshold = 6.e10;
 	int i_min = sb_Get_closest_index(wl_min);
 	int i_max = sb_Get_closest_index(wl_max);
-	std::vector<double> fit_spec, ones(i_max - i_min + 1, 1.);
+	std::vector<double> fit_spec_sig, fit_spec_rayl;
 
 	for (int i = i_min; i < i_max + 1; ++i) {
 		double sol_i = sol_spec.m_Int_interpoliert.at(i);
@@ -371,8 +371,10 @@ double Messung::fit_rayleigh_and_interp_peaks(Sonnenspektrum &sol_spec,
 			// exclude the previous, the current, and the next point.
 			// That means we pop the last one and don't include the current
 			// one, and interpolate the next point of the fit spectrum.
-			if (!fit_spec.empty())
-				fit_spec.pop_back();
+			if (!fit_spec_sig.empty())
+				fit_spec_sig.pop_back();
+			if (!fit_spec_rayl.empty())
+				fit_spec_rayl.pop_back();
 			// interpolate three points of the peak linearly
 			double y0 = m_Intensitaeten.at(i - 2);
 			double yN = m_Intensitaeten.at(i + 2);
@@ -382,11 +384,11 @@ double Messung::fit_rayleigh_and_interp_peaks(Sonnenspektrum &sol_spec,
 			// done interpolating
 			++i;
 		} else {
-			fit_spec.push_back(rad_i / (sigma_rayleigh(wl) * sol_i));
+			fit_spec_sig.push_back(rad_i);
+			fit_spec_rayl.push_back(sigma_rayleigh(wl) * sol_i);
 		}
 	}
-	ones.resize(fit_spec.size(), 1.);
-	double f_sol_fit = fit_spectra(ones, fit_spec);
+	double f_sol_fit = fit_spectra(fit_spec_rayl, fit_spec_sig);
 	if (debug == true)
 		std::cout << "# solar fit factor = " << f_sol_fit << std::endl;
 	if (f_sol_fit < 0.)
