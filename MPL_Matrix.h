@@ -49,6 +49,7 @@
 #include <cstdio>
 #include<fstream>
 #include <algorithm>
+#include <vector>
 #include "gzstream.h"
 #include "netcdf.h"
 
