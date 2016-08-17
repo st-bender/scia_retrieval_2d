@@ -91,6 +91,7 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 	if (dark_sig > 6.e9)
 		has_straylight = true;
 	// */
+	std::cerr << "dark signal: " << dark_sig << std::endl;
 
 	// 4. Erstellung des Übergabevektors
 	vector<Messung_Limb> Ergebnisvektor;
