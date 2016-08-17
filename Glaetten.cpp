@@ -52,7 +52,7 @@ void smooth_data(int Datasize, double *Data, int Anzahl_Nachbarn_eine_Seite,
 	delete[] Data_old;
 }
 
-double clamp(double d, double min, double max)
+double my_clamp(double d, double min, double max)
 {
 	const double t = d < min ? min : d;
 	return t > max ? max : t;
@@ -93,7 +93,7 @@ double hardstep(double x)
  */
 double smoothstep(double x)
 {
-	x = clamp(x, 0., 1.);
+	x = my_clamp(x, 0., 1.);
 	// Evaluate polynomial
 	return x*x*(3 - 2*x);
 }
@@ -103,7 +103,7 @@ double smoothstep(double x)
  */
 double smootherstep(double x)
 {
-	x = clamp(x, 0., 1.);
+	x = my_clamp(x, 0., 1.);
 	// Evaluate polynomial
 	return x*x*x*(x*(x*6 - 15) + 10);
 }
