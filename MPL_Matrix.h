@@ -847,7 +847,7 @@ inline int MPL_Matrix::save_to_netcdf(std::string Dateiname, bool pack) const
 		if (ret) return ret;
 		/* We still have to tell libnetcdf that the memory block contains
 		 * double precision floats. */
-		ret = nc_put_var_double(ncid, varid, &m_Elemente[0]);
+		ret = nc_put_var_double(ncid, varid, m_Elemente);
 		if (ret) return ret;
 	}
 	ret = nc_close(ncid);
