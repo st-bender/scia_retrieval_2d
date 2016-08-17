@@ -11,6 +11,7 @@
 void smooth_data(int Datasize, double *Data, int Anzahl_Nachbarn_eine_Seite,
 		int Zahl_der_Iterationen);
 
+double my_clamp(double d, double min, double max);
 double my_phi(double x);
 double hardstep(double x);
 double smoothstep(double x);
