@@ -127,6 +127,8 @@ irgendetwas nicht funktioniert, mich kontaktieren
 #include <cstdlib>        // für atoi
 #include <sstream>
 #include <iomanip>
+#include <vector>
+#include <glob.h>
 //eigene
 #include "Konfiguration.h"
 #include "Liniendaten.h"
@@ -196,6 +198,45 @@ double slit_func_gauss(double fwhm, double x0, double x)
 	double n = 1. / (std::sqrt(2. * M_PI) * s);
 	double dxs = (x - x0) / s;
 	return n * std::exp(-0.5 * dxs * dxs);
+}
+
+/* C++ wrapper for glob(3c) */
+inline std::vector<std::string> glob(const std::string& pattern)
+{
+	glob_t glob_result;
+	std::vector<std::string> ret;
+
+	glob(pattern.c_str(), 0, NULL, &glob_result);
+
+	for(unsigned int i = 0; i < glob_result.gl_pathc; ++i) {
+		ret.push_back(std::string(glob_result.gl_pathv[i]));
+	}
+
+	globfree(&glob_result);
+	return ret;
+}
+
+/* We try to determine the orbit solar spectrum by looking at the first line of
+ * the orbit list and extracting the path name from it. We use this then to
+ * construct a glob pattern for the solar spectrum of this orbit, which should
+ * reside in the same directory. */
+std::vector<std::string> find_orb_sol_paths(Orbitliste orb_list)
+{
+	// read first (full) filename
+	std::string orb_path{orb_list.m_Dateinamen.front()};
+	// extract orbit number as string
+	std::string orb_num_str{orb_path.substr(orb_path.find_last_of(".") - 9, 5)};
+	// construct solar path glob pattern
+	std::string sol_glob_str{orb_path.substr(0, orb_path.find_last_of("/\\")) +
+			"/SCIA_solar_*_" + orb_num_str + ".dat"};
+
+	std::vector<std::string> orb_sol_path_list = glob(sol_glob_str);
+	// debug output
+	if (!orb_sol_path_list.empty())
+		std::copy(orb_sol_path_list.begin(), orb_sol_path_list.end(),
+			std::ostream_iterator<std::string>(std::cerr, "\n"));
+
+	return orb_sol_path_list;
 }
 
 // argc ist Die Anzahl der Kommandozeilenparameter
