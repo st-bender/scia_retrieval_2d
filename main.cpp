@@ -329,6 +329,40 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 	////////////////////////////////////////////////////////////////////////////
+	// Orbitliste Laden
+	//
+	// Die Orbitliste ist so zu erstellen, dass die erste Datei eine Limb Datei
+	// ist Da dieses Verfahren eh nur sinnvoll ist, wenn Limbmessungen
+	// vorhanden sind, sollte dies kein Problem sein
+	// TODO Die Orbitliste sollte nach Limb und Nadir sortiert werden. Danach
+	// muss sie nach Zeit sortiert sein( Wichtig für Einteilung der Boxen
+	// etc.... falls Ordner nach Dateinamen sortiert, so sollte das immer
+	// stimmen) Die Frage ist, ob man die Orbitliste so übernimmt, oder ob man
+	// hier nochmal sortiert. Bis jetzt ist die Orbitliste schon automatisch
+	// so. Allerdings wär eine Sortierung der Orbitliste ein geringer
+	// Zeitaufwand
+	//
+	////////////////////////////////////////////////////////////////////////////
+	Nachricht_Schreiben("Lade Orbitliste...", 3, Prioritylevel);
+	Orbitliste Orbitlist;
+	if (Orbitlist.Liste_Laden(Konf.m_Pfad_Datei_mit_Dateinamen_fuer_Messungen_eines_Orbits) != 0) {
+		cout << "Programmabbruch\n";
+		return -1;
+	}
+	// Zur Überprüfung Orbitliste in Datei schreiben
+	//Orbitlist.In_Datei_Speichern("CHECKDATA/Orbitliste_Ueberpruefung.txt");
+	// der ordner CHECKDATA muss vorher existieren
+	//cout<<Orbitlist.m_Dateinamen[Orbitlist.m_Dateinamen.size()-1];//
+	//TODO Das ist leer...Es muss beim erstellen der Orbitliste
+	// sichergestellt werden, dass die letzte Zeile kein\n enthält!!!!
+	// -> Funktion funktioniert... aber Orbitliste Datei muss  ordentlich
+	// erzeugt sein
+	////////////////////////////////////////////////////////////////////////////
+	//
+	// Orbitliste Ist geladen
+	//
+	////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	//
 	// Sonnenspektrum ist bestimmt
 	//
@@ -577,40 +611,6 @@ int main(int argc, char *argv[])
 	vector<Ausgewertete_Messung_Nadir> Ausgewertete_Nadirmessung_FeI;
 	vector<Ausgewertete_Messung_Limb> Ausgewertete_Limbmessung_NO;
 	vector<Ausgewertete_Messung_Nadir> Ausgewertete_Nadirmessung_NO;
-	////////////////////////////////////////////////////////////////////////////
-	// Orbitliste Laden
-	//
-	// Die Orbitliste ist so zu erstellen, dass die erste Datei eine Limb Datei
-	// ist Da dieses Verfahren eh nur sinnvoll ist, wenn Limbmessungen
-	// vorhanden sind, sollte dies kein Problem sein
-	// TODO Die Orbitliste sollte nach Limb und Nadir sortiert werden. Danach
-	// muss sie nach Zeit sortiert sein( Wichtig für Einteilung der Boxen
-	// etc.... falls Ordner nach Dateinamen sortiert, so sollte das immer
-	// stimmen) Die Frage ist, ob man die Orbitliste so übernimmt, oder ob man
-	// hier nochmal sortiert. Bis jetzt ist die Orbitliste schon automatisch
-	// so. Allerdings wär eine Sortierung der Orbitliste ein geringer
-	// Zeitaufwand
-	//
-	////////////////////////////////////////////////////////////////////////////
-	Nachricht_Schreiben("Lade Orbitliste...", 3, Prioritylevel);
-	Orbitliste Orbitlist;
-	if (Orbitlist.Liste_Laden(Konf.m_Pfad_Datei_mit_Dateinamen_fuer_Messungen_eines_Orbits) != 0) {
-		cout << "Programmabbruch\n";
-		return -1;
-	}
-	// Zur Überprüfung Orbitliste in Datei schreiben
-	//Orbitlist.In_Datei_Speichern("CHECKDATA/Orbitliste_Ueberpruefung.txt");
-	// der ordner CHECKDATA muss vorher existieren
-	//cout<<Orbitlist.m_Dateinamen[Orbitlist.m_Dateinamen.size()-1];//
-	//TODO Das ist leer...Es muss beim erstellen der Orbitliste
-	// sichergestellt werden, dass die letzte Zeile kein\n enthält!!!!
-	// -> Funktion funktioniert... aber Orbitliste Datei muss  ordentlich
-	// erzeugt sein
-	////////////////////////////////////////////////////////////////////////////
-	//
-	// Orbitliste Ist geladen
-	//
-	////////////////////////////////////////////////////////////////////////////
 
 	// Convolve high resolution solar spectra with the Sciamachy resolution
 	// function if the median wavelength spacing is below 0.05 nm.
