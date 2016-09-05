@@ -616,7 +616,7 @@ int main(int argc, char *argv[])
 	// function if the median wavelength spacing is below 0.05 nm.
 	// The typical wavelength spacing for Sciamachy spectra is about 0.1 nm.
 	std::vector<double> solwl_diffs;
-	std::adjacent_difference (Solspec.m_Wellenlaengen.begin(),
+	std::adjacent_difference(Solspec.m_Wellenlaengen.begin(),
 			Solspec.m_Wellenlaengen.end(), std::back_inserter(solwl_diffs));
 	std::nth_element(solwl_diffs.begin(),
 			solwl_diffs.begin() + solwl_diffs.size() / 2, solwl_diffs.end());
