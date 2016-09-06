@@ -350,26 +350,6 @@ int main(int argc, char *argv[])
 	Konf.m_Pfad_Solar_Spektrum = Solarpfad;
 
 	////////////////////////////////////////////////////////////////////////////
-	//
-	// Sonnenspektrum bestimmen
-	//
-	////////////////////////////////////////////////////////////////////////////
-	Nachricht_Schreiben("Lade Sonnenspektrum...", 3, Prioritylevel);
-	Sonnenspektrum Solspec;
-	if (Solspec.Laden_SCIA(Konf.m_Pfad_Solar_Spektrum, Konf.m_Pfad_Solar_Fallback_Spektrum) != 0) {
-		cout << "Programmabbruch\n";
-		return -1;
-	}
-	//Überprüfen, ob einlesen erfolgreich war
-	//Solspec.Speichern_was_geladen_wurde("CHECKDATA/Sonne_so_wie_geladen.txt");
-	//ok -> funktioniert
-	Nachricht_Schreiben("Lade Referenzsonnenspektrum...", 3, Prioritylevel);
-	Sonnenspektrum sol_ref;
-	if (sol_ref.Laden_SCIA(sol_refname, Konf.m_Pfad_Solar_Fallback_Spektrum) != 0) {
-		cout << "Programmabbruch\n";
-		return -1;
-	}
-	////////////////////////////////////////////////////////////////////////////
 	// Orbitliste Laden
 	//
 	// Die Orbitliste ist so zu erstellen, dass die erste Datei eine Limb Datei
@@ -403,6 +383,29 @@ int main(int argc, char *argv[])
 	// Orbitliste Ist geladen
 	//
 	////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
+	//
+	// Sonnenspektrum bestimmen
+	//
+	////////////////////////////////////////////////////////////////////////////
+	std::vector<std::string> orb_sol_paths = find_orb_sol_paths(Orbitlist);
+	if (Konf.m_Pfad_Solar_Spektrum == "auto" && !orb_sol_paths.empty())
+		Konf.m_Pfad_Solar_Spektrum = orb_sol_paths.front();
+	Nachricht_Schreiben("Lade Sonnenspektrum...", 3, Prioritylevel);
+	Sonnenspektrum Solspec;
+	if (Solspec.Laden_SCIA(Konf.m_Pfad_Solar_Spektrum, Konf.m_Pfad_Solar_Fallback_Spektrum) != 0) {
+		cout << "Programmabbruch\n";
+		return -1;
+	}
+	//Überprüfen, ob einlesen erfolgreich war
+	//Solspec.Speichern_was_geladen_wurde("CHECKDATA/Sonne_so_wie_geladen.txt");
+	//ok -> funktioniert
+	Nachricht_Schreiben("Lade Referenzsonnenspektrum...", 3, Prioritylevel);
+	Sonnenspektrum sol_ref;
+	if (sol_ref.Laden_SCIA(sol_refname, Konf.m_Pfad_Solar_Fallback_Spektrum) != 0) {
+		cout << "Programmabbruch\n";
+		return -1;
+	}
 	////////////////////////////////////////////////////////////////////////////
 	//
 	// Sonnenspektrum ist bestimmt
