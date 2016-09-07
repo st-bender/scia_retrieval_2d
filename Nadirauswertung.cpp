@@ -139,7 +139,7 @@ int Nadir_Auswertung(Orbitliste &Orbitlist,
 					std::cerr << "# wls: abs = " << wl_abs << ", emiss = "
 						<< wl_emiss << std::endl;
 					mnit->slant_column_NO(NO_new, mache_Fit_Plots, Solspec, k,
-							*sfit, Arbeitsverzeichnis);
+							*sfit, Arbeitsverzeichnis, Konf);
 					Ergebnis = mnit->Ergebnis_Zusammenfassen();
 					Ergebnis.m_Wellenlaenge
 						= ldit->m_Wellenlaenge

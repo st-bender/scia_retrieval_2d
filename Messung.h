@@ -39,6 +39,7 @@ public:
 	void slant_column_NO(class NO_emiss &NO, std::string mache_Fit_Plots,
 			class Sonnenspektrum &sol_spec, int index,
 			class Speziesfenster &Spezfenst, std::string Arbeitsverzeichnis,
+			class Konfiguration &Konf,
 			bool debug = true);
 
 	//Hilfsfunktionen  //nur intern aufrufen!!!

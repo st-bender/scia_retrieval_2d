@@ -399,6 +399,7 @@ double Messung::fit_rayleigh_and_interp_peaks(Sonnenspektrum &sol_spec,
 void Messung::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 		Sonnenspektrum &sol_spec, int index,
 		Speziesfenster &Spezfenst, std::string Arbeitsverzeichnis,
+		Konfiguration &Konf,
 		bool debug)
 {
 	// I/(piFGamma)=integral(AMF n ds) mit AMF = s exp(-tau) ...aber zu der
@@ -454,9 +455,21 @@ void Messung::slant_column_NO(NO_emiss &NO, string mache_Fit_Plots,
 			<< std::endl;
 	}
 
-	f_sol_fit = fit_rayleigh_and_interp_peaks(sol_spec,
+	switch (Konf.NO_rayleigh_fit_method) {
+	case 0: // no fit
+		f_sol_fit = 0.;
+		break;
+	case 2: // fixed window
+		f_sol_fit = fit_rayleigh_and_interp_peaks(sol_spec,
+			Konf.NO_rayleigh_fit_window.first,
+			Konf.NO_rayleigh_fit_window.second, debug);
+		break;
+	case 1: // per NO gamma band fit (standard up to v5.0)
+	default:
+		f_sol_fit = fit_rayleigh_and_interp_peaks(sol_spec,
 			min_lambda_NO - base_offset_o,
 			max_lambda_NO + base_offset_o, debug);
+	}
 	// reassign because m_Intensitaeten may have changed
 	rad = m_Intensitaeten;
 
