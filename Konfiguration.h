@@ -76,6 +76,8 @@ public:
 	unsigned no_NO_transitions;
 	std::vector<int> NO_v_u, NO_v_l, NO_v_l_abs;
 	bool NO_pol_correction; // polarisation correction of the NO lines
+	unsigned short NO_rayleigh_fit_method;
+	std::pair<double, double> NO_rayleigh_fit_window;
 	unsigned short NO_apriori;
 	double NO_apriori_bottom, NO_apriori_top;
 	/* NO apriori scaling factor and transition width in km
