@@ -40,6 +40,7 @@ using std::vector;
 int Limb_Auswertung(Orbitliste &Orbitlist,
 					int l,
 					Sonnenspektrum &Solspec,
+					Sonnenspektrum &sol_ref,
 					vector<Speziesfenster>& Spezies_Fenster,
 					int &counter_Nachtmessungen,
 					int &counter_NLC_detektiert,
@@ -85,6 +86,27 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 
 	Solspec.Interpolieren(Rohdaten[0]);
 	//Solspec.nicht_interpolieren();
+
+	double sol_fac = 1.;
+	if (Konf.m_Pfad_Solar_Correction_Factors == "auto") {
+		sol_ref.Interpolieren(Rohdaten[0]);
+
+		ptrdiff_t wl_idx_low = std::distance(Solspec.m_WL_interpoliert.begin(),
+				std::lower_bound(Solspec.m_WL_interpoliert.begin(),
+					Solspec.m_WL_interpoliert.end(), 238)) - 1;
+		ptrdiff_t wl_idx_hi = std::distance(Solspec.m_WL_interpoliert.begin(),
+				std::lower_bound(Solspec.m_WL_interpoliert.begin(),
+					Solspec.m_WL_interpoliert.end(), 282)) + 1;
+
+		std::vector<double> sol_spec_part(
+				Solspec.m_Int_interpoliert.begin() + wl_idx_low,
+				Solspec.m_Int_interpoliert.begin() + wl_idx_hi);
+		std::vector<double> sol_ref_part(
+				sol_ref.m_Int_interpoliert.begin() + wl_idx_low,
+				sol_ref.m_Int_interpoliert.begin() + wl_idx_hi);
+
+		sol_fac = fit_spectra(sol_ref_part, sol_spec_part);
+	}
 
 	// Testen, ob die Interpolation erfolgreich war
 	//Solspec.Speichern("CHECKDATA/Sonne_interpoliert_auf_826.txt"); ->ok
@@ -221,9 +243,11 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 					Ausgewertete_Limbmessung_FeI.push_back(Ergebnis);
 				}
 				if (sfit->m_Spezies_Name == "NO") {
-					double sol_fac = spidr_value_from_file(mlit->m_Jahr,
+					if (Konf.m_Pfad_Solar_Correction_Factors != "auto") {
+						sol_fac = spidr_value_from_file(mlit->m_Jahr,
 							mlit->m_Monat, mlit->m_Tag,
 							Konf.m_Pfad_Solar_Correction_Factors, 1.0);
+					}
 					std::cerr << "# solar factor = " << sol_fac << std::endl;
 					// create new object, same transition but modelled temperature
 					double temp = mlit->msise_temperature(Konf);

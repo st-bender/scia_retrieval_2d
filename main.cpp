@@ -699,6 +699,11 @@ int main(int argc, char *argv[])
 	int counter_Richtungsvektor_nicht_ok = 0;
 	int counter_Nachtmessungen_Nadir = 0;
 	int counter_Nadir_Nacht_Dateien = 0;
+	/* After setting up the NO parameters, we don't need the highly
+	 * resolved solar spectrum anymore. Instead, we use it to obtain
+	 * the scaling factor from comparing it to the measured solar
+	 * spectrum. Therefore, we degrade its resolution first. */
+	sol_ref.saoref_to_sciamachy();
 	// Aus jeder Messung egal ob Limb oder Nadir die Säulendichte für jede
 	// Linie jeder Spezies bestimmen
 	for (l = 0; l < Orbitlist.m_Dateinamen.size(); l++) {
@@ -716,7 +721,7 @@ int main(int argc, char *argv[])
 			//cerr<<"limbauswertung start\n";
 			//NotTODO Die Säulendichtebestimmung kann deutlich schneller
 			//geschehen, Verbesserungen hier sind aber irrelevant
-			Limb_Auswertung(Orbitlist, l, Solspec, Spezies_Fenster,
+			Limb_Auswertung(Orbitlist, l, Solspec, sol_ref, Spezies_Fenster,
 							counter_Nachtmessungen, counter_NLC_detektiert,
 							counter_Richtungsvektor_nicht_ok,
 							Arbeitsverzeichnis, mache_Fit_Plots_limb,

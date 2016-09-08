@@ -17,6 +17,7 @@
 int Limb_Auswertung(class Orbitliste &Orbitlist,
 					int l,
 					class Sonnenspektrum &Solspec,
+					class Sonnenspektrum &sol_ref,
 					std::vector<class Speziesfenster> &Spezies_Fenster,
 					int &counter_Nachtmessungen,
 					int &counter_NLC_detektiert,
