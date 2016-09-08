@@ -220,7 +220,7 @@ inline std::vector<std::string> glob(const std::string& pattern)
  * the orbit list and extracting the path name from it. We use this then to
  * construct a glob pattern for the solar spectrum of this orbit, which should
  * reside in the same directory. */
-std::vector<std::string> find_orb_sol_paths(Orbitliste orb_list)
+std::vector<std::string> find_orb_sol_paths(Orbitliste orb_list, bool debug = false)
 {
 	// read first (full) filename
 	std::string orb_path{orb_list.m_Dateinamen.front()};
@@ -232,7 +232,7 @@ std::vector<std::string> find_orb_sol_paths(Orbitliste orb_list)
 
 	std::vector<std::string> orb_sol_path_list = glob(sol_glob_str);
 	// debug output
-	if (!orb_sol_path_list.empty())
+	if (debug && !orb_sol_path_list.empty())
 		std::copy(orb_sol_path_list.begin(), orb_sol_path_list.end(),
 			std::ostream_iterator<std::string>(std::cerr, "\n"));
 
@@ -389,8 +389,10 @@ int main(int argc, char *argv[])
 	//
 	////////////////////////////////////////////////////////////////////////////
 	std::vector<std::string> orb_sol_paths = find_orb_sol_paths(Orbitlist);
-	if (Konf.m_Pfad_Solar_Spektrum == "auto" && !orb_sol_paths.empty())
+	if (Konf.m_Pfad_Solar_Spektrum == "auto" && !orb_sol_paths.empty()) {
 		Konf.m_Pfad_Solar_Spektrum = orb_sol_paths.front();
+		std::cerr << "Solarpfad: " << Konf.m_Pfad_Solar_Spektrum << std::endl;
+	}
 	Nachricht_Schreiben("Lade Sonnenspektrum...", 3, Prioritylevel);
 	Sonnenspektrum Solspec;
 	if (Solspec.Laden_SCIA(Konf.m_Pfad_Solar_Spektrum, Konf.m_Pfad_Solar_Fallback_Spektrum) != 0) {
