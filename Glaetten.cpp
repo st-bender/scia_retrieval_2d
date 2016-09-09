@@ -404,8 +404,9 @@ double interpolate(std::vector<double> &x, std::vector<double> &y, double x0)
 	std::vector<double>::iterator x_it;
 	x_it = std::upper_bound(x.begin(), x.end(), x0);
 
-	if (x_it == x.begin()) return y.at(0);
-	if (x_it == x.end()) return *(y.end() - 1);
+	// constant extrapolation outside the range
+	if (x_it == x.begin()) return y.front();
+	if (x_it == x.end()) return y.back();
 
 	i = distance(x.begin(), x_it) - 1;
 
