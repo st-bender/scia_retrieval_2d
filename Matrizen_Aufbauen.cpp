@@ -1881,7 +1881,9 @@ void SNOE_apriori_NO(Retrievalgitter &grid, Ausgewertete_Messung_Limb &aml,
 
 	// initialise altitude array
 	for (int i = 0; i < __params_MOD_nz; i++)
-		__dynam_MOD_zkm[i] = grid.m_Gitter[i * grid.m_Anzahl_Breiten].m_Hoehe;
+		__dynam_MOD_zkm[i] =
+			my_clamp(grid.m_Gitter[i * grid.m_Anzahl_Breiten].m_Hoehe,
+				Konf.NO_apriori_bottom, Konf.NO_apriori_top);
 
 	// run the model for each latitude
 	for (int i = 0; i < grid.m_Anzahl_Breiten; i++) {
@@ -1912,7 +1914,9 @@ void regression_apriori_NO(Retrievalgitter &grid, Ausgewertete_Messung_Limb &aml
 {
 	std::vector<double> alt_vec;
 	for (int i = 0; i < grid.m_Anzahl_Hoehen; i++)
-		alt_vec.push_back(grid.m_Gitter[i * grid.m_Anzahl_Breiten].m_Hoehe);
+		alt_vec.push_back(
+			my_clamp(grid.m_Gitter[i * grid.m_Anzahl_Breiten].m_Hoehe,
+				Konf.NO_apriori_bottom, Konf.NO_apriori_top));
 
 	for (int j = 0; j < grid.m_Anzahl_Breiten; j++) {
 		double lat = grid.m_Gitter[j].m_Breite;
