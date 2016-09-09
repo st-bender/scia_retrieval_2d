@@ -385,7 +385,7 @@ double Messung::fit_rayleigh_and_interp_peaks(Sonnenspektrum &sol_spec,
 			++i;
 		} else {
 			fit_spec_sig.push_back(rad_i);
-			fit_spec_rayl.push_back(sigma_rayleigh(wl) * sol_i);
+			fit_spec_rayl.push_back(rayl(1.)(wl, sol_i));
 		}
 	}
 	double f_sol_fit = fit_spectra(fit_spec_rayl, fit_spec_sig);
