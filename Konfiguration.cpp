@@ -37,6 +37,7 @@ Konfiguration::Konfiguration() :
 	m_Pfad_Ap_index("DATA/spidr_ap_2000-2012.dat"),
 	m_Pfad_Kp_index("DATA/spidr_kp_2000-2012.dat"),
 	m_Pfad_f107_index("DATA/spidr_f107_2000-2012.dat"),
+	m_Pfad_f107a_index("DATA/spidr_f107a_2000-2012.dat"),
 	m_MinLat(-90.0), m_MaxLat(90.0), m_NLat(72),
 	m_TOA(200.0), m_BOA(50.0),
 	m_min_TP(50.0), m_max_TP(200.0),
@@ -142,6 +143,10 @@ void Konfiguration::Konfiguration_einlesen(std::string file)
 		}
 		if (Zeile == "f10.7 index file") {
 			getline(infile, m_Pfad_f107_index);
+			continue;
+		}
+		if (Zeile == "f10.7a index file") {
+			getline(infile, m_Pfad_f107a_index);
 			continue;
 		}
 		if (Zeile == "Absorption wavelengths") {

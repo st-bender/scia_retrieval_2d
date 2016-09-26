@@ -26,6 +26,7 @@ public:
 	std::string m_Pfad_Ap_index;
 	std::string m_Pfad_Kp_index;
 	std::string m_Pfad_f107_index;
+	std::string m_Pfad_f107a_index;
 	std::vector<double> m_AbsorptionsWL_der_Atmosphaerengase;
 	// Input_Data ////////////////////////////////////////////////////
 	std::string m_Pfad_Datei_mit_Dateinamen_fuer_Messungen_eines_Orbits;
