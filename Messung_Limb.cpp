@@ -824,7 +824,7 @@ double Messung_Limb::msise_temperature(Konfiguration &Konf)
 	input.g_lat = m_Latitude_TP;
 	input.g_long = m_Longitude_TP;
 	// local apparent solar time (quick default)
-	input.lst = input.sec / 3600. + input.g_long / 15.;
+	input.lst = std::fmod(input.sec / 3600. + input.g_long / 15., 24.);
 
 	// solar data from spidr data files
 	double f107 = spidr_value_from_file(m_Jahr, m_Monat, m_Tag,
