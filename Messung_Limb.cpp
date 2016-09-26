@@ -829,11 +829,14 @@ double Messung_Limb::msise_temperature(Konfiguration &Konf)
 	// solar data from spidr data files
 	double f107 = spidr_value_from_file(m_Jahr, m_Monat, m_Tag,
 			Konf.m_Pfad_f107_index);
+	double f107a = spidr_value_from_file(m_Jahr, m_Monat, m_Tag,
+			Konf.m_Pfad_f107a_index);
 	double ap = spidr_value_from_file(m_Jahr, m_Monat, m_Tag,
 			Konf.m_Pfad_Ap_index);
-	std::cout << "# msis parameters: f10.7 = " << f107
+	std::cout << "# msis parameters: lst = " << input.lst
+		<<", f10.7 = " << f107 << ", f10.7a = " << f107a
 		<< ", ap = " << ap << std::endl;
-	input.f107A = f107;
+	input.f107A = f107a;
 	input.f107 = f107;
 	input.ap = ap;
 
