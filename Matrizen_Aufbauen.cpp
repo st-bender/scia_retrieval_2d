@@ -1864,9 +1864,9 @@ void SNOE_apriori_NO(Retrievalgitter &grid, Ausgewertete_Messung_Limb &aml,
 
 	// get solar data from the spidr input files
 	__params_MOD_f107 = spidr_value_from_file(aml.m_Jahr, aml.m_Monat,
-			aml.m_Tag, Konf.m_Pfad_f107_adj_index);
+			aml.m_Tag, Konf.m_Pfad_f107_adj_index, 150, 1);
 	__params_MOD_kp = spidr_value_from_file(aml.m_Jahr, aml.m_Monat,
-			aml.m_Tag, Konf.m_Pfad_Kp_index);
+			aml.m_Tag, Konf.m_Pfad_Kp_index, 3, 1);
 	std::cout << "# snoe parameters: f10.7 = " << __params_MOD_f107
 		<< ", kp = " << __params_MOD_kp << std::endl;
 
