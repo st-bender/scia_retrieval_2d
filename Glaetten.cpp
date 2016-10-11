@@ -434,7 +434,8 @@ double n_air(double wl)
 /* the rough rayleigh cross section for wl in [nm] in [cm^2] */
 double sigma_rayleigh(double wl)
 {
-	/* ref.: planet. space sci., vol. 32, no. 6, pp 785-790, 1984 */
+	/* ref.: planet. space sci., vol. 32, no. 6, pp. 785--790, 1984
+	 * http://dx.doi.org/10.1016/0032-0633(84)90102-8 */
 	std::vector<double> wl_Fk{ 200, 205, 210, 215, 220, 225, 230, 240, 250, 260,
 		270, 280, 290, 300, 310, 320, 330, 340, 350, 360, 370, 380, 390, 400,
 		450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000 };
