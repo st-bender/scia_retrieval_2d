@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <vector>
+#include <deque>
 #include <iterator>
 #include <numeric>
 #include <algorithm>
@@ -453,9 +454,10 @@ double shift_wavelength(double wl)
 	return wl / n_air(wl);
 }
 double spidr_value_from_file(int year, int month, int day,
-		std::string filename, double defvalue)
+		std::string filename, double defvalue, unsigned lag)
 {
 	double ret = defvalue;
+	std::deque<double> lagged_vals;
 	std::string line, date;
 	std::stringstream ss;
 	size_t pos;
@@ -473,13 +475,30 @@ double spidr_value_from_file(int year, int month, int day,
 	}
 	while (std::getline(f, line)) {
 		pos = line.find(date);
-		if (pos != std::string::npos) {
+		if (pos == std::string::npos && lag > 0) {
 			std::istringstream iss(line);
 			std::string dummy1, dummy2;
+			double val;
 			// skip the first two items (date and time)
 			iss >> dummy1 >> dummy2;
 			// the third is what we need
-			iss >> ret;
+			iss >> val;
+			lagged_vals.push_front(val);
+			if (lagged_vals.size() > lag)
+				lagged_vals.pop_back();
+		}
+		if (pos != std::string::npos) {
+			if (lag > 0)
+				ret = lagged_vals.at(lag - 1);
+			else {
+				std::istringstream iss(line);
+				std::string dummy1, dummy2;
+				// skip the first two items (date and time)
+				iss >> dummy1 >> dummy2;
+				// the third is what we need
+				iss >> ret;
+			}
+			break;
 		}
 	}
 

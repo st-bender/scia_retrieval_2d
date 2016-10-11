@@ -31,6 +31,6 @@ double n_air(double wl);
 double sigma_rayleigh(double wl);
 double shift_wavelength(double wl);
 double spidr_value_from_file(int year, int month, int day,
-		std::string filename, double defvalue = 0.0);
+		std::string filename, double defvalue = 0.0, unsigned lag = 0);
 
 #endif /* GLAETTEN_HH_ */
