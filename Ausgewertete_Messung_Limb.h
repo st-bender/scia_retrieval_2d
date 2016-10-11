@@ -38,6 +38,7 @@ public:
 	// Zwischenergebnisse
 	double m_Deklination;
 	double m_Sonnen_Longitude;
+	double m_LocalSolarTime;
 	// Wellenlänge des Übergangs
 	double m_Wellenlaenge;
 	double m_Wellenlaenge_abs;
@@ -69,6 +70,7 @@ inline void Ausgewertete_Messung_Limb::Ausgabe_auf_Bildschirm()
 	std::cout << "total_number_density     : " << "\t" << total_number_density << std::endl;
 	std::cout << "m_Deklination            : " << "\t" << m_Deklination << std::endl;
 	std::cout << "m_Sonnen_Longitude       : " << "\t" << m_Sonnen_Longitude << std::endl;
+	std::cout << "m_LocalSolarTime         : " << "\t" << m_LocalSolarTime << std::endl;
 	std::cout << "Wellenlänge des Übergangs: " << "\t" << m_Wellenlaenge << std::endl;
 	std::cout << "Jahr                     : " << "\t" << m_Jahr << std::endl;
 	std::cout << "Monat                    : " << "\t" << m_Monat << std::endl;

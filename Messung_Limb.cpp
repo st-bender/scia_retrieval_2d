@@ -869,6 +869,7 @@ Ausgewertete_Messung_Limb Messung_Limb::Ergebnis_Zusammenfassen()
 	//Zwischenergebnisse
 	aus.m_Deklination = this->m_Deklinationswinkel;
 	aus.m_Sonnen_Longitude = this->m_Sonnen_Longitude;
+	aus.m_LocalSolarTime = this->m_LocalSolarTime;
 	aus.m_Wellenlaenge = 0;
 	// Nullinitialisierung...
 	// die Wellenlänge des Übergangs steckt im Speziesfenster

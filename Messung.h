@@ -79,6 +79,7 @@ public:
 	double m_Deklinationswinkel;  // aus Datum berechenbar
 	double m_Sonnen_Longitude;
 	double m_SunEarthDistance;
+	double m_LocalSolarTime;
 	//double  m_Streuwinkel;  // ist mehrere Streuwinkel auf einer Messachse...
 							  //muss später berechnet werden
 	//double  m_SZA;          //abhängig von Deklination Uhrzeit und Lat und Lon

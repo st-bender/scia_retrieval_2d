@@ -245,6 +245,7 @@ void Messung::Sonnen_Longitude_bestimmen()
 	Stunden += (double) this->m_Sekunde / 3600.0;
 
 	this->m_Sonnen_Longitude = std::fmod(540.0 - 15.0 * Stunden, 360.);
+	this->m_LocalSolarTime = std::fmod(Stunden + m_Longitude_TP / 15., 24.);
 }
 //ENDE Sonnen_Longitude_bestimmen
 //========================================
