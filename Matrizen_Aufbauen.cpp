@@ -1899,6 +1899,19 @@ void SNOE_apriori_NO(Retrievalgitter &grid, Ausgewertete_Messung_Limb &aml,
 		}
 	}
 
+	/* "Automatic" a priori scaling:
+	 * In the case of a negative scale factor, we simply overwrite it with
+	 * F10.7 / 150. 150 is the mean F10.7 during the SNOE measurement time
+	 * period used for NOEM. This should avoid the "fixed scale factor"
+	 * problem. We set the scale factor here because we already read the F10.7
+	 * value for the NOEM model run. */
+	if (Konf.NO_apriori_scale < 0) {
+		// simply overwrite the configured scale factor
+		Konf.NO_apriori_scale = __params_MOD_f107 / 150.;
+		std::cout << "# snoe a priori auto scale: "
+			<< Konf.NO_apriori_scale << std::endl;
+	}
+
 	// cleanup
 	delete[] snoe_no;
 	delete[] __dynam_MOD_zkm;
