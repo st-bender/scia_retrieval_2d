@@ -165,21 +165,21 @@ bool Test_auf_NLC_Limb(vector<Messung_Limb> &Rohdaten, Konfiguration &Konf)
 	int Index1 = 242;
 	//Die Indizes könnte man auch ermitteln, aber die sind ja immer gleich
 	int Index2 = 727;
-	bool ist_NLC_Messung = false;
 	double mittleres_Signal[7];
 	for (int Hoehenlevel = 0; Hoehenlevel < 7; Hoehenlevel++) {
 		mittleres_Signal[Hoehenlevel] = 0;
 		for (int i = Index1; i <= Index2; i++) {
-			mittleres_Signal[Hoehenlevel] += Rohdaten[Hoehenlevel].m_Intensitaeten[i];
+			// we look at the signals from level 5 (~65 km) to 11 (~90 km)
+			mittleres_Signal[Hoehenlevel] += Rohdaten[Hoehenlevel + 5].m_Intensitaeten[i];
 		}
 		mittleres_Signal[Hoehenlevel] /= (Index2 - Index1 + 1);
 	}
 	for (int i = 0; i < 6; i++) {
 		if (mittleres_Signal[i + 1] > mittleres_Signal[i]) {
-			ist_NLC_Messung = true;
+			return true;
 		}
 	}
-	return ist_NLC_Messung;
+	return false;
 }
 //////////////////////////////////////////////////////////////////////////
 // ENDE Test_auf_NLC_Limb
