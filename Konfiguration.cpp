@@ -512,7 +512,7 @@ void Konfiguration::Konfiguration_anzeigen()
 	cout << "Nachtmessung: " << this->m_Nachtmessung << "\n";
 	cout << "Geolocation: " << this->m_Geolocation << "\n";
 	cout << "Large SZA: " << this->m_Large_SZA << "\n";
-	cout << "Mesosphärische Wolken: " << this->m_NLC << "\n";
+	cout << "Mesosphärische Wolken (NLC, PMC): " << this->m_NLC << "\n";
 	cout << "Skip SAA: " << skip_SAA << "\n";
 	cout << "Max SZA: " << this->m_Maximaler_SZA << "\n";
 	cout << "SAA cut-off: " << SAA_cutoff << "\n";
