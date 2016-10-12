@@ -1938,6 +1938,22 @@ void regression_apriori_NO(Retrievalgitter &grid, Ausgewertete_Messung_Limb &aml
 		for (int i = 0; i < grid.m_Anzahl_Hoehen; i++)
 			apriori(i * grid.m_Anzahl_Breiten + j) = NO_model.at(i);
 	}
+
+	/* "Automatic" a priori scaling:
+	 * In the case of a negative scale factor, we simply overwrite it with
+	 * F10.7 / 150. 150 is the mean F10.7 during the SNOE measurement time
+	 * period used for NOEM. This should avoid the "fixed scale factor"
+	 * problem. We read the F10.7 in the same way as we do for the NOEM
+	 * model run. */
+	if (Konf.NO_apriori_scale < 0) {
+		// get solar data from the spidr input files
+		double f107 = spidr_value_from_file(aml.m_Jahr, aml.m_Monat,
+				aml.m_Tag, Konf.m_Pfad_f107_adj_index, 150, 1);
+		// simply overwrite the configured scale factor
+		Konf.NO_apriori_scale = f107 / 150.;
+		std::cout << "# regression a priori auto scale: "
+			<< Konf.NO_apriori_scale << std::endl;
+	}
 }
 
 /* arbitrary transition using given function */
