@@ -32,6 +32,8 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 		vector<Ausgewertete_Messung_Limb> &AM_Limb, double Epsilon,
 		Konfiguration &Konf)
 {
+	// deg -> rad conversion factor
+	const double deg = M_PI / 180.;
 	// Das Epsilon gibt den Mindestabstand zweier Gitterpunkte in Breitengrad an
 
 	// ACHTUNG falls die Lats beim auf und absteigen des Satelliten zufällig
@@ -44,7 +46,8 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	//Zunächst Latitudes in einen Vektor schreiben, aber nur die, welche noch
 	//nicht vorgekommen sind Es wird davon ausgegangen, dass der Datensatz nach
 	//Zeit sortiert ist
-	vector<double> Lats_Messung, Lons_Messung;
+	vector<double> Lats_Messung;
+	vector<double> CLons_Messung, SLons_Messung;
 	vector<double>::iterator lat_it;
 	vector<Ausgewertete_Messung_Limb>::iterator aml_it;
 
@@ -61,8 +64,9 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 
 		if (!(doppelt)) {
 			Lats_Messung.push_back(aml_it->center_lat);
-			Lons_Messung.push_back(aml_it->center_lon);
-			std::cout << Lons_Messung.back() << "\t"
+			CLons_Messung.push_back(std::cos(aml_it->center_lon * deg));
+			SLons_Messung.push_back(std::sin(aml_it->center_lon * deg));
+			std::cout << aml_it->center_lon << "\t"
 				<< Lats_Messung.back() << std::endl;
 		}
 	}
@@ -90,12 +94,13 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	 */
 	// reverse the vectors for the interpolation to work
 	std::reverse(Lats_Messung.begin(), Lats_Messung.end());
-	std::reverse(Lons_Messung.begin(), Lons_Messung.end());
-	double lon0 = interpolate(Lats_Messung, Lons_Messung, 0.);
+	std::reverse(CLons_Messung.begin(), CLons_Messung.end());
+	std::reverse(SLons_Messung.begin(), SLons_Messung.end());
+	double clon0 = interpolate(Lats_Messung, CLons_Messung, 0.);
+	double slon0 = interpolate(Lats_Messung, SLons_Messung, 0.);
+	double lon0 = std::fmod(std::atan2(slon0, clon0), 2. * M_PI) / deg;
 	// emprical longitude factor
 	const double phi_fac = 11.91;
-	// deg -> rad conversion factor
-	const double deg = M_PI / 180.;
 
 	/////////////////////////////
 	// selbst gesetzt.....
