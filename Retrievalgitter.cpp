@@ -34,6 +34,8 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 {
 	// deg -> rad conversion factor
 	const double deg = M_PI / 180.;
+	// emprical longitude factor
+	const double phi_fac = 11.91;
 	// Das Epsilon gibt den Mindestabstand zweier Gitterpunkte in Breitengrad an
 
 	// ACHTUNG falls die Lats beim auf und absteigen des Satelliten zufällig
@@ -47,7 +49,7 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	//nicht vorgekommen sind Es wird davon ausgegangen, dass der Datensatz nach
 	//Zeit sortiert ist
 	vector<double> Lats_Messung;
-	vector<double> CLons_Messung, SLons_Messung;
+	vector<double> CLons0, SLons0;
 	vector<double>::iterator lat_it;
 	vector<Ausgewertete_Messung_Limb>::iterator aml_it;
 
@@ -62,10 +64,22 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 			}
 		}
 
+		/* For each "unique" point we save the latitude and the calculated
+		 * equatorial longitude lon0 according to: lon = C * tg(lat) + lon0,
+		 * which translates to: lon0 = lon - C * tg(lat).
+		 * (C is our experimental factor 11.91.)
+		 * Simply interpolating to latitude = 0 sometimes does not work because
+		 * of removed scans, e.g. from the SAA, or because of lack of data.
+		 * To reconstruct the equatorial longitude of the orbit, we then calculate
+		 * the mean of all these calculated values. To avoid periodicity
+		 * problems around 0/360 degrees, we actually save the sine and cosine
+		 * values and use atan2() later. */
 		if (!(doppelt)) {
+			double phi0 = aml_it->center_lon -
+				phi_fac * std::tan(aml_it->center_lat * deg);
 			Lats_Messung.push_back(aml_it->center_lat);
-			CLons_Messung.push_back(std::cos(aml_it->center_lon * deg));
-			SLons_Messung.push_back(std::sin(aml_it->center_lon * deg));
+			CLons0.push_back(std::cos(phi0 * deg));
+			SLons0.push_back(std::sin(phi0 * deg));
 			std::cout << aml_it->center_lon << "\t"
 				<< Lats_Messung.back() << std::endl;
 		}
@@ -88,19 +102,16 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	double MaxLat = Lats_Messung[Max_Index];
 	double MinLat = Lats_Messung[Min_Index];
 	int Breitenzahl = Min_Index - Max_Index + 1;
-	/*
-	 * finds the longitude of the orbit at the equator.
-	 * linear interpolation works because the angles are small.
-	 */
-	// reverse the vectors for the interpolation to work
-	std::reverse(Lats_Messung.begin(), Lats_Messung.end());
-	std::reverse(CLons_Messung.begin(), CLons_Messung.end());
-	std::reverse(SLons_Messung.begin(), SLons_Messung.end());
-	double clon0 = interpolate(Lats_Messung, CLons_Messung, 0.);
-	double slon0 = interpolate(Lats_Messung, SLons_Messung, 0.);
-	double lon0 = std::fmod(std::atan2(slon0, clon0), 2. * M_PI) / deg;
-	// emprical longitude factor
-	const double phi_fac = 11.91;
+	/* Reconstruct the equatorial longitude from the mean of the individual
+	 * scan values (sine and cosine) saved above.
+	 * We can just sum here because we divide the two values, i.e. any
+	 * constant factor (e.g. CLons0.size() for the real mean) drops out.
+	 * We remove the endpoints to avoid that the large outliers at the edge of
+	 * the orbits skew the mean too much. */
+	double CLon0s = std::accumulate(CLons0.begin() + 1, CLons0.end() - 1, 0.);
+	double SLon0s = std::accumulate(SLons0.begin() + 1, SLons0.end() - 1, 0.);
+	double lon0 = std::fmod(
+			std::atan2(SLon0s, CLon0s) + 2. * M_PI, 2. * M_PI) / deg;
 
 	/////////////////////////////
 	// selbst gesetzt.....
