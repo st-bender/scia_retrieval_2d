@@ -405,11 +405,13 @@ double interpolate(std::vector<double> &x, std::vector<double> &y, double x0)
 	std::vector<double>::iterator x_it;
 	x_it = std::upper_bound(x.begin(), x.end(), x0);
 
-	// constant extrapolation outside the range
-	if (x_it == x.begin()) return y.front();
-	if (x_it == x.end()) return y.back();
-
-	i = distance(x.begin(), x_it) - 1;
+	// linear extrapolation outside the range
+	if (x_it == x.begin())
+		i = 0;
+	else if (x_it == x.end())
+		i = x.size() - 2;
+	else
+		i = distance(x.begin(), x_it) - 1;
 
 	return y.at(i)
 		+ (x0 - x.at(i)) * (y.at(i) - y.at(i + 1)) / (x.at(i) - x.at(i + 1));
