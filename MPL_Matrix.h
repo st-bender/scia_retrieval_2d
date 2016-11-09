@@ -97,8 +97,8 @@ public:
 	// Beachte...es gibt keine Division, da nicht jede Matrix eine Inverse hat
 
 	//() Überladung -> Direkter Zugriff auf Das Elemente Array
-	double &operator()(int Zeile, int Spalte);
-	double &operator()(int Elementindex);
+	double &operator()(int Zeile, int Spalte) const;
+	double &operator()(int Elementindex) const;
 
 	// binary operators
 	//TODO mit DGEMM
@@ -309,7 +309,7 @@ inline MPL_Matrix &MPL_Matrix::operator /= (double rhs)
 /////////////////////////////////////////////////////////
 // Methodenstart
 /////////////////////////////////////////////////////////
-inline double &MPL_Matrix::operator()(int Zeile, int Spalte)
+inline double &MPL_Matrix::operator()(int Zeile, int Spalte) const
 {
 	//A(1,2)=b;
 	int idx = transposed ? Spalte * m_Zeilenzahl + Zeile
@@ -325,7 +325,7 @@ inline double &MPL_Matrix::operator()(int Zeile, int Spalte)
 /////////////////////////////////////////////////////////
 // Methodenstart
 /////////////////////////////////////////////////////////
-inline double &MPL_Matrix::operator()(int Elementindex)
+inline double &MPL_Matrix::operator()(int Elementindex) const
 {
 	if ((uint)Elementindex < (uint)m_Elementanzahl)
 		return this->m_Elemente[Elementindex];
