@@ -113,6 +113,11 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	//Choleskyzerlegung genauer, das schließt aber negative Säulendichten aus,
 	//also wird LU-benutzt
 	////////////////////////////////////////////////////////////////////////////
+	double beta_inv = (Dichten_apriori.transponiert() *
+			S_apriori * Dichten_apriori)(0, 0);
+	if (beta_inv != 0 && Konf.NO_apriori_scale == -2)
+		LHS -= 1 / beta_inv * (S_apriori * Dichten_apriori) *
+				(Dichten_apriori.transponiert() * S_apriori);
 
 	////////////////////////////////////////////////////////////////////////////
 	// LU Zerlegung der LHS
@@ -172,8 +177,9 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	 * (F(x) = K*x in our case), F(0) = K*0 = 0.
 	 * Therefore, y - F(x_0) = y for calculating x_1.
 	 */
-	RHS = AMF_trans_S_y * (Saeulendichten)
-		  + S_apriori * Dichten_apriori;
+	RHS = AMF_trans_S_y * (Saeulendichten);
+	if (beta_inv == 0 || Konf.NO_apriori_scale != -2)
+		RHS += S_apriori * Dichten_apriori;
 #ifdef DEBUG_RETRIEVAL_MATRICES
 	LHS.in_Datei_speichern("/tmp/LHS1.dat.gz");
 	RHS.in_Datei_speichern("/tmp/RHS1.dat.gz");
@@ -197,6 +203,12 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	///////////////////////////////////////
 	// ENDE erster Schritt
 	///////////////////////////////////////
+	if (beta_inv != 0 && Konf.NO_apriori_scale == -2) {
+		double alpha = 1. / beta_inv *
+				(Dichten_apriori.transponiert() * S_apriori * Dichten)(0, 0);
+		std::cout << "# apriori fit factor = " << alpha << std::endl;
+		Dichten_apriori *= alpha;
+	}
 
 	///////////////////////////////////////
 	// Nachiteration
