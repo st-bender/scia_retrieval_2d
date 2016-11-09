@@ -1888,7 +1888,7 @@ void SNOE_apriori_NO(Retrievalgitter &grid, Ausgewertete_Messung_Limb &aml,
 	// run the model for each latitude
 	for (int i = 0; i < grid.m_Anzahl_Breiten; i++) {
 		Gitterpunkt gp = grid.m_Gitter[i];
-		__dynam_MOD_glon[0] = gp.longitude;
+		__dynam_MOD_glon[0] = std::fmod(gp.longitude, 360.);
 		if (grid.m_Anzahl_Breiten > 1)
 			__dynam_MOD_glat[0] = gp.m_Breite;
 		else
