@@ -1905,7 +1905,7 @@ void SNOE_apriori_NO(Retrievalgitter &grid, Ausgewertete_Messung_Limb &aml,
 	 * period used for NOEM. This should avoid the "fixed scale factor"
 	 * problem. We set the scale factor here because we already read the F10.7
 	 * value for the NOEM model run. */
-	if (Konf.NO_apriori_scale < 0) {
+	if (Konf.NO_apriori_scale == -1) {
 		// simply overwrite the configured scale factor
 		Konf.NO_apriori_scale = __params_MOD_f107 / 150.;
 		std::cout << "# snoe a priori auto scale: "
@@ -1945,7 +1945,7 @@ void regression_apriori_NO(Retrievalgitter &grid, Ausgewertete_Messung_Limb &aml
 	 * period used for NOEM. This should avoid the "fixed scale factor"
 	 * problem. We read the F10.7 in the same way as we do for the NOEM
 	 * model run. */
-	if (Konf.NO_apriori_scale < 0) {
+	if (Konf.NO_apriori_scale == -1) {
 		// get solar data from the spidr input files
 		double f107 = spidr_value_from_file(aml.m_Jahr, aml.m_Monat,
 				aml.m_Tag, Konf.m_Pfad_f107_adj_index, 150, 1);
