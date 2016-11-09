@@ -204,11 +204,12 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	for (int Iterationsschritt = 0; Iterationsschritt < Itmax; Iterationsschritt++) {
 		Saeulendichten_rest = Saeulendichten - AMF * Dichten;
 		MPL_Matrix Dichten_apriori_rest = Dichten_apriori - Dichten;
-		Mat_Residual = (Saeulendichten_rest.transponiert() * S_y * Saeulendichten_rest)
-			+ Dichten_apriori_rest.transponiert() * S_apriori * Dichten_apriori_rest;
+		Mat_Residual = 0.5 * (Saeulendichten_rest.transponiert() * S_y * Saeulendichten_rest
+			+ Dichten_apriori_rest.transponiert() * S_apriori * Dichten_apriori_rest
+			+ Dichten.transponiert() * R * Dichten);
 
 		// Anfangsresiduum bestimmen
-		Residual = sqrt(Mat_Residual(0));
+		Residual = Mat_Residual(0);
 		if ((Iterationsschritt == 0) || (Iterationsschritt == Itmax - 1)) {
 			cout << "Iterationsschritt:" << Iterationsschritt << "\t"
 				 << "Residual: " << Residual << "\n";
@@ -217,6 +218,10 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 			// erstes Residuum als ungefähre Fehlerabschätzung
 			Residual_1 = Residual;
 		}
+		cout << "Iterationsschritt:" << Iterationsschritt << "\t"
+			 << "residual_prev: " << residual_prev << "\t"
+			 << "Residual_1: " << Residual_1 << "\t"
+			 << "Residual: " << Residual << "\n";
 		if (Residual < Threshold * Residual_1) {
 			cout << "Konvergenz 1 bei Iterationsschritt: " << Iterationsschritt << endl;
 			cout << "Residual: " << Residual << endl;
