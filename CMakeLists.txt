@@ -45,6 +45,14 @@ link_directories(/usr/lib64
 	/home/Processor/Work_SB/openblas_64.i/lib
 	${loc_LIBS} ${sp_PATH})
 
+include(CheckIncludeFileCXX)
+check_include_file_cxx("Eigen/Dense" HAVE_EIGEN3
+	-I/home/Processor/Work_SB/eigen_64.i/include/eigen3)
+if (HAVE_EIGEN3)
+	include_directories(/home/Processor/Work_SB/eigen_64.i/include/eigen3)
+	add_definitions(-DHAVE_EIGEN3)
+endif ()
+
 add_definitions(-O2 -m64 -march=native -g -pedantic -Wall -Wextra -Wshadow)
 add_definitions(-std=gnu++0x)
 add_definitions(-ffast-math -fno-builtin)
