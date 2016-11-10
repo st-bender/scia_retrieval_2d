@@ -1586,6 +1586,17 @@ int main(int argc, char *argv[])
 						   NO_Lambda_Breite,
 						   NO_Lambda_Hoehe, AMF_NO, Konf);
 			break;
+		case 2:
+#ifdef HAVE_EIGEN3
+			Retrievaliteration_Eigen(Dichte_n_NO, Dichte_apriori_NO,
+						   Saeulendichten_NO,
+						   S_apriori_NO, S_y_NO, S_Breite, S_Hoehe,
+						   NO_Lambda_Breite,
+						   NO_Lambda_Hoehe, AMF_NO, Konf);
+#else
+			std::cout << "Retrieval using Eigen3 not supported." << std::endl;
+#endif /* HAVE_EIGEN3 */
+			break;
 		}
 	}
 
