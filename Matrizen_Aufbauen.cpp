@@ -174,9 +174,9 @@ MPL_Matrix Differenz_von_benachbarten_Zeilenelementen_Matrix_aufbauen(
 	// Element auch +0 rauskommen ).
 
 	for (int i = 0; i < Elementzahl; i++) {
+		Mat(i, i) = -1;
 		//Prüfen, ob x nicht das Maximum der ursprünglichen Zeile war
 		if (((i + 1) % Spaltenzahl) != 0) {
-			Mat(i, i) = -1;
 			Mat(i, i + 1) = 1;
 		}
 	}
@@ -204,9 +204,10 @@ MPL_Matrix Differenz_von_benachbarten_Spaltenelementen_Matrix_aufbauen(
 	// Element der Spalte abgezogen die Elemente, die 0 sein sollen sind in
 	// dieser Reihenfolge am Ende der Matrix zu finden, sodass man sich die if
 	// Abfrage sparen kann
-	for (int i = 0; i < Elementzahl - Spaltenzahl; i++) {
+	for (int i = 0; i < Elementzahl; i++) {
 		Mat(i, i) = -1;
-		Mat(i, i + Spaltenzahl) = 1;
+		if (i < Elementzahl - Spaltenzahl)
+			Mat(i, i + Spaltenzahl) = 1;
 	}
 	return Mat;
 }// Ende  Differenz_von_benachbarten_Spaltenelementen_Matrix_aufbauen
