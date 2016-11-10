@@ -1731,7 +1731,10 @@ int main(int argc, char *argv[])
 #ifdef DEBUG_NO_MATRICES
 		// debug output
 		Dichte_n_NO.save_to_netcdf(Dateiname_out + "_Dichten.nc");
+		Dichte_apriori_NO.save_to_netcdf(Dateiname_out + "_Dichten_a.nc");
+		Saeulendichten_NO.save_to_netcdf(Dateiname_out + "_y.nc");
 		S_y_NO.save_to_netcdf(Dateiname_out + "_Sy.nc");
+		S_apriori_NO.save_to_netcdf(Dateiname_out + "_Sa.nc");
 		AMF_NO.save_to_netcdf(Dateiname_out + "_AMF.nc");
 #endif /* DEBUG_NO_MATRICES */
 	}
