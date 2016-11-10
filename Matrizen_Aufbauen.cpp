@@ -1986,11 +1986,16 @@ void scale_apriori(Retrievalgitter &grid, MPL_Matrix &apriori,
 	auto trans01 = my_phi;
 	auto transition = std::bind(transition_func, trans01,
 			std::placeholders::_1, std::placeholders::_2);
+	double NO_apriori_scale = Konf.NO_apriori_scale;
+	/* Calculate only the transition (i.e. don't scale)
+	 * if the scale is negative. */
+	if (NO_apriori_scale < 0)
+		NO_apriori_scale = 1.;
 
 	for (int i = 0; i < grid.m_Anzahl_Hoehen; i++) {
 		double z = grid.m_Gitter[i * grid.m_Anzahl_Breiten].m_Hoehe;
 		double f = transition(z, Konf);
 		for (int j = 0; j < grid.m_Anzahl_Breiten; j++)
-			apriori(i * grid.m_Anzahl_Breiten + j) *= f * Konf.NO_apriori_scale;
+			apriori(i * grid.m_Anzahl_Breiten + j) *= f * NO_apriori_scale;
 	}
 }
