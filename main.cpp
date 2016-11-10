@@ -1381,8 +1381,45 @@ int main(int argc, char *argv[])
 		default:
 			break;
 		}
-		if (Konf.NO_apriori > 0)
+		if (Konf.NO_apriori > 0) {
 			scale_apriori(Grid, Dichte_apriori_NO, Konf);
+			/* Calculates the a priori scaling factor by applying the forward
+			 * model to the a priori and comparing the resulting slant column
+			 * densities. We do this in any case even if we don't actually
+			 * scale it here (-3) but later (-2 = fit). */
+			if (Konf.NO_apriori_scale < -1) {
+				MPL_Matrix fwd_apriori{AMF_NO * Dichte_apriori_NO};
+				int apri_num = 0;
+				double apri_fac = 0.;
+				for (i = 0; i < Ausgewertete_Limbmessung_NO.size(); i++) {
+					double tp_alt = Ausgewertete_Limbmessung_NO.at(i).m_Hoehe_TP;
+					/* averages the top three slant column factors */
+					if (tp_alt > Konf.m_max_TP - 10. && tp_alt < Konf.m_max_TP) {
+						apri_fac += Ausgewertete_Limbmessung_NO.at(i).m_Zeilendichte /
+							fwd_apriori(i);
+						++apri_num;
+					}
+				}
+				double apri_fwd_scale = apri_fac / (double)apri_num;
+				std::cout << "# apriori fwd scale: "
+					<< apri_fwd_scale << std::endl;
+				if (Konf.NO_apriori_scale == -3)
+					Dichte_apriori_NO *= apri_fwd_scale;
+			}
+			/* Scales the a priori covariance according to the config. */
+			for (int j = 0; j < Dichte_apriori_NO.m_Elementanzahl; ++j) {
+				double fac = Konf.NO_apriori_cov_factor;
+				double x_a_j = Dichte_apriori_NO(j);
+				if (x_a_j != 0.) {
+					if (Konf.NO_apriori_cov_relative)
+						// relative (co)variance (squared weights)
+						S_apriori_NO(j, j) = NO_Lambda_apriori /
+							(1. + fac*fac * x_a_j*x_a_j * NO_Lambda_apriori);
+					else
+						S_apriori_NO(j, j) = NO_Lambda_apriori / fac;
+				}
+			}
+		}
 		// Säulendichten und Fehler auffüllen (Fehler für Wichtungsmatrixberechnung)
 		Saeulendichten_NO = MPL_Matrix(Ausgewertete_Limbmessung_NO.size()
 				+ Ausgewertete_Nadirmessung_NO.size(), 1); //Spaltenvektor
