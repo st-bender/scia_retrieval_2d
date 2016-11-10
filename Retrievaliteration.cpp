@@ -261,6 +261,103 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	return 0;
 }
 
+#ifdef HAVE_EIGEN3
+#include <Eigen/Dense>
+/*
+ * Retrieval variant using Eigen3 (http://eigen.tuxfamily.org).
+ * This provides an easy interface to matrix operations and should also be
+ * robust and hopefully a little more modern compared to the self-made
+ * MPL_Matrix class.
+ */
+int Retrievaliteration_Eigen(MPL_Matrix &Dichten,
+					   MPL_Matrix &Dichten_apriori,
+					   MPL_Matrix &Saeulendichten,
+					   MPL_Matrix &S_apriori,
+					   MPL_Matrix &S_y,
+					   MPL_Matrix &S_Breite,
+					   MPL_Matrix &S_Hoehe,
+					   const double &Lambda_Breite,
+					   const double &Lambda_Hoehe,
+					   MPL_Matrix &AMF,
+					   Konfiguration &Konf)
+{
+	using Eigen::Dynamic;
+	using Eigen::LDLT;
+	using Eigen::Map;
+	using Eigen::Matrix;
+	using Eigen::MatrixXd;
+	using Eigen::PartialPivLU;
+	using Eigen::RowMajor;
+
+	bool fit_apriori = (Konf.NO_apriori_scale == -2);
+	int grad_add_rows = 1 ? fit_apriori : 0;
+	Map<Matrix<double, Dynamic, Dynamic, RowMajor> >
+		S_alt{S_Hoehe.m_Elemente, S_Hoehe.m_Zeilenzahl, S_Hoehe.m_Spaltenzahl};
+	Map<Matrix<double, Dynamic, Dynamic, RowMajor> >
+		S_lat{S_Breite.m_Elemente, S_Breite.m_Zeilenzahl, S_Breite.m_Spaltenzahl};
+	Map<Matrix<double, Dynamic, Dynamic, RowMajor> >
+		K_m{AMF.m_Elemente, AMF.m_Zeilenzahl, AMF.m_Spaltenzahl};
+	Map<Matrix<double, Dynamic, Dynamic, RowMajor> >
+		Sy_m{S_y.m_Elemente, S_y.m_Zeilenzahl, S_y.m_Spaltenzahl};
+	Map<Matrix<double, Dynamic, Dynamic, RowMajor> >
+		Sa_m{S_apriori.m_Elemente, S_apriori.m_Zeilenzahl, S_apriori.m_Spaltenzahl};
+	Map<Matrix<double, Dynamic, Dynamic, RowMajor> >
+		x_m{Dichten.m_Elemente, Dichten.m_Zeilenzahl, Dichten.m_Spaltenzahl};
+	Map<Matrix<double, Dynamic, Dynamic, RowMajor> >
+		xa_m{Dichten_apriori.m_Elemente, Dichten_apriori.m_Zeilenzahl, Dichten_apriori.m_Spaltenzahl};
+	Map<Matrix<double, Dynamic, Dynamic, RowMajor> >
+		y_m{Saeulendichten.m_Elemente, Saeulendichten.m_Zeilenzahl, Saeulendichten.m_Spaltenzahl};
+
+	MatrixXd R_m{Lambda_Hoehe * S_alt.transpose() * S_alt +
+			Lambda_Breite * S_lat.transpose() * S_lat};
+	MatrixXd K_T_Sy{K_m.transpose() * Sy_m};
+	MatrixXd LHS_m{K_T_Sy * K_m + Sa_m + R_m};
+	MatrixXd RHS_m{K_T_Sy * y_m + Sa_m * xa_m};
+
+	Matrix<double, Dynamic, Dynamic, RowMajor>
+		nHess(LHS_m.rows() + grad_add_rows, LHS_m.cols() + grad_add_rows);
+	Matrix<double, Dynamic, Dynamic, RowMajor>
+		gradf(RHS_m.rows() + grad_add_rows, RHS_m.cols());
+	Matrix<double, Dynamic, Dynamic, RowMajor> dx, nlp_m;
+	if (fit_apriori) {
+		nHess << LHS_m, -1. * Sa_m * xa_m,
+			  -1. * xa_m.transpose() * Sa_m, xa_m.transpose() * Sa_m * xa_m;
+	} else
+		nHess = LHS_m;
+	//PartialPivLU<MatrixXd> nHess_fact;
+	LDLT<MatrixXd> nHess_fact; // LDLT gives slightly higher accuracy
+	nHess_fact.compute(nHess);
+	double alpha = 1.;
+	double nlp_old = 1e25, nlp = 1e24;
+	int it_cnt = 0;
+	while (std::abs(nlp_old - nlp) > Konf.m_Convergence_Treshold
+			&& it_cnt < Konf.m_Max_Zahl_Iterationen) {
+		nlp_old = nlp;
+		if (fit_apriori)
+			gradf << K_T_Sy * (y_m - K_m * x_m) - Sa_m * (x_m - alpha * xa_m) - R_m * x_m,
+					xa_m.transpose() * Sa_m * (x_m - alpha * xa_m);
+		else
+			gradf = K_T_Sy * (y_m - K_m * x_m) - Sa_m * (x_m - alpha * xa_m) - R_m * x_m;
+		dx = nHess_fact.solve(gradf);
+		x_m += dx.topRows(dx.rows() - grad_add_rows);
+		if (fit_apriori) {
+			double dalpha = dx.bottomRows(grad_add_rows)(0, 0);
+			alpha += dalpha;
+			std::cout << "# apriori fit factor adj = " << dalpha << std::endl;
+			std::cout << "# apriori fit factor = " << alpha << std::endl;
+		}
+		// negative log posterior probability
+		nlp_m = 0.5 * ((y_m - K_m * x_m).transpose() * Sy_m * (y_m - K_m * x_m)
+				+ (x_m - alpha * xa_m).transpose() * Sa_m * (x_m - alpha * xa_m)
+				+ x_m.transpose() * R_m * x_m);
+		nlp = nlp_m(0, 0);
+		std::cout << "iteration nr. " << it_cnt;
+		std::cout << " negative log posterior: " << nlp << std::endl;
+		++it_cnt;
+	}
+	return 0;
+}
+#endif /* HAVE_EIGEN3 */
 
 
 int Retrievaliteration_old(MPL_Matrix &Dichten,
