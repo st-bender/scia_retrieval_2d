@@ -48,6 +48,8 @@ Konfiguration::Konfiguration() :
 	NO_apriori(0),
 	NO_apriori_bottom(40.0), NO_apriori_top(160.0),
 	NO_apriori_scale(1.0), NO_apriori_smoothness(4.0),
+	NO_apriori_cov_relative(false),
+	NO_apriori_cov_factor(1.0),
 	retrieval_algo(1), MLT(false)
 {
 }
@@ -466,6 +468,18 @@ void Konfiguration::Konfiguration_einlesen(std::string file)
 			ss >> NO_apriori_smoothness;
 			continue;
 		}
+		if (Zeile == "NO apriori covariance relative") {
+			getline(infile, Zeile);
+			ss << Zeile;
+			ss >> NO_apriori_cov_relative;
+			continue;
+		}
+		if (Zeile == "NO apriori covariance factor") {
+			getline(infile, Zeile);
+			ss << Zeile;
+			ss >> NO_apriori_cov_factor;
+			continue;
+		}
 		if (Zeile == "Retrieval algorithm") {
 			getline(infile, Zeile);
 			ss << Zeile;
@@ -596,6 +610,8 @@ void Konfiguration::Konfiguration_anzeigen()
 	cout << "NO apriori top: " << this->NO_apriori_top << "\n";
 	cout << "NO apriori scale: " << this->NO_apriori_scale << "\n";
 	cout << "NO apriori smoothness: " << this->NO_apriori_smoothness << "\n";
+	cout << "NO apriori covariance relative: " << this->NO_apriori_cov_relative << "\n";
+	cout << "NO apriori covariance factor: " << this->NO_apriori_cov_factor << "\n";
 	cout << "Retrieval algorithm: ";
 	switch (retrieval_algo) {
 	case 0:

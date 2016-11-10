@@ -85,6 +85,8 @@ public:
 	/* NO apriori scaling factor and transition width in km
 	 * for a smooth transition from 0 to 1 (or to NO_apriori_scale). */
 	double NO_apriori_scale, NO_apriori_smoothness;
+	bool NO_apriori_cov_relative;
+	double NO_apriori_cov_factor;
 	unsigned short retrieval_algo;
 	bool MLT;
 };
