@@ -38,10 +38,8 @@ endif ()
 #	/home/msk-data/Scia/software/lib_linux
 #	DOC "local libs")
 
-#link_directories(${CMAKE_SOURCE_DIR}/lib ${sp_PATH})
 link_directories(/usr/lib64
 	/usr/local/lib/amd64
-	/usr/gnu/lib/amd64
 	/home/Processor/Work_SB/openblas_64.i/lib
 	${loc_LIBS} ${sp_PATH})
 
