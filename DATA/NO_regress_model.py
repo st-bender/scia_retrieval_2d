@@ -45,6 +45,12 @@ def time_fun_sol(tday, t0, solnames, solscales, sol_lags, solsubmin=1):
 			if solsubmin == 1:
 				svalues -= svalues.min()
 			else:
+				# FIXME: "days" and "ds" are not defined here.
+				# In the regression fit code "days" are
+				# all measurement days and "ds" only
+				# the ones with useful data.
+				# Thus, they have to come from outside which is
+				# not very practical.
 				dds = [days, ds][solsubmin - 2]
 				sidx = [list(sdates).index(t0 + dt.timedelta(x))
 						for x in [(d - t0).days for d in sdates if (d - t0).days in dds]]
