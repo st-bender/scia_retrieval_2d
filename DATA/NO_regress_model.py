@@ -1,6 +1,8 @@
 ﻿#!/usr/bin/env python
 # vim: set fileencoding=utf-8
 
+from __future__ import absolute_import, division, print_function
+
 import os
 import sys
 import numpy as np
@@ -9,10 +11,13 @@ import dateutil.parser as dp
 import scipy.interpolate as sip
 import bisect
 import json
-from StringIO import StringIO
+try:
+	from StringIO import StringIO
+except ImportError:
+	from io import BytesIO as StringIO
 
-mkdate = lambda t: dt.datetime.strptime(t, "%Y-%m-%d")
-mktime = lambda t: dt.datetime.strptime(t, "%H:%M")
+mkdate = lambda t: dt.datetime.strptime(bytes(t).decode(), "%Y-%m-%d")
+mktime = lambda t: dt.datetime.strptime(bytes(t).decode(), "%H:%M")
 
 def get_solar_data(fname, scale=1.0):
 	sol_name = os.path.basename(fname).split('_')[1]
@@ -58,7 +63,7 @@ def coeffs_alt_lat(coeffs, fields, alt=100.0, lat=67.5):
 	l1 = lats[j]
 	cfl1 = coeffs[coeffs['lats']==l1]
 	alts = cfl1['alts']
-	return (alts, cfl1[fields].view('<f8').reshape((-1, len(fields))))
+	return (alts, cfl1[fields].copy().view('<f8').reshape((-1, len(fields))))
 
 def main():
 	ff = open(sys.argv[1], 'r')
@@ -69,12 +74,12 @@ def main():
 	model_t0 = dt.datetime(2003, 7, 1)
 
 	coeff_fname = files["data"]["regress"]
-	data_name = config["dataname"]
+	data_name = config["dataname"].encode("utf-8")
 	date = dp.parse(sys.argv[2])
 	t_day = (date - model_t0).days
 
 	try:
-		alt = np.genfromtxt(StringIO(sys.argv[3]), dtype='<f8', delimiter=",")
+		alt = np.genfromtxt(StringIO(sys.argv[3].encode()), dtype='<f8', delimiter=",")
 		lat = float(sys.argv[4])
 	except:
 		alt = 100.0
@@ -108,8 +113,7 @@ def main():
 	mod_val_f = sip.InterpolatedUnivariateSpline(alts, mod_val, k=1)
 	#mod_val_f = sip.UnivariateSpline(alts, mod_val, k=1)
 	#mod_val_f = sip.interp1d(alts, mod_val, bounds_error=False, fill_value=0)
-	print ' '.join(map(str, mod_val_f(alt)))
+	print(' '.join(map(str, mod_val_f(np.atleast_1d(alt)))))
 
 if __name__ == "__main__":
 	main()
-
