@@ -851,7 +851,10 @@ int main(int argc, char *argv[])
 	***************************************************************************/
 	// check for successfully analysed limb scans
 	// and return early if there are none.
-	if (Ausgewertete_Limbmessung_MgI.size() == 0) return -1;
+	if (Ausgewertete_Limbmessung_MgI.size() == 0) {
+		std::cout << "No usable limb scans found in this orbit, exiting." << std::endl;
+		return -1;
+	}
 
 	/***************************************************************************
 	TEIL 3 AUFBAU DER FÜR DAS RETRIEVAL BENÖTIGTEN MATRIZZEN
