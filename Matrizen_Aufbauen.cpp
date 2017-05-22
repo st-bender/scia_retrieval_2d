@@ -1823,6 +1823,7 @@ void prepare_total_density(Retrievalgitter &grid, MPL_Matrix &dens,
 	}
 }
 
+#ifdef HAVE_NOEM
 /*
  * interface to the SNOEM model for the SNOE NO data as apriori input
  * for the retrieval.
@@ -1919,6 +1920,14 @@ void SNOE_apriori_NO(Retrievalgitter &grid, Ausgewertete_Messung_Limb &aml,
 	delete[] __dynam_MOD_glat;
 	delete[] __dynam_MOD_glon;
 }
+#else /* HAVE_NOEM */
+void SNOE_apriori_NO(Retrievalgitter &grid, Ausgewertete_Messung_Limb &aml,
+		MPL_Matrix &apriori, Konfiguration &Konf)
+{
+	// not available
+	std::cerr << "NOEM model not available." << std::endl;
+}
+#endif /* HAVE_NOEM */
 
 /*
  * NO apriori derived from the regression model.

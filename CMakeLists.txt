@@ -23,6 +23,18 @@ else ()
 		DOC "local libs")
 endif ()
 
+find_library(NOEM NOEM
+	${CMAKE_SOURCE_DIR}/lib_solaris
+	${CMAKE_SOURCE_DIR}/lib_linux
+	/home/msk-data/Scia/software/lib_linux)
+if (NOEM)
+	message("NOEM model found at ${NOEM}.")
+	add_definitions(-DHAVE_NOEM)
+	set(noem_LIB NOEM)
+else ()
+	message("NOEM model not found.")
+endif ()
+
 find_library(NCDFF netcdff)
 if (NCDFF)
 	set(ncdf_LIB netcdff)
@@ -69,4 +81,4 @@ add_definitions(`${CMAKE_CURRENT_SOURCE_DIR}/git_version_flags.sh`)
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -m64")
 add_executable(scia_retrieval ${scia_SRC})
 
-target_link_libraries(scia_retrieval ${linalg_LIBS} NOEM gfortran netcdf ${ncdf_LIB} z gomp)
+target_link_libraries(scia_retrieval ${linalg_LIBS} ${noem_LIB} gfortran netcdf ${ncdf_LIB} z gomp)
