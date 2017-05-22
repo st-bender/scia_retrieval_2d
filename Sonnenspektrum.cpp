@@ -137,7 +137,7 @@ double Sonnenspektrum::get_rad_at_wl(double wl)
 	std::vector<double>::iterator wlit =
 		std::lower_bound(m_Wellenlaengen.begin(),
 			m_Wellenlaengen.end(), wl);
-	ptrdiff_t i = std::distance(m_Wellenlaengen.begin(), wlit);
+	std::ptrdiff_t i = std::distance(m_Wellenlaengen.begin(), wlit);
 	double rad = interpolate(m_Wellenlaengen, m_Intensitaeten, wl);
 	std::cerr << "wls = " << m_Wellenlaengen.at(i - 1)
 		<< ", " << m_Wellenlaengen.at(i) << std::endl;
