@@ -51,6 +51,7 @@ if (HAVE_EIGEN3)
 	add_definitions(-DHAVE_EIGEN3)
 endif ()
 
+include_directories(.)
 add_definitions(-O2 -m64 -march=native -g -pedantic -Wall -Wextra -Wshadow)
 add_definitions(-std=gnu++0x)
 add_definitions(-ffast-math -fno-builtin)
@@ -64,4 +65,4 @@ add_definitions(`${CMAKE_CURRENT_SOURCE_DIR}/git_version_flags.sh`)
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -m64")
 add_executable(scia_retrieval ${scia_SRC})
 
-target_link_libraries(scia_retrieval ${linalg_LIBS} NOEM gfortran netcdf ${ncdf_LIB} gzstream z gomp)
+target_link_libraries(scia_retrieval ${linalg_LIBS} NOEM gfortran netcdf ${ncdf_LIB} z gomp)
