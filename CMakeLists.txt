@@ -51,6 +51,10 @@ if (HAVE_EIGEN3)
 	add_definitions(-DHAVE_EIGEN3)
 endif ()
 
+include(FindHDF5)
+include_directories(${HDF5_INCLUDE_DIRS})
+link_directories(${HDF5_LIBRARY_DIRS})
+
 include_directories(.)
 add_definitions(-O2 -m64 -march=native -g -pedantic -Wall -Wextra -Wshadow)
 add_definitions(-std=gnu++0x)
