@@ -10,17 +10,9 @@ if (SUNPERF)
 	message("sunperf found at ${SUNPERF}.")
 	set(linalg_LIBS openblas sunperf)
 	set(sp_PATH /opt/SUNWspro/lib/amd64)
-	find_path(loc_LIBS NAMES libNOEM.a libgzstream.a
-		PATHS ${CMAKE_SOURCE_DIR}/lib_solaris
-		/home/msk-data/Scia/software/lib_solaris
-		DOC "local libs")
 else ()
 	message("sunperf not found, using lapack and blas.")
 	set(linalg_LIBS lapack blas)
-	find_path(loc_LIBS NAMES libNOEM.a libgzstream.a
-		PATHS ${CMAKE_SOURCE_DIR}/lib_linux
-		/home/msk-data/Scia/software/lib_linux
-		DOC "local libs")
 endif ()
 
 find_library(NOEM NOEM
@@ -29,6 +21,7 @@ find_library(NOEM NOEM
 	/home/msk-data/Scia/software/lib_linux)
 if (NOEM)
 	message("NOEM model found at ${NOEM}.")
+	get_filename_component(noem_DIR ${NOEM} PATH)
 	add_definitions(-DHAVE_NOEM)
 	set(noem_LIB NOEM)
 else ()
@@ -53,7 +46,7 @@ endif ()
 link_directories(/usr/lib64
 	/usr/local/lib/amd64
 	/home/Processor/Work_SB/openblas_64.i/lib
-	${loc_LIBS} ${sp_PATH})
+	${noem_DIR} ${sp_PATH})
 
 include(CheckIncludeFileCXX)
 check_include_file_cxx("Eigen/Dense" HAVE_EIGEN3
