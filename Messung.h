@@ -1,8 +1,17 @@
 /*
  * Messung.h
  *
- *  Created on: 27.01.2015
+ * Copyright (c) 2015-2017 Stefan Bender
+ *
+ * Initial version created on: 27.01.2015
  *      Author: Stefan Bender
+ *
+ * This file is part of scia_retrieval_2d
+ *
+ * scia_retrieval_2d is free software: you can redistribute it or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 2.
+ * See accompanying COPYING.GPL2 file or http://www.gnu.org/licenses/gpl-2.0.html.
  */
 #ifndef MESSUNG_HH_
 #define MESSUNG_HH_

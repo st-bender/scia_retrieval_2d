@@ -1,6 +1,16 @@
 /*******************************************************************************
 main.cpp
 
+Copyright (c) 2011-2017 Stefan Bender
+Copyright (c) 2010-2011 Martin Langowski
+Based on code by Marco Scharringhausen copyright (c) 2004-2008.
+
+This program is free software: you can redistribute it or modify
+it under the terms of the GNU General Public License as published
+by the Free Software Foundation, version 2.
+See accompanying COPYING.GPL2 file or http://www.gnu.org/licenses/gpl-2.0.html.
+
+
 Dieses Programm ist eine C++ Version des Retrievalprogramms SCIA2D.f90,
 welches von Marco Scharringhausen entwickelt wurde.
 Zur Vergleichbarkeit sind die durchgeführten Rechnungen gleich, lediglich
