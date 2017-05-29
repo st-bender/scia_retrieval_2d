@@ -1,0 +1,8 @@
+#! /bin/sh
+outfile="$1"
+shift
+infiles="$@"
+OPTIONS="-dSAFER"
+exec gs $OPTIONS -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite \
+"-sOutputFile=$outfile" $OPTIONS -c .setpdfwrite -f \
+$infiles 
