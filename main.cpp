@@ -1,9 +1,12 @@
 /*******************************************************************************
 main.cpp
 
+scia_retrieval_2d
+Two-dimensional trace gas retrieval from SCIAMACHY limb scans
+
 Copyright (c) 2011-2017 Stefan Bender
 Copyright (c) 2010-2011 Martin Langowski
-Based on code by Marco Scharringhausen copyright (c) 2004-2008.
+Based on the FORTRAN version by Marco Scharringhausen, copyright (c) 2004-2008.
 
 This program is free software: you can redistribute it or modify
 it under the terms of the GNU General Public License as published
