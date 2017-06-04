@@ -109,7 +109,7 @@ $ scia_retrieval orbitlist output_path sol_scia_orbit sol_ref script1 script2 co
 
 - output\_path: pathname
 
-  Path to put the program output in.
+  Path to save the result files (number densities, averaging kernels, etc.) to.
   Example: `/home/user/SCIA/Retrieval/Species_2008`
 
 - sol\_scia\_orbit: filename or `auto`
@@ -154,9 +154,10 @@ $ scia_retrieval orbitlist output_path sol_scia_orbit sol_ref script1 script2 co
 
 This program is free software: you can redistribute it or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation, version 2, see [local copy](./COPYING.GPL2)
+the Free Software Foundation, version 2 (GPLv2), see [local copy](./COPYING.GPL2)
 or [online version](http://www.gnu.org/licenses/gpl-2.0.html).
-**Exceptions** are the following parts:
+
+**Exemptions** from the GPLv2 are the following parts:
 
 - The NRLMSISE-00 source files `nrlmsise-00.c`, `nrlmsise-00_data.c`,
   `nrlmsise-00_doc.txt`, and `nrlmsise-00.h` are in the public domain,
