@@ -78,7 +78,7 @@ The spectra need to be calibrated first which requires two steps:
    The latter can also output to HDF5 (`.h5`).
 
 2. Extracting the limb spectra from the `.child` or HDF5 files to ASCII
-   (or a special binary format). For example using the `scia_scripts`
+   (or a special binary format). For example using the `sciapy` python tools
    which will be available publicly soon.
 
 After calibration, the orbitlist file contains the pathnames of all
