@@ -47,10 +47,12 @@ Other pieces needed to successfully compile the program are:
 
 Out of tree builds are supported and recommended, the simplest build steps are:
 
-    $ mkdir build
-    $ cd build
-    $ cmake [OPTIONS] ..
-    $ make [-j <n>]
+```sh
+$ mkdir build
+$ cd build
+$ cmake [OPTIONS] ..
+$ make [-j <n>]
+```
 
 This should produce an executable called `scia_retrieval` in the (current)
 `build/` subdirectory.
@@ -94,9 +96,11 @@ may contain the following:
 
 ### Command line arguments
 
-The executable `scia_retrieval` is called as follows:
+The executable `scia_retrieval` is invoked as follows:
 
-    $ scia_retrieval orbitlist output_path sol_scia_orbit sol_ref script1 script2 config
+```sh
+$ scia_retrieval orbitlist output_path sol_scia_orbit sol_ref script1 script2 config
+```
 
 - orbitlist: filename
 
