@@ -80,8 +80,8 @@ The spectra need to be calibrated first which requires two steps:
    The latter can also output to HDF5 (`.h5`).
 
 2. Extracting the limb spectra from the `.child` or HDF5 files to ASCII
-   (or a special binary format). For example using the `sciapy` python tools
-   which will be available publicly soon.
+   (or a special binary format, see [mpl\_binary.md](./mpl_binary.md)).
+   For example using the `sciapy` python tools which will be available publicly soon.
 
 #### Orbitlist
 
@@ -96,9 +96,20 @@ may contain the following:
     /home/user/SCIA/Spectra/MLT/channel_1_v8.02/2008/20080924/SCIA_limb_20080924_070415_1_0_34343.dat
     ...
 
-This list can be easily created by, for example:
+or using the binary format:
+
+    /home/user/SCIA/Spectra/MLT/channel_1_v8.02/2008/20080924/SCIA_limb_20080924_070223_1_0_34343.dat.l_mpl_binary
+    /home/user/SCIA/Spectra/MLT/channel_1_v8.02/2008/20080924/SCIA_limb_20080924_070319_1_0_34343.dat.l_mpl_binary
+    /home/user/SCIA/Spectra/MLT/channel_1_v8.02/2008/20080924/SCIA_limb_20080924_070415_1_0_34343.dat.l_mpl_binary
+    ...
+
+These lists can be easily created by, for example:
 ```sh
 $ find /home/user/SCIA/Spectra/MLT/channel_1_v8.02/<year>/<date>/SCIA_limb_*_<orbit>.dat > /home/user/SCIA/Spectra/orbitlists/MLT/<year>/orbitlist-sb<orbit>_scia1.dat
+```
+or:
+```sh
+$ find /home/user/SCIA/Spectra/MLT/channel_1_v8.02/<year>/<date>/SCIA_limb_*_<orbit>.dat.l_mpl_binary > /home/user/SCIA/Spectra/orbitlists/MLT/<year>/orbitlist-sb<orbit>_scia1.dat
 ```
 with `<year>`, `<date>`, and `<orbit>` set appropriately.
 
