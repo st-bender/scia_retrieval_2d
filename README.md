@@ -83,6 +83,8 @@ The spectra need to be calibrated first which requires two steps:
    (or a special binary format). For example using the `sciapy` python tools
    which will be available publicly soon.
 
+#### Orbitlist
+
 After calibration, the orbitlist file contains the pathnames of all
 limb spectra belonging to one orbit. Those are typically 20--30 per orbit,
 depending on the chosen category (or categories) in the steps above.
@@ -94,17 +96,23 @@ may contain the following:
     /home/user/SCIA/Spectra/MLT/channel_1_v8.02/2008/20080924/SCIA_limb_20080924_070415_1_0_34343.dat
     ...
 
+This list can be easily created by, for example:
+```sh
+$ find /home/user/SCIA/Spectra/MLT/channel_1_v8.02/<year>/<date>/SCIA_limb_*_<orbit>.dat > /home/user/SCIA/Spectra/orbitlists/MLT/<year>/orbitlist-sb<orbit>_scia1.dat
+```
+with `<year>`, `<date>`, and `<orbit>` set appropriately.
+
 ### Command line arguments
 
 The executable `scia_retrieval` is invoked as follows:
 
 ```sh
-$ scia_retrieval orbitlist output_path sol_scia_orbit sol_ref script1 script2 config
+$ scia_retrieval <orbitlist> <output_path> <sol_scia_orbit> <sol_ref> <script1> <script2> <config>
 ```
 
 - orbitlist: filename
 
-  File containing the orbital spectra files one per line (see above).
+  File containing the orbital spectra files one per line ([see above](#orbitlist)).
   Example: `/home/user/SCIA/Spectra/orbitlists/MLT/2008/orbitlist-sb34343_scia1.dat`
 
 - output\_path: pathname
