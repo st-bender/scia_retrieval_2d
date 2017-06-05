@@ -112,12 +112,12 @@ $ scia_retrieval <orbitlist> <output_path> <sol_scia_orbit> <sol_ref> <script1> 
 
 - orbitlist: filename
 
-  File containing the orbital spectra files one per line ([see above](#orbitlist)).
+  File containing the orbital spectra files one per line ([see above](#orbitlist)).<br />
   Example: `/home/user/SCIA/Spectra/orbitlists/MLT/2008/orbitlist-sb34343_scia1.dat`
 
 - output\_path: pathname
 
-  Path to save the result files (number densities, averaging kernels, etc.) to.
+  Path to save the result files (number densities, averaging kernels, etc.) to.<br />
   Example: `/home/user/SCIA/Retrieval/Species_2008`
 
 - sol\_scia\_orbit: filename or `auto`
@@ -126,7 +126,7 @@ $ scia_retrieval <orbitlist> <output_path> <sol_scia_orbit> <sol_ref> <script1> 
   the program tries to determine the solar spectrum location from the limb spectra
   file names (given by the entries in the orbitlist). It then assumes that the 
   solar spectrum is located in the same directory using the glob string
-  `SCIA_solar_*_<orbitnumber>.dat`.
+  `SCIA_solar_*_<orbitnumber>.dat`.<br />
   Example: `/home/user/SCIA/Spectra/2008/SCIA_solar_20080924_065146_D0_34343.dat`
 
 - sol\_ref: filename
@@ -135,27 +135,27 @@ $ scia_retrieval <orbitlist> <output_path> <sol_scia_orbit> <sol_ref> <script1> 
   [SAO2010 solar reference spectrum](http://www.sciencedirect.com/science/article/pii/S0022407310000610)
   ([doi:10.1016/j.jqsrt.2010.01.036](http://dx.doi.org/10.1016/j.jqsrt.2010.01.036)),
   available from
-  https://www.cfa.harvard.edu/atmosphere/links/sao2010.solref.converted
+  https://www.cfa.harvard.edu/atmosphere/links/sao2010.solref.converted<br />
   Example: `/home/user/SCIA/Spectra/SolRef/sao2010.solref.dat`
 
 - script1: filename
 
   A script for combining multiple postscript or pdf files into one large
   pdf document. A simple approach is using ghostscript, see the `multips2pdf`
-  script in the source tree.
+  script in the source tree.<br />
   Example: `/home/user/SCIA/run/multips2pdf`
 
 - script2: filename
 
   A script for combining multiple postscript or pdf files into one large
   postscript document. A simple approach is using ghostscript, see the `multips2ps`
-  script in the source tree.
+  script in the source tree.<br />
   Example: `/home/user/SCIA/run/multips2ps`
 
 - config: filename
 
   Detailed retrieval configuration, see the `SCIA2D_mlt.conf` and
-  `SCIA2D_nom.conf` files in the source tree.
+  `SCIA2D_nom.conf` files in the source tree.<br />
   Example: `/home/user/SCIA/run/SCIA2D_mlt.conf`
 
 ## Legal notice
