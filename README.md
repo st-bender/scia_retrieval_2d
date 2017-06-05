@@ -158,7 +158,7 @@ $ scia_retrieval <orbitlist> <output_path> <sol_scia_orbit> <sol_ref> <script1> 
   `SCIA2D_nom.conf` files in the source tree.<br />
   Example: `/home/user/SCIA/run/SCIA2D_mlt.conf`
 
-## Legal notice
+## Licenses
 
 This program is free software: you can redistribute it or modify
 it under the terms of the GNU General Public License as published by
