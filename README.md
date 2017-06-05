@@ -121,17 +121,17 @@ The executable `scia_retrieval` is invoked as follows:
 $ scia_retrieval <orbitlist> <output_path> <sol_scia_orbit> <sol_ref> <script1> <script2> <config>
 ```
 
-- orbitlist: filename
+- orbitlist: _filename_
 
   File containing the orbital spectra files one per line ([see above](#orbitlist)).<br />
   Example: `/home/user/SCIA/Spectra/orbitlists/MLT/2008/orbitlist-sb34343_scia1.dat`
 
-- output\_path: pathname
+- output\_path: _pathname_
 
   Path to save the result files (number densities, averaging kernels, etc.) to.<br />
   Example: `/home/user/SCIA/Retrieval/Species_2008`
 
-- sol\_scia\_orbit: filename or `auto`
+- sol\_scia\_orbit: _filename_ or `auto`
 
   Filename of the orbit measured solar spectrum. When set to `auto`,
   the program tries to determine the solar spectrum location from the limb spectra
@@ -140,7 +140,7 @@ $ scia_retrieval <orbitlist> <output_path> <sol_scia_orbit> <sol_ref> <script1> 
   `SCIA_solar_*_<orbitnumber>.dat`.<br />
   Example: `/home/user/SCIA/Spectra/2008/SCIA_solar_20080924_065146_D0_34343.dat`
 
-- sol\_ref: filename
+- sol\_ref: _filename_
 
   The filename of the highly resolved solar reference spectrum, for example the
   [SAO2010 solar reference spectrum](http://www.sciencedirect.com/science/article/pii/S0022407310000610)
@@ -149,21 +149,21 @@ $ scia_retrieval <orbitlist> <output_path> <sol_scia_orbit> <sol_ref> <script1> 
   https://www.cfa.harvard.edu/atmosphere/links/sao2010.solref.converted<br />
   Example: `/home/user/SCIA/Spectra/SolRef/sao2010.solref.dat`
 
-- script1: filename
+- script1: _filename_
 
   A script for combining multiple postscript or pdf files into one large
   pdf document. A simple approach is using ghostscript, see the `multips2pdf`
   script in the source tree.<br />
   Example: `/home/user/SCIA/run/multips2pdf`
 
-- script2: filename
+- script2: _filename_
 
   A script for combining multiple postscript or pdf files into one large
   postscript document. A simple approach is using ghostscript, see the `multips2ps`
   script in the source tree.<br />
   Example: `/home/user/SCIA/run/multips2ps`
 
-- config: filename
+- config: _filename_
 
   Detailed retrieval configuration, see the `SCIA2D_mlt.conf` and
   `SCIA2D_nom.conf` files in the source tree.<br />
