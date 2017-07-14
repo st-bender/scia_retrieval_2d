@@ -78,11 +78,21 @@ The spectra need to be calibrated first which requires two steps:
    [SciaL1C](https://earth.esa.int/web/guest/software-tools/content/-/article/scial1c-command-line-tool-4073)
    command line tool or with the free software
    [nadc\_tools](https://github.com/rmvanhees/nadc_tools).
-   The latter can also output to HDF5 (`.h5`).
+   The latter can also output to HDF5 (`.h5`), for example:
+   ```sh
+   $ /path/to/nadc_tools/bin/scia_nl1 -limb --cat=26,27 --channel=1 --cal=1,2,4,5+,6,7,9,E,N -hdf5 /path/to/L1b_v8.02/SCI_NL__1PYDPA.N1 --output=SCI_NL__1PYDPA.N1.ch1.h5
+   ```
+   (For category and cluster definitions see the `nadc_tools` documentation or the
+   [SciaL1C User Manual](https://earth.esa.int/documents/10174/2481822/SciaL1c-Command-line-Tool-Software-User-Manual).)
 
-2. Extracting the limb spectra from the `.child` or HDF5 files to ASCII
-   (or a special binary format, see [mpl\_binary.md](./mpl_binary.md)).
-   For example using the `sciapy` python tools which will be available publicly soon.
+2. Extracting the limb spectra from the `.child` or HDF5 files to ASCII files
+   or the special binary files used here, see [mpl\_binary.md](./mpl_binary.md).
+   The HDF5 files can be converted for example with the
+   [sciapy](https://github.com/st-bender/sciapy) python tools and the provided
+   `scia_conv_hdf5_limb.py` script (after installing `sciapy`):
+   ```sh
+   $ python /path/to/scia_conv_hdf5_limb.py <HDF5_file> --cat 26,27 --clus 2,3,4
+   ```
 
 #### Orbitlist
 
