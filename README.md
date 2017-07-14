@@ -114,7 +114,7 @@ or using the binary format:
     /home/user/SCIA/Spectra/MLT/channel_1_v8.02/2008/20080924/SCIA_limb_20080924_070415_1_0_34343.dat.l_mpl_binary
     ...
 
-These lists can be easily created by, for example:
+These lists can be easily created using `find`, for example with:
 ```sh
 $ find /home/user/SCIA/Spectra/MLT/channel_1_v8.02/<year>/<date>/SCIA_limb_*_<orbit>.dat > /home/user/SCIA/Spectra/orbitlists/MLT/<year>/orbitlist-sb<orbit>_scia1.dat
 ```
