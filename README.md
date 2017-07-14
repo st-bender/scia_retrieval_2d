@@ -30,7 +30,8 @@ Other pieces needed to successfully compile the program are:
 ### required
 - gcc and g++ version 4.9 or higher
 - a linear algebra system, for example [OpenBLAS](http://www.openblas.net),
-  [ATLAS](http://math-atlas.sourceforge.net), Intel MKL,
+  [ATLAS](http://math-atlas.sourceforge.net),
+  [Intel MKL](https://software.intel.com/en-us/mkl),
   [sunperf](https://docs.oracle.com/cd/E60778_01/html/E61993/sunperf-3p.html)
   on OpenSolaris/OpenIndiana or similar
 - the netcdf library and headers (www.unidata.ucar.edu)
