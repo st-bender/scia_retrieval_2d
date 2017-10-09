@@ -81,17 +81,17 @@ void Plot_2xy(string Arbeitsverzeichnis, string Dateiname,
 	/* beautify the order of magnitude converting "e+x" to 10^{x}. */
 	std::regex magregex{"e\\+(\\d+) \\$"};
 	text_messwert = std::regex_replace(text_messwert, magregex,
-			"$$\\,\\times\\,10^{$1}\\,");
+			std::string("$$\\,\\times\\,10^{$1}\\,"));
 	text_Fehler = std::regex_replace(text_Fehler, magregex,
-			"$$\\,\\times\\,10^{$1}\\,");
+			std::string("$$\\,\\times\\,10^{$1}\\,"));
 	/* beautify units in labels by setting the units in math mode
 	 * and substituting spaces with '\,' */
 	std::regex unitregex{"\\[(.*)\\]"};
 	/* extract units first */
-	std::string xunits{std::regex_replace(xlabel, std::regex(".*\\[(.*)\\].*"), "$$[$1]$$")};
-	std::string yunits{std::regex_replace(ylabel, std::regex(".*\\[(.*)\\].*"), "$$[$1]$$")};
-	xunits = std::regex_replace(xunits, std::regex("\\s"), "\\,");
-	yunits = std::regex_replace(yunits, std::regex("\\s"), "\\,");
+	std::string xunits{std::regex_replace(xlabel, std::regex(".*\\[(.*)\\].*"), std::string("$$[$1]$$"))};
+	std::string yunits{std::regex_replace(ylabel, std::regex(".*\\[(.*)\\].*"), std::string("$$[$1]$$"))};
+	xunits = std::regex_replace(xunits, std::regex("\\s"), std::string("\\,"));
+	yunits = std::regex_replace(yunits, std::regex("\\s"), std::string("\\,"));
 	xlabel = std::regex_replace(xlabel, unitregex, xunits);
 	ylabel = std::regex_replace(ylabel, unitregex, yunits);
 	////////////////////////////////////////////////////////////////////////////
