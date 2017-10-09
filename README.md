@@ -1,5 +1,7 @@
 # SCIAMACHY 2d satellite trace gas retrieval
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.848216.svg)](https://doi.org/10.5281/zenodo.848216)
+
 Two-dimensional trace gas retrieval from
 [SCIAMACHY](http://www.sciamachy.org) limb scans as described in
 [Scharringhausen et al., 2008](http://www.atmos-chem-phys.net/8/1963/2008/)
@@ -28,7 +30,7 @@ version 2.6 or higher.
 Other pieces needed to successfully compile the program are:
 
 ### required
-- gcc and g++ version 4.9 or higher
+- gcc and g++ version 4.8 or higher
 - a linear algebra system, for example [OpenBLAS](http://www.openblas.net),
   [ATLAS](http://math-atlas.sourceforge.net),
   [Intel MKL](https://software.intel.com/en-us/mkl),
