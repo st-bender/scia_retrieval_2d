@@ -4,23 +4,30 @@ project(scia_retrieval CXX C)
 
 file(GLOB scia_SRC *.cpp *.c)
 
-find_library(SUNPERF sunperf /opt/SUNWspro/lib/amd64)
-if (SUNPERF)
-	message("sunperf found at ${SUNPERF}.")
-	set(linalg_LIBS openblas sunperf)
-	set(sp_PATH /opt/SUNWspro/lib/amd64)
+find_library(OPENBLAS openblas PATHS ${OPENBLAS_LIBS})
+if (OPENBLAS)
+	get_filename_component(ob_PATH ${OPENBLAS} PATH)
+	message("openblas found at ${OPENBLAS} in ${ob_PATH}.")
+	set(BLAS openblas)
 else ()
-	message("sunperf not found, using lapack and blas.")
-	set(linalg_LIBS lapack blas)
+	message("openblas not found, using blas.")
+	set(BLAS blas)
 endif ()
 
-find_library(NOEM NOEM
-	${CMAKE_SOURCE_DIR}/lib_solaris
-	${CMAKE_SOURCE_DIR}/lib_linux
-	/home/msk-data/Scia/software/lib_linux)
+find_library(SUNPERF sunperf PATHS /opt/SUNWspro/lib/amd64 ${SUNPERF_LIBS})
+if (SUNPERF)
+	get_filename_component(sp_PATH ${SUNPERF} PATH)
+	message("sunperf found at ${SUNPERF} in ${sp_PATH}.")
+	set(linalg_LIBS ${BLAS} sunperf)
+else ()
+	message("sunperf not found, using lapack and ${BLAS}.")
+	set(linalg_LIBS lapack ${BLAS})
+endif ()
+
+find_library(NOEM NOEM PATHS ${NOEM_LIBS})
 if (NOEM)
-	message("NOEM model found at ${NOEM}.")
-	get_filename_component(noem_DIR ${NOEM} PATH)
+	get_filename_component(noem_PATH ${NOEM} PATH)
+	message("NOEM model found at ${NOEM} in ${noem_PATH}.")
 	add_definitions(-DHAVE_NOEM)
 	set(noem_LIB NOEM)
 else ()
@@ -44,8 +51,7 @@ endif ()
 
 link_directories(/usr/lib64
 	/usr/local/lib/amd64
-	/home/Processor/Work_SB/openblas_64.i/lib
-	${noem_DIR} ${sp_PATH})
+	${noem_PATH} ${ob_PATH} ${sp_PATH})
 
 include(CheckIncludeFileCXX)
 set(CMAKE_REQUIRED_INCLUDES "${CMAKE_REQUIRED_INCLUDES} ${EIGEN3_INCLUDES}")
