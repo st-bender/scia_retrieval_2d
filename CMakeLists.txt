@@ -48,10 +48,10 @@ link_directories(/usr/lib64
 	${noem_DIR} ${sp_PATH})
 
 include(CheckIncludeFileCXX)
-check_include_file_cxx("Eigen/Dense" HAVE_EIGEN3
-	-I/home/Processor/Work_SB/eigen_64.i/include/eigen3)
+set(CMAKE_REQUIRED_INCLUDES "${CMAKE_REQUIRED_INCLUDES} ${EIGEN3_INCLUDES}")
+check_include_file_cxx("Eigen/Dense" HAVE_EIGEN3)
 if (HAVE_EIGEN3)
-	include_directories(/home/Processor/Work_SB/eigen_64.i/include/eigen3)
+	include_directories(${EIGEN3_INCLUDES})
 	add_definitions(-DHAVE_EIGEN3)
 endif ()
 
