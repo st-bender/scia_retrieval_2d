@@ -41,14 +41,6 @@ else ()
 	set(ncdf_LIB netcdf)
 endif ()
 
-#find_path(loc_LIBS NAMES libNOEM.a libgzstream.a
-#	PATHS
-#	${CMAKE_SOURCE_DIR}/lib_solaris
-#	${CMAKE_SOURCE_DIR}/lib_linux_clang
-#	/home/msk-data/Scia/software/lib_solaris
-#	/home/msk-data/Scia/software/lib_linux
-#	DOC "local libs")
-
 link_directories(/usr/lib64
 	/usr/local/lib/amd64
 	${noem_PATH} ${ob_PATH} ${sp_PATH})
