@@ -191,7 +191,8 @@ or [online version](http://www.gnu.org/licenses/gpl-2.0.html).
 
 **Exemptions** from the GPLv2 are the following parts:
 
-- The NRLMSISE-00 source files `nrlmsise-00.c`, `nrlmsise-00_data.c`,
+- The [NRLMSISE-00](https://www.brodo.de/space/nrlmsise) source files
+  `nrlmsise-00.c`, `nrlmsise-00_data.c`,
   `nrlmsise-00_doc.txt`, and `nrlmsise-00.h` are in the public domain,
   see [COPYING.NRLMSISE-00](./COPYING.NRLMSISE-00).
 - The [gzstream](http://www.cs.unc.edu/Research/compgeom/gzstream)
