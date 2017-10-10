@@ -26,7 +26,7 @@ This version currently supports retrieving the following species:
 ## Prerequisites
 
 Configuration and pre-build setup is best managed via [CMake](https://cmake.org)
-version 2.6 or higher.
+version 2.8 or higher.
 Other pieces needed to successfully compile the program are:
 
 ### required
