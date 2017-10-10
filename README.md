@@ -60,6 +60,28 @@ $ make [-j <n>]
 This should produce an executable called `scia_retrieval` in the (current)
 `build/` subdirectory.
 
+The `cmake` command above honours the following variables
+(defined on the command line with `-D`)
+to find libraries and include files in non-standard locations:
+
+- `EIGEN3_INCLUDES`: to find `Eigen/Dense` if available
+- `OPENBLAS_LIBS`: to find the openblas libraries if available
+- `SUNPERF_LIBS`: to find the sunperf libraries if available
+- `NOEM_LIBS`: to find the NOEM model (as a shared library) if available
+- `CMAKE_LIBRARY_PATH`: combined library search path
+  ([documentation](https://cmake.org/cmake/help/latest/variable/CMAKE_LIBRARY_PATH.html)),
+  separated by semicolons
+  (`;`, may have to be escaped depending on the shell)
+
+Examples:
+```sh
+$ cmake -DEIGEN3_INCLUDES=/usr/include/eigen3 ..
+$ cmake -DOPENBLAS_LIBS=/path/to/openblas/lib ..
+$ cmake -DNOEM_LIBS=/path/to/noem/lib ..
+# using CMAKE_LIBRARY_PATH
+$ cmake -DCMAKE_LIBRARY_PATH=/path/to/openblas/lib\;/path/to/noem/lib ..
+```
+
 ## Install
 
 There is no automatic install available. Simply copy the executable to a place
