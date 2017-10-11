@@ -103,7 +103,7 @@ output value.
 
 The C version probably contains some bugs and still has to be regarded
 more unstable than the FORTRAN release. Please report any bugs or
-incorrect values to the maintainer at linux@brodo.de
+incorrect values to the maintainer at mail@brodo.de
 
 
 
@@ -141,6 +141,9 @@ the in- and output, and the differences between the various functions.
 
 20151122	-	fixes for gcc5, spelling fixes
 			(Jacco Geul)
+
+20170830	-	fix some compiler warninges
+			(noted by Steven Queen)
 
 
 7. TESTING OUTPUT
@@ -264,6 +267,6 @@ double variables are used, this value reduces to 0.000E-00 as well.
 
 ========================================================
 
-Tuebingen, Germany, on July 27th, 2007
+Frankfurt, Germany, on August 30, 2017
 
 Dominik Brodowski
