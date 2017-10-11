@@ -6,6 +6,7 @@
 # *~
 .*.swp
 Solaris\ GCC/*
+build/*
 cmake/*
 gcc/*
 linux/*
