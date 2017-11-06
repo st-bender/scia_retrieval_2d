@@ -46,6 +46,19 @@ Other pieces needed to successfully compile the program are:
   for calculating the prior densities.
   The code is not (yet) freely distributable but available on request from the author.
 
+## Download
+
+Official releases are available for download from
+https://github.com/st-bender/scia_retrieval_2d/releases.
+
+To keep up with ongoing development, clone the git repository:
+```sh
+$ git clone https://github.com/st-bender/scia_retrieval_2d.git
+```
+If you want to contribute, fork the project on github and send
+pull requests for changes you made to improve the retrieval or
+documentation.
+
 ## Compile
 
 Out of tree builds are supported and recommended, the simplest build steps are:
