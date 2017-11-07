@@ -365,6 +365,9 @@ inline MPL_Matrix MPL_Matrix::operator * (const MPL_Matrix &rhs) const
 		return *this;
 	}
 	// gemm vorbereiten  (das ist ein Routine aus ATLAS)
+	// Set memory order according to the transposed flag:
+	// true = Fortran order, no transpose in dgemm_(),
+	// false = C order, use transpose in dgemm_())
 	char TRANSA = transposed ? 'n' : 't';
 	char TRANSB = rhs.transposed ? 'n' : 't';
 	int M = this->m_Zeilenzahl;
@@ -375,18 +378,15 @@ inline MPL_Matrix MPL_Matrix::operator * (const MPL_Matrix &rhs) const
 	int LDB = rhs.transposed ? K : N;
 	double BETA = 0.0;
 	int LDC = M;
-	double *C = new double[M * N];
+	MPL_Matrix Produkt(M, N);
 	// Matrixmultiplikation durchführen
 	dgemm_(&TRANSA, &TRANSB, &M, &N, &K,
-		   &ALPHA, m_Elemente, &LDA, rhs.m_Elemente, &LDB, &BETA, C, &LDC);
-	MPL_Matrix Produkt(M, N);
-	// C transponieren
-	for (int i = 0; i < M; i++) {
-		for (int j = 0; j < N; j++) {
-			Produkt.m_Elemente[j + i * N] = C[i + j * M];
-		}
-	}
-	delete[] C;
+		   &ALPHA, m_Elemente, &LDA, rhs.m_Elemente, &LDB, &BETA,
+		   Produkt.m_Elemente, &LDC);
+	// We need to keep track of the element ordering in memory.
+	// dgemm_() yields Fortran order which is transposed to C.
+	// All subsequent multiplications will take care of that.
+	Produkt.transposed = true;
 	return Produkt;
 }
 /////////////////////////////////////////////////////////
