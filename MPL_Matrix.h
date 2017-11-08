@@ -130,7 +130,7 @@ public:
 	MPL_Matrix get_Spalte(int Spaltennummer); // gibt eine Spalte als Spaltenvektor aus
 
 	void transpose();
-	MPL_Matrix transponiert(); //transponierte Matrix
+	MPL_Matrix transponiert() const; //transponierte Matrix
 	MPL_Matrix transponiert_full() const; //transponierte Matrix
 	MPL_Matrix transponiert_full2() const; //transponierte Matrix
 //    MPLMatrix  invertiert();
@@ -479,7 +479,7 @@ inline void MPL_Matrix::transpose()
 	std::swap(m_Spaltenzahl, m_Zeilenzahl);
 	transposed = !transposed;
 }
-inline MPL_Matrix MPL_Matrix::transponiert() //transponierte Matrix
+inline MPL_Matrix MPL_Matrix::transponiert() const //transponierte Matrix
 {
 	MPL_Matrix Transponierte(*this);
 	std::swap(Transponierte.m_Spaltenzahl, Transponierte.m_Zeilenzahl);
