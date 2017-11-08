@@ -134,8 +134,8 @@ public:
 
 	void transpose();
 	MPL_Matrix transponiert(); //transponierte Matrix
-	MPL_Matrix transponiert_full(); //transponierte Matrix
-	MPL_Matrix transponiert_full2(); //transponierte Matrix
+	MPL_Matrix transponiert_full() const; //transponierte Matrix
+	MPL_Matrix transponiert_full2() const; //transponierte Matrix
 //    MPLMatrix  invertiert();
 //    //inverse Matrix, falls existent...
 //      existiert nur bei quadratischen, nicht singulären Matrizen
@@ -532,7 +532,7 @@ inline MPL_Matrix MPL_Matrix::transponiert() //transponierte Matrix
 	Transponierte.transposed = !transposed;
 	return Transponierte;
 }
-inline MPL_Matrix MPL_Matrix::transponiert_full()
+inline MPL_Matrix MPL_Matrix::transponiert_full() const
 {
 	//Zeilen und Spalten tauschen
 	MPL_Matrix Transponierte(m_Spaltenzahl, m_Zeilenzahl);
@@ -542,7 +542,7 @@ inline MPL_Matrix MPL_Matrix::transponiert_full()
 				= m_Elemente[i + j * m_Spaltenzahl];
 	return Transponierte;
 }
-inline MPL_Matrix MPL_Matrix::transponiert_full2()
+inline MPL_Matrix MPL_Matrix::transponiert_full2() const
 {
 	MPL_Matrix Transponierte(m_Spaltenzahl, m_Zeilenzahl);
 	for (int n = 0; n < m_Elementanzahl; n++) {
@@ -786,13 +786,14 @@ inline int MPL_Matrix::Gausselimination_mit_Teilpivotisierung_ohne_Skalenfaktor(
 inline void MPL_Matrix::in_Datei_speichern(std::string Dateiname, double precision) const
 {
 	ogzstream outfile;
+	MPL_Matrix A{transposed ? this->transponiert_full() : *this};
 	outfile.open(Dateiname.c_str());
 	if (precision != 0)
 		outfile.precision(precision);
-	for (int i = 0; i < this->m_Zeilenzahl; i++) {
-		for (int j = 0; j < this->m_Spaltenzahl; j++) {
-			outfile << m_Elemente[j + i * m_Spaltenzahl];
-			if (j < (m_Spaltenzahl - 1)) {
+	for (int i = 0; i < A.m_Zeilenzahl; i++) {
+		for (int j = 0; j < A.m_Spaltenzahl; j++) {
+			outfile << m_Elemente[j + i * A.m_Spaltenzahl];
+			if (j < (A.m_Spaltenzahl - 1)) {
 				outfile << "\t";
 			}
 		}
@@ -817,11 +818,12 @@ inline int MPL_Matrix::save_to_netcdf(std::string Dateiname, bool pack) const
 	int shuffle = NC_SHUFFLE;
 	int deflate = 1;
 	int deflate_level = 9;
+	MPL_Matrix A{transposed ? this->transponiert_full() : *this};
 	ret = nc_create(Dateiname.c_str(), NC_NETCDF4 | NC_CLOBBER, &ncid);
 	if (ret) return ret;
-	ret = nc_def_dim(ncid, "rows", m_Zeilenzahl, &dimidx);
+	ret = nc_def_dim(ncid, "rows", A.m_Zeilenzahl, &dimidx);
 	if (ret) return ret;
-	ret = nc_def_dim(ncid, "cols", m_Spaltenzahl, &dimidy);
+	ret = nc_def_dim(ncid, "cols", A.m_Spaltenzahl, &dimidy);
 	if (ret) return ret;
 	dimids[0] = dimidx;
 	dimids[1] = dimidy;
@@ -835,7 +837,7 @@ inline int MPL_Matrix::save_to_netcdf(std::string Dateiname, bool pack) const
 			std::minmax_element(m_Elemente, m_Elemente + m_Elementanzahl);
 		double scale_factor = (*minmax.second - *minmax.first) / pack_ndrv;
 		double add_offset = 0.5 * (*minmax.second + *minmax.first);
-		std::transform(m_Elemente, m_Elemente + m_Elementanzahl,
+		std::transform(A.m_Elemente, A.m_Elemente + A.m_Elementanzahl,
 				std::back_inserter(idata),
 				[=](double upk) { return (upk - add_offset) / scale_factor; });
 		ret = nc_def_var(ncid, "data", NC_UINT, 2, dimids, &varid);
@@ -864,7 +866,7 @@ inline int MPL_Matrix::save_to_netcdf(std::string Dateiname, bool pack) const
 		if (ret) return ret;
 		/* We still have to tell libnetcdf that the memory block contains
 		 * double precision floats. */
-		ret = nc_put_var_double(ncid, varid, m_Elemente);
+		ret = nc_put_var_double(ncid, varid, A.m_Elemente);
 		if (ret) return ret;
 	}
 	ret = nc_close(ncid);
@@ -886,8 +888,9 @@ inline int MPL_Matrix::save_to_hdf5(std::string Dateiname, bool pack) const
 	hsize_t dims[2], cdims[2] = { 128, 128 };
 	herr_t ret;
 
-	dims[0] = m_Zeilenzahl;
-	dims[1] = m_Spaltenzahl;
+	MPL_Matrix A{transposed ? this->transponiert_full() : *this};
+	dims[0] = A.m_Zeilenzahl;
+	dims[1] = A.m_Spaltenzahl;
 
 	/* Open an existing file. */
 	file_id = H5Fcreate(Dateiname.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
@@ -914,7 +917,7 @@ inline int MPL_Matrix::save_to_hdf5(std::string Dateiname, bool pack) const
 		double add_offset = 0.5 * (*minmax.second + *minmax.first);
 		hid_t attribute_id;
 
-		std::transform(m_Elemente, m_Elemente + m_Elementanzahl,
+		std::transform(A.m_Elemente, A.m_Elemente + A.m_Elementanzahl,
 				std::back_inserter(idata),
 				[=](double upk) { return (upk - add_offset) / scale_factor; });
 
@@ -945,7 +948,7 @@ inline int MPL_Matrix::save_to_hdf5(std::string Dateiname, bool pack) const
 				H5P_DEFAULT, plist_id, H5P_DEFAULT);
 		/* Write the dataset. */
 		ret = H5Dwrite(dataset_id, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL,
-				H5P_DEFAULT, m_Elemente);
+				H5P_DEFAULT, A.m_Elemente);
 		if (ret) return ret;
 	}
 	ret = H5Dclose(dataset_id);
