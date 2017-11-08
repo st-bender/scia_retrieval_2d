@@ -103,8 +103,6 @@ public:
 	// wird am ende Eine .inl Funktion included
 	// Zuweisungen
 	MPL_Matrix &operator = (const MPL_Matrix &rhs);   // Zuweisung
-	// TODO mit DGEMM
-	MPL_Matrix &operator *= (const MPL_Matrix &rhs);  // Matrixmultiplikation
 	MPL_Matrix &operator += (const MPL_Matrix &rhs);  // Matrixaddition
 	MPL_Matrix &operator -= (const MPL_Matrix &rhs);  // Matrixsubtraktion
 	MPL_Matrix &operator *= (double rhs);  // Skalare Multiplikation
@@ -116,7 +114,6 @@ public:
 	double &operator()(int Elementindex) const;
 
 	// binary operators
-	//TODO mit DGEMM
 	MPL_Matrix operator * (const MPL_Matrix &rhs) const;   //matmul
 	MPL_Matrix operator + (const MPL_Matrix &rhs) const;   //matadd
 	MPL_Matrix operator - (const MPL_Matrix &rhs) const;   //matsub
@@ -213,49 +210,6 @@ inline MPL_Matrix &MPL_Matrix::operator = (const MPL_Matrix &rhs)
 	return *this;
 }
 // ende operator =
-/////////////////////////////////////////////////////////
-// Methodenstart
-/////////////////////////////////////////////////////////
-// Matrixmultiplikation
-inline MPL_Matrix &MPL_Matrix::operator *= (const MPL_Matrix &rhs)
-{
-	//Zunächst prüfen, ob Multiplikation möglich ist
-	if (this->m_Spaltenzahl != rhs.m_Zeilenzahl) {
-		MPL_Matrix dummy(1, 1);
-		dummy.m_Elemente[0] = 0;
-		std::cerr << "*= Wrong Matrix Multiplication A*B, "
-			 << "coloums number of A != rows number of B" << std::endl;
-		std::cerr << "returning nonsense!!!!" << std::endl;
-		//return;
-		*this = dummy;
-		return *this;
-	}
-	// gemm vorbereiten  (das ist ein Routine aus ATLAS)
-	char TRANSA = transposed ? 'n' : 't';
-	char TRANSB = rhs.transposed ? 'n' : 't';
-	int M = this->m_Zeilenzahl;
-	int N = rhs.m_Spaltenzahl;
-	int K = this->m_Spaltenzahl;
-	double ALPHA = 1.0;
-	int LDA = transposed ? M : K;
-	int LDB = rhs.transposed ? K : N;
-	double BETA = 0.0;
-	int LDC = M;
-	double *C = new double[M * N];
-	// Matrixmultiplikation durchführen
-	dgemm_(&TRANSA, &TRANSB, &M, &N, &K,
-		   &ALPHA, m_Elemente, &LDA, rhs.m_Elemente, &LDB, &BETA, C, &LDC);
-	MPL_Matrix Produkt(M, N);
-	// C transponieren
-	for (int i = 0; i < M; i++) {
-		for (int j = 0; j < N; j++) {
-			Produkt.m_Elemente[j + i * N] = C[i + j * M];
-		}
-	}
-	delete[] C;
-	*this = Produkt;
-	return *this; // für solche schlimme konstrukte C=A*=B;
-}// ende *=
 
 /////////////////////////////////////////////////////////
 // Methodenstart
