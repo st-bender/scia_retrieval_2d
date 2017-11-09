@@ -139,12 +139,6 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	// in der Iteration dann nur das Rückeinsetzen nutzen
 	// START LU ZERLEGUNG
 	// VORBEREITEN
-	//Fortran Matrizen sind zu C++ Matrizen transponiert
-	MPL_Matrix A = LHS.transponiert_full();
-	// Man kann auch die MPL_Matrix nach Fortran Nomenklatur anpassen, aber
-	// transponieren ist nicht zeitaufwändig
-	// Feldgröße Speed propto N^3, LHS ist quadratisch, N ist Anzahl
-	// der Gitterpunkte
 	int N = LHS.m_Zeilenzahl;
 	//array mit der Pivotisierungsmatrix sollte so groß wie N sein,
 	//alle Elemente 0
@@ -158,7 +152,7 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	//Anzahl sollte die Integer grenzen nicht überschreiten,
 	//aber danbn sollte der Aufbau von LHS schon stören
 	//int Anzahl=N*N;
-	char textflag = 'N'; // "No transpose"; //fürs Rückeinsetzen
+	char textflag = 'T'; // "transpose"; //fürs Rückeinsetzen
 
 	double Residual, Residual_1, residual_prev = 0.001;
 	MPL_Matrix Mat_Residual;
@@ -202,7 +196,7 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 #endif /* DEBUG_RETRIEVAL_MATRICES */
 	// Lösungen durch LU Zerlegung finden
 	// LU Komponenten für später in A abgelegt
-	dgesv_(&N, &NRHS, A.m_Elemente, &LDA, IPIV, RHS.m_Elemente, &LDB, &INFO);
+	dgesv_(&N, &NRHS, LHS.m_Elemente, &LDA, IPIV, RHS.m_Elemente, &LDB, &INFO);
 	//cout<<"RHS.m_Zeilenzahl: "<<RHS.m_Zeilenzahl<<"\n";
 	////////////////////////////////////////////////////////////////////////////
 	// ENDE LU Zerlegung der LHS
@@ -260,7 +254,7 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 			  + S_apriori * Dichten_apriori_rest
 			  - R * Dichten;
 		// Lösungen durch Rückeinsetzen finden
-		dgetrs_(&textflag, &N, &NRHS, A.m_Elemente, &LDA, IPIV, RHS.m_Elemente,
+		dgetrs_(&textflag, &N, &NRHS, LHS.m_Elemente, &LDA, IPIV, RHS.m_Elemente,
 				&LDB, &INFO);
 		Dichten += RHS; // inkrementierung
 	}//for Iterationsschritt
