@@ -48,8 +48,6 @@ void Retrievalfehler_Abschaetzung(MPL_Matrix &S_x,
 	// as is S_apriori (~ S_a^-1)
 	S_x = (AMF_trans * (S_y * AMF)); // hier noch invers, also noch invertieren
 	S_x += S_apriori;
-	S_x += Lambda_Hoehe * (S_Hoehe_trans * S_Hoehe);
-	S_x += Lambda_Breite * (S_Breite_trans * S_Breite);
 	Matrix_Invertieren(S_x);
 	//Nun noch die Averaging Kernel Matrix bestimmen
 	MPL_Matrix D = S_x * AMF_trans * S_y;

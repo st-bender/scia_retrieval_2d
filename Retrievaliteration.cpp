@@ -262,6 +262,7 @@ int Retrievaliteration(MPL_Matrix &Dichten,
 	//Dichten.in_Datei_speichern("/tmp/mlangowski/0/Dichten_nach_Iteration.txt");
 	// dynamischen Kram löschen
 	delete[] IPIV;
+	S_apriori += R; // update to speed up AKM calculation
 	return 0;
 }
 
@@ -359,6 +360,7 @@ int Retrievaliteration_Eigen(MPL_Matrix &Dichten,
 		std::cout << " negative log posterior: " << nlp << std::endl;
 		++it_cnt;
 	}
+	Sa_m += R_m; // update to speed up AKM calculation
 	return 0;
 }
 #endif /* HAVE_EIGEN3 */
