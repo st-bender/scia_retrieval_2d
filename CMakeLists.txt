@@ -34,13 +34,6 @@ else ()
 	message("NOEM model not found.")
 endif ()
 
-find_library(NCDFF netcdff)
-if (NCDFF)
-	set(ncdf_LIB netcdff)
-else ()
-	set(ncdf_LIB netcdf)
-endif ()
-
 link_directories(/usr/lib64
 	/usr/local/lib/amd64
 	${noem_PATH} ${ob_PATH} ${sp_PATH})
@@ -70,4 +63,4 @@ add_definitions(-fopenmp -D_GLIBCXX_PARALLEL)
 add_definitions(`${CMAKE_CURRENT_SOURCE_DIR}/git_version_flags.sh`)
 add_executable(scia_retrieval ${scia_SRC})
 
-target_link_libraries(scia_retrieval ${linalg_LIBS} ${noem_LIB} gfortran netcdf ${ncdf_LIB} z gomp)
+target_link_libraries(scia_retrieval ${linalg_LIBS} ${noem_LIB} netcdf z gomp)
