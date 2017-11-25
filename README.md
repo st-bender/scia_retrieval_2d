@@ -1,6 +1,7 @@
 # SCIAMACHY 2d satellite trace gas retrieval
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.848216.svg)](https://doi.org/10.5281/zenodo.848216)
+[![Build Status](https://travis-ci.org/st-bender/scia_retrieval_2d.svg?branch=master)](https://travis-ci.org/st-bender/scia_retrieval_2d)
 
 Two-dimensional trace gas retrieval from
 [SCIAMACHY](http://www.sciamachy.org) limb scans as described in
