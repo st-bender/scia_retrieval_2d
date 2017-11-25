@@ -35,11 +35,12 @@ Other pieces needed to successfully compile the program are:
   [ATLAS](http://math-atlas.sourceforge.net),
   [Intel MKL](https://software.intel.com/en-us/mkl),
   [sunperf](https://docs.oracle.com/cd/E60778_01/html/E61993/sunperf-3p.html)
-  on OpenSolaris/OpenIndiana or similar
+  on OpenSolaris/OpenIndiana, or similar
 - the netcdf library and headers (www.unidata.ucar.edu)
-- the hdf5 library and headers (www.hdfgroup.org)
 
 ### optional
+- the hdf5 library and headers (www.hdfgroup.org)
+- the Eigen3 linear algebra template library (http://eigen.tuxfamily.org)
 - the Nitric Oxide Empirical Model (NOEM), see
   [Marsh et al., 2004](http://onlinelibrary.wiley.com/doi/10.1029/2003JA010199/full)
   ([doi:10.1029/2003JA010199](http://dx.doi.org/10.1029/2003JA010199)),
