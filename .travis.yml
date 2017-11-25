@@ -1,0 +1,41 @@
+sudo: false
+dist: trusty
+
+language: cpp
+
+addons:
+  apt:
+    packages: &base_libs
+    - liblapack-dev
+    - libhdf5-dev
+    - libnetcdf-dev
+    - libgfortran-4.8-dev
+
+matrix:
+  include:
+  - cpp: "blas"
+  - cpp: "eigen3"
+    env: EIGEN3_INCLUDES=/usr/include/eigen3
+    addons:
+      apt:
+        packages:
+        - *base_libs
+        - libeigen3-dev
+  - cpp: "openblas"
+    addons:
+      apt:
+        packages:
+        - *base_libs
+        - libopenblas-dev
+
+install: true
+
+script:
+  - mkdir build
+  - cd build
+  - cmake -DEIGEN3_INCLUDES=${EIGEN3_INCLUDES} ..
+  - make
+
+# at least check that it linked correctly
+after_script:
+  - ldd -r scia_retrieval
