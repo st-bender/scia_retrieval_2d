@@ -67,7 +67,6 @@
 #include <vector>
 #include "gzstream.h"
 #include "netcdf.h"
-#include "hdf5.h"
 
 extern "C" {
 	void dgemm_(char *TRANSA, char *TRANSB, int *M, int *N, int *K,
@@ -827,6 +826,8 @@ inline int MPL_Matrix::save_to_netcdf(std::string Dateiname, bool pack) const
 	return ret;
 }
 
+#ifdef HAVE_HDF5
+#include "hdf5.h"
 /* Alternative method to store the matrix contents as a (compressed) hdf5.
  * It should be portable and saves a few bytes on disk space.
  * If requested (pack == true), the data will be further packed using the
@@ -914,5 +915,14 @@ inline int MPL_Matrix::save_to_hdf5(std::string Dateiname, bool pack) const
 	ret = H5Fclose(file_id);
 	return ret;
 }
+#else /* HAVE_HDF5 */
+/* Dummy method if hdf5 is not available on the system */
+inline int MPL_Matrix::save_to_hdf5(std::string Dateiname, bool pack) const
+{
+	std::cerr << "Saving to hdf5 is not available in this build, "
+			<< "use ascii or netcdf instead." << std::endl;
+	return -1;
+}
+#endif /* HAVE_HDF5 */
 
 #endif /* MPLMATRIX_HH_ */

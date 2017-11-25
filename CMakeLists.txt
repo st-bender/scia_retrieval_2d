@@ -47,8 +47,11 @@ if (HAVE_EIGEN3)
 endif ()
 
 include(FindHDF5)
-include_directories(${HDF5_INCLUDE_DIRS})
-link_directories(${HDF5_LIBRARY_DIRS})
+if (HDF5_FOUND)
+	include_directories(${HDF5_INCLUDE_DIRS})
+	link_directories(${HDF5_LIBRARY_DIRS})
+	add_definitions(-DHAVE_HDF5)
+endif ()
 
 include_directories(.)
 add_definitions(-O2 -march=native -g -pedantic -Wall -Wextra -Wshadow)
