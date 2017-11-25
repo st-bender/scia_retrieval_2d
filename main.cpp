@@ -1609,8 +1609,9 @@ int main(int argc, char *argv[])
 						   S_apriori_NO, S_y_NO, S_Breite, S_Hoehe,
 						   NO_Lambda_Breite,
 						   NO_Lambda_Hoehe, AMF_NO, Konf);
-#else
-			std::cout << "Retrieval using Eigen3 not supported." << std::endl;
+#else /* HAVE_EIGEN3 */
+			std::cerr << "Retrieval using Eigen3 is not available in this build."
+					<< std::endl;
 #endif /* HAVE_EIGEN3 */
 			break;
 		}
