@@ -7,7 +7,6 @@ addons:
   apt:
     packages: &base_libs
     - liblapack-dev
-    - libhdf5-dev
     - libnetcdf-dev
     - libgfortran-4.8-dev
 
@@ -27,6 +26,12 @@ matrix:
         packages:
         - *base_libs
         - libopenblas-dev
+  - cpp: "hdf5"
+    addons:
+      apt:
+        packages:
+        - *base_libs
+        - libhdf5-dev
 
 install: true
 
