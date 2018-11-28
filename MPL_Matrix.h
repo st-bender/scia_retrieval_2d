@@ -68,6 +68,10 @@
 #include "gzstream.h"
 #include "netcdf.h"
 
+#ifdef HAVE_HDF5
+#include "hdf5.h"
+#endif /* HAVE_HDF5 */
+
 extern "C" {
 	void dgemm_(char *TRANSA, char *TRANSB, int *M, int *N, int *K,
 				double *ALPHA, const double *A, int *LDA, const double *B, int *LDB,
@@ -827,7 +831,6 @@ inline int MPL_Matrix::save_to_netcdf(std::string Dateiname, bool pack) const
 }
 
 #ifdef HAVE_HDF5
-#include "hdf5.h"
 /* Alternative method to store the matrix contents as a (compressed) hdf5.
  * It should be portable and saves a few bytes on disk space.
  * If requested (pack == true), the data will be further packed using the
