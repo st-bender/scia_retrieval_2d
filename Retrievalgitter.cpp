@@ -143,7 +143,7 @@ void Retrievalgitter::Retrievalgitter_erzeugen(
 	//  unbekannte Spezies bei niedrigen Hoehen......teste bis 110
 	double h_start = Konf.m_MinAlt;
 	double h_end = Konf.m_MaxAlt;
-	double dh = 2., dhh = 0.5 * dh;
+	double dh = Konf.m_dAlt, dhh = 0.5 * dh;
 	int Anzahl_Hoehen = int((h_end - h_start) / dh) + 1;   // 82  //42  //132
 	int add_alts = Konf.m_Anzahl_zusaetzliche_Hoehengitterpunkte;
 	/* Check if the extensions really start above the top grid altitude.

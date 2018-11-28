@@ -49,6 +49,7 @@ Konfiguration::Konfiguration() :
 	m_Pfad_f107_index("DATA/spidr_f107_2000-2012.dat"),
 	m_Pfad_f107a_index("DATA/spidr_f107a_2000-2012.dat"),
 	m_Pfad_f107_adj_index("DATA/spidr_f107_2000-2012.dat"),
+	m_MinAlt(60.0), m_MaxAlt(160.0), m_dAlt(2.),
 	m_MinLat(-90.0), m_MaxLat(90.0), m_NLat(72),
 	m_TOA(200.0), m_BOA(50.0),
 	m_min_TP(50.0), m_max_TP(200.0),
@@ -190,6 +191,12 @@ void Konfiguration::Konfiguration_einlesen(std::string file)
 			vector<double> dummy = string_to_vector<double>(Zeile);
 			this->m_MinAlt = dummy[0];
 			this->m_MaxAlt = dummy[1];
+			continue;
+		}
+		if (Zeile == "dAlt") {
+			getline(infile, Zeile);
+			ss << Zeile;
+			ss >> this->m_dAlt;
 			continue;
 		}
 		if (Zeile == "MinLat and MaxLat") {
