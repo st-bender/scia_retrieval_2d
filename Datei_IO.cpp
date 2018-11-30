@@ -92,9 +92,9 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 	/*
 	// normal average or median for the dark signal correction
 	dark_sig = average_over_wl_range(Limbdaten[no_of_alt - 1].m_radiance,
-			Wellenlaengen, no_of_pix, 238.0, 282.0, true);
+			Wellenlaengen, 238.0, 282.0, true);
 	dark_err = average_over_wl_range(Limbdaten[no_of_alt - 1].m_error,
-			Wellenlaengen, no_of_pix, 238.0, 282.0, true);
+			Wellenlaengen, 238.0, 282.0, true);
 	// */
 
 	/*
