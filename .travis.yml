@@ -26,6 +26,14 @@ matrix:
         packages:
         - *base_libs
         - libopenblas-dev
+  - cpp: "openblas+eigen3"
+    env: EIGEN3_INCLUDES=/usr/include/eigen3
+    addons:
+      apt:
+        packages:
+        - *base_libs
+        - libeigen3-dev
+        - libopenblas-dev
   - cpp: "hdf5"
     addons:
       apt:
