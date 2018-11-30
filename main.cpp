@@ -686,6 +686,7 @@ int main(int argc, char *argv[])
 
 	time(&Teil1_End);
 	T1_Dauer = Teil1_End - Teil1_Start;
+	std::cerr << T1_Dauer << " s." << std::endl;
 	/***************************************************************************
 	 ENDE TEIL 1
 	 **************************************************************************/
@@ -851,6 +852,7 @@ int main(int argc, char *argv[])
 	////////////////////////////////////////////////////////////////////////////
 	time(&Teil2_End);
 	T2_Dauer = Teil2_End - Teil2_Start;
+	std::cerr << T2_Dauer << " s." << std::endl;
 	if (mache_volles_Retrieval != "ja") { // Falls nicht, nach Teil 2 abbrechen
 		// Hier könnt man echtmal ne sprunganweisung machen...ich verlass mich
 		// erstmal auf den garbage collector von c++
@@ -1476,6 +1478,7 @@ int main(int argc, char *argv[])
 
 	time(&Teil3_End);
 	T3_Dauer = Teil3_End - Teil3_Start;
+	std::cerr << T3_Dauer << " s." << std::endl;
 	/***************************************************************************
 	 ENDE TEIL 3
 	***************************************************************************/
@@ -1620,6 +1623,7 @@ int main(int argc, char *argv[])
 
 	time(&Teil4_End);
 	T4_Dauer = Teil4_End - Teil4_Start;
+	std::cerr << T4_Dauer << " s." << std::endl;
 	/***************************************************************************
 	TEIL 5 FEHLERABSCHÄTZUNG
 	BERECHNUNG DER AVERAGING-KERNEL MATRIX UND DER FEHLERMATRIX
@@ -1702,6 +1706,7 @@ int main(int argc, char *argv[])
 	}
 	time(&Teil5_End);
 	T5_Dauer = Teil5_End - Teil5_Start;
+	std::cerr << T5_Dauer << " s." << std::endl;
 	/***************************************************************************
 	ENDE TEIL 5
 	 **************************************************************************/
@@ -1769,6 +1774,7 @@ int main(int argc, char *argv[])
 
 	time(&Teil6_End);
 	T6_Dauer = Teil6_End - Teil6_Start;
+	std::cerr << T6_Dauer << " s." << std::endl;
 	/***************************************************************************
 	ENDE TEIL 6
 	***************************************************************************/
