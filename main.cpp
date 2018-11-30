@@ -923,7 +923,7 @@ int main(int argc, char *argv[])
 	MPL_Matrix Saeulendichten_MgI;
 	MPL_Matrix Saeulendichten_Fehler_MgI;
 	// verwendete Konfiguration bis 20.1.2011
-	//double MgI_Lambda_Hoehe= 5E-7;//5E-6;//5E-6;//5E-6;     gute Werte 5 E-6 
+	//double MgI_Lambda_Hoehe= 5E-7;//5E-6;//5E-6;//5E-6;     gute Werte 5 E-6
 	// TODO das laden der Parameter eindeutiger machen
 	// Konf.m_Retrieval_Kovarianzen[0+1*m_Anzahl_der_Emitter];
 	//double MgI_Lambda_Breite= 5E-6;//1E-6;//1E-7;//1E-7;      gute Werte 1 E-6
