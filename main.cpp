@@ -238,7 +238,8 @@ std::vector<std::string> find_orb_sol_paths(Orbitliste orb_list, bool debug = fa
 	// read first (full) filename
 	std::string orb_path{orb_list.m_Dateinamen.front()};
 	// extract orbit number as string
-	std::string orb_num_str{orb_path.substr(orb_path.find_last_of(".") - 9, 5)};
+	std::string filename{orb_path.substr(orb_path.find_last_of("/\\"))};
+	std::string orb_num_str{filename.substr(filename.find_first_of(".") - 5, 5)};
 	// construct solar path glob pattern
 	std::string sol_glob_str{orb_path.substr(0, orb_path.find_last_of("/\\")) +
 			"/SCIA_solar_*_" + orb_num_str + ".dat"};
