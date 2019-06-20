@@ -74,7 +74,7 @@ int Sonnenspektrum::Laden_SCIA(string Dateiname, string Fallback_Dateiname)
 {
 	// Lädt das Sonnenspektrum das mit SCIAMACHY während des gleichen Orbits
 	// gemessen wird
-	int nh = 5;
+	int nh = 5, columns = 2;
 	double read_wl, read_int, dummy;
 	string s_dummy;
 	std::stringstream ss;
@@ -97,6 +97,8 @@ int Sonnenspektrum::Laden_SCIA(string Dateiname, string Fallback_Dateiname)
 	// nh dummyzeilen
 	for (int i = 0; i < nh; i++) {
 		getline(infile, s_dummy);
+		if (s_dummy.find("accuracy") != std::string::npos)
+			columns = 3;
 	}
 
 	infile >> m_Anzahl_WL;
@@ -113,7 +115,7 @@ int Sonnenspektrum::Laden_SCIA(string Dateiname, string Fallback_Dateiname)
 			getline(infile, s_dummy);
 	}
 	for (int i = 0; i < m_Anzahl_WL; i++) {
-		if (nh > 5)
+		if (nh > 5 && columns < 3)
 			// "D0" files contain only tow columns.
 			infile >> read_wl >> read_int;
 		else
