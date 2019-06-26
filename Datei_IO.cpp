@@ -93,14 +93,14 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 	double dark_err = 0.0;
 
 	if (dark_sig == -1.) {
-	// normal average or median for the dark signal correction
-	dark_sig = average_over_wl_range(Limbdaten[no_of_alt - 1].m_radiance,
-			Wellenlaengen, 238.0, 282.0, true);
-	dark_err = average_over_wl_range(Limbdaten[no_of_alt - 1].m_error,
-			Wellenlaengen, 238.0, 282.0, true);
+		// normal average or median for the dark signal correction
+		dark_sig = average_over_wl_range(Limbdaten[no_of_alt - 1].m_radiance,
+				Wellenlaengen, 238.0, 282.0, true);
+		dark_err = average_over_wl_range(Limbdaten[no_of_alt - 1].m_error,
+				Wellenlaengen, 238.0, 282.0, true);
 
-	if (dark_sig > 6.e9)
-		has_straylight = true;
+		if (dark_sig > 6.e9)
+			has_straylight = true;
 	}
 	std::cerr << "dark signal: " << dark_sig << std::endl;
 
