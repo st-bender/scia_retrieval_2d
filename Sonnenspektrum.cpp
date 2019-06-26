@@ -134,15 +134,15 @@ int Sonnenspektrum::Laden_SCIA(string Dateiname, string Fallback_Dateiname)
 
 void Sonnenspektrum::moving_average(int window_size)
 {
-	my_moving_average(m_Intensitaeten, window_size);
+	m_Intensitaeten = my_moving_average(m_Intensitaeten, window_size);
 }
 void Sonnenspektrum::savitzky_golay(int window_size)
 {
-	my_savitzky_golay(m_Intensitaeten, window_size);
+	m_Intensitaeten = my_savitzky_golay(m_Intensitaeten, window_size);
 }
 void Sonnenspektrum::saoref_to_sciamachy()
 {
-	my_sciamachy_blur(m_Intensitaeten);
+	m_Intensitaeten = my_sciamachy_blur(m_Intensitaeten);
 }
 double Sonnenspektrum::get_rad_at_wl(double wl)
 {

@@ -794,11 +794,11 @@ void Messung_Limb::Plots_der_Spektren_erzeugen(Speziesfenster &Spezfenst,
 ////////////////////////////////////////////////////////////////////////////////
 void Messung_Limb::moving_average(int window_size)
 {
-	my_moving_average(m_Intensitaeten, window_size);
+	m_Intensitaeten = my_moving_average(m_Intensitaeten, window_size);
 }
 void Messung_Limb::savitzky_golay(int window_size)
 {
-	my_savitzky_golay(m_Intensitaeten, window_size);
+	m_Intensitaeten = my_savitzky_golay(m_Intensitaeten, window_size);
 }
 
 double Messung_Limb::msise_temperature(Konfiguration &Konf)
