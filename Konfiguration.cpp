@@ -49,6 +49,7 @@ Konfiguration::Konfiguration() :
 	m_Pfad_f107_index("DATA/spidr_f107_2000-2012.dat"),
 	m_Pfad_f107a_index("DATA/spidr_f107a_2000-2012.dat"),
 	m_Pfad_f107_adj_index("DATA/spidr_f107_2000-2012.dat"),
+	dark_bg(3.9e9),
 	m_MinAlt(60.0), m_MaxAlt(160.0), m_dAlt(2.),
 	m_MinLat(-90.0), m_MaxLat(90.0), m_NLat(72),
 	m_TOA(200.0), m_BOA(50.0),
@@ -183,6 +184,12 @@ void Konfiguration::Konfiguration_einlesen(std::string file)
 		if (Zeile == "Correction factors") {
 			//cout<<"Correction factors\n";
 			getline(infile, m_Pfad_Korrekturfaktoren);
+			continue;
+		}
+		if (Zeile == "dark background") {
+			getline(infile, Zeile);
+			ss << Zeile;
+			ss >> this->dark_bg;
 			continue;
 		}
 		if (Zeile == "MinAlt and MaxAlt") {
@@ -529,6 +536,7 @@ void Konfiguration::Konfiguration_anzeigen()
 	}
 	cout << "Pfad Orbitliste: " << this->m_Pfad_Datei_mit_Dateinamen_fuer_Messungen_eines_Orbits << "\n";
 	cout << "Pfad Korrekturfaktoren: " << this->m_Pfad_Korrekturfaktoren << "\n";
+	cout << "Dark signal background correction: " << this->dark_bg << "\n";
 	cout << "MinAlt: " << this->m_MinAlt << "\n";
 	cout << "MaxAlt: " << this->m_MaxAlt << "\n";
 	cout << "Zahl der Gittererweiterungen: " << this->m_Anzahl_zusaetzliche_Hoehengitterpunkte << "\n";

@@ -49,6 +49,8 @@ public:
 	// Input_Data ////////////////////////////////////////////////////
 	std::string m_Pfad_Datei_mit_Dateinamen_fuer_Messungen_eines_Orbits;
 	std::string m_Pfad_Korrekturfaktoren;   // wird  nicht genutzt
+	// dark signal background (the empirical average is 3.9e9)
+	double dark_bg;
 	// Altitude Grid /////////////////////////////////////////////////
 	double m_MinAlt;  // höhen für retrieval 71
 	double m_MaxAlt;  // 93

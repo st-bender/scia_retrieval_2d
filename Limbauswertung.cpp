@@ -80,14 +80,14 @@ int Limb_Auswertung(Orbitliste &Orbitlist,
 		int Anzahl_Hoehen = -1;
 		Rohdaten =
 			ReadL1C_Limb_mpl_binary(Orbitlist.m_Dateinamen[l], Tropo, mean_10_20,
-					Anzahl_Hoehen);
+					Anzahl_Hoehen, Konf.dark_bg);
 	} else {
 		//Rohdaten =
 		//ReadL1C_Limb_meso_thermo_mpl_binary(Orbitlist.m_Dateinamen[l], Tropo);
 		int Anzahl_Hoehen = -1;
 		Rohdaten =
 			ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(Orbitlist.m_Dateinamen[l],
-					Tropo, space, Anzahl_Hoehen);
+					Tropo, space, Anzahl_Hoehen, Konf.dark_bg);
 	}
 	//cerr<<Orbitlist.m_Dateinamen[l]<<" wird bearbeitet\n";
 	//Testen, ob ReadL1C ordentlich gearbeitet hat
