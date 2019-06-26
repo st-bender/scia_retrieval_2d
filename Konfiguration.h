@@ -70,9 +70,9 @@ public:
 	unsigned short m_Geolocation; // switch 0 ja 1 nein
 	unsigned short m_Large_SZA;   // switch 0 ja 1 nein //SZA Sonnenwinkel zum Zenit
 	unsigned short m_NLC;         // switch 0 ja 1 nein
-	bool skip_SAA;
 	double m_Maximaler_SZA;         // falls Auswahlkriterium Large_SZA aktiv ist dies die Grenze
-	double SAA_cutoff;
+	bool skip_SAA;                // skip scans in the South Atlantic Anomaly
+	double SAA_cutoff;            // min intensity spike to detect SAA scans
 	std::vector<double> m_Geolocation_Grenzen;//LonMin,LonMax,LatMin,LatMax
 	// Baseline Fitparameters ////////////////////////////////////////
 	int m_Anzahl_Baseline_Intervalle;
