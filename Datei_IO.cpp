@@ -81,26 +81,27 @@ double average_over_wl_range(std::vector<float> rad, std::vector<float> wl,
 vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 		std::vector<Limb_Datensatz> &Limbdaten, std::vector<float> &Wellenlaengen,
 		int no_of_alt, int no_of_pix, int Datum[6], float cent_lat_lon[10],
-		float orbit_phase, int no_of_heights, int offset, int direction)
+		float orbit_phase, int no_of_heights, int offset, int direction,
+		double dark_sig)
 {
 	bool has_straylight = false;
 	// dark signal and error
 	// constant dark signal (default and fall-back)
 	//dark_sig = 2.731e9;
-	double dark_sig = 3.9e9;
+	//double dark_sig = 3.9e9;
+	//double dark_sig = 0.0;
 	double dark_err = 0.0;
-	/*
+
+	if (dark_sig == -1.) {
 	// normal average or median for the dark signal correction
 	dark_sig = average_over_wl_range(Limbdaten[no_of_alt - 1].m_radiance,
 			Wellenlaengen, 238.0, 282.0, true);
 	dark_err = average_over_wl_range(Limbdaten[no_of_alt - 1].m_error,
 			Wellenlaengen, 238.0, 282.0, true);
-	// */
 
-	/*
 	if (dark_sig > 6.e9)
 		has_straylight = true;
-	// */
+	}
 	std::cerr << "dark signal: " << dark_sig << std::endl;
 
 	// 4. Erstellung des Übergabevektors
@@ -170,7 +171,7 @@ vector<Messung_Limb> make_messung_limb_vector(string Dateiname,
 ////////////////////////////////////////////////////////////////////////////////
 vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
 		Messung_Limb &Troposphaerische_Saeule, Messung_Limb &mean_10_20,
-		int Anzahl_Hoehen)
+		int Anzahl_Hoehen, double dark_bg)
 {
 	//binärdateien sind nicht gepackt(das wär einfach nicht effizient)...
 	//ansonsten hier packen und später entpacken
@@ -216,7 +217,7 @@ vector<Messung_Limb> ReadL1C_Limb_mpl_binary(string Dateiname,
 	Ergebnisvektor
 		= make_messung_limb_vector(Dateiname, Limbdaten, Wellenlaengen,
 				no_of_alt, no_of_pix, Datum, Center_Lat_Lon, orbit_phase,
-				Anzahl_Hoehen, no_of_alt - Anzahl_Hoehen - 1, 1);
+				Anzahl_Hoehen, no_of_alt - Anzahl_Hoehen - 1, 1, dark_bg);
 
 	//Teile von Schritt 4 nochmal für die Troposhärische Säule
 	//Eigentlich reichen Intensitäten
@@ -274,7 +275,8 @@ vector<Messung_Limb> ReadL1C_Limb_meso_thermo_mpl_binary(string Dateiname,
 ////////////////////////////////////////////////////////////////////////////////
 vector<Messung_Limb>
 ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(string Dateiname,
-		Messung_Limb &niedrigste_Hoehe, Messung_Limb &space, int Anzahl_Hoehen)
+		Messung_Limb &niedrigste_Hoehe, Messung_Limb &space, int Anzahl_Hoehen,
+		double dark_bg)
 {
 	// Hier wieder nur Höhen von 70 bis 90 km....(einziger unterschied liegt in
 	// der for schleife die nur bis 7 geht)
@@ -328,7 +330,7 @@ ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(string Dateiname,
 	Ergebnisvektor
 		= make_messung_limb_vector(Dateiname, Limbdaten, Wellenlaengen,
 				no_of_alt, no_of_pix, Datum, Center_Lat_Lon, orbit_phase,
-				Anzahl_Hoehen, Anzahl_Hoehen - 1, -1);
+				Anzahl_Hoehen, Anzahl_Hoehen - 1, -1, dark_bg);
 
 	//Teile von Schritt 4 nochmal für die niedrigste Höhe
 	//Eigentlich reichen Intensitäten
@@ -339,7 +341,7 @@ ReadL1C_Limb_meso_thermo_mpl_binary_reduziert(string Dateiname,
 	// It then returns the only element as the "space" limb scan as requested.
 	space = make_messung_limb_vector(Dateiname, Limbdaten, Wellenlaengen,
 				no_of_alt, no_of_pix, Datum, Center_Lat_Lon, orbit_phase,
-				1, Anzahl_Hoehen, +1).front();
+				1, Anzahl_Hoehen, +1, dark_bg).front();
 
 	return Ergebnisvektor;
 }
