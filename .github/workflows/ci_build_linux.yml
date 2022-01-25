@@ -9,9 +9,6 @@ on:
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./build
 
     strategy:
       fail-fast: false
@@ -44,15 +41,18 @@ jobs:
             libgfortran-$(echo "__GNUC__" | gfortran -E -P -)-dev
       - name: Install libs
         run: sudo apt-get install -y --no-install-recommends ${{ matrix.libs }}
-      - name: Prepare build
+      - name: Prepare build dir
         run: |
           mkdir -p build
       - name: Configure
         run: |
+          cd build
           cmake -DEIGEN3_INCLUDES=${EIGEN3_INCLUDES} ..
       - name: Build
         run: |
+          cd build
           make
       - name: Test
         run: |
+          cd build
           ldd -r scia_retrieval
