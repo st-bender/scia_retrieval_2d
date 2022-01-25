@@ -9,6 +9,9 @@ on:
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
+    defauls:
+      run:
+        working-directory: ./build
 
     strategy:
       fail-fast: false
@@ -46,7 +49,6 @@ jobs:
           mkdir -p build
       - name: Configure
         run: |
-          cd build
           cmake -DEIGEN3_INCLUDES=${EIGEN3_INCLUDES} ..
       - name: Build
         run: |
