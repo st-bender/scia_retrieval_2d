@@ -43,10 +43,16 @@ jobs:
         run: sudo apt-get install -y --no-install-recommends ${{ matrix.libs }}
       - name: Prepare build
         run: |
-          mkdir build
+          pwd
+          ls -alF
+          mkdir -p build
           cd build
+          pwd
+          ls ..
       - name: Configure
         run: |
+          pwd
+          ls ..
           cmake -DEIGEN3_INCLUDES=${EIGEN3_INCLUDES} ..
       - name: Build
         run: |
