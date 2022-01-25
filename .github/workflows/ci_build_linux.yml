@@ -44,6 +44,8 @@ jobs:
       - name: Prepare build dir
         run: |
           mkdir -p build
+          echo ${EIGEN3_INCLUDES}
+          ls -alF ${EIGEN3_INCLUDES}
       - name: Configure
         run: |
           cd build
