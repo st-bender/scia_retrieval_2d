@@ -13,19 +13,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        env: [""]
+        eigen3: [""]
         libs: [""]
         include:
           - name: "blas"
           - name: "eigen3"
-            env:
-              EIGEN3_INCLUDES: /usr/include/eigen3
+            eigen3: /usr/include/eigen3
             libs: "libeigen3-dev"
           - name: "openblas"
             libs: "libopenblas-dev"
           - name: "openblas+eigen3"
-            env:
-              EIGEN3_INCLUDES: /usr/include/eigen3
+            eigen3: /usr/include/eigen3
             libs: "libeigen3-dev libopenblas-dev"
           - name: "hdf5"
             libs: "libhdf5-dev"
@@ -44,12 +42,16 @@ jobs:
       - name: Prepare build dir
         run: |
           mkdir -p build
-          echo ${EIGEN3_INCLUDES}
-          ls -alF ${EIGEN3_INCLUDES}
+        env:
+          EIGEN3_INCLUDES: ${{ matrix.eigen3 }}
       - name: Configure
         run: |
+          echo ${EIGEN3_INCLUDES}
+          ls -alF ${EIGEN3_INCLUDES}
           cd build
           cmake -DEIGEN3_INCLUDES=${EIGEN3_INCLUDES} ..
+        env:
+          EIGEN3_INCLUDES: ${{ matrix.eigen3 }}
       - name: Build
         run: |
           cd build
