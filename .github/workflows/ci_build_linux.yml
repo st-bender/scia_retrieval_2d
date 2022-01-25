@@ -29,6 +29,7 @@ jobs:
             libs: "libhdf5-dev"
 
 
+    name: ${{ matrix.name }}
     steps:
       - uses: actions/checkout@v2
       - run: sudo apt-get update
