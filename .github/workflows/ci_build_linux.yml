@@ -14,6 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
+        name: [blas, eigen3, openblas, openblas+eigen3, hdf5]
         include:
           - name: "blas"
           - name: "eigen3"
