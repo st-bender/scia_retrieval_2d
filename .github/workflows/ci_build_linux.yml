@@ -38,7 +38,10 @@ jobs:
       - uses: actions/checkout@v2
       - run: sudo apt-get update
       - name: Install apt packages
-        run: sudo apt-get install -y --no-install-recommends liblapack-dev libnetcdf-dev libgfortran-dev
+        run: |
+          sudo apt-get install -y --no-install-recommends \
+            liblapack-dev libnetcdf-dev \
+            libgfortran-$(echo "__GNUC__" | gfortran -E -P -)-dev
       - name: Install libs
         run: sudo apt-get install -y --no-install-recommends ${{ matrix.libs }}
       - name: Prepare build
