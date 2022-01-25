@@ -43,8 +43,6 @@ jobs:
       - name: Prepare build
         run: |
           mkdir -p build
-        env:
-          EIGEN3_INCLUDES: ${{ matrix.eigen3 }}
       - name: Configure
         run: |
           cd build
