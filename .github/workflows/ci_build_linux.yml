@@ -28,8 +28,7 @@ jobs:
           - name: "hdf5"
             libs: "libhdf5-dev"
 
-
-    name: ${{ matrix.name }}
+    name: build ${{ matrix.os }} - ${{ matrix.name }}
     steps:
       - uses: actions/checkout@v2
       - run: sudo apt-get update
