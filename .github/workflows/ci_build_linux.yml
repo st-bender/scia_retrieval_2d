@@ -13,20 +13,22 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        e3includes: ""
-        libs: ""
+        env: [""]
+        libs: [""]
         include:
           - name: "blas"
           - name: "eigen3"
-            e3includes: /usr/include/eigen3
-            libs: libeigen3-dev
+            env:
+              EIGEN3_INCLUDES: /usr/include/eigen3
+            libs: "libeigen3-dev"
           - name: "openblas"
-            libs: libopenblas-dev
+            libs: "libopenblas-dev"
           - name: "openblas+eigen3"
-            e3includes: /usr/include/eigen3
-            libs: libeigen3-dev libopenblas-dev
+            env:
+              EIGEN3_INCLUDES: /usr/include/eigen3
+            libs: "libeigen3-dev libopenblas-dev"
           - name: "hdf5"
-            libs: libhdf5-dev
+            libs: "libhdf5-dev"
 
 
     steps:
@@ -45,7 +47,7 @@ jobs:
           cd build
       - name: Configure
         run: |
-          cmake -DEIGEN3_INCLUDES=${{ matrix.e3includes }} ..
+          cmake -DEIGEN3_INCLUDES=${EIGEN3_INCLUDES} ..
       - name: Build
         run: |
           make
