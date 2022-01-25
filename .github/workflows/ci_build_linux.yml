@@ -39,15 +39,13 @@ jobs:
             libgfortran-$(echo "__GNUC__" | gfortran -E -P -)-dev
       - name: Install libs
         run: sudo apt-get install -y --no-install-recommends ${{ matrix.libs }}
-      - name: Prepare build dir
+      - name: Prepare build
         run: |
           mkdir -p build
         env:
           EIGEN3_INCLUDES: ${{ matrix.eigen3 }}
       - name: Configure
         run: |
-          echo ${EIGEN3_INCLUDES}
-          ls -alF ${EIGEN3_INCLUDES}
           cd build
           cmake -DEIGEN3_INCLUDES=${EIGEN3_INCLUDES} ..
         env:
