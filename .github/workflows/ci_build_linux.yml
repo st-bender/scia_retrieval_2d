@@ -9,7 +9,7 @@ on:
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
-    defauls:
+    defaults:
       run:
         working-directory: ./build
 
